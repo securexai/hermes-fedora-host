@@ -68,7 +68,7 @@ Record state: ACTIVE
 
 | ID | Task and dependencies | Progress | Gate and expected result | Gate status | Evidence / docs / next action |
 | --- | --- | --- | --- | --- | --- |
-| T01 | Harden canonical dev-toolbox: bump `shellcheck-py` v0.10.0.1 → v0.11.0.1; bump `markdownlint-cli2` v0.18.1 → v0.23.3; add check-only shfmt local gate, in root and template configs. Deps: none | ⬜ TODO | `scripts/check-precommit-parity.sh` green; `scripts/test-setup.sh` PASS; `scripts/verify.sh base\|python\|infra` PASS; bumped hooks report pinned versions | ⬜ NOT_RUN | Pending |
+| T01 | Harden canonical dev-toolbox: bump `shellcheck-py` v0.10.0.1 → v0.11.0.1; bump `markdownlint-cli2` v0.18.1 → v0.23.3; add check-only shfmt gate to the shipped template (root dogfood deferred — see decisions). Deps: none | ✅ DONE | `scripts/check-precommit-parity.sh` green; `scripts/test-setup.sh` PASS; `scripts/verify.sh base\|python\|infra` PASS; bumped hooks execute and report pinned versions | ✅ PASS | All gates green 2026-09-20. shellcheck hook reports 0.11.0; markdownlint rev `916ad0a` (v0.23.3); `shfmt (check only)` runs. dev-toolbox change intentionally left uncommitted (repo has no remote) |
 | T02 | Publish `dev-base`/`dev-python`/`dev-infra:fedora-44` to a registry; add digest-pinned CI running the same gates. Deps: T01 | ⬜ TODO | CI and local container produce matching results; digests recorded | ⬜ NOT_RUN | Likely 🚧 BLOCKED: `gh` token scopes lack `write:packages` |
 | T03 | Reconcile image chain (base tag `72f3583d` vs children built from untagged `b82aa0f9`); create fresh container `dev-infra-hermes`. Deps: T01 | ⬜ TODO | every child `parent-id` == parent ID; `verify.sh infra dev-infra-hermes` PASS | ⬜ NOT_RUN | Pending |
 | T04 | Author `toolbox/extensions.yaml` + non-writing validator (shellspec 0.28.1; ruff, ty, PyYAML, yamllint via `uv.lock`). Deps: T03 | ⬜ TODO | validator asserts tools and re-asserts base contract, writes nothing | ⬜ NOT_RUN | Pending |
@@ -115,6 +115,26 @@ Additional provenance:
 - **Upstream version verification:** `shellcheck-py` publishes tag `v0.11.0.1`
   (and a `v0.11.0.1-1` re-tag); `markdownlint-cli2` latest tag is `v0.23.3`.
 
+### T01 — canonical dev-toolbox hardening (Gate 1)
+
+- **Command or review method and working directory:** `scripts/check-precommit-parity.sh`, `scripts/test-setup.sh`, `scripts/verify.sh <profile> dev-<profile>-44`, and a throwaway-repo `pre-commit run --all-files`, from `/var/home/aicloudopspecial/code/repos/dev-toolbox`
+- **Expected result:** parity green; setup tests pass; all three profiles verify; the bumped hooks resolve at the pinned revisions and execute
+- **Actual result and status:** ✅ PASS, all four checks.
+  - `scripts/check-precommit-parity.sh` exit 0.
+  - `scripts/test-setup.sh` → `PASS: profile ordering, repeat setup, stale containers, invalid input, build failure, build-only, parent changes and overrides`.
+  - `scripts/verify.sh base|python|infra` → `PASS` for all three, against the Fedora 44 containers.
+  - Throwaway repo using the template config: `pre-commit run --all-files` exit 0, every hook Passed. The `shellcheck-py` environment resolves to commit `745efac` and reports `version: 0.11.0`; `markdownlint-cli2` resolves to `916ad0a` (= `v0.23.3`); the new `shfmt (check only)` hook Passed.
+- **Checked files, artifact, or relevant state:** `dev-toolbox/.pre-commit-config.yaml` (pins bumped only) and `dev-toolbox/templates/.pre-commit-config.yaml` (pins bumped plus the shfmt gate)
+- **Documentation updated:** this record; `docs/hook-parity.md`
+- **Sanitized evidence link, if needed:** none
+
+Additional provenance:
+
+- **Timestamp with timezone:** 2026-09-20, America/Bogota (UTC−05)
+- **Environment and relevant versions/configuration:** verification ran inside `dev-base-44`, `dev-python-44` and `dev-infra-44`; the `infra` profile reported Python 3.14.7, uv 0.12.9, ruff 0.16.6, restic 0.19.1
+- **Tested revision or artifact fingerprint, including relevant dirty/untracked inputs:** dev-toolbox remains dirty (8 modified, 1 deletion, 9 untracked) on `codex/toolbox-profiles` @ `151c1b47`; the two config edits are uncommitted on top, so a dev-toolbox commit SHA is not yet available to pin
+- **shfmt scoping evidence (read-only):** `shfmt -d -l -i 2 -ci -bn` over dev-toolbox's 7 shell files produced **941 diff lines** (`bootstrap-repo.sh` 63, `scripts/check-precommit-parity.sh` 12, `scripts/pnpm-host.sh` 539, `scripts/test-pnpm-host.sh` 181, `scripts/test-setup.sh` 60, `scripts/verify.sh` 12, `setup.sh` 74). Enabling the gate in dev-toolbox's own config would therefore require reformatting unrelated in-progress work, so it was scoped to the template.
+
 ## Decisions and approved scope changes
 
 | Date and timezone | Decision and reason | Approval reference when required | Affected tasks / evidence |
@@ -126,16 +146,22 @@ Additional provenance:
 | 2026-09-20 −05 | Server-side branch protection is deferred; local hooks only for milestone 1. Accepted deviation from the gold standard (GitHub not authoritative yet) | Decision answer: "Local hooks only for the first milestone" | T09 |
 | 2026-09-20 −05 | Project language tooling (ruff, ty, PyYAML, yamllint) is pinned through the project lockfile; the `infra` globals are convenience only | Gold-standard table | T04, T05, T07 |
 | 2026-09-20 −05 | Runtime tooling (restic execution, Trivy, systemd/systemdUkify/sbsign/virt-firmware, host package set) stays out of the development profile | Gold-standard table | T06 |
+| 2026-09-20 −05 | The `shfmt` gate ships in the template but is **not** enabled in dev-toolbox's own dogfood config, because dev-toolbox's shell files are not yet formatted to `-i 2 -ci -bn` (941 diff lines across 7 files, including unrelated untracked pnpm scripts). Enabling it in dev-toolbox is a separate follow-up | Bounded implementation decision under the approved "add shfmt gate"; avoids reformatting unrelated in-progress work | T01, T07 |
 
 ## Handoff / closure
 
-- **Current outcome:** baseline saved; destination repository cloned (empty);
-  no implementation performed.
-- **Remaining gates and blockers:** all gates NOT_RUN. T02 is expected to be
-  blocked until a registry credential with package-write scope is available.
+- **Current outcome:** baseline saved; destination repository cloned and pushed
+  with an initial commit on `main`; feature branch `hermes/hermes-foundation`
+  created; **T01 complete with Gate 1 PASS** (dev-toolbox hardened and verified).
+- **Remaining gates and blockers:** G2–G8 NOT_RUN. G2 is expected to be blocked
+  until a registry credential with package-write scope is available (the current
+  `gh` token scopes are `admin:public_key`, `gist`, `read:org`, `repo`).
 - **Material limitations:** the reviewed Hermes corrections remain an
-  uncommitted working-tree delta in mikrotik; dev-toolbox remains uncommitted and
-  remote-less; runtime acceptance is not covered by any gate here.
-- **Exact next action:** execute T01 — harden the canonical dev-toolbox hooks in
-  root and template configs, then run its verification gates.
+  uncommitted working-tree delta in mikrotik; dev-toolbox's standard is
+  uncommitted and has no remote, so the template adopted here can only be
+  referenced by working-tree state, not by a commit SHA; runtime acceptance is
+  not covered by any gate here.
+- **Exact next action:** execute T03 — reconcile the Toolbox image chain
+  (base tag `72f3583d` vs the untagged `b82aa0f9088a` its children were built
+  from) and create a fresh `dev-infra-hermes` container for all later gates.
 - **Final state:** ACTIVE
