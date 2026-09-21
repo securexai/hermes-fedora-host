@@ -360,3 +360,97 @@ human review remains recommended before any Gate 2 authorization request.
   (2) before any Gate 2 authorization request, obtain a fresh independent human
   review of this repository keyed to its current commit.
 - **Final state:** ACTIVE
+
+## Appendix — post-audit corrections and side effects
+
+Added 2026-09-20 (America/Bogota, UTC−05) after auditing whether this record
+matched the actual state. It did not, in four places.
+
+### Correction: a preserved evidence document was silently edited
+
+An early `pre-commit run --all-files` executed **before** the preserved
+documents were added to the `markdownlint-cli2` `ignores` list. Its
+trailing-whitespace fixer removed a *meaningful* trailing space inside a
+documented `sudo` prefix in `docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md` §6.3
+(`HERMES_EXPECT_MACHINE_ID_SHA256=<reviewed hash>` became
+`...<reviewed hash>`), which changes the documented command syntax.
+
+- Action taken: the file was restored byte-for-byte from source.
+- Its SHA-256 again matches the source (`c1395234972dc722…`), and
+  `docs/extraction-manifest.txt` was regenerated.
+- Re-verified: `markdownlint-cli2` exit 0 (the file is now ignored), both
+  shebang mode hooks PASS, and `toolbox/run-offline-checks.sh` exit 0 (8/8).
+- Lesson recorded: declare preserved-artifact ignores *before* running the
+  gate, and never let an auto-fixing hook see evidence documents.
+
+### Exact files reformatted by the explicit `shfmt -w -i 2 -ci -bn` step
+
+1. `scripts/hermes/manual/boot/rehearse-clean-install.sh`
+2. `scripts/hermes/manual/lab/gate2-boot-kickstart.sh`
+3. `scripts/hermes/manual/lab/gate2-create-fixture.sh`
+4. `scripts/hermes/manual/lab/gate2-install-grants.sh`
+5. `scripts/hermes/manual/lab/gate2-make-kickstart.sh`
+6. `scripts/hermes/manual/lab/gate2-observe.sh`
+7. `scripts/hermes/manual/lab/gate2-rebuild-kickstart-iso.sh`
+8. `scripts/hermes/manual/lib-manual-common.sh`
+9. `scripts/hermes/manual/m01-baseline.sh`
+10. `scripts/hermes/manual/m01-host-prepare.sh`
+11. `scripts/hermes/manual/m02-deploy-and-validate.sh`
+12. `scripts/hermes/manual/m04-backup.sh`
+13. `scripts/hermes/manual/m05-tests.sh`
+14. `tests/test-hermes-manual-m01-tempdir.sh`
+15. `tests/test-hermes-manual-profile.sh`
+16. `tests/test-hermes-manual-review.sh`
+
+Every other extracted file — including all `docs/` and `docs/reviews/`
+artifacts — is byte-for-byte identical to source.
+
+### File modes
+
+Working-tree modes produced by `cp -p` did not match the source index, so the
+two shebang hooks failed until the index was refreshed. After `chmod` plus
+`git add -A`, the executable bit on every extracted path matches the source
+index exactly; no tracked mode divergence remains. (`600` versus `644`
+differences are working-tree-only and are not tracked by Git.)
+
+### Host side effects left behind
+
+- Toolbox containers left **running**: `dev-base-44`, `dev-python-44`,
+  `dev-infra-44` (started for profile verification) and `dev-infra-hermes`
+  (this project's environment). The older Fedora 43 containers and
+  `dev-toolbox` remain exited.
+- Local gitignored artifacts: `.venv/` (56 MB) and `toolbox/.tools/` (612 KB),
+  both reproducible via `uv sync --locked` and
+  `toolbox/install-extensions.sh`.
+- The pre-existing `dev-base-44` container still runs the superseded base image
+  `b82aa0f9088a`; it was intentionally left untouched.
+
+### Commits on `hermes/hermes-foundation`
+
+| Commit | Purpose |
+| --- | --- |
+| `ff8d354` | initial scaffold and this plan record |
+| `418dbc5` | T01 dev-toolbox hardening record and hook parity map |
+| `c02190c` | declared tool extensions and provenance baseline |
+| `5e4d1d1` | adopted dev-toolbox pre-commit enforcement baseline |
+| `a0fc1b7` | extracted the reviewed manual-profile tree with provenance |
+| `1fb8348` | closed out the migration record |
+
+### Security action still outstanding
+
+`mikrotik/.mcp.json` (untracked, gitignored, **not** extracted) contains a
+live-looking GitHub PAT matching `ghp_[A-Za-z0-9]{20,}`. It should be revoked
+and rotated. `.claude/settings.local.json` grants broad
+`sudo`/`podman`/`virsh` allowances and was likewise not extracted.
+
+### dev-toolbox follow-ups (owned by that repository, not this one)
+
+- The two hook changes (`.pre-commit-config.yaml` and
+  `templates/.pre-commit-config.yaml`) remain **uncommitted**; `dev-toolbox`
+  has no remote, so this repository identifies the adopted template by file
+  hash rather than by a dev-toolbox commit.
+- `dev-toolbox/CHANGELOG.md` has no entry for the shellcheck/markdownlint bumps
+  or the new shfmt template gate.
+- The shfmt gate is not enabled in dev-toolbox's own dogfood config (941
+  inherited diff lines), and the image ships shfmt 3.7.0 while the source
+  declared 3.13.1 — a version skew worth aligning.

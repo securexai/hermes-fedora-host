@@ -4,13 +4,14 @@
 # codex/hermes-fedora44-manual-review, HEAD 130bf8f2, dirty-input fingerprint
 # d7a336b635f13100164a71054f8528f03565fe1100171c02112a5892ed403d87.
 #
-# NOTE: 16 shell files were then reformatted with
+# NOTE: 16 shell files were reformatted with
 #   shfmt -w -i 2 -ci -bn
-# as an explicit, behavior-preserving formatting step, because they did not
-# satisfy the adopted shfmt gate. File modes were also normalised to satisfy
-# the adopted shebang hooks. Hashes below describe the FINAL tree, not the
-# pre-format source bytes. All offline suites were re-run afterwards and
-# reproduce their recorded results.
+# as an explicit, behaviour-preserving formatting step, because they did not
+# satisfy the adopted shfmt gate. The exact list is in the migration record
+# (appendix: 'Post-audit corrections'). Every other extracted file, including
+# all docs/ and docs/reviews/ artifacts, is byte-for-byte identical to source.
+# Hashes below describe the FINAL tree. All offline suites were re-run after
+# the formatting and reproduce their recorded results.
 #
 # Format: <sha256>  <path>
 # Paths authored in this repository (README.md, docs/CONTRIBUTING.md,
@@ -19,7 +20,7 @@
 8f2bf8db4cc25a814853da53f514386f0d76455866e86153f85ad6d77fd85818  docs/HERMES_B6_CLEAN_INSTALL_HANDOFF.md
 5df3b517c24593c0f4d77fe8687bf8a8a1e6c3dd971825c3a24ade26e838704d  docs/HERMES_BOOT_AUTOMATION.md
 3e29287bbdcd0469e4825893dd7f4d9520b8a1cd600d0580018f74ace0dd9ba2  docs/HERMES_BOOT_CLEAN_INSTALL.md
-e28969a9d63096b41f1cf8463a2c2efe309a954ddac628a3d75f68f466c8c0ea  docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md
+c1395234972dc722235d8fdde9e4661cf608a67935e7bf77dd90d2ac65226209  docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md
 3b9fa6364e6e3227d6481898821c65ed4ab34bd869f9bd3d4a39f749bf6af7bf  docs/HERMES_MANUAL_HANDOFF.md
 4a2d2881e4e9f136fd34f69573c9a6e4ae6b92b6848a9dc058fa8ec8c16aa849  docs/HERMES_MANUAL_PROFILE_CONTRACT.md
 7805e12b97e2c64f4cab82ef8e41f93fbda3f9faf621fba1ba95ccec3b583714  docs/HERMES_MEMORY_APPROVAL.md

@@ -699,7 +699,7 @@ sudo bash ~/hermes-m02-bundle/m00-pin-host-identity.sh --apply  # writes the 064
 ### 6.3 — The ordered sequence
 
 Run as root; `sudo` prompts for your password. Step 1 needs the key provisioned in 6.2. Unless the pin from
-6.2 is installed, prefix every command in the table with `HERMES_EXPECT_MACHINE_ID_SHA256=<reviewed hash>`;
+6.2 is installed, prefix every command in the table with `HERMES_EXPECT_MACHINE_ID_SHA256=<reviewed hash> `;
 for example:
 
 ```bash
