@@ -76,7 +76,7 @@ Record state: ACTIVE
 | T06 | Extract Hermes manual profile, docs, tests, evidence. Excludes runtime/deployment **except** the statically-inspected `manual/lab/**` and `deploy-lib.sh` (per boundary decision); authors a Hermes-scoped `docs/CONTRIBUTING.md` instead of copying the source one. Deps: T05 | ✅ DONE | extraction matches the approved boundary; secret scan clean | ✅ PASS | 166-entry manifest; profile 358/0, review 142/0, backup 43/0, configure 64/0, contract 30/0, m01 9/0, hardening 21 OK, rehearsal PASS. `test-hermes-guide.sh` and `spec/hermes/` are N/A (deployment scope); secret scan resolved in T07 |
 | T07 | Adopt pre-commit template + port the Hermes pre-push gate; record the gate parity map. Deps: T01, T06 | ✅ DONE | full parity map; `pre-commit run --all-files` passes | ✅ PASS | Six templates copied and pre-commit/commit-msg/pre-push hooks installed; all hooks Passed; ported `hermes-offline-suites` pre-push hook; parity map in `docs/hook-parity.md` |
 | T08 | Offline validation on the migrated tree. Deps: T07 | ✅ DONE | suites reproduce: 358/0, 142/0, 43/0, 64/0, 30/0, 9/0, 21 OK, rehearsal PASS; lint gates run | ✅ PASS | `pre-commit run --all-files` and an explicit all-files pass exit 0; `toolbox/run-offline-checks.sh` exit 0 (8/8); extensions validator exit 0. Gate surfaced inherited shfmt/shellcheck/markdownlint/mode issues, all dispositioned. Guide/spec N/A. A fresh independent human review is still recommended before Gate 2 |
-| T09 | Close-out: single execution record finalized; branch protection revisited. Deps: T08 | ⬜ TODO | outcome, limitations and next action recorded | ⬜ NOT_RUN | Pending |
+| T09 | Close-out: single execution record finalized; branch protection revisited. Deps: T08 | ✅ DONE | outcome, limitations and next action recorded | ✅ PASS | Record finalized; branch-protection deferral and all deviations documented; work pushed to `origin/hermes/hermes-foundation` |
 
 ## Evidence history
 
@@ -336,7 +336,8 @@ human review remains recommended before any Gate 2 authorization request.
 
 ## Handoff / closure
 
-- **Current outcome:** T01 and T03–T08 complete with Gates 1 and 3–8 PASS. The
+- **Current outcome:** T01 and T03–T09 complete with Gates 1 and 3–9 PASS, and
+  all work pushed to `origin/hermes/hermes-foundation`. The
   dev-toolbox standard is hardened and verified; the image chain is internally
   consistent (`dev-infra-hermes` on `af934ead…`); project extensions are
   declared, installed and validated; provenance is recorded; the reviewed Hermes
