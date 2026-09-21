@@ -1,0 +1,24 @@
+# Secrets and machine-local agent state — never commit.
+.mcp.json
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# uv / build output
+dist/
+build/
+
+# Toolbox and container scratch
+.toolbox/
+*.qcow2
+
+# Editor and OS noise
+.DS_Store
+*.swp
