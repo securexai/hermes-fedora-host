@@ -19,6 +19,9 @@ build/
 .toolbox/
 *.qcow2
 
+# Project-declared tool extensions (installed by toolbox/install-extensions.sh)
+toolbox/.tools/
+
 # Editor and OS noise
 .DS_Store
 *.swp

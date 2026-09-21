@@ -70,9 +70,9 @@ Record state: ACTIVE
 | --- | --- | --- | --- | --- | --- |
 | T01 | Harden canonical dev-toolbox: bump `shellcheck-py` v0.10.0.1 → v0.11.0.1; bump `markdownlint-cli2` v0.18.1 → v0.23.3; add check-only shfmt gate to the shipped template (root dogfood deferred — see decisions). Deps: none | ✅ DONE | `scripts/check-precommit-parity.sh` green; `scripts/test-setup.sh` PASS; `scripts/verify.sh base\|python\|infra` PASS; bumped hooks execute and report pinned versions | ✅ PASS | All gates green 2026-09-20. shellcheck hook reports 0.11.0; markdownlint rev `916ad0a` (v0.23.3); `shfmt (check only)` runs. dev-toolbox change intentionally left uncommitted (repo has no remote) |
 | T02 | Publish `dev-base`/`dev-python`/`dev-infra:fedora-44` to a registry; add digest-pinned CI running the same gates. Deps: T01 | ⬜ TODO | CI and local container produce matching results; digests recorded | ⬜ NOT_RUN | Likely 🚧 BLOCKED: `gh` token scopes lack `write:packages` |
-| T03 | Reconcile image chain (base tag `72f3583d` vs children built from untagged `b82aa0f9`); create fresh container `dev-infra-hermes`. Deps: T01 | ⬜ TODO | every child `parent-id` == parent ID; `verify.sh infra dev-infra-hermes` PASS | ⬜ NOT_RUN | Pending |
-| T04 | Author `toolbox/extensions.yaml` + non-writing validator (shellspec 0.28.1; ruff, ty, PyYAML, yamllint via `uv.lock`). Deps: T03 | ⬜ TODO | validator asserts tools and re-asserts base contract, writes nothing | ⬜ NOT_RUN | Pending |
-| T05 | Repository scaffold, `.gitignore`, `pyproject.toml` (`requires-python >=3.13`, `.python-version` 3.14), `uv.lock`, `PROVENANCE.md`. Deps: none | ⬜ TODO | provenance records source HEAD `130bf8f2`, 14/0, diffstat, algorithm, `d7a336b6…`, `c82e470c…` | ⬜ NOT_RUN | Started: baseline record (this file) |
+| T03 | Reconcile image chain (base tag `72f3583d` vs children built from untagged `b82aa0f9`); create fresh container `dev-infra-hermes`. Deps: T01 | ✅ DONE | every child `parent-id` == parent ID; `verify.sh infra dev-infra-hermes` PASS | ✅ PASS | base `72f3583d` → python `965ea02e` (parent `72f3583d`) → infra `af934ead` (parent `965ea02e`); container on `af934ead`; verify PASS; RPM manifest 385 pkgs, sha256 `860b9dfe…` |
+| T04 | Author `toolbox/extensions.yaml` + validator + installer (shellspec 0.28.1; ruff, ty, yamllint via `uv.lock`). Deps: T03 | ✅ DONE | validator asserts tools and re-asserts the base contract, modifying no tracked file | ✅ PASS | shellspec 0.28.1 installed and validated; ruff 0.16.8, ty 0.0.82, yamllint 1.38.0 via `uv run --locked`; all checks PASS |
+| T05 | Repository scaffold, `.gitignore`, `pyproject.toml` (`requires-python >=3.13`, `.python-version` 3.14), `uv.lock`, `PROVENANCE.md`. Deps: none | ✅ DONE | provenance records source HEAD `130bf8f2`, 14/0, diffstat, algorithm, `d7a336b6…`, `c82e470c…` | ✅ PASS | PROVENANCE.md records source state, companion artifacts, template hashes and image IDs; `uv.lock` resolved (6 packages) |
 | T06 | Extract Hermes manual profile, docs, tests, evidence; exclude runtime/deployment; sanitize site coupling. Deps: T05 | ⬜ TODO | no excluded path present; betterleaks clean | ⬜ NOT_RUN | Pending |
 | T07 | Adopt pre-commit template + port Hermes pre-push/rehearsal gates; record gate parity map. Deps: T01, T06 | ⬜ TODO | full parity map; `pre-commit run --all-files` and `--files` pass | ⬜ NOT_RUN | Pending |
 | T08 | Offline validation on migrated tree + fresh fingerprint-bound review. Deps: T07 | ⬜ TODO | suites reproduce: 358/0, 142/0, 43/0, 64/0, 30/0, 9/0, 21 OK, 217/0, rehearsal PASS; lint gates run; review recorded | ⬜ NOT_RUN | Satisfies the §14.8 outstanding action |
@@ -135,6 +135,39 @@ Additional provenance:
 - **Tested revision or artifact fingerprint, including relevant dirty/untracked inputs:** dev-toolbox remains dirty (8 modified, 1 deletion, 9 untracked) on `codex/toolbox-profiles` @ `151c1b47`; the two config edits are uncommitted on top, so a dev-toolbox commit SHA is not yet available to pin
 - **shfmt scoping evidence (read-only):** `shfmt -d -l -i 2 -ci -bn` over dev-toolbox's 7 shell files produced **941 diff lines** (`bootstrap-repo.sh` 63, `scripts/check-precommit-parity.sh` 12, `scripts/pnpm-host.sh` 539, `scripts/test-pnpm-host.sh` 181, `scripts/test-setup.sh` 60, `scripts/verify.sh` 12, `setup.sh` 74). Enabling the gate in dev-toolbox's own config would therefore require reformatting unrelated in-progress work, so it was scoped to the template.
 
+### T03 — Toolbox image-chain reconciliation (Gate 3)
+
+- **Command or review method and working directory:** `./setup.sh infra --build-only`; `CONTAINER_NAME=dev-infra-hermes ./setup.sh infra`; `bash scripts/verify.sh infra dev-infra-hermes` — from `/var/home/aicloudopspecial/code/repos/dev-toolbox`
+- **Expected result:** each derived image's `io.dev-toolbox.parent-id` equals its parent's image ID; the new container runs the current infra image; verification prints `PASS`
+- **Actual result and status:** ✅ PASS. base `72f3583d…` (no parent) → python `965ea02e…` (parent `72f3583d…`) → infra `af934ead…` (parent `965ea02e…`). Container `dev-infra-hermes` runs `af934ead…`. `verify.sh infra dev-infra-hermes` → `PASS: infra Toolbox tools, paths, offline smoke checks and synthetic secret detection`.
+- **Checked files, artifact, or relevant state:** image IDs, `io.dev-toolbox.parent-id` labels, container image; RPM manifest 385 packages, sha256 `860b9dfeae6d6d3e2429518b046754d4fb7016e82625117d94d041d03ac01374`
+- **Documentation updated:** this record; `PROVENANCE.md`
+- **Sanitized evidence link, if needed:** none
+
+Additional provenance: 2026-09-20, America/Bogota (UTC−05). The pre-existing `dev-base-44` container still references the untagged base `b82aa0f9…`; it was left untouched and is superseded by `dev-infra-hermes`.
+
+### T04 — Declared project tool extensions (Gate 4)
+
+- **Command or review method and working directory:** `toolbox/install-extensions.sh` then `toolbox/verify-extensions.sh`, inside `dev-infra-hermes`, from the repository root
+- **Expected result:** every declared extension is present at its pinned version and the shared profile contract still holds
+- **Actual result and status:** ✅ PASS. `shellspec 0.28.1` installed from the checksum-pinned upstream release; `ruff 0.16.8`, `ty 0.0.82`, `yamllint 1.38.0` resolved through `uv run --locked`; all 11 profile tools present; RPM manifest non-empty; all five managed `/opt` directories writable. Validator output ends `PASS: declared extensions and profile contract verified`.
+- **Checked files, artifact, or relevant state:** `toolbox/extensions.yaml`, `toolbox/install-extensions.sh`, `toolbox/verify-extensions.sh`, `pyproject.toml`, `uv.lock`
+- **Documentation updated:** this record; `PROVENANCE.md`; `docs/hook-parity.md`
+- **Sanitized evidence link, if needed:** none
+
+Additional provenance: shellspec tarball `shellspec-dist.tar.gz` is 76 365 bytes with SHA-256 `350d3de04ba61505c54eda31a3c2ee912700f1758b1a80a284bc08fd8b6c5992`; upstream publishes no digest, so this value was computed from the pinned release and is recorded in `toolbox/extensions.yaml`. Both scripts pass `shfmt -d -i 2 -ci -bn` and `shellcheck`. `uv run --locked` may materialise the gitignored `.venv`; no tracked file is modified.
+
+### T05 — Repository scaffold and provenance (Gate 5)
+
+- **Command or review method and working directory:** repository scaffolding plus `uv lock`, from the repository root
+- **Expected result:** provenance names the exact source state, including the uncommitted corrections
+- **Actual result and status:** ✅ PASS. `PROVENANCE.md` records the source repo/remote/branch/HEAD `130bf8f2…`, 14 modified / 0 untracked, diffstat 1400/109, both fingerprints, the fingerprint algorithm, the five correction/review artifacts with SHA-256, the six adopted template hashes, the three image IDs and the RPM-manifest hash. `uv.lock` resolved 6 packages on CPython 3.14.7.
+- **Checked files, artifact, or relevant state:** `PROVENANCE.md`, `pyproject.toml`, `.python-version` (3.14), `uv.lock`, `.gitignore`
+- **Documentation updated:** this record
+- **Sanitized evidence link, if needed:** none
+
+Additional provenance: 2026-09-20, America/Bogota (UTC−05). dev-toolbox is local-only (no remote), so the adopted template is identified by file hash rather than by a dev-toolbox commit.
+
 ## Decisions and approved scope changes
 
 | Date and timezone | Decision and reason | Approval reference when required | Affected tasks / evidence |
@@ -150,18 +183,20 @@ Additional provenance:
 
 ## Handoff / closure
 
-- **Current outcome:** baseline saved; destination repository cloned and pushed
-  with an initial commit on `main`; feature branch `hermes/hermes-foundation`
-  created; **T01 complete with Gate 1 PASS** (dev-toolbox hardened and verified).
-- **Remaining gates and blockers:** G2–G8 NOT_RUN. G2 is expected to be blocked
-  until a registry credential with package-write scope is available (the current
-  `gh` token scopes are `admin:public_key`, `gist`, `read:org`, `repo`).
+- **Current outcome:** T01, T03, T04 and T05 complete with Gates 1, 3, 4 and 5
+  PASS. The dev-toolbox standard is hardened and verified; the image chain is
+  internally consistent (`dev-infra-hermes` on `af934ead…`); project extensions
+  are declared, installed and validated; provenance is recorded.
+- **Remaining gates and blockers:** G2 NOT_RUN and expected 🚧 BLOCKED until a
+  registry credential with package-write scope exists (current `gh` token scopes:
+  `admin:public_key`, `gist`, `read:org`, `repo`). G6–G8 NOT_RUN (extraction not
+  started).
 - **Material limitations:** the reviewed Hermes corrections remain an
-  uncommitted working-tree delta in mikrotik; dev-toolbox's standard is
-  uncommitted and has no remote, so the template adopted here can only be
-  referenced by working-tree state, not by a commit SHA; runtime acceptance is
-  not covered by any gate here.
-- **Exact next action:** execute T03 — reconcile the Toolbox image chain
-  (base tag `72f3583d` vs the untagged `b82aa0f9088a` its children were built
-  from) and create a fresh `dev-infra-hermes` container for all later gates.
+  uncommitted working-tree delta in mikrotik; dev-toolbox is uncommitted and has
+  no remote, so the adopted template is identified by file hash, not commit SHA;
+  server-side branch protection is deferred; runtime acceptance is not covered by
+  any gate here.
+- **Exact next action:** execute T06 — extract the Hermes manual profile, docs,
+  tests and evidence from the mikrotik **working tree** (not HEAD), excluding
+  runtime/deployment assets and credential files, and sanitize site coupling.
 - **Final state:** ACTIVE

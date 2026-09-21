@@ -1,0 +1,74 @@
+# Project-specific tool extensions for the dev-toolbox `infra` profile.
+#
+# The shared profiles deliberately do not ship every tool a project needs. The
+# dev-toolbox standard has no container-extension API, so this file is the
+# declared extension set: every missing tool states an exact version, a verified
+# source, and how the project proves it is present. Provisioning happens through
+# `install-extensions.sh`; `verify-extensions.sh` validates it. This replaces
+# ad-hoc, undocumented container customisation.
+#
+# This file must not weaken the shared profile contract. The base tool set, the
+# writable /opt managed directories, the RPM manifest and the betterleaks
+# synthetic-secret check must all still pass (`dev-toolbox scripts/verify.sh`).
+
+version: 1
+profile: infra
+
+extensions:
+  # ---------------------------------------------------------------------------
+  # Standalone tools the profile does not provide.
+  # ---------------------------------------------------------------------------
+  - id: shellspec
+    version: "0.28.1"
+    purpose: >-
+      Runs spec/hermes/, replacing the retired Lefthook pre-push gate
+      `test-hermes-deploy-spec`.
+    source:
+      type: upstream-release
+      url: https://github.com/shellspec/shellspec/releases/download/0.28.1/shellspec-dist.tar.gz
+      sha256: 350d3de04ba61505c54eda31a3c2ee912700f1758b1a80a284bc08fd8b6c5992
+      size_bytes: 76365
+    install:
+      script: toolbox/install-extensions.sh
+      destination: toolbox/.tools/shellspec
+    validate:
+      command: toolbox/.tools/shellspec/shellspec --version
+      expect: "0.28.1"
+
+  # ---------------------------------------------------------------------------
+  # Python tooling pinned through the project lockfile, not the image.
+  #
+  # The `infra` profile also ships a global ruff. That copy is a convenience
+  # only; the authoritative versions for this project are the ones resolved in
+  # uv.lock and invoked with `uv run --locked`.
+  # ---------------------------------------------------------------------------
+  - id: ruff
+    version: "locked"
+    purpose: Python lint and format check.
+    source:
+      type: uv-lock
+      manifest: pyproject.toml
+    validate:
+      command: uv run --locked ruff --version
+
+  - id: ty
+    version: "locked"
+    purpose: Python type check.
+    source:
+      type: uv-lock
+      manifest: pyproject.toml
+    validate:
+      command: uv run --locked ty --version
+
+  - id: yamllint
+    version: "locked"
+    purpose: YAML structural and style validation.
+    source:
+      type: uv-lock
+      manifest: pyproject.toml
+    validate:
+      command: uv run --locked yamllint --version
+
+# PyYAML is intentionally absent: the `infra` profile provides python3-pyyaml
+# (6.0.3), and the manual-profile helpers import `yaml` from the system
+# interpreter, so it is a profile capability rather than an extension.
