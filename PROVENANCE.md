@@ -47,6 +47,11 @@ the sibling checkout and are extracted here alongside it.
 | HEAD | `151c1b47537f1cbb0f5f478c8b9894040ea985b9` |
 | Working tree | dirty: the profile standard itself is uncommitted (10 modified, 1 tracked deletion, 9 untracked, including two uncommitted config edits made for this project) |
 
+The two config edits made for this project were subsequently committed in
+`dev-toolbox` as `c0f0889` on `codex/toolbox-profiles`. That commit is
+**unpushed**: `dev-toolbox` has no remote. The adopted template is therefore
+still identified here by file hash rather than by a dev-toolbox commit.
+
 Adopted template files and their SHA-256 at capture:
 
 | Template | SHA-256 |

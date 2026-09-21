@@ -445,12 +445,16 @@ and rotated. `.claude/settings.local.json` grants broad
 
 ### dev-toolbox follow-ups (owned by that repository, not this one)
 
-- The two hook changes (`.pre-commit-config.yaml` and
-  `templates/.pre-commit-config.yaml`) remain **uncommitted**; `dev-toolbox`
-  has no remote, so this repository identifies the adopted template by file
-  hash rather than by a dev-toolbox commit.
-- `dev-toolbox/CHANGELOG.md` has no entry for the shellcheck/markdownlint bumps
-  or the new shfmt template gate.
+- The two hook changes are now committed locally in `dev-toolbox` on
+  `codex/toolbox-profiles` as `c0f0889` ("chore: align shellcheck and
+  markdownlint pins and add the shfmt gate"), authored as
+  `securexai <github.com.valium091@passmail.com>` and touching only
+  `.pre-commit-config.yaml` and `templates/.pre-commit-config.yaml`. That
+  repository has **no remote**, so the commit cannot be pushed and the adopted
+  template is still identified here by file hash rather than by a dev-toolbox
+  commit. The rest of that repository's uncommitted work was left untouched.
+- `dev-toolbox/CHANGELOG.md` still has no entry for the shellcheck/markdownlint
+  bumps or the new shfmt template gate.
 - The shfmt gate is not enabled in dev-toolbox's own dogfood config (941
   inherited diff lines), and the image ships shfmt 3.7.0 while the source
   declared 3.13.1 — a version skew worth aligning.
