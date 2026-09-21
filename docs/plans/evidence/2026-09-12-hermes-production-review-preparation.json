@@ -1,0 +1,65 @@
+{
+  "schema": "hermes-production-review-preparation-v1",
+  "timestamp": "2026-09-12T02:15:22.667654+00:00",
+  "scope": "offline-configuration-review-only",
+  "production_ready": false,
+  "production_accessed": false,
+  "configuration_check": "PASS",
+  "configuration_root": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-production-review/configuration",
+  "destinations": {
+    "/etc/nvpcr/hardware.nvpcr": {
+      "type": "symlink",
+      "target": "/dev/null"
+    },
+    "/etc/nvpcr/cryptsetup.nvpcr": {
+      "type": "symlink",
+      "target": "/dev/null"
+    },
+    "/etc/systemd/system/systemd-pcrproduct.service": {
+      "type": "symlink",
+      "target": "/dev/null"
+    },
+    "/etc/dracut.conf.d/99-hermes-standard-tpm2.conf": {
+      "type": "file",
+      "sha256": "5ed0c35c3cd0f282f2569b3b37810ef8d86b82328069def2feb4a3b696ead8cc",
+      "mode": "0644"
+    }
+  },
+  "source_sha256": {
+    "scripts/hermes/unattended/tpm_profile.py": "8bfc6130067d141e98b057f06787612d938a6b84f80fe2d1c00ec72516be5b19",
+    "scripts/hermes/unattended/boot_build.py": "c63b0fff03213749d43568b1d8ab8ecad61aa80e3e66174e4b613ecfa3e0ebae",
+    "docs/HERMES_TPM_DEPENDENCY_REVIEW.md": "a81836af208c3788a9103e9b85599a76b9e70ddcb555cb2c77ede4af3e934582",
+    "docs/HERMES_UNATTENDED_DEPLOYMENT.md": "b5c0ec688fb7e94c5ed642cd14805e7fb8d679cbd63aa528de7e0de79e99134a"
+  },
+  "pending": [
+    "full B4/B7 live matrix and independent cleanup",
+    "fresh protected production backup and physical recovery readiness",
+    "exact production current and previous signed UKIs and matching modules",
+    "hardware boot and new-token-only acceptance",
+    "restricted identities and encrypted credential acceptance",
+    "production-bound signed release and deployment acceptance"
+  ],
+  "fresh_production_backup": null,
+  "production_current_uki_sha256": null,
+  "production_previous_uki_sha256": null,
+  "new_token_id": null,
+  "new_slot_id": null,
+  "production_release_sha256": null,
+  "independent_preparation": {
+    "recorded_at": "2026-09-12T02:20:05.892192+00:00",
+    "embedded_guest_syntax": {
+      "credential_probe": 2,
+      "pcr_boot": 1,
+      "external_probe": 1
+    },
+    "desktop_notification_preflight": {
+      "dbus_session_address_present": true,
+      "runtime_directory_present": true,
+      "notify_send_present": true,
+      "gdbus_present": true,
+      "notification_service_owner": true,
+      "notification_sent": false,
+      "visible_receipt": "UNVERIFIED"
+    }
+  }
+}

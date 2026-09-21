@@ -1,0 +1,605 @@
+{
+  "schema": "hermes-standard-tpm2-live-observation-v1",
+  "updated_at": "2026-09-10T17:28:06.432037+00:00",
+  "environment": "local Fedora workstation / fixed disposable libvirt+swtpm guest; production not mutated",
+  "operator_evidence": {
+    "recorded_at": "2026-09-10T16:46:55.140986+00:00",
+    "provenance": "operator supplied JSON in this task; not independently rerun",
+    "collector_sha256": "06064b53d079cf13c1442bc3f02c2c585d5f2c1bdc5c10c5929322500309d30a",
+    "result": {
+      "schema": "hermes-custom-tpm-inventory-v1",
+      "timestamp": "2026-09-10T16:41:36.494248+00:00",
+      "effective_uid": 0,
+      "hits": [],
+      "unreviewed": [],
+      "scanned_files": 0,
+      "scanned_bytes": 0,
+      "directories": [
+        {
+          "path": "/var/spool/cron",
+          "state": "visited"
+        },
+        {
+          "path": "/home/hermes/.config/systemd/user",
+          "state": "absent"
+        },
+        {
+          "path": "/home/hermes/.config/containers/systemd",
+          "state": "absent"
+        },
+        {
+          "path": "/root/.config/systemd/user",
+          "state": "absent"
+        },
+        {
+          "path": "/root/.config/containers/systemd",
+          "state": "absent"
+        }
+      ],
+      "walked_directories": 1,
+      "scope": "protected-consumer-remainder",
+      "relevant_packages": [],
+      "coverage_complete": true,
+      "consumer_absence_proven": false
+    },
+    "approval": {
+      "reference": "user message accompanying protected-consumer JSON, 2026-09-10",
+      "text": "I approve AR04-L0/L1/L2: temporary broker/socket access for UID 984, fixed-VM power permission, one fresh lab run with a maximum four-hour grant, and mandatory cleanup and restoration.",
+      "production_operations": false,
+      "maximum_runs": 1,
+      "maximum_grant_seconds": 14400
+    }
+  },
+  "evidence_directory": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run",
+  "L0": {
+    "timestamp": "2026-09-10T16:49:36.547369+00:00",
+    "operation": "AR04-L0",
+    "result": "PASS",
+    "root": "/var/lib/hermes-standard-tpm2-20260910",
+    "source_archive_sha256": "9e7d8b765750fd0579bf1f4719ddaced14dc4c71e1864b0b03852e20f46f6a14",
+    "source_files": 71,
+    "broker_before_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_during_sha256": "3c3e16074e883f9cfb7fe77684efd404e43bfa561855f08636f7366ac96e6c71",
+    "test_uid": 984,
+    "production_disabled": true,
+    "grant_issued": false,
+    "services_started": false,
+    "temporary_control_hashes": {
+      "hermes-standard-tpm2-20260910.service": "b315651462cdde52e4f07c8b44e20c291f428bdcbb12f44df805fa45133694a3",
+      "hermes-standard-tpm2-20260910-failed.service": "ddd46b9ae17f4a18183b4ea750d405b0bf97af41a13a08bc1a9ea41290e3a7f6",
+      "90-hermes-standard-tpm2-20260910.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+      "hermes-standard-tpm2-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+      "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+      "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451"
+    }
+  },
+  "L1": {
+    "status": "FAIL",
+    "requested_at": "2026-09-10T16:49:59.549160+00:00",
+    "run_id": "3882cd7b48e3d8472f12d73792f7d9afa210bab572352612f1034129e2a08605",
+    "invocation_id": "a1ba292946b740b2ab03e97e38cdf2a8",
+    "grant_issued_at": 1789058999,
+    "grant_expires_at": 1789073399,
+    "maximum_runs": 1,
+    "policy_binding": "7c0a629483c42d365745681ddc5c4fc52290f30d2617efd756d2df7c474c65ad",
+    "source_identity": "9ec3fcc4cd93f26563abe58d64f0de5943ea299fabc9bbfefc84045098b97766",
+    "final": {
+      "lifecycle.json": {
+        "binding": "7c0a629483c42d365745681ddc5c4fc52290f30d2617efd756d2df7c474c65ad",
+        "certified": false,
+        "certifier_secrets_purged": true,
+        "cleanup_failure": null,
+        "domain_destroyed": true,
+        "failure": "lifecycle-execution-failed",
+        "failure_context": {
+          "locations": [
+            {
+              "file": "lifecycle.py",
+              "function": "execute",
+              "line": 136
+            },
+            {
+              "file": "lifecycle_fixture.py",
+              "function": "prepare",
+              "line": 365
+            },
+            {
+              "file": "lifecycle_fixture.py",
+              "function": "build",
+              "line": 214
+            },
+            {
+              "file": "tpm_profile.py",
+              "function": "inspect_initrd",
+              "line": 135
+            },
+            {
+              "file": "common.py",
+              "function": "require",
+              "line": 24
+            }
+          ],
+          "type": "Failure"
+        },
+        "guest_identity": {
+          "machine_id_sha256": "2cac2579c2c2c65c48cafeda711ce381011fb60dd1cb18557e16cf49f0cccd31",
+          "ssh_fingerprint": "SHA256:HVSN8U5vrjZq0IsurFuT3ZZo5SRaVNy5HD+M5oejCvU"
+        },
+        "inputs_started": true,
+        "install_started": true,
+        "lab_window": {
+          "binding": "7c0a629483c42d365745681ddc5c4fc52290f30d2617efd756d2df7c474c65ad",
+          "expires_at": 1789073399,
+          "issued_at": 1789058999,
+          "run_id": "3882cd7b48e3d8472f12d73792f7d9afa210bab572352612f1034129e2a08605",
+          "schema": "hermes-lifecycle-lab-window-v1"
+        },
+        "pool_identity": [
+          46,
+          3954256
+        ],
+        "pool_owned": true,
+        "private_purged": true,
+        "recovery_readback": true,
+        "run_id": "3882cd7b48e3d8472f12d73792f7d9afa210bab572352612f1034129e2a08605",
+        "schema": "hermes-lifecycle-state-v1",
+        "slot": "2026-09-10",
+        "source_sha256": "9ec3fcc4cd93f26563abe58d64f0de5943ea299fabc9bbfefc84045098b97766",
+        "stage": "failed-cleaned",
+        "storage_purge_started": true,
+        "vm_destroyed": true
+      },
+      "cleanup.json": {
+        "candidate_sha256": null,
+        "completed_at": 1789060013,
+        "credentials_reconciled": false,
+        "domain_absent": true,
+        "guest_purged": false,
+        "logical_deletion": true,
+        "private_material_absent": true,
+        "release_signed": false,
+        "run_id": "3882cd7b48e3d8472f12d73792f7d9afa210bab572352612f1034129e2a08605",
+        "schema": "hermes-lifecycle-cleanup-v1"
+      }
+    },
+    "failure_observed_at": "2026-09-10T17:07:32.710515+00:00",
+    "grant_consumed": true
+  },
+  "L2": {
+    "timestamp": "2026-09-10T17:12:52.984297+00:00",
+    "operation": "AR04-L2",
+    "result": "PASS",
+    "lifecycle_stage": "failed-cleaned",
+    "provider_credential": "not-issued",
+    "fixed_domain_disk_nvram_swtpm_absent": true,
+    "private_material_absent": true,
+    "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_metadata_xattrs_restored": true,
+    "test_uid_restored": 987,
+    "production_role_disabled": true,
+    "socket_runtime_credential_absent": true,
+    "temporary_units_override_power_grant_helpers_removed": true,
+    "consumed_grant_archived_and_active_grant_removed": true,
+    "old_policy_journal_timers_preserved": true,
+    "unit_results_before_removal": {
+      "hermes-standard-tpm2-20260910.service": [
+        "ActiveState=failed",
+        "SubState=failed",
+        "InvocationID=a1ba292946b740b2ab03e97e38cdf2a8",
+        "Result=exit-code",
+        "ExecMainStatus=69"
+      ],
+      "hermes-standard-tpm2-20260910-failed.service": [
+        "ActiveState=inactive",
+        "SubState=dead",
+        "InvocationID=00748a91e3f3435aba83e6b44273a9ae",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.service": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=5b8b0073519b4c58874081fafd799485",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.socket": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=90e74a6159d9449daf1edcfe08367976",
+        "Result=success"
+      ]
+    },
+    "release_signed": false
+  },
+  "remaining_gates": [
+    "Diagnose/correct baseline initrd mask validation, then fresh separately approved integration run",
+    "B3 previous approved image boot",
+    "B4 unauthorized boot artifacts and unapproved PCR11 policy rejection",
+    "complete B7 interruption matrix",
+    "production P2 hardware boot/recovery, then P3/P4"
+  ],
+  "production_ready": false,
+  "local_correction": {
+    "status": "PASS_LOCAL_TESTS",
+    "reproduction": {
+      "timestamp": "2026-09-10T17:14:26.191821+00:00",
+      "environment": "unprivileged disposable sysroot; installed workstation dracut-108-8.fc44",
+      "checks": [
+        {
+          "path": "etc/nvpcr/hardware.nvpcr",
+          "present": true,
+          "symlink": true,
+          "target": "../../dev/null"
+        },
+        {
+          "path": "etc/nvpcr/cryptsetup.nvpcr",
+          "present": true,
+          "symlink": true,
+          "target": "../../dev/null"
+        },
+        {
+          "path": "etc/systemd/system/systemd-pcrproduct.service",
+          "present": true,
+          "symlink": true,
+          "target": "../../../dev/null"
+        }
+      ],
+      "command_template": [
+        "/usr/lib/dracut/dracut-install",
+        "-r",
+        "<isolated-source>",
+        "-D",
+        "<isolated-destination>",
+        "-a",
+        "/etc/nvpcr/hardware.nvpcr",
+        "/etc/nvpcr/cryptsetup.nvpcr",
+        "/etc/systemd/system/systemd-pcrproduct.service"
+      ],
+      "exit_code": 0,
+      "diagnostic": ""
+    },
+    "upstream_source": "https://raw.githubusercontent.com/dracut-ng/dracut-ng/108/src/install/dracut-install.c",
+    "tests": [
+      {
+        "command": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_hermes_tpm_profile.py"
+        ],
+        "timestamp": "2026-09-10T17:17:39.719660+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/test_hermes_tpm_profile.py.log",
+        "sha256": "b6cf2031a4cb1bbee4fd4d87f3c33cc4ba39564039a95d83370c4e93e1157a58",
+        "tail": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 0.727s\n\nOK\n"
+      },
+      {
+        "command": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_hermes_lifecycle.py"
+        ],
+        "timestamp": "2026-09-10T17:17:39.721371+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/test_hermes_lifecycle.py.log",
+        "sha256": "2cbddb193cf84f06cd13aa80873a3d94f51d626a347cd3323d23dbed7ae03715",
+        "tail": "..................................................................\n----------------------------------------------------------------------\nRan 66 tests in 4.659s\n\nOK\n"
+      }
+    ],
+    "changes": [
+      "accept exact dracut relative-null links only with real unambiguous archive directories",
+      "retain sanitized pre-signing module/mask/archive verdicts before failure"
+    ],
+    "limitations": [
+      "failed guest archive was removed by mandatory cleanup; exact guest mask representation not recovered",
+      "workstation dracut 108-8.fc44 reproduction is not a new full Fedora guest build or boot"
+    ]
+  },
+  "next_package": {
+    "prepared_at": "2026-09-10T17:19:01.043735+00:00",
+    "directory": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/review-package-r2",
+    "source_files": 71,
+    "proposal": {
+      "broker_test_uid_before": 987,
+      "broker_test_uid_during": 984,
+      "domain_uuid": "4db6369a-2b8b-427f-a47a-a5d83bb40cff",
+      "existing_broker_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "fixed_domain": "lab-hermes-server",
+      "issued": false,
+      "maximum_lifecycle_runs": 1,
+      "maximum_window_seconds": 14400,
+      "policy_binding": "6fb4f69cdee32a3331a561345d9776bdbeeab2aa1fbc8979f2dfde8619083da0",
+      "production_broker_role_remains_disabled": true,
+      "production_operations_authorized": false,
+      "release_signing_authorized": false,
+      "root_destination": "/var/lib/hermes-standard-tpm2-20260910-r2",
+      "run_id": "e2fc5937ad3c02f437df891f0d224e099c3ef2cda49b53436f7d35baba6a7c05",
+      "schema": "hermes-lab-operation-proposal-v1",
+      "source_archive_sha256": "052a2294e22b1f5ca12ccf6fa18bc80fec41ef3e6df74d068e64abe7abcef1ee",
+      "target": "172.16.99.12",
+      "sudoers_destination": "/etc/sudoers.d/hermes-standard-tpm2-r2-power",
+      "socket_override_destination": "/etc/systemd/system/hermes-lab-credentials.socket.d/90-hermes-standard-tpm2-20260910-r2.conf",
+      "authorization_status": "NOT_APPROVED"
+    },
+    "control_hashes": {
+      "source-manifest.json": "a211182ca6fd5dbe322efb4c724aa6fab06b4c44b7d218cddfc4eb3d10501806",
+      "source.tar": "052a2294e22b1f5ca12ccf6fa18bc80fec41ef3e6df74d068e64abe7abcef1ee",
+      "policy.json": "6fb4f69cdee32a3331a561345d9776bdbeeab2aa1fbc8979f2dfde8619083da0",
+      "hermes-standard-tpm2-20260910-r2.service": "42e919adbf87b4ef46dbf48560ad57433fb9f24ad1963570e251a2215efaa139",
+      "hermes-standard-tpm2-20260910-r2-failed.service": "27636a426ef045326d6f7e1339ccb96a41c702c3f01a9760cdb234e6a71a2a5c",
+      "90-hermes-standard-tpm2-20260910-r2.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+      "hermes-standard-tpm2-r2-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+      "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+      "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+      "operation-proposal.json": "190134b57319393cc91eabb6129d0315a7e2868e67a888a97d86e2cbe2e6a491"
+    }
+  },
+  "status": "FIRST_RUN_FAILED_AND_RESTORED_R2_PREPARED_NOT_APPROVED",
+  "validation": {
+    "r2_package": {
+      "timestamp": "2026-09-10T17:21:31.919308+00:00",
+      "result": "PASS",
+      "source_files": 71,
+      "original_root_snapshot_unchanged": true,
+      "archive_regular_paths_modes_hashes_current_sources_match": true,
+      "grant_unissued_new_run_id": true,
+      "checks": [
+        {
+          "name": "r2-units",
+          "command": [
+            "/usr/bin/systemd-analyze",
+            "verify",
+            "--man=no",
+            "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/review-package-r2/hermes-standard-tpm2-20260910-r2.service",
+            "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/review-package-r2/hermes-standard-tpm2-20260910-r2-failed.service"
+          ],
+          "timestamp": "2026-09-10T17:21:25.588669+00:00",
+          "exit_code": 0,
+          "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/r2-units.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "r2-sudoers",
+          "command": [
+            "visudo",
+            "-cf",
+            "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/review-package-r2/hermes-standard-tpm2-r2-power.sudoers"
+          ],
+          "timestamp": "2026-09-10T17:21:26.205375+00:00",
+          "exit_code": 0,
+          "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/r2-sudoers.log",
+          "sha256": "08318b786d27e236ae1c4f77e25721eb7da7ce8da15048f3112235aefb52af64"
+        },
+        {
+          "name": "r2-media-helper",
+          "command": [
+            "python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_hermes_unattended.py",
+            "-k",
+            "signed_installer_media_round_trip"
+          ],
+          "timestamp": "2026-09-10T17:21:26.245898+00:00",
+          "exit_code": 0,
+          "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/r2-media-helper.log",
+          "sha256": "4d8bafdc112953fcb3afe1427246843ecc5b87b8d50c2c121cdbf26e7a84eff1"
+        }
+      ]
+    },
+    "documents": [
+      {
+        "name": "documents-final",
+        "command": [
+          "python3",
+          "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/validate-docs.py"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "timestamp": "2026-09-10T17:22:53.954766+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/documents-final.log",
+        "sha256": "8ffd710abe2254f56fc24cf5032e580b09ea69c53340d604fe0b423f6401963c"
+      },
+      {
+        "name": "guide-final",
+        "command": [
+          "./tests/test-hermes-guide.sh"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "timestamp": "2026-09-10T17:22:54.476872+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/guide-final.log",
+        "sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691"
+      },
+      {
+        "name": "markdown-final",
+        "command": [
+          "markdownlint-cli2"
+        ],
+        "cwd": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-review",
+        "timestamp": "2026-09-10T17:22:55.670034+00:00",
+        "exit_code": 1,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-final.log",
+        "sha256": "ebb07d73c8e2e39f317e7dcc713d47559c734e820486b6dff4682911a1a29ecc"
+      },
+      {
+        "name": "whitespace-final",
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "timestamp": "2026-09-10T17:22:57.895594+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/whitespace-final.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "failed_markdown_followups": [
+      {
+        "command": [
+          "markdownlint-cli2"
+        ],
+        "cwd": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-review",
+        "timestamp": "2026-09-10T17:25:21.908612+00:00",
+        "exit_code": 1,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-corrected.log",
+        "sha256": "57d466bb3732602a426e0590fb991519889efd801f57f14617a1cece7d8d579f"
+      },
+      {
+        "timestamp": "2026-09-10T17:26:04.887045+00:00",
+        "command": [
+          "markdownlint-cli2"
+        ],
+        "cwd": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-review",
+        "exit_code": 1,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-paragraph-wrap.log",
+        "sha256": "c8ca879892b4c3075f3218b2c39a90332794686ba261665d78e555e5162bd063"
+      }
+    ],
+    "corrected_markdown": {
+      "timestamp": "2026-09-10T17:26:47.720422+00:00",
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "cwd": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-review",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-restored-list.log",
+      "sha256": "77d70b99ca7e5d373e05200543d906b6879aa1d853db4dc953e9cc1acfd41a3e"
+    },
+    "preservation": {
+      "timestamp": "2026-09-10T17:23:54.723435+00:00",
+      "result": "PASS",
+      "changed_preexisting": [
+        "docs/HERMES_INSTALLATION_VERIFICATION.md",
+        "docs/HERMES_SELINUX_TPM_REPAIR.md",
+        "docs/HERMES_TPM_DEPENDENCY_REVIEW.md",
+        "docs/HERMES_UNATTENDED_DEPLOYMENT.md",
+        "docs/plans/2026-09-07-hermes-unattended.md",
+        "scripts/hermes/unattended/lifecycle_fixture.py",
+        "scripts/hermes/unattended/tpm_profile.py",
+        "tests/test_hermes_lifecycle.py",
+        "tests/test_hermes_tpm_profile.py",
+        "vm/DEPLOYMENT_TASKS.md"
+      ],
+      "new_files": [
+        "docs/plans/evidence/2026-09-10-hermes-standard-tpm2-live.json"
+      ],
+      "missing_files": [],
+      "preserved_policy_source_test_evidence_files": 33,
+      "other_preexisting_files_preserved": true
+    },
+    "final_handoff": [
+      {
+        "command": [
+          "markdownlint-cli2"
+        ],
+        "cwd": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/markdown-review",
+        "timestamp": "2026-09-10T17:28:03.353572+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/handoff-markdown.log",
+        "sha256": "77d70b99ca7e5d373e05200543d906b6879aa1d853db4dc953e9cc1acfd41a3e"
+      },
+      {
+        "command": [
+          "python3",
+          "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/validate-docs.py"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "timestamp": "2026-09-10T17:28:05.844496+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/handoff-links.log",
+        "sha256": "8ffd710abe2254f56fc24cf5032e580b09ea69c53340d604fe0b423f6401963c"
+      },
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "timestamp": "2026-09-10T17:28:06.411628+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-standard-tpm2-campaign/20260910T160319Z/authorized-run/handoff-whitespace.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "final_document_hashes": {
+      "docs/HERMES_TPM_DEPENDENCY_REVIEW.md": "5ea5bef953dd82ebadcea2b957e0ffacdf8efb7ce7b9ac7dadd3e07fda976392",
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": "e0fef5aaa8e1034ea4b7ddbb3531a13bd79aed1e0d93478bfd623a83d9920f6f",
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": "b10fe1473db726f166ff6f8727bb0ec3c51eb72118fb171282874256b84d24a6",
+      "docs/HERMES_UNATTENDED_DEPLOYMENT.md": "ee57f4ba20de81cfbfdb3ccdcaad7adcbc28f76ef2cbdf4f3ed2f93a6f665736",
+      "docs/VM_TESTING_GUIDE.md": "a1b514aa2e9ecaf5b4e36271d42f59c655e89e88c083b622871579c01dd9be9e",
+      "docs/CONTRIBUTING.md": "74abf7adb08e026c944e5f99b2ad72a135606569d2afb4b076b2b6f5385a91a3",
+      "vm/DEPLOYMENT_TASKS.md": "60ec7d6541fffdc2a0e1ee948b1c6256d9490403a6f7cbc0dd29e295a1a95905",
+      "docs/plans/2026-09-07-hermes-unattended.md": "fa68348980e901a51fa9751e5f936f9732bb3d7bb151f7d73d6f95f6410eaeb6"
+    }
+  },
+  "independent_restoration": {
+    "timestamp": "2026-09-10T17:25:05.363276+00:00",
+    "result": "PASS",
+    "absence": {
+      "/var/lib/hermes-standard-tpm2-20260910/state/3882cd7b48e3d8472f12d73792f7d9afa210bab572352612f1034129e2a08605/private": true,
+      "/var/lib/hermes-standard-tpm2-20260910/state/3882cd7b48e3d8472f12d73792f7d9afa210bab572352612f1034129e2a08605/work/inputs": true,
+      "/var/lib/hermes-standard-tpm2-20260910/state/3882cd7b48e3d8472f12d73792f7d9afa210bab572352612f1034129e2a08605/work/backup": true,
+      "/var/lib/hermes-standard-tpm2-20260910/grant.json": true,
+      "/var/lib/libvirt/images/hermes-tpm-lab": true,
+      "/var/lib/libvirt/qemu/nvram/lab-hermes-server_VARS.fd": true,
+      "/var/lib/libvirt/swtpm/4db6369a-2b8b-427f-a47a-a5d83bb40cff": true,
+      "/run/hermes-lab-credentials/broker.sock": true,
+      "/run/credentials/hermes-lab-credentials.service": true,
+      "/usr/local/libexec/hermes-lab-power": true,
+      "/etc/sudoers.d/hermes-standard-tpm2-power": true,
+      "/etc/systemd/system/hermes-lab-credentials.socket.d/90-hermes-standard-tpm2-20260910.conf": true,
+      "/etc/systemd/system/hermes-standard-tpm2-20260910.service": true,
+      "/etc/systemd/system/hermes-standard-tpm2-20260910-failed.service": true
+    },
+    "domain_list_empty": true,
+    "restored_socket": [
+      "ActiveState=inactive",
+      "SocketUser=hermes-lab-certifier",
+      "SocketGroup=hermes-lab-certifier",
+      "SocketMode=0600"
+    ],
+    "broker_hash_matches": true,
+    "provider_lease_not_issued": true,
+    "r2_not_installed": true,
+    "provider_read_correction": {
+      "initial_scope": "all filesystem/control assertions valid except provider lease path had 33 characters; provider assertion STALE",
+      "corrected_read": {
+        "timestamp": "2026-09-10T17:25:05.363276+00:00",
+        "result": "PASS",
+        "canonical_lease": "3882cd7b48e3d8472f12d73792f7d9af",
+        "provider_lease_and_credential_absent": true,
+        "broker_hash_restored_and_service_inactive": true
+      },
+      "original_L2_verification": "already used canonical run_id[:32] and remains valid"
+    }
+  },
+  "current_tasks": {
+    "AR01": "PASS bounded dependency review; arbitrary external use unproven",
+    "AR02": "PASS local dracut representation and failure-verdict correction",
+    "AR03": "PASS r2 package prepared; unapproved and unissued",
+    "AR04": "BLOCKED first integration failed; new r2 operation approval and full B1-B7 certification required",
+    "AR05": "BLOCKED AR04, then production P2/P3/P4 and concrete operation approvals"
+  },
+  "exact_next_action": "Review and explicitly approve AR04-L0/L1/L2 for the distinct r2 source/policy/run proposal, including temporary broker/socket UID984 access, fixed-domain power permission, one fresh maximum-four-hour grant and mandatory cleanup/restoration. No more production inventory is requested."
+}

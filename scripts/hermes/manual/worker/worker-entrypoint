@@ -1,0 +1,17 @@
+#!/bin/sh
+# Worker container entrypoint: prepare the writable runtime state that a
+# read-only root filesystem cannot provide, then start the socket adapter.
+set -eu
+
+# /home/worker is a persistent bind mount. The container root can chown it
+# inside its own user namespace, which is what maps to the fixed worker UID.
+if [ -d /home/worker ]; then
+  mkdir -p /home/worker/.hermes
+  chown 1000:1000 /home/worker /home/worker/.hermes 2>/dev/null || true
+  chmod 0700 /home/worker 2>/dev/null || true
+fi
+
+mkdir -p /run/sshd
+chmod 0755 /run/sshd
+
+exec /usr/local/bin/worker-socket-adapter

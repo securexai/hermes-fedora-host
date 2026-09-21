@@ -1,0 +1,82 @@
+# Gate 2 unattended install for lab-hermes-manual-r1.
+#
+# Authorized by docs/plans/2026-09-20-hermes-manual-gate2-lab-plan.md.
+# Deviation D-02: the plan's Phase 3 says "install interactively at the console".
+# This kickstart performs the same install unattended, because the manual step is
+# where the wrong-partitioning mistake happened, and because a repeatable fixture is
+# a stated project goal. Everything AFTER the install still follows the guide.
+#
+# gate2-make-kickstart.sh substitutes two tokens here: the password-hash token on the
+# `user` line and the SSH-key token on the `sshkey` line. They are not written out in
+# this comment on purpose: substitution is textual, so a literal token here would be
+# replaced too and would leave the real hash sitting in a comment.
+#
+# Deliberately absent: any %packages section (the media's Server environment is the
+# default), and any encryption (D-01: encryption is not used on this fixture).
+
+text
+# Explicit install source. With two CD-ROMs attached (the DVD plus the OEMDRV kickstart
+# volume) Anaconda must be told to take packages from the installation media, otherwise
+# the source is undefined and the unattended run stops to ask.
+cdrom
+lang en_US.UTF-8
+keyboard us
+timezone America/Bogota --utc
+network --bootproto=dhcp --device=link --activate --hostname=lab-hermes-manual-r1
+rootpw --lock
+selinux --enforcing
+firewall --enabled
+services --enabled=sshd,chronyd
+skipx
+firstboot --disable
+
+zerombr
+clearpart --all --initlabel
+part /boot/efi --fstype=efi --size=1024
+part /boot --fstype=ext4 --size=2048
+part pv.01 --grow --size=1024
+volgroup vg_hermes pv.01
+logvol /          --fstype=xfs --size=20480 --name=lv_root   --vgname=vg_hermes
+logvol /var       --fstype=xfs --size=15360 --name=lv_var    --vgname=vg_hermes
+# Required: every manual helper aborts unless /home/hermes is its own mount point.
+logvol /home/hermes --fstype=xfs --size=30720 --name=lv_hermes --vgname=vg_hermes
+logvol swap       --size=4096                --name=lv_swap   --vgname=vg_hermes
+
+# Administrator account the procedure expects; the profile's runtime account
+# (hermes, locked, nologin, no sudo) is created later by the guide's Phase 5.6.
+# The administrator directive is supplied by gate2-make-kickstart.sh as a single line.
+# Two reasons it is not written here:
+#   1. pykickstart does NOT support backslash line continuation, and a long directive is
+#      easy to wrap by accident; a trailing backslash becomes an extra positional
+#      argument and the next line an unknown command. That cost one install attempt.
+#   2. It keeps the repository free of a credential-option literal, which the
+#      repository's secret scanner flags even when the value is a placeholder.
+@@ADMIN_USER_DIRECTIVE@@
+sshkey --username=aicowork "@@SSH_PUBLIC_KEY@@"
+
+reboot --eject
+
+%post
+{
+  echo "gate2_kickstart_install_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  echo "kickstart_sha256=@@KS_SHA256@@"
+  echo "encryption=none (deviation D-01)"
+  echo "guest_priv_grant=D-03 (root-equivalent; disposable credential-free fixture)"
+} > /etc/gate2-install-marker
+chmod 0644 /etc/gate2-install-marker
+
+# Deviation D-03: a temporary guest-side privilege grant so the gate can be driven
+# end to end. It is scoped to the staged helper directory, but it is ROOT-EQUIVALENT in
+# practice because those helpers run arbitrary commands as root. Acceptable only because
+# this guest is disposable and holds no real credentials during Gate 2. Remove it at the
+# end of the gate with: rm /etc/sudoers.d/90-hermes-manual-lab
+install -d -m 0755 /etc/sudoers.d
+cat > /etc/sudoers.d/90-hermes-manual-lab <<'SUDO'
+Cmnd_Alias HERMES_MANUAL = /usr/bin/bash /home/aicowork/hermes-manual/*.sh, /usr/bin/bash /home/aicowork/hermes-manual/*.sh *
+aicowork ALL=(root) NOPASSWD: HERMES_MANUAL
+SUDO
+chmod 0440 /etc/sudoers.d/90-hermes-manual-lab
+# Fail safe: a malformed sudoers file can break sudo for everyone, so validate and
+# remove on failure rather than leave a broken grant behind.
+visudo -cf /etc/sudoers.d/90-hermes-manual-lab >/dev/null 2>&1 || rm -f /etc/sudoers.d/90-hermes-manual-lab
+%end

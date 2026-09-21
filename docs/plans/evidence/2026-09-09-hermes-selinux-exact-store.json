@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-09-09T03:54:04.119726+00:00",
+  "environment": "isolated rootless Fedora 44 container hermes-selinux-build-20260909; production SSH read-only",
+  "export_sha256": "d9687d0fcef3a931ce0edcab4fc7d29b369c7982f6c7aa53116752f48586dc5a",
+  "baseline_rebuilt_byte_identical_to_current_host": true,
+  "inspection": {
+    "base_sha256": "bf58d5f5ae23502d844f70c153ef5366c31bf16ac9c77f548b94f3cf1aea1949",
+    "merged_sha256": "67d4f87afb2df3137fb8ab81f8f260942c3b43238bb275d16826b6c7a2ede8c0",
+    "checks": {
+      "candidate_enforcing": true,
+      "no_new_permissive_types": true,
+      "init_transition": true,
+      "access_dosfs_t": true,
+      "access_syslogd_var_run_t": true,
+      "access_tpm_device_t": true,
+      "access_init_var_lib_t": true,
+      "access_init_var_run_t": true,
+      "access_hermes_tpm2_setup_exec_t": true,
+      "no_capability": true,
+      "no_capability2": true,
+      "no_create_tcp_socket": true,
+      "no_create_udp_socket": true,
+      "no_create_rawip_socket": true,
+      "no_mutation_shadow_t": true,
+      "no_mutation_security_t": true,
+      "no_mutation_efivarfs_t": true,
+      "unchanged_init_dosfs_t": true,
+      "unchanged_init_syslogd_var_run_t": true
+    },
+    "passed": true,
+    "scope": "offline policy inspection only; not hardware or persistence acceptance"
+  },
+  "file_context": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+  "module_sha256": "1ce86147143ac668910e5136e89e54f69a9f1d62a55073a0c5d1b37406372a5a",
+  "helper_sha256": "54b057c6f5a174013fbd4019eae77db690cb89f2392bb53f3d85902e712bb36f",
+  "methods": [
+    "Pinned SCP and operator SHA256 comparison; validate all archive entry paths and file types",
+    "semodule -n -s targeted -S /tmp/hermes-exact/base-store -B (container only)",
+    "semodule -n -s targeted -S /tmp/hermes-exact/merged-store -X 400 -i /tmp/hermes-exact/hermes_tpm2_setup.pp (container only)",
+    "python3 verify_policy.py base-store/targeted/active/policy.kern merged-store/targeted/active/policy.kern",
+    "matchpathcon -f merged-store/targeted/active/file_contexts /usr/lib/systemd/systemd-tpm2-setup"
+  ],
+  "failed_attempts": [
+    "Initial combination of -p and absolute -S prefixed the store path, so it addressed an empty store. Initial baseline observation invalidated; link failed resolving roletype. Removed -p and reran both required gates against the exported stores.",
+    "An initial output lookup expected base-root/targeted/policy/policy.35, which did not exist. Canonical store output policy.kern used for final comparisons.",
+    "Documentation lint initially found three long lines, including a prior continuation note. Rewrapped those lines. Initial CLI base config still selected repository globs; final check used isolated exact copies with fix false."
+  ],
+  "helper_checks": [
+    "bash -n passed",
+    "shellcheck passed",
+    "shfmt applied",
+    "Missing approval argument and corrupt module rejected before privileged operations"
+  ],
+  "limits": [
+    "No production module installation, executable relabel, service restart, TPM operation or reboot.",
+    "Helper installation success path has not run on hardware.",
+    "Actual service domain, anchor persistence, idempotency and cold boot remain untested.",
+    "Guide preflight and explicit approval remain required; helper handles only policy installation, not service execution or automatic rollback."
+  ],
+  "private_artifacts": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909",
+  "documentation_checks": {
+    "timestamp": "2026-09-09T03:55:55.080070+00:00",
+    "hermes_guide": "PASS: 217 checks",
+    "markdownlint": "PASS: four exact document copies, fix false, zero errors",
+    "local_links": "PASS: eight repair-guide file targets",
+    "git_diff_check": "PASS before final result notes"
+  },
+  "container": "Stopped and retained after all build/check processes completed; idle sleep required SIGKILL after one-second stop timeout."
+}

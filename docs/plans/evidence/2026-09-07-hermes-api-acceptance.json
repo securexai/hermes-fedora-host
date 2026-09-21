@@ -1,0 +1,27 @@
+{
+  "started_at": "2026-09-07T23:10:28.462794+00:00",
+  "lease": "a61fb03119aed29a8bf10ce348132692",
+  "model": "gpt-5.6-luna",
+  "issued": true,
+  "revoked": true,
+  "procedure_sha256": "97044091e484eb1262a4f2f069eb202ada128f3369c2250d0e5abe97c97ba3ae",
+  "issue_attempted": true,
+  "guest": {
+    "credential_absent_in_inference_output": true,
+    "credential_absent_in_metadata_and_logs": true,
+    "credential_delivery": true,
+    "credential_mount_read_only": true,
+    "credential_restored": true,
+    "inference": true,
+    "inference_exit_code": 0,
+    "model": "gpt-5.6-luna",
+    "model_access": true,
+    "model_http_status": 200,
+    "no_ports": true,
+    "root_read_only": true,
+    "stderr_bytes": 0,
+    "stdout_bytes": 10
+  },
+  "finished_at": "2026-09-07T23:13:20.943549+00:00",
+  "pass": true
+}

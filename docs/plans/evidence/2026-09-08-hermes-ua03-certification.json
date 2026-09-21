@@ -1,0 +1,285 @@
+{
+  "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+  "candidate_manifest_sha256": "bf348b9fc25e93edd1de6a63862457da2022c3fb69b57dc64ee948f8c4939111",
+  "completed_at": 1788840331,
+  "domain_uuid": "4db6369a-2b8b-427f-a47a-a5d83bb40cff",
+  "environment": "isolated disposable TPM2 Fedora 44 lab",
+  "executed_certifier_code_sha256": {
+    "boot_build.py": "c63b0fff03213749d43568b1d8ab8ecad61aa80e3e66174e4b613ecfa3e0ebae",
+    "build_release.py": "ba8fb758444d6612c099b6046790c4a9928a69da4c2c65b5c5486c4097551a89",
+    "certify.py": "361b9078f050ac0f5cbf060985231087430559a15870f0e1ad055c20ccd64b62",
+    "certify_guest.py": "f29424b6722f805761fe7afa84a722c2a2cc3431f09e9959c7dd7ae2715d2f68",
+    "certify_observe.py": "31c61dc6716e8bb2302877a9b4dbf77d2ec7d3c80efd76e925704a5482967a65",
+    "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+    "common.py": "5dd9b679bdfe129f2f1b4651018cf9a1a70af6712688aa1f5fe93799574e7685",
+    "controller.py": "4dccef39d66f364eb3495b6cea08cb349b1ac7055d2f59a41f6f861856c3f6be",
+    "credentials.py": "d24f8f4dfdb5af8dbe937533000f0aaba3707b071348954cb1c53d1183e086a3",
+    "dispatcher.py": "1b7a6346c28ac01ee02179c7f3a5eb22df988197bf5393c1b2aa7ed4e249e804",
+    "efi_media.py": "b6951ec711b375af9383bd3df750b568ae0642dd09c53ca7c2f0aa0d0d1c1344",
+    "finalize.py": "a57cdc257b73e04086d49c4ad43750febc35169595b25d1b1af2c0faeaf2c8a9",
+    "firmware.py": "0a656cf54dab22ac1325fc44a13a0151b85a166b6123b43332c43ebb08357c35",
+    "gates.py": "bbbcbad23cb88d72847929304d9a27de650836df4f63d47476b59bcc48ac2b0a",
+    "host.py": "14c98e19a70371357b4707bbef8e9cc8934b03808f0024ef136c557e9e60af2c",
+    "lab_boot.py": "2b65eb31ee4f6d98ed9d3b0e19251c8630f4fb012c0fe5124f4660eed8a5a00a",
+    "lab_candidate.py": "e3adb3d89ff7efc7a1d41883f45c7ee8a5f0807317c43a4dca04549102dc8f62",
+    "lab_enroll_boot.py": "48f0148b1625130f5c9e0f1d424b0a3ef27fd9a12a65c2fedb4ca59f5d5d4f9c",
+    "maintenance.py": "e223813ba053b36b6575a2aa6b3bfc4563ea83f1a62b0ad20b7b26fb24e1fa99",
+    "materialize.py": "f8135eaebf0820fbba73eed7a7f52790594666b6d390d9122492667cf3765561",
+    "notify.py": "7ca9c98c31fd6ca8153f265efe30e1f169ff6fca78158beec6bbdc17349fbf4c",
+    "offline.py": "8d41ed97a3032be34eff5f62527aa54ace54db407520d80c4870bfe4b9261a6b",
+    "policy.py": "52da2f8b4f8fbad5b6d0c88022c9a4f2d325027755324955aa42480929d94bab",
+    "prepare.py": "985c7c1950adddbff30ce827b37d117b54055e40d27047c21519834e57adec39",
+    "release.py": "b55d71fd0332cfd51fe85b744eab3a9ad885445a989cf9cf741d8c3f4455b479",
+    "scan_candidate.py": "9d8bd8cd89f898b7e8310542ccd3cd0a7d33eea34487808091e97074c76ffd1e",
+    "signer.py": "a003b0ad521b7e539c3265a40efefb54770ca0bb08024b819651a004f0710d9a",
+    "transaction.py": "50e5d34297be55986db65b182be3998600ea5880e8c448ff0b2ed8d72b605b4d"
+  },
+  "final_access_verification": {
+    "certifier_ssh": true,
+    "observation": {
+      "boot_id": "bd5ff55d-3c66-41cb-aa26-1d611c937620",
+      "bounded_credential_leak_check": true,
+      "completed_at": 1788840312,
+      "credential_matches": true,
+      "kernel": "7.1.13-200.fc44.x86_64",
+      "no_ports": true,
+      "ok": true,
+      "overlay_read_only": true,
+      "package_inventory": "f40cbc4f9054a85fb9635016f58d304ef74f8cc2323927f877b997f821606b1d",
+      "root_read_only": true,
+      "runtime_healthy": true,
+      "secure_boot": true,
+      "security_config": true,
+      "selinux": "Enforcing",
+      "stage": "observed",
+      "tpm_services": true,
+      "uki_sha256": "1d602560d4ebc2a55987a0d7b7a8d17d816715c4be5f937a74d35f13d804361e"
+    },
+    "operator_ssh": true,
+    "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2",
+    "ssh_policy_verified": true
+  },
+  "gates": {
+    "boot": {
+      "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+      "cold": {
+        "boot_id": "bd5ff55d-3c66-41cb-aa26-1d611c937620",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1788839909,
+        "credential_matches": true,
+        "kernel": "7.1.13-200.fc44.x86_64",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "f40cbc4f9054a85fb9635016f58d304ef74f8cc2323927f877b997f821606b1d",
+        "root_read_only": true,
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_services": true,
+        "uki_sha256": "1d602560d4ebc2a55987a0d7b7a8d17d816715c4be5f937a74d35f13d804361e"
+      },
+      "completed_at": 1788839909,
+      "gate": "boot",
+      "release_id": "ua03-cert-20260908-05",
+      "result": "PASS",
+      "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2",
+      "warm": {
+        "boot_id": "b15c4e77-016e-45e3-98b9-d891888ce4e5",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1788839799,
+        "credential_matches": true,
+        "kernel": "7.1.13-200.fc44.x86_64",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "f40cbc4f9054a85fb9635016f58d304ef74f8cc2323927f877b997f821606b1d",
+        "root_read_only": true,
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_services": true,
+        "uki_sha256": "1d602560d4ebc2a55987a0d7b7a8d17d816715c4be5f937a74d35f13d804361e"
+      }
+    },
+    "credential_revocation": {
+      "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+      "completed_at": 1788840125,
+      "gate": "credential_revocation",
+      "lease": "f7fc227e7ded428e339fbd8770bc7fb5",
+      "ok": true,
+      "release_id": "ua03-cert-20260908-05",
+      "result": "PASS",
+      "revoked": true,
+      "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2"
+    },
+    "inference": {
+      "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+      "completed_at": 1788839799,
+      "exact_output": "HERMES_OK",
+      "gate": "inference",
+      "release_id": "ua03-cert-20260908-05",
+      "result": "PASS",
+      "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2",
+      "source": "candidate Host.acceptance before and after persistence reboot"
+    },
+    "package_replay": {
+      "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+      "completed_at": 1788839799,
+      "gate": "package_replay",
+      "inventory_sha256": "f40cbc4f9054a85fb9635016f58d304ef74f8cc2323927f877b997f821606b1d",
+      "ordered_stages": [
+        "reboot-pending",
+        "persistence-reboot",
+        "closed"
+      ],
+      "release_id": "ua03-cert-20260908-05",
+      "result": "PASS",
+      "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2"
+    },
+    "restore": {
+      "application_loaded_state": true,
+      "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+      "completed_at": 1788840005,
+      "encrypted_roundtrip": true,
+      "gate": "restore",
+      "ok": true,
+      "release_id": "ua03-cert-20260908-05",
+      "result": "PASS",
+      "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2",
+      "snapshot": "b673043bf348e8f638516c0d782dda4bde4214345c6d8e7559cc3490a34bdd27",
+      "stage": "restore-check"
+    },
+    "runtime": {
+      "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+      "boot_id": "bd5ff55d-3c66-41cb-aa26-1d611c937620",
+      "bounded_credential_leak_check": true,
+      "completed_at": 1788839909,
+      "credential_matches": true,
+      "gate": "runtime",
+      "kernel": "7.1.13-200.fc44.x86_64",
+      "no_ports": true,
+      "ok": true,
+      "overlay_read_only": true,
+      "package_inventory": "f40cbc4f9054a85fb9635016f58d304ef74f8cc2323927f877b997f821606b1d",
+      "release_id": "ua03-cert-20260908-05",
+      "result": "PASS",
+      "root_read_only": true,
+      "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2",
+      "runtime_healthy": true,
+      "secure_boot": true,
+      "security_config": true,
+      "selinux": "Enforcing",
+      "stage": "observed",
+      "tpm_services": true,
+      "uki_sha256": "1d602560d4ebc2a55987a0d7b7a8d17d816715c4be5f937a74d35f13d804361e"
+    },
+    "vulnerability_scan": {
+      "advisory": true,
+      "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+      "completed_at": 1788840044,
+      "findings": {
+        "CRITICAL": 20,
+        "HIGH": 457,
+        "LOW": 978,
+        "MEDIUM": 1497,
+        "UNKNOWN": 63
+      },
+      "gate": "vulnerability_scan",
+      "policy": "advisory-denylist-v1",
+      "policy_sha256": "a5c084a0b4879376ba307c85ea8c76a05857c217b09417cce19a72f472d2340d",
+      "release_id": "ua03-cert-20260908-05",
+      "result": "PASS",
+      "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2"
+    }
+  },
+  "negative_matrix": {
+    "artifact_fingerprint": "13aefaacc776ebf182fa4d6091f877167fc6deb0faedacd65749301b6b22f40b",
+    "checks": {
+      "changed_payload": true,
+      "closed_deploy_upgrade_rerun": true,
+      "credential_before_backup": true,
+      "deploy_before_backup": true,
+      "extra_fields": true,
+      "target_lock": true,
+      "wrong_backup_receipt": true,
+      "wrong_restore_receipt": true,
+      "wrong_run": true
+    },
+    "result": "PASS",
+    "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2"
+  },
+  "offline_validation": {
+    "basis": "checks observed in this execution record; source identities verified unchanged at assembly",
+    "checks": [
+      {
+        "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_unattended.py",
+        "result": "PASS",
+        "tests": 128
+      },
+      {
+        "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_offline.py",
+        "result": "PASS",
+        "tests": 12
+      },
+      {
+        "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_certify.py",
+        "result": "PASS",
+        "tests": 11
+      },
+      {
+        "command": "devbox run -- shellspec spec/hermes/ spec/vm/",
+        "examples": 138,
+        "result": "PASS"
+      },
+      {
+        "checks": 217,
+        "command": "devbox run -- ./tests/test-hermes-guide.sh",
+        "result": "PASS"
+      }
+    ],
+    "environment": "Devbox on the operator workstation"
+  },
+  "pending_gates": [
+    "UA-04: purge, destroy and sign",
+    "UA-05: explicitly authorized production enrollment"
+  ],
+  "production_touched": false,
+  "release_id": "ua03-cert-20260908-05",
+  "release_signed": false,
+  "result": "PASS",
+  "retained_attempts": [
+    {
+      "candidate": "v5",
+      "provider_credential_revoked": true,
+      "reason": "new kernel selected before matching RPM/module installation",
+      "result": "FAIL"
+    },
+    {
+      "candidate": "v6",
+      "credential_issued": false,
+      "reason": "offline bytecode-writing defect found before credential issuance",
+      "result": "INTERRUPTED"
+    },
+    {
+      "candidate": "v7",
+      "provider_credential_revoked": true,
+      "reason": "persistence-transition failure; primary error overwritten by cleanup failure; host stage ordering defect independently reproduced and fixed",
+      "result": "FAIL"
+    },
+    {
+      "candidate": "v8",
+      "encrypted_key_saved": false,
+      "matching_accounts": 0,
+      "provider_listing_complete": true,
+      "reason": "credential broker rejected issuance before package deployment",
+      "result": "FAIL"
+    }
+  ],
+  "run_id": "f7fc227e7ded428e339fbd8770bc7fb504a3ae27e1b0ebf794d8bcdbf35dc6a2",
+  "schema": "hermes-ua03-certification-v1"
+}

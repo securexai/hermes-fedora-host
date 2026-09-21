@@ -1,0 +1,268 @@
+{
+  "recorded_at": "2026-09-09T20:29:13.524424+00:00",
+  "scope": "Local SE9-SE11 preparation for one separately approved v2 late-service trial",
+  "environment": {
+    "python": "3.13.15",
+    "platform": "Linux",
+    "commands": "devbox run --",
+    "branch": "codex/hermes-unattended",
+    "base_revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9",
+    "worktree": "uncommitted; pre-existing unrelated changes preserved"
+  },
+  "artifact_sha256": {
+    "scripts/hermes/selinux/run-reviewed-service-v2.py": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+    "tests/test_hermes_selinux_service_v2.py": "c1d869e040fdab7c499e2149429664221db3a82580473963718ab9e252bfa36f"
+  },
+  "validation": [
+    {
+      "method": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_selinux_service_v2.py",
+      "expected": "All tests pass; no live host or TPM calls",
+      "actual": "PASS: 31 tests, 0 failures, 0.219 seconds",
+      "timestamp_note": "Observed during this preparation turn; recorded_at is the evidence write time",
+      "status": "STALE: duplicate-property rejection subsequently added; retained historical result"
+    },
+    {
+      "method": "Python compile(source, filename, exec) for helper and test file",
+      "expected": "Both parse without executing",
+      "actual": "PASS"
+    },
+    {
+      "method": "Import helper and call unit_state(systemd-journald.service) on workstation, asserting all required fields and empty hooks",
+      "expected": "Read-only actual CLI/D-Bus representation accepted",
+      "actual": "PASS; no service mutation, all required properties and five typed empty command arrays checked"
+    },
+    {
+      "timestamp": "2026-09-09T20:34:13.596705+00:00",
+      "method": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_selinux_service_v2.py",
+      "expected": "All tests pass; no live host or TPM calls",
+      "actual": "PASS: 32 tests, 0 failures, 0.243 seconds",
+      "timestamp_note": "Recorded immediately after the observed run"
+    },
+    {
+      "timestamp": "2026-09-09T20:34:13.596725+00:00",
+      "method": "Python compile(source, filename, exec) for final helper and test",
+      "actual": "PASS",
+      "expected": "Both parse without executing"
+    },
+    {
+      "timestamp": "2026-09-09T20:34:13.641493+00:00",
+      "method": "Final helper unit_state(systemd-journald.service), workstation read-only",
+      "expected": "All required fields and independently verified empty hooks",
+      "actual": "PASS"
+    }
+  ],
+  "preserved_failures": [
+    "Initial local CLI probe omitted empty ExecStartPre; regression reproduced missing --all: 30 tests, one failure.",
+    "Adding --all passed the regression but the real CLI still omitted empty command arrays. Reassessed using upstream v259 source and direct typed D-Bus queries; --all alone was insufficient.",
+    "Exploratory read-only busctl query included ExecStopPre, which is absent from the v259 service interface. Upstream dbus-service.c confirmed its absence; final helper queries only the five supported hooks.",
+    "Initial five-document Markdown validation failed on four duplicate blank lines introduced in this continuation; repaired only those lines. Initial logs retained.",
+    "Second Markdown pass retained one extra blank line at the historical/new-section boundary; inspected the exact boundary and normalized it. Both failed lint logs retained.",
+    "A subsequent appended result note introduced a new duplicate blank line. Final correction normalizes only the complete new section and its boundary after all notes are appended; failed corrected-markdownlint.log retained."
+  ],
+  "final_boundaries": [
+    "Pinned verified v2 loaded/disk policy, package versions, actual/expected label, backup payload hashes and firmware/anchor baseline",
+    "Both setup units idle at recorded pre-installation invocation timestamps; no queued jobs, pending dependency activation, propagation, extra execution hooks, automatic restart or emergency actions",
+    "Explicit v2 scope argument, operator root, root-private v2 backup and exclusive result reservation; an existing result blocks every rerun including failed preflight",
+    "Audit date parser checked before restart; healthy audit baseline refreshed immediately before request",
+    "One fixed systemctl --job-mode=fail restart systemd-tpm2-setup.service; process domain tied to that unit cgroup",
+    "Independent private process, service, snapshot, audit and journal evidence; private encrypted-anchor copies before and after when collection succeeds",
+    "Exit 76, skipped/stale invocation, missing domain, audit errors/loss/backlog, drift, changed early unit, changed anchor/SRK/LUKS/boot state and timeout cannot pass",
+    "Timeout terminates only the waiting systemctl client; actual unit may continue and requires read-only inspection",
+    "Repeated unit property rows are rejected, preventing multiple ExecStart commands from collapsing into one parsed command"
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/units/systemd-tpm2-setup.service.in",
+      "use": "Late-unit command and explicit exit-76 exclusion"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/core/dbus-unit.c",
+      "use": "Dependency, emergency-action and invocation property availability"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/core/dbus-service.c",
+      "use": "Supported service command-array properties"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/systemctl/systemctl-show.c",
+      "use": "Exec property rendering and typed command-array representation"
+    }
+  ],
+  "approval": "Pending; proposed private staging, one console-supervised late-service invocation and read-only observation review",
+  "limits": [
+    "No Hermes connection, production staging, privileged host action, service execution or reboot during preparation",
+    "Offline synthetic tests and a workstation parser check do not prove Hermes runtime completeness or cold-boot persistence",
+    "Host drift or concurrent administrator changes stop the trial; the helper does not lock out independent root/systemd activity",
+    "No automatic repeat, policy change, anchor restore, TPM clear, LUKS change or reboot; recovery after a service failure requires separate review",
+    "The existing enforcing policy permits TPM operations, type-wide raw fixed-disk reads and ESP writes; service execution can update TPM and encrypted anchors"
+  ],
+  "documentation_validation": [
+    {
+      "name": "hermes-guide",
+      "timestamp": "2026-09-09T20:31:43.948424+00:00",
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/hermes-guide.log",
+      "output_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691"
+    },
+    {
+      "name": "markdownlint",
+      "timestamp": "2026-09-09T20:31:45.597658+00:00",
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 1,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/markdownlint.log",
+      "output_sha256": "4b7e32d8d40de7060653a69ff59073596588c8f13507670ed65ef2598513537f"
+    },
+    {
+      "name": "handoff-syntax",
+      "timestamp": "2026-09-09T20:31:45.606227+00:00",
+      "command": [
+        "sh",
+        "-n",
+        "/tmp/hermes-v2-docs-7d1tuumh/operator-handoff.sh"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/handoff-syntax.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-shellcheck",
+      "timestamp": "2026-09-09T20:31:45.640102+00:00",
+      "command": [
+        "shellcheck",
+        "-s",
+        "sh",
+        "/tmp/hermes-v2-docs-7d1tuumh/operator-handoff.sh"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/handoff-shellcheck.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "diff-whitespace",
+      "timestamp": "2026-09-09T20:31:45.651197+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/diff-whitespace.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "hermes-guide",
+      "timestamp": "2026-09-09T20:34:15.661213+00:00",
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/final-hermes-guide.log",
+      "output_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691"
+    },
+    {
+      "name": "markdownlint",
+      "timestamp": "2026-09-09T20:34:17.306254+00:00",
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 1,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/final-markdownlint.log",
+      "output_sha256": "34256a2336a740c3da0675660f24429f2ba2ce551f038fd43b991b46424495ca"
+    },
+    {
+      "name": "handoff-syntax",
+      "timestamp": "2026-09-09T20:34:17.314172+00:00",
+      "command": [
+        "sh",
+        "-n",
+        "/tmp/hermes-v2-docs-final-fxutrcu7/operator-handoff.sh"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/final-handoff-syntax.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-shellcheck",
+      "timestamp": "2026-09-09T20:34:17.346544+00:00",
+      "command": [
+        "shellcheck",
+        "-s",
+        "sh",
+        "/tmp/hermes-v2-docs-final-fxutrcu7/operator-handoff.sh"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/final-handoff-shellcheck.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "local-links",
+      "timestamp": "2026-09-09T20:34:17.357643+00:00",
+      "method": "Resolve local Markdown files and heading fragments in repair guide and changed plan/ledger/task sections",
+      "expected": "Every local target exists",
+      "actual": "PASS",
+      "count": 37
+    },
+    {
+      "name": "diff-whitespace",
+      "timestamp": "2026-09-09T20:34:17.370079+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/final-diff-whitespace.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "corrected-markdownlint",
+      "timestamp": "2026-09-09T20:35:10.032755+00:00",
+      "method": "markdownlint-cli2 on five exact document copies with fix false",
+      "expected": "exit 0",
+      "actual_exit": 1,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/corrected-markdownlint.log"
+    },
+    {
+      "name": "verified-markdownlint",
+      "timestamp": "2026-09-09T20:35:47.265093+00:00",
+      "method": "markdownlint-cli2 on five exact copies with fix false",
+      "expected": "exit 0",
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/verified-markdownlint.log"
+    },
+    {
+      "name": "closure",
+      "timestamp": "2026-09-09T20:36:45.494401+00:00",
+      "method": "Nonfix five-document Markdown lint after completion/status update; git diff --check; artifact hash comparison",
+      "expected": "All pass",
+      "actual": "PASS",
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-service-preparation/closure-markdownlint.log"
+    }
+  ],
+  "documentation_status": "PASS",
+  "final_artifact_timestamp": "2026-09-09T20:34:13.655287+00:00",
+  "document_sha256": {
+    "docs/HERMES_SELINUX_TPM_REPAIR.md": "738720406000c7525a1d619b8ff9236a417f6c46e0402ecb722bfe2ac9d63b7d",
+    "docs/CONTRIBUTING.md": "7ce10efb331021e89164239a80a6df75816c9b63b6a04ee69866a515dff0a2e3",
+    "docs/HERMES_INSTALLATION_VERIFICATION.md": "cc2365b5c4133aecd7abd78c8ab0a510ba06fc1a45efb6eabd5835a652c121c3",
+    "docs/plans/2026-09-07-hermes-unattended.md": "f683ed1bd5b358ccb13343b370861a2dcb05045982f5723afb8408e7cbd819db",
+    "vm/DEPLOYMENT_TASKS.md": "d9fe69722bae321cf2a3b3c24721cf4beeaee2b251fb0f916c5d4e7bad725820"
+  },
+  "preparation_status": "PASS: SE9-SE11 complete; production staging and single-service trial await explicit approval",
+  "completed_at": "2026-09-09T20:36:45.495804+00:00"
+}

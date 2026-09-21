@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-09-09T18:48:07.098006+00:00",
+  "approval": "User approved installation, loaded-policy/backup verification and bounded policy/label rollback; no service restart or reboot",
+  "ssh": "BatchMode=yes, StrictHostKeyChecking=yes, existing configured identity and host pin",
+  "live_preflight": {
+    "host": "hermes",
+    "enforcing": true,
+    "baseline_policy_sha256": "bf58d5f5ae23502d844f70c153ef5366c31bf16ac9c77f548b94f3cf1aea1949",
+    "actual_expected_context": "system_u:object_r:init_exec_t:s0",
+    "packages": [
+      "selinux-policy-44.8-1.fc44.noarch",
+      "selinux-policy-targeted-44.8-1.fc44.noarch",
+      "systemd-259.8-1.fc44.x86_64"
+    ],
+    "late_service": "failed; MainPID=0; last start 2026-09-09 09:43:14 -05; ExecMainStatus=1",
+    "early_service": "active; MainPID=0; last start 2026-09-08 22:19:12 -05; ExecMainStatus=0",
+    "sudo_probe": "sudo -n true exited 1: password required"
+  },
+  "staging": {
+    "directory": "/home/aicowork/hermes-selinux-trial-20260909-v2",
+    "directory_mode": "0700",
+    "file_mode": "0600",
+    "remote_hashes": {
+      "install-reviewed-candidate-v2.sh": "fe4624900d47aa5c910f9234b5fce290abc32d0e005194d4c1255d438628b914",
+      "hermes_tpm2_setup.pp": "37643c3428ee847e82643056142d1ff5702d7249ed8046e71326c1e01b00a6b8"
+    },
+    "passed": true
+  },
+  "installation": "BLOCKED on interactive operator sudo; not executed",
+  "loaded_policy_and_backups": "TODO after installation",
+  "production_mutations": "Only exclusive operator-private staging directory and reviewed artifacts; no policy, label, service, TPM or boot changes",
+  "export_helper": {
+    "path": "/home/aicowork/hermes-selinux-trial-20260909-v2/export-reviewed-policy-v2.py",
+    "sha256": "53512c68fe2c76393c50788ca0682a046348eaa0a3177c522bb0bf8353896150",
+    "remote_hash_matches": true,
+    "tests": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_selinux_export.py: PASS, one test covering success/allowlist/modes and rerun/drift/symlink/missing-scope rejection",
+    "failed_attempt": "Initial inline fixture omitted the aicowork account mock and failed with KeyError before export creation; fixed in retained test."
+  },
+  "last_updated": "2026-09-09T18:52:09.975476+00:00",
+  "documentation_checks": {
+    "hermes_guide": "PASS: 217 assertions",
+    "initial_lint": "FAIL: one long status line; corrected",
+    "final_lint": "PASS: five exact document copies, fix false",
+    "timestamp": "2026-09-09T18:53:31.670316+00:00",
+    "local_file_links": 19,
+    "git_diff_check": "PASS"
+  }
+}

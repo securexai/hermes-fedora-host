@@ -76,8 +76,14 @@ repos:
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
-        # Default severity is "warning". Drop to --severity=error in repos
-        # with legacy code that has not yet been cleaned up.
+        # The migrated Hermes scripts are a preserved review artifact and carry
+        # pre-existing findings that were never gated upstream (the source
+        # review record states shellcheck was absent and lint was NOT RUN).
+        # As the template advises for legacy code not yet cleaned up, gate on
+        # errors only. Inherited findings: 10 warnings (SC2034 x5, SC2221/SC2222,
+        # SC2154, SC2115, SC2043) and 72 info-level notes. Remediating them is a
+        # follow-up in this repository, not part of a preservation migration.
+        args: [--severity=error]
 
   # ---------------------------------------------------------------------------
   # Markdown linting

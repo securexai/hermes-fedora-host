@@ -1,0 +1,370 @@
+{
+  "recorded_at": "2026-09-09T23:12:13.163535+00:00",
+  "operator_report": {
+    "helper_sha256_check": "OK",
+    "summary": {
+      "passed": false,
+      "service_requested": false,
+      "checks": {},
+      "errors": [
+        {
+          "phase": "preflight",
+          "type": "RuntimeError"
+        }
+      ],
+      "timestamp": "2026-09-09T23:10:56.604573+00:00"
+    }
+  },
+  "approval": "Existing single-trial approval includes read-only result review; no rerun, guard removal or reboot",
+  "artifact_sha256": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+  "SE13": {
+    "progress": "BLOCKED on failed preflight; exclusive attempt consumed",
+    "validation": "FAIL: operator-reported preflight RuntimeError; service_requested false"
+  },
+  "SE14": {
+    "progress": "PASS: preflight failure review complete",
+    "validation": "PASS for failure attribution using operator protected-file diagnostic plus independent CLI reproduction; runtime acceptance remains unperformed"
+  },
+  "known_limit": "Printed error records type/phase only; exact failed operation is not established by the operator summary",
+  "next_action": "Prepare bounded continuation preserving old attempt and verifying no request; retain existing authorization for one real service invocation",
+  "live_diagnostic_method": {
+    "timestamp": "2026-09-09T23:12:45.746656+00:00",
+    "ssh": "BatchMode=yes StrictHostKeyChecking=yes ConnectTimeout=10 aicowork@10.0.30.10",
+    "method": "Verify staged source hash; load without main; read unit_state and evaluate command contract/dependencies; policy file hash and enforcing; noninteractive sudo probe",
+    "remote_program": "\nimport datetime,hashlib,json,os,re,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C';os.environ['PATH']='/usr/sbin:/usr/bin:/sbin:/bin'\np=Path('/home/aicowork/hermes-selinux-trial-20260909-v2/run-reviewed-service-v2.py');src=p.read_bytes();assert hashlib.sha256(src).hexdigest()=='3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500'\nns={'__name__':'reviewed_read_only_diagnostic'};exec(compile(src,str(p),'exec'),ns)\nresult={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'units':{},'unit_parser_errors':{}}\nfor unit in (ns['UNIT'],ns['EARLY']):\n try:result['units'][unit]=ns['unit_state'](unit)\n except Exception as e:result['unit_parser_errors'][unit]={'type':type(e).__name__,'message':str(e)}\nif ns['UNIT'] in result['units']:\n state=result['units'][ns['UNIT']]\n checks={'Type':state['Type']=='oneshot','Restart':state['Restart']=='no','ExecStart':bool(re.fullmatch(r'\\{ path='+re.escape(ns['EXE'])+r' ; argv\\[\\]='+re.escape(ns['EXE'])+r' --graceful ; ignore_errors=no ;[^{}]*\\}',state['ExecStart']))}\n for name in (*ns['HOOKS'],'OnFailure','OnSuccess','ConsistsOf','BoundBy','PropagatesStopTo','Upholds'):checks[name]=not state[name]\n for name in ('FailureAction','SuccessAction','StartLimitAction','JobTimeoutAction'):checks[name]=state[name]=='none'\n result['service_contract_checks']=checks;result['dependency_states']={}\n for name in ('Requires','Wants','Requisite','BindsTo','Conflicts'):\n  for unit in state[name].split():result['dependency_states'][name+':'+unit]=ns['command']('systemctl','show','-p','ActiveState','--value',unit).decode().strip()\nresult['pending_jobs']=ns['command']('systemctl','list-jobs','--no-legend','--no-pager').decode().strip()\nresult['enforcing']=ns['command']('getenforce').decode().strip()\nresult['disk_policy_sha256']=hashlib.sha256(Path('/etc/selinux/targeted/policy/policy.35').read_bytes()).hexdigest()\nresult['sudo_noninteractive_available']=subprocess.run(['sudo','-n','true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15).returncode==0\nprint(json.dumps(result))\n",
+    "exit_code": 1
+  },
+  "failed_diagnostics": [
+    {
+      "timestamp": "2026-09-09T23:12:45.746656+00:00",
+      "result": "FAIL: dependency observation using helper command() stopped on nonzero systemctl exit; no service mutation; reassessed to preserve each return code and independent unit result"
+    },
+    {
+      "result": "Initial link validator false positive on ns subscript/call within Python code fence; excluded fenced blocks and all 42 actual local links passed"
+    }
+  ],
+  "independent_live_diagnostic_method": {
+    "timestamp": "2026-09-09T23:13:09.886289+00:00",
+    "remote_program": "\nimport datetime,hashlib,json,os,re,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C';os.environ['PATH']='/usr/sbin:/usr/bin:/sbin:/bin'\np=Path('/home/aicowork/hermes-selinux-trial-20260909-v2/run-reviewed-service-v2.py');src=p.read_bytes();assert hashlib.sha256(src).hexdigest()=='3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500'\nns={'__name__':'reviewed_read_only_diagnostic'};exec(compile(src,str(p),'exec'),ns)\nresult={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'units':{},'unit_parser_errors':{}}\nfor unit in (ns['UNIT'],ns['EARLY']):\n try:result['units'][unit]=ns['unit_state'](unit)\n except Exception as e:result['unit_parser_errors'][unit]={'type':type(e).__name__,'message':str(e)}\nif ns['UNIT'] in result['units']:\n state=result['units'][ns['UNIT']]\n checks={'Type':state['Type']=='oneshot','Restart':state['Restart']=='no','ExecStart':bool(re.fullmatch(r'\\{ path='+re.escape(ns['EXE'])+r' ; argv\\[\\]='+re.escape(ns['EXE'])+r' --graceful ; ignore_errors=no ;[^{}]*\\}',state['ExecStart']))}\n for name in (*ns['HOOKS'],'OnFailure','OnSuccess','ConsistsOf','BoundBy','PropagatesStopTo','Upholds'):checks[name]=not state[name]\n for name in ('FailureAction','SuccessAction','StartLimitAction','JobTimeoutAction'):checks[name]=state[name]=='none'\n result['service_contract_checks']=checks;result['dependency_states']={}\n for name in ('Requires','Wants','Requisite','BindsTo','Conflicts'):\n  for unit in state[name].split():\n   observation=subprocess.run(['systemctl','show','-p','LoadState','-p','ActiveState',unit],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)\n   result['dependency_states'][name+':'+unit]={'exit_code':observation.returncode,'properties':observation.stdout.decode().strip(),'diagnostic':observation.stderr.decode().strip()}\nresult['pending_jobs']=ns['command']('systemctl','list-jobs','--no-legend','--no-pager').decode().strip()\nresult['enforcing']=ns['command']('getenforce').decode().strip()\nresult['disk_policy_sha256']=hashlib.sha256(Path('/etc/selinux/targeted/policy/policy.35').read_bytes()).hexdigest()\nresult['sudo_noninteractive_available']=subprocess.run(['sudo','-n','true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15).returncode==0\nprint(json.dumps(result))\n",
+    "exit_code": 0
+  },
+  "live_diagnostic": {
+    "timestamp": "2026-09-09T23:13:09.794993+00:00",
+    "units": {
+      "systemd-tpm2-setup.service": {
+        "Requires": "system.slice -.mount",
+        "Requisite": "",
+        "Wants": "",
+        "BindsTo": "",
+        "Upholds": "",
+        "BoundBy": "",
+        "ConsistsOf": "",
+        "Conflicts": "shutdown.target",
+        "OnSuccess": "",
+        "OnFailure": "",
+        "PropagatesStopTo": "",
+        "LoadState": "loaded",
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "JobTimeoutAction": "none",
+        "ConditionResult": "yes",
+        "AssertResult": "yes",
+        "StartLimitAction": "none",
+        "FailureAction": "none",
+        "SuccessAction": "none",
+        "InvocationID": "4cce6a53c01c4dff8c480b530fd16661",
+        "Type": "oneshot",
+        "Restart": "no",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "Result": "exit-code",
+        "ExecMainStartTimestamp": "Wed 2026-09-09 09:43:14 -05",
+        "ExecMainCode": "1",
+        "ExecMainStatus": "1",
+        "ExecStart": "{ path=/usr/lib/systemd/systemd-tpm2-setup ; argv[]=/usr/lib/systemd/systemd-tpm2-setup --graceful ; ignore_errors=no ; start_time=[Wed 2026-09-09 09:43:14 -05] ; stop_time=[Wed 2026-09-09 09:43:16 -05] ; pid=56396 ; code=exited ; status=1 }",
+        "ExecCondition": "",
+        "ExecStartPre": "",
+        "ExecStartPost": "",
+        "ExecStop": "",
+        "ExecStopPost": ""
+      },
+      "systemd-tpm2-setup-early.service": {
+        "Requires": "system.slice",
+        "Requisite": "",
+        "Wants": "",
+        "BindsTo": "",
+        "Upholds": "",
+        "BoundBy": "",
+        "ConsistsOf": "",
+        "Conflicts": "shutdown.target",
+        "OnSuccess": "",
+        "OnFailure": "",
+        "PropagatesStopTo": "",
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "exited",
+        "JobTimeoutAction": "none",
+        "ConditionResult": "yes",
+        "AssertResult": "yes",
+        "StartLimitAction": "none",
+        "FailureAction": "none",
+        "SuccessAction": "none",
+        "InvocationID": "856199b7545e421e84cec252c2106124",
+        "Type": "oneshot",
+        "Restart": "no",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "Result": "success",
+        "ExecMainStartTimestamp": "Tue 2026-09-08 22:19:12 -05",
+        "ExecMainCode": "1",
+        "ExecMainStatus": "0",
+        "ExecStart": "{ path=/usr/lib/systemd/systemd-tpm2-setup ; argv[]=/usr/lib/systemd/systemd-tpm2-setup --early=yes --graceful ; ignore_errors=no ; start_time=[Tue 2026-09-08 22:19:12 -05] ; stop_time=[Tue 2026-09-08 22:19:12 -05] ; pid=1032 ; code=exited ; status=0 }",
+        "ExecCondition": "",
+        "ExecStartPre": "",
+        "ExecStartPost": "",
+        "ExecStop": "",
+        "ExecStopPost": ""
+      }
+    },
+    "unit_parser_errors": {},
+    "service_contract_checks": {
+      "Type": true,
+      "Restart": true,
+      "ExecStart": true,
+      "ExecCondition": true,
+      "ExecStartPre": true,
+      "ExecStartPost": true,
+      "ExecStop": true,
+      "ExecStopPost": true,
+      "OnFailure": true,
+      "OnSuccess": true,
+      "ConsistsOf": true,
+      "BoundBy": true,
+      "PropagatesStopTo": true,
+      "Upholds": true,
+      "FailureAction": true,
+      "SuccessAction": true,
+      "StartLimitAction": true,
+      "JobTimeoutAction": true
+    },
+    "dependency_states": {
+      "Requires:system.slice": {
+        "exit_code": 0,
+        "properties": "LoadState=loaded\nActiveState=active",
+        "diagnostic": ""
+      },
+      "Requires:-.mount": {
+        "exit_code": 1,
+        "properties": "",
+        "diagnostic": "systemctl: invalid option -- '.'\nHint: to specify units starting with a dash, use \"--\":\n      systemctl [OPTIONS...] COMMAND -- -.mount ..."
+      },
+      "Conflicts:shutdown.target": {
+        "exit_code": 0,
+        "properties": "LoadState=loaded\nActiveState=inactive",
+        "diagnostic": ""
+      }
+    },
+    "pending_jobs": "",
+    "enforcing": "Enforcing",
+    "disk_policy_sha256": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+    "sudo_noninteractive_available": false
+  },
+  "preserved_original_source": {
+    "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/run-reviewed-service-v2-original.py",
+    "sha256": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+    "mode": "0600",
+    "remote_originals": "Unchanged in operator staging and root-private backup"
+  },
+  "diagnosis": {
+    "confirmed": "Live unit Requires includes -.mount; existing dependency query parses it as an option and exits 1 with invalid option dot; this is a reproducible helper bug",
+    "original_failure_attribution": "Not yet proven: root-private before.json and preflight progress evidence inaccessible without operator sudo",
+    "runtime": "Both live InvocationID/start timestamps match staging; late historical failed state and early active/exited unchanged; no current PIDs",
+    "code_change_scope": "Local one-line option terminator fix and regression; no altered trial path, reset of guard, remote staging or new invocation"
+  },
+  "local_validation": [
+    {
+      "timestamp": "2026-09-09T23:15:05.787462+00:00",
+      "method": "python3 -m unittest discover -s tests -p test_hermes_selinux_service_v2.py via devbox",
+      "expected": "New root-mount regression reproduces defect before fix",
+      "actual_exit": 1,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/regression-before-fix.log"
+    },
+    {
+      "timestamp": "2026-09-09T23:15:26.709699+00:00",
+      "name": "tests-after-fix",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_selinux_service_v2.py"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/tests-after-fix.log",
+      "output_sha256": "50ea7d5387ea930aa231f9847d818689eaaeb775e9fac03812102afa0b47425e"
+    },
+    {
+      "timestamp": "2026-09-09T23:15:26.936746+00:00",
+      "name": "live-root-mount",
+      "command": [
+        "ssh",
+        "-T",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "aicowork@10.0.30.10",
+        "LC_ALL=C systemctl show -p ActiveState --value -- -.mount"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/live-root-mount.log",
+      "output_sha256": "45df5ad5e0ecfa54d3226343e0e6857337494ba6e32f189d1174070665d8c659"
+    }
+  ],
+  "corrected_local_artifacts": {
+    "scripts/hermes/selinux/run-reviewed-service-v2.py": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+    "tests/test_hermes_selinux_service_v2.py": "e8a59ac6c040f450ca66cec54c3b52f2265f3ed5c034c4b55f0766bafc8dc161"
+  },
+  "SE15": {
+    "progress": "PASS: local one-line correction complete",
+    "validation": "PASS: regression failed before fix; all 33 tests pass after fix; both source files compile; corrected live read-only query returns active",
+    "runtime_limits": "Not staged; existing trial path and rerun guard unchanged; no new trial authorized"
+  },
+  "operator_diagnostic": {
+    "command": "sudo python3 -I -B - <<'PYDIAG'\nimport hashlib, json, os\nfrom pathlib import Path\nos.environ.update(PATH=\"/usr/sbin:/usr/bin:/sbin:/bin\", LC_ALL=\"C\")\np = Path(\"/var/lib/hermes-selinux-trial-20260909-v2/run-reviewed-service-v2.py\")\nsource = p.read_bytes()\nassert hashlib.sha256(source).hexdigest() == \"3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500\"\nns = {\"__name__\": \"read_only_review\"}\nexec(compile(source, str(p), \"exec\"), ns)\nt = p.parent / \"service-first\"\nnames = (\"before.json\", \"audit-before.json\", \"audit-preflight.json\", \"process-observation.json\", \"restart.log\")\nresult = {\"files_present\": {name: (t / name).is_file() for name in names}}\nphase = \"retained-before\" if (t / \"before.json\").is_file() else \"current-snapshot\"\ntry:\n    before = json.loads((t / \"before.json\").read_text()) if phase == \"retained-before\" else ns[\"snapshot\"]()\n    phase = \"read-only-preflight\"\n    ns[\"preflight\"](before)\n    result[\"preflight\"] = \"PASS\"\nexcept Exception as error:\n    result[\"error\"] = {\"phase\": phase, \"type\": type(error).__name__}\n    if isinstance(error, RuntimeError):\n        result[\"error\"][\"reason\"] = str(error)\nprint(json.dumps(result, indent=2))\nPYDIAG",
+    "scope": "Read-only: original frozen helper hash; no main/trial/save/observe_service invocation; read saved snapshot or current snapshot and preflight only",
+    "requires": "Interactive operator sudo; existing approval covers result review"
+  },
+  "documentation_validation": [
+    {
+      "name": "hermes-guide",
+      "timestamp": "2026-09-09T23:18:05.855058+00:00",
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/hermes-guide.log"
+    },
+    {
+      "name": "diagnostic-syntax",
+      "timestamp": "2026-09-09T23:18:05.861788+00:00",
+      "command": [
+        "sh",
+        "-n",
+        "/tmp/hermes-v2-failure-docs-cfn10d5w/read-only-diagnostic.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/diagnostic-syntax.log"
+    },
+    {
+      "name": "diagnostic-shellcheck",
+      "timestamp": "2026-09-09T23:18:05.878731+00:00",
+      "command": [
+        "shellcheck",
+        "-s",
+        "sh",
+        "/tmp/hermes-v2-failure-docs-cfn10d5w/read-only-diagnostic.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/diagnostic-shellcheck.log"
+    },
+    {
+      "name": "markdownlint",
+      "timestamp": "2026-09-09T23:18:07.420465+00:00",
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "cwd": "/tmp/hermes-v2-failure-docs-cfn10d5w",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/markdownlint.log"
+    },
+    {
+      "name": "diff-whitespace",
+      "timestamp": "2026-09-09T23:18:07.435441+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/diff-whitespace.log"
+    },
+    {
+      "name": "local-links",
+      "timestamp": "2026-09-09T23:18:07.451548+00:00",
+      "method": "Resolve all repair-guide local links and changed plan/ledger/task sections; check heading targets",
+      "actual": "FAIL",
+      "count": 43,
+      "errors": [
+        [
+          "docs/HERMES_SELINUX_TPM_REPAIR.md",
+          "before"
+        ]
+      ]
+    },
+    {
+      "name": "corrected-local-links",
+      "timestamp": "2026-09-09T23:19:31.625278+00:00",
+      "method": "Exclude Markdown fenced code before resolving local file links/heading targets",
+      "actual": "PASS",
+      "count": 42,
+      "errors": []
+    },
+    {
+      "name": "closure-markdownlint",
+      "timestamp": "2026-09-09T23:19:33.313971+00:00",
+      "method": "markdownlint-cli2",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/closure-markdownlint.log"
+    },
+    {
+      "name": "closure-diff-whitespace",
+      "timestamp": "2026-09-09T23:19:33.328134+00:00",
+      "method": "git diff --check",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-preflight-failure/closure-diff-whitespace.log"
+    }
+  ],
+  "documentation_status": "PASS: 217 guide checks; diagnostic Python/shell syntax/ShellCheck; four-document nonfix lint; 42 corrected local links; whitespace",
+  "document_sha256": {
+    "docs/HERMES_SELINUX_TPM_REPAIR.md": "8bc9fdf4da25df51015165fe3dc322f6243696eb68140d34c186752998b0a758",
+    "docs/plans/2026-09-07-hermes-unattended.md": "c38e1bf0d83c3bbc74523c9889a605127cf2723f1d6c52d436b5c6e9d9583a7a",
+    "docs/HERMES_INSTALLATION_VERIFICATION.md": "326d20397cc7dcc4ea451536eabcfb4b50486db4c03ac7ae082c192f12aa6422",
+    "vm/DEPLOYMENT_TASKS.md": "5be81a3c982fa84767a8e36428bbc6dbba079bf9384568d83d823e6c8e39f58d"
+  },
+  "handoff_ready_at": "2026-09-09T23:19:33.330167+00:00",
+  "operator_read_only_diagnostic": {
+    "received_at": "2026-09-09T23:23:13.823046+00:00",
+    "files_present": {
+      "before.json": true,
+      "audit-before.json": false,
+      "audit-preflight.json": false,
+      "process-observation.json": false,
+      "restart.log": false
+    },
+    "error": {
+      "phase": "read-only-preflight",
+      "type": "RuntimeError",
+      "reason": "Command failed: systemctl"
+    },
+    "interpretation": "Retained snapshot exists and the original helper preflight reproduces the systemctl failure before audit collection. Together with live -.mount option error, corrected query success and unchanged unit invocation IDs, this supports the dependency-query defect as the blocker. No service request evidence."
+  }
+}

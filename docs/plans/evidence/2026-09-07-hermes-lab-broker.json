@@ -1,0 +1,61 @@
+{
+  "schema": "hermes-lab-broker-observation-v1",
+  "observed_at": "2026-09-07T19:46:01.032101+00:00",
+  "scope": "disposable workstation lab; production excluded",
+  "production_changed": false,
+  "source_sha256": {
+    "credentials.py": "d24f8f4dfdb5af8dbe937533000f0aaba3707b071348954cb1c53d1183e086a3",
+    "common.py": "5dd9b679bdfe129f2f1b4651018cf9a1a70af6712688aa1f5fe93799574e7685"
+  },
+  "identity": {
+    "broker_uid": 985,
+    "test_uid": 987,
+    "production_project": null,
+    "production_uid": null
+  },
+  "units": {
+    "service": "hermes-lab-credentials.service",
+    "socket": "hermes-lab-credentials.socket",
+    "automatic_enablement": false,
+    "final_state": "service and socket inactive, both static"
+  },
+  "validation": {
+    "python_regressions": {
+      "result": "PASS",
+      "count": 119,
+      "seconds": 10.832,
+      "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_unattended.py",
+      "initial_failure": "119-test sandbox run: Unix socket bind denied (EPERM); approved local-socket run passed"
+    },
+    "systemd_analyze_verify": "PASS",
+    "encrypted_admin_delivery": "PASS",
+    "sandboxed_user_credential_roundtrip": "PASS",
+    "fixed_test_project_read": "PASS",
+    "issue": "PASS",
+    "encrypted_key_reread": "PASS",
+    "repeat_issue_same_key": "PASS",
+    "issued_key_models_authentication": "PASS",
+    "delete_and_401_rejection": "PASS",
+    "revoked_lease_ciphertext_removed": "PASS",
+    "production_role_denied": "PASS",
+    "deployment_and_signer_socket_access_denied": "PASS",
+    "other_lab_roles_admin_read_denied": "PASS",
+    "admin_root_0600": "PASS",
+    "documentation": {
+      "result": "PASS",
+      "documents": 4,
+      "method": "nonfix markdownlint-cli2 in temporary copy, local links, git diff --check",
+      "initial_failure": "Two extra blank lines corrected before successful rerun",
+      "repo_docs_sync": "BLOCKED: required diff_docs.py unavailable as previously recorded"
+    }
+  },
+  "limitations": [
+    "Runtime guest credential mount compatibility remains unverified.",
+    "Semantic application backup restore and clean exact-candidate certification remain pending.",
+    "This observation is not UA-03/UA-04 certification or permission to promote."
+  ],
+  "procedures_sha256": {
+    "hermes-lab-enroll-broker.py": "104a7e47fbeb91932e1867cde4c7dc9aff688b8842c840ee7749284179ddeb84",
+    "hermes-lab-broker-lifecycle.py": "cd8bfb81020aef1f678845d6ec7fa7a93f14d62477792d4352649c95c65f4b5e"
+  }
+}

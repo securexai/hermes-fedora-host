@@ -1,0 +1,108 @@
+{
+  "record": "hermes-m04-hardening-and-recovery",
+  "kind": "live-server-hardening-and-backup",
+  "profile": "manual-guide (docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md)",
+  "branch": "codex/hermes-manual-guide-plan",
+  "gate": "M04 - Hardening and recovery",
+  "status": "PASS - posture, limits, backup, isolated restore, read-only gateway root and host reboot persistence all verified",
+  "utc": "2026-09-13T03:18:34Z",
+  "credential_cleanup": {
+    "removed": "/home/hermes/gateway-state/.env.pre-hardening-20260913T031526Z (mode 0600, 302 bytes, sha256 93324f17b736a9da...)",
+    "root_cause_fixed": "scripts/hermes/manual/config/harden-config.py no longer copies .env; only the non-secret config.yaml is backed up",
+    "remaining_credential_files": "exactly one, /home/hermes/gateway-state/.env (mode 0600, owner 599823:599823)"
+  },
+  "runtime_posture": {
+    "worker_container": {
+      "readonly_rootfs": true,
+      "memory_bytes": 2147483648,
+      "pids_limit": 512,
+      "network_mode": "none",
+      "privileged": false,
+      "security_opt": ["no-new-privileges"],
+      "cap_drop": [],
+      "cap_add": [],
+      "selinux": "container_t with private category labels",
+      "binds": [
+        "/home/hermes/worker-state/ssh-host-keys:/etc/ssh/host-keys:ro",
+        "/home/hermes/transport:/run/transport",
+        "/home/hermes/worker-state/home:/home/worker"
+      ]
+    },
+    "effective_process": {
+      "user": "root inside the user namespace (mapped to the hermes account)",
+      "no_new_privs": 1,
+      "seccomp": 2,
+      "cap_effective": "00000000800405fb (rootless Podman default set)",
+      "root_write_probe": "READONLY_OK",
+      "tmp_write_probe": "TMP_WRITABLE_OK",
+      "mountinfo_lines": 41
+    },
+    "selinux_labels": {
+      "gateway-ssh": "container_file_t (private categories)",
+      "gateway-state": "container_file_t (private categories)",
+      "transport": "container_file_t (shared, no categories)",
+      "worker-state": "user_home_t at the parent; the :Z subdirectories carry the container label"
+    },
+    "avc_denials": "none"
+  },
+  "resource_limits": {
+    "per_container": {"worker_memory": "2 GiB", "worker_pids": 512, "gateway_memory": "2 GiB", "gateway_pids": 256},
+    "parent_slice": "user-1001.slice MemoryHigh=6G MemoryMax=8G TasksMax=1536",
+    "persistence": "systemctl set-property was runtime-only, so an explicit drop-in was written and verified",
+    "drop_in": "/etc/systemd/system/user-1001.slice.d/50-hermes-limits.conf",
+    "rationale": "host has 13 GiB, below the guide's >=16 GiB example row, so the documented 16 GiB budget was deliberately not applied"
+  },
+  "backup": {
+    "archive": "app-state.tar, 58234880 bytes",
+    "archive_sha256": "3f7286186d5382453bc772afb096c4cdf319543f55706c2676377968e95a9af8",
+    "contents": ["home/hermes/gateway-state", "home/hermes/worker-state", "home/hermes/gateway-ssh", "etc/containers/systemd/users/1001"],
+    "preservation": "tar --xattrs --acls --selinux (ownership, modes, labels)",
+    "method": "stopped-state: gateway and worker stopped before capture",
+    "offdisk": "private/hermes-app-backups/ on the LUKS-encrypted workstation; sha256 re-verified after transfer; server staging removed",
+    "manifest_sha256": {
+      "gateway_config": "072e3a0b789b597eb883140bdc6cd09dff59b8231ca473c31496e076ce17bd0a",
+      "env_file": "090b2e40511bf9d50aec987ccb4b3d244ce23be46faf857406de956866ca4ba7",
+      "worker_host_key_pub": "9bb27de1cd8c78049038f7ef18904f6a453d832c7bd4fa04674ae584678bb08c",
+      "gateway_known_hosts": "eecbb170849f01abd3cdab927befd23bc82593b926421296c89513013f805430"
+    },
+    "credential_note": "the archive contains the provider credential, so it is treated as secret material and is stored only on encrypted storage"
+  },
+  "restore_test": {
+    "destination": "isolated /home/hermes/m04-restore-test-<ts>, never launched",
+    "entry_counts": {"gateway_state": "1493 source / 1493 restored", "worker_state": "451 / 451", "gateway_ssh": "11 / 11"},
+    "config_assertions": {"terminal_backend_ssh": 1, "gpt-5.6-luna": 3, "ssh_host_worker": 1},
+    "restored_env": "mode 0600 owner 599823:599823 with exactly one OPENAI_API_KEY line",
+    "quadlets": "both restored",
+    "cleanup": "the restored tree was deleted after verification so no second credential copy remains",
+    "diff_notes": "diff -r reported dangling uv wheel-cache symlink targets; entry counts and config assertions match"
+  },
+  "readonly_gateway_root": {
+    "utc": "2026-09-13T17:48:38Z",
+    "change": "gateway Quadlet gained ReadOnly=true, Tmpfs=/run and Tmpfs=/tmp; the working unit was backed up to /root/hermes-gateway.container.pre-readonly-20260913T174838Z before the change",
+    "service_after_45s": "active",
+    "probes": {
+      "root_write": "READONLY_OK",
+      "run_write": "RUN_WRITABLE_OK (s6 bootstrap needs writable /run)",
+      "data_write": "DATA_WRITABLE_OK (the /opt/data state volume)"
+    },
+    "telegram_after_restart": "PASS - '[Telegram] Connected to Telegram (polling mode)' at 2026-09-13T17:49:05Z",
+    "avc_denials": "none",
+    "auto_revert": "not needed; the script would have restored the previous unit if the gateway had not returned"
+  },
+  "reboot_persistence": {
+    "utc": "2026-09-13T17:51:02Z reboot, verified 17:53-17:55Z",
+    "container_restart": "PASS - worker stopped and restarted earlier; socket recreated; state active",
+    "host_reboot": "PASS - boot_id changed 8cf2e255-6d0e-4360-8944-0164064bf6e2 -> c1489f2b-c62f-4f44-9914-98bb3e9cc8e5",
+    "autostart": "PASS - the gateway [Install] section was added and BOTH Quadlets started by autostart at 2026-09-13 12:52:26 local with no manual start: user@1001 active, linger preserved, gateway and worker containers Up",
+    "worker_socket_after_boot": "present (container_file_t, mode 0666)",
+    "telegram_after_boot": "PASS - '[Telegram] Connected to Telegram (polling mode)' at 2026-09-13T17:52:51Z for this boot",
+    "exposure_after_boot": "no published container ports; host listeners only sshd 22 and systemd-resolved 53/5355",
+    "failed_units": "none",
+    "post_reboot_probe": "PASS - resolved_backend=ssh, execute_returncode=0, HERMES_WORKER_ROUNDTRIP_OK, Fedora Linux (probe_rc=0)",
+    "labeling_finding": "the verification script initially installed m03-probe.py into the :Z-mounted /home/hermes/gateway-ssh directory AFTER the container had started, so the file kept the host default label (user_home_t) and container_t was denied read (one AVC). Fixed by chcon --reference to a correctly labelled sibling; no further AVCs. Lesson: files added to a :Z-mounted directory while the container runs must be relabelled, or the container restarted."
+  },
+  "open_items": [
+    "explicit capability dropping was not attempted: the guide warns not to blind-drop caps because of user-namespace mapping helpers; current set is the rootless default",
+    "M06 handoff finalization remains"
+  ]
+}

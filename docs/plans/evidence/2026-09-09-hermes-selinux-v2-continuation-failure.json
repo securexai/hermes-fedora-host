@@ -1,0 +1,356 @@
+{
+  "recorded_at": "2026-09-09T23:40:41.420736+00:00",
+  "operator_report": {
+    "corrected_core_hash_check": "OK",
+    "wrapper_hash_check": "OK",
+    "summary": {
+      "passed": false,
+      "service_requested": false,
+      "checks": {},
+      "errors": [
+        {
+          "phase": "preflight",
+          "type": "RuntimeError"
+        }
+      ],
+      "timestamp": "2026-09-09T23:39:18.235067+00:00"
+    }
+  },
+  "scope": "Read-only review under existing approval; no new attempt, helper edit, guard reset or reboot while exact diagnostic is unknown",
+  "SE18": {
+    "progress": "BLOCKED: continuation preflight failed; reservation consumed",
+    "validation": "FAIL: operator-reported RuntimeError before service request"
+  },
+  "SE19": {
+    "progress": "BLOCKED on saved audit-query metadata requiring operator sudo",
+    "validation": "PARTIAL: failing operation isolated to query_audit; snapshots match and audit status passes; underlying query error unknown"
+  },
+  "limitations": [
+    "Printed type and phase do not establish the failed guard",
+    "No runtime acceptance; repeat/idempotency and cold-boot remain open"
+  ],
+  "next_action": "Operator returns saved audit-query metadata using the current read-only command; no retries or guard changes",
+  "live_method": {
+    "timestamp": "2026-09-09T23:41:10.211343+00:00",
+    "ssh": "BatchMode=yes StrictHostKeyChecking=yes ConnectTimeout=10 aicowork@10.0.30.10; existing pin/identity",
+    "remote_program": "\nimport datetime,hashlib,json,os,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C'\ndef run(*args):\n r=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)\n if r.returncode:raise RuntimeError('Read-only command failed: '+args[0])\n return r.stdout.decode().strip()\nr={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'hostname':run('hostname','-s'),'units':{},'enforcing':run('getenforce'),'disk_policy':hashlib.sha256(Path('/etc/selinux/targeted/policy/policy.35').read_bytes()).hexdigest(),'staged_hashes':{}}\nfor unit in ('systemd-tpm2-setup.service','systemd-tpm2-setup-early.service'):\n args=['systemctl','show','--all',unit]\n for key in ('LoadState','ActiveState','SubState','MainPID','ControlPID','InvocationID','ExecMainStartTimestamp','ExecMainStatus'):args+=['-p',key]\n r['units'][unit]=dict(line.split('=',1) for line in run(*args).splitlines())\nfor name in ('run-reviewed-service-v2.py','run-reviewed-service-v2-corrected.py','continue-reviewed-service-v2.py'):\n r['staged_hashes'][name]=hashlib.sha256((Path('/home/aicowork/hermes-selinux-trial-20260909-v2')/name).read_bytes()).hexdigest()\nr['sudo_noninteractive_available']=subprocess.run(['sudo','-n','true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15).returncode==0\nprint(json.dumps(r))\n",
+    "exit_code": 0
+  },
+  "live_observation": {
+    "timestamp": "2026-09-09T23:41:10.158369+00:00",
+    "hostname": "hermes",
+    "units": {
+      "systemd-tpm2-setup.service": {
+        "LoadState": "loaded",
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "InvocationID": "4cce6a53c01c4dff8c480b530fd16661",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Wed 2026-09-09 09:43:14 -05",
+        "ExecMainStatus": "1"
+      },
+      "systemd-tpm2-setup-early.service": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "exited",
+        "InvocationID": "856199b7545e421e84cec252c2106124",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Tue 2026-09-08 22:19:12 -05",
+        "ExecMainStatus": "0"
+      }
+    },
+    "enforcing": "Enforcing",
+    "disk_policy": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+    "staged_hashes": {
+      "run-reviewed-service-v2.py": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+      "run-reviewed-service-v2-corrected.py": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+      "continue-reviewed-service-v2.py": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1"
+    },
+    "sudo_noninteractive_available": false
+  },
+  "live_checks": {
+    "host": true,
+    "units_unchanged": true,
+    "enforcing": true,
+    "disk_policy": true,
+    "staged_artifacts": true
+  },
+  "operator_diagnostic": {
+    "command": "sudo python3 -I -B - <<'PYDIAG'\nimport json\nfrom pathlib import Path\nroot = Path(\"/var/lib/hermes-selinux-trial-20260909-v2\")\ntrial = root / \"service-continuation-1\"\nresult = {\"diagnostics\": {}}\noperations = (\"snapshot\", \"preflight\", \"audit_status\", \"query_audit\", \"journal_cursor\", \"preserve_anchors\")\nfor name in (\"command-failure.json\", *(\"diagnostic-\" + x + \".json\" for x in operations)):\n    p = trial / name\n    if p.is_file():\n        data = json.loads(p.read_text())\n        result[\"diagnostics\"][name] = {k: data[k] for k in (\"operation\", \"type\", \"reason\") if k in data}\n        if \"argv\" in data:\n            result[\"diagnostics\"][name][\"command\"] = data[\"argv\"] if data[\"argv\"][0] == \"systemctl\" else data[\"argv\"][:1]\nnames = (\"before.json\", \"audit-before.json\", \"audit-preflight.json\", \"journal-before.json\", \"audit-ready.json\", \"process-observation.json\", \"restart.log\")\nresult[\"files_present\"] = {name: (trial / name).is_file() for name in names}\nif (trial / \"audit-before.json\").is_file():\n    audit = json.loads((trial / \"audit-before.json\").read_text())\n    result[\"audit_health\"] = {k: audit.get(k) for k in (\"enabled\", \"pid\", \"lost\", \"backlog\")}\nif (trial / \"before.json\").is_file():\n    old = json.loads((root / \"service-first/before.json\").read_text())\n    new = json.loads((trial / \"before.json\").read_text())\n    result[\"changed_snapshot_fields\"] = sorted(k for k in old.keys() | new.keys() if old.get(k) != new.get(k))\n    result[\"changed_unit_fields\"] = {u: sorted(k for k in old[\"units\"][u].keys() | new[\"units\"][u].keys() if old[\"units\"][u].get(k) != new[\"units\"][u].get(k)) for u in old[\"units\"].keys() & new[\"units\"].keys()}\nprint(json.dumps(result, indent=2))\nPYDIAG",
+    "scope": "Read saved JSON only; known diagnostic fields, systemctl argv or executable name only, numeric audit health and changed snapshot/unit field names; no helper loading or service action"
+  },
+  "private_log_directory": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure",
+  "retained_source_validation": "52-test source/test hashes unchanged; historical offline evidence retained, no rerun needed",
+  "documentation_validation": [
+    {
+      "name": "diagnostic-fixtures",
+      "timestamp": "2026-09-09T23:44:24.956748+00:00",
+      "method": "Read-only synthetic saved JSON; check snapshot-field-only output, absent snapshot and selected audit health; file hashes unchanged; canary never printed",
+      "actual": "PASS",
+      "cases": [
+        "snapshot-field-diff",
+        "snapshot-unavailable",
+        "audit-health"
+      ]
+    },
+    {
+      "name": "hermes-guide",
+      "timestamp": "2026-09-09T23:44:26.519698+00:00",
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/hermes-guide.log"
+    },
+    {
+      "name": "diagnostic-syntax",
+      "timestamp": "2026-09-09T23:44:26.527293+00:00",
+      "command": [
+        "sh",
+        "-n",
+        "/tmp/hermes-v2-continuation-failure-docs-370cmuj9/diagnostic.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/diagnostic-syntax.log"
+    },
+    {
+      "name": "diagnostic-shellcheck",
+      "timestamp": "2026-09-09T23:44:26.547529+00:00",
+      "command": [
+        "shellcheck",
+        "-s",
+        "sh",
+        "/tmp/hermes-v2-continuation-failure-docs-370cmuj9/diagnostic.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/diagnostic-shellcheck.log"
+    },
+    {
+      "name": "markdownlint",
+      "timestamp": "2026-09-09T23:44:28.246809+00:00",
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "cwd": "/tmp/hermes-v2-continuation-failure-docs-370cmuj9",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/markdownlint.log"
+    },
+    {
+      "name": "diff-whitespace",
+      "timestamp": "2026-09-09T23:44:28.260087+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/diff-whitespace.log"
+    },
+    {
+      "name": "local-links",
+      "timestamp": "2026-09-09T23:44:28.283824+00:00",
+      "method": "Resolve full guide and changed plan/ledger/task local files and headings, excluding code fences",
+      "count": 51,
+      "actual": "PASS",
+      "errors": []
+    },
+    {
+      "name": "closure-markdownlint",
+      "timestamp": "2026-09-09T23:45:04.145149+00:00",
+      "method": "markdownlint-cli2",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/closure-markdownlint.log"
+    },
+    {
+      "name": "closure-whitespace",
+      "timestamp": "2026-09-09T23:45:04.160268+00:00",
+      "method": "git diff --check",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/closure-whitespace.log"
+    },
+    {
+      "name": "audit-metadata-fixture",
+      "timestamp": "2026-09-10T02:24:17.021566+00:00",
+      "method": "Run current read-only diagnostic against synthetic saved metadata/raw-event canary; verify selected output, unchanged input hashes and no raw-event output",
+      "actual": "PASS"
+    },
+    {
+      "name": "audit-metadata-guide",
+      "timestamp": "2026-09-10T02:24:18.737723+00:00",
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/audit-metadata-guide.log"
+    },
+    {
+      "name": "audit-metadata-syntax",
+      "timestamp": "2026-09-10T02:24:18.743799+00:00",
+      "command": [
+        "sh",
+        "-n",
+        "/tmp/hermes-audit-metadata-docs-tmlp3_s0/audit-metadata.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/audit-metadata-syntax.log"
+    },
+    {
+      "name": "audit-metadata-shellcheck",
+      "timestamp": "2026-09-10T02:24:18.761126+00:00",
+      "command": [
+        "shellcheck",
+        "-s",
+        "sh",
+        "/tmp/hermes-audit-metadata-docs-tmlp3_s0/audit-metadata.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/audit-metadata-shellcheck.log"
+    },
+    {
+      "name": "audit-metadata-lint",
+      "timestamp": "2026-09-10T02:24:21.217818+00:00",
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "cwd": "/tmp/hermes-audit-metadata-docs-tmlp3_s0",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/audit-metadata-lint.log"
+    },
+    {
+      "name": "audit-metadata-whitespace",
+      "timestamp": "2026-09-10T02:24:21.231943+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/audit-metadata-whitespace.log"
+    },
+    {
+      "name": "audit-metadata-links",
+      "timestamp": "2026-09-10T02:24:21.258085+00:00",
+      "method": "Local guide and changed plan/ledger/task files and headings, excluding fenced code",
+      "count": 51,
+      "actual": "PASS",
+      "errors": []
+    },
+    {
+      "name": "audit-metadata-closure",
+      "timestamp": "2026-09-10T02:24:23.324115+00:00",
+      "method": "Four-document nonfix lint after final gate wording",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation-failure/audit-metadata-closure.log"
+    }
+  ],
+  "documentation_status": "PASS",
+  "final_closure": {
+    "timestamp": "2026-09-09T23:45:04.160902+00:00",
+    "result": "PASS: final documentation and saved-only diagnostic handoff; no source or production changes",
+    "document_sha256": {
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": "4cde99887089df7cf2d37643a73b9588b224ea3a925cca613a0282d2e7546509",
+      "docs/plans/2026-09-07-hermes-unattended.md": "1e392cde036150842e6bee01b1e40d22030504d7a325b672b94fa1147a91b807",
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": "10c38fd8ee15614a35f68dfa7bd558c0145566e5060640bbfe474562580cf6f2",
+      "vm/DEPLOYMENT_TASKS.md": "0e50415dbba1018183d0e8f60a795eaf72bf1df3c4d12f76a36392cd00b0b2f6"
+    },
+    "remaining": "SE19 awaits operator diagnostic; runtime/repeat/cold-boot open"
+  },
+  "saved_diagnostic_report": {
+    "received_at": "2026-09-10T02:22:59.741240+00:00",
+    "diagnostics": {
+      "diagnostic-query_audit.json": {
+        "operation": "query_audit",
+        "type": "RuntimeError",
+        "reason": "Audit query failed; absence of denials is unverified"
+      }
+    },
+    "files_present": {
+      "before.json": true,
+      "audit-before.json": true,
+      "audit-preflight.json": true,
+      "journal-before.json": false,
+      "audit-ready.json": false,
+      "process-observation.json": false,
+      "restart.log": false
+    },
+    "audit_health": {
+      "enabled": "1",
+      "pid": "1182",
+      "lost": "0",
+      "backlog": "0"
+    },
+    "changed_snapshot_fields": [],
+    "changed_unit_fields": {
+      "systemd-tpm2-setup.service": [],
+      "systemd-tpm2-setup-early.service": []
+    }
+  },
+  "diagnosis": {
+    "established": "The first audit query failed after the unchanged state/policy/unit preflight and audit-status check; no journal cursor or service request was reached",
+    "unknown": "ausearch return code/stderr and stdout shape; cannot distinguish parser/log access/output-contract failure from generic wrapper message",
+    "audit_limit": "Enabled daemon and zero reported lost/backlog do not prove successful query or absence of denials"
+  },
+  "operator_audit_metadata": {
+    "command": "sudo python3 -I -B - <<'PYDIAG'\nimport json\nfrom pathlib import Path\np = Path(\"/var/lib/hermes-selinux-trial-20260909-v2/service-continuation-1\")\nresult = json.loads((p / \"audit-preflight.json\").read_text())\noutput = (p / \"audit-preflight.log\").read_bytes()\nresult[\"stdout_bytes\"] = len(output)\nresult[\"stdout_is_no_matches\"] = output.strip() == b\"<no matches>\"\nprint(json.dumps(result, indent=2))\nPYDIAG",
+    "scope": "Read saved returncode/timestamp_arguments/stderr plus stdout byte count and exact no-matches boolean; no raw audit stdout, helper execution or mutation"
+  },
+  "audit_metadata_handoff_validation": {
+    "timestamp": "2026-09-10T02:24:23.341893+00:00",
+    "result": "PASS",
+    "local_links": 51,
+    "document_sha256": {
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": "13bd01786c92ddc9a9912379100c287d4ea5144ba612b820e0469c38e5e292d7",
+      "docs/plans/2026-09-07-hermes-unattended.md": "dbbed7d7f0e98dd9d293c32b3e943a97bf4824dd4d2651491a56585fe55a414d",
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": "af216549e58f2ebe503ba3e2da68ccc4cc5678c1cf592e147cda0dcb94577590",
+      "vm/DEPLOYMENT_TASKS.md": "f59ba0e6e717e7a514086b71af5f226a8a03b75cdda8d6e7e1845599dfd2557e"
+    },
+    "next": "Operator saved-query metadata; no changes to source or host"
+  },
+  "operator_audit_query_metadata": {
+    "received_at": "2026-09-10T02:29:14.846016+00:00",
+    "returncode": 1,
+    "stderr": "",
+    "timestamp_arguments": [
+      "09/09/26",
+      "18:39:18"
+    ],
+    "stdout_bytes": 0,
+    "stdout_is_no_matches": false
+  },
+  "audit_version_observed": {
+    "timestamp": "2026-09-10T02:29:14.846016+00:00",
+    "method": "Pinned SSH LC_ALL=C rpm -q audit audit-libs",
+    "packages": [
+      "audit-4.2.1-1.fc44.x86_64",
+      "audit-libs-4.2.1-1.fc44.x86_64"
+    ]
+  },
+  "source_findings": {
+    "upstream": "https://github.com/linux-audit/audit-userspace/blob/v4.2.1/src/ausearch.c",
+    "manual": "https://github.com/linux-audit/audit-userspace/blob/v4.2.1/docs/ausearch.8",
+    "finding": "No-match success path exits 1 and suppresses marker in raw mode. Exit 1 also covers errors. Input defaults to stdin when it is a pipe unless --input-logs is supplied. Prior helper incorrectly required the non-raw marker and did not force log input. Saved output matches raw no-match representation but does not prove which input was read."
+  }
+}

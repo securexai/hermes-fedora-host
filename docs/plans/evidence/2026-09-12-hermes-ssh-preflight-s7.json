@@ -1,0 +1,130 @@
+{
+  "timestamp_utc": "2026-09-12T21:51:04.132518+00:00",
+  "helper_sha256": "06e70bdb99c78d76b6f0de051e5fddce6bb1cd3d8719613ade367918ad1df569",
+  "checks": [
+    {
+      "name": "sshd_syntax",
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "effective_current_ssh",
+      "rc": 0,
+      "stdout": "port 22\nusepam yes\npermitrootlogin prohibit-password\npubkeyauthentication yes\npasswordauthentication yes\nkbdinteractiveauthentication no\nauthorizedkeysfile .ssh/authorized_keys\nauthenticationmethods any",
+      "stderr": ""
+    },
+    {
+      "name": "service_overrides",
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "service_environment",
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "supported_ssh_configuration",
+      "rc": 1,
+      "stdout": "",
+      "stderr": "ERROR: Nonstandard Include requires manual review"
+    },
+    {
+      "name": "candidate_key_only_configuration",
+      "blocked": "supported_ssh_configuration failed"
+    },
+    {
+      "name": "firewall_compatibility",
+      "rc": 1,
+      "stdout": "",
+      "stderr": "ERROR: Firewall policies require manual review"
+    },
+    {
+      "name": "active_zones",
+      "rc": 0,
+      "stdout": "FedoraServer (default)\n  interfaces: eno1",
+      "stderr": ""
+    },
+    {
+      "name": "default_zone",
+      "rc": 0,
+      "stdout": "FedoraServer",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --get-zone-of-interface=eno1",
+      "rc": 0,
+      "stdout": "FedoraServer",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --zone=FedoraServer --list-all",
+      "rc": 0,
+      "stdout": "FedoraServer (default, active)\n  target: default\n  ingress-priority: 0\n  egress-priority: 0\n  icmp-block-inversion: no\n  interfaces: eno1\n  sources: \n  services: cockpit dhcpv6-client ssh\n  ports: \n  protocols: \n  forward: yes\n  masquerade: no\n  forward-ports: \n  source-ports: \n  icmp-blocks: \n  rich rules:",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --get-policies",
+      "rc": 0,
+      "stdout": "allow-host-ipv6 gateway-dmz-to-HOST gateway-lan-to-HOST gateway-lan-to-work gateway-lan-to-world gateway-world-to-HOST",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --direct --get-all-rules",
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --info-service=ssh",
+      "rc": 0,
+      "stdout": "ssh\n  ports: 22/tcp\n  protocols: \n  source-ports: \n  modules: \n  destination: \n  includes: \n  helpers:",
+      "stderr": ""
+    },
+    {
+      "name": "ipv6_policy ",
+      "rc": 0,
+      "stdout": "allow-host-ipv6 (active)\n  disable: no\n  priority: -15000\n  target: CONTINUE\n  ingress-zones: ANY\n  egress-zones: HOST\n  services: \n  ports: \n  protocols: \n  masquerade: no\n  forward-ports: \n  source-ports: \n  icmp-blocks: \n  rich rules: \n\trule family=\"ipv6\" icmp-type name=\"mld-listener-done\" accept\n\trule family=\"ipv6\" icmp-type name=\"mld-listener-query\" accept\n\trule family=\"ipv6\" icmp-type name=\"mld-listener-report\" accept\n\trule family=\"ipv6\" icmp-type name=\"mld2-listener-report\" accept\n\trule family=\"ipv6\" icmp-type name=\"neighbour-advertisement\" accept\n\trule family=\"ipv6\" icmp-type name=\"neighbour-solicitation\" accept\n\trule family=\"ipv6\" icmp-type name=\"redirect\" accept\n\trule family=\"ipv6\" icmp-type name=\"router-advertisement\" accept",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --permanent --get-zone-of-interface=eno1",
+      "rc": 2,
+      "stdout": "",
+      "stderr": "no zone"
+    },
+    {
+      "name": "firewall --permanent --zone=FedoraServer --list-all",
+      "rc": 0,
+      "stdout": "FedoraServer (default)\n  target: default\n  ingress-priority: 0\n  egress-priority: 0\n  icmp-block-inversion: no\n  interfaces: \n  sources: \n  services: cockpit dhcpv6-client ssh\n  ports: \n  protocols: \n  forward: yes\n  masquerade: no\n  forward-ports: \n  source-ports: \n  icmp-blocks: \n  rich rules:",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --permanent --get-policies",
+      "rc": 0,
+      "stdout": "allow-host-ipv6 gateway-dmz-to-HOST gateway-lan-to-HOST gateway-lan-to-work gateway-lan-to-world gateway-world-to-HOST",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --permanent --direct --get-all-rules",
+      "rc": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "firewall --permanent --info-service=ssh",
+      "rc": 0,
+      "stdout": "ssh\n  ports: 22/tcp\n  protocols: \n  source-ports: \n  modules: \n  destination: \n  includes: \n  helpers:",
+      "stderr": ""
+    },
+    {
+      "name": "ipv6_policy --permanent",
+      "rc": 0,
+      "stdout": "allow-host-ipv6\n  disable: no\n  priority: -15000\n  target: CONTINUE\n  ingress-zones: ANY\n  egress-zones: HOST\n  services: \n  ports: \n  protocols: \n  masquerade: no\n  forward-ports: \n  source-ports: \n  icmp-blocks: \n  rich rules: \n\trule family=\"ipv6\" icmp-type name=\"mld-listener-done\" accept\n\trule family=\"ipv6\" icmp-type name=\"mld-listener-query\" accept\n\trule family=\"ipv6\" icmp-type name=\"mld-listener-report\" accept\n\trule family=\"ipv6\" icmp-type name=\"mld2-listener-report\" accept\n\trule family=\"ipv6\" icmp-type name=\"neighbour-advertisement\" accept\n\trule family=\"ipv6\" icmp-type name=\"neighbour-solicitation\" accept\n\trule family=\"ipv6\" icmp-type name=\"redirect\" accept\n\trule family=\"ipv6\" icmp-type name=\"router-advertisement\" accept",
+      "stderr": ""
+    }
+  ]
+}

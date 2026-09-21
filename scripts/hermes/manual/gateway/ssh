@@ -1,0 +1,30 @@
+#!/bin/sh
+# Hermes gateway SSH enforcement shim.
+#
+# Bind-mounted at /opt/hermes/bin/ssh, which is first on the image PATH, so the
+# Hermes backend resolves this instead of /usr/bin/ssh.
+#
+# The backend builds:  ssh -o ControlPath=... -o ControlMaster=auto \
+#                          -o StrictHostKeyChecking=accept-new ... user@host
+# OpenSSH uses the FIRST obtained value for an option, so injecting our policy
+# before "$@" defeats the backend's accept-new and pins the worker identity.
+# ControlPath/ControlMaster/SendEnv are deliberately not set here, so the
+# backend's own multiplexing and (empty) passthrough behaviour is preserved.
+set -eu
+
+# The live pin is the default. HERMES_GATEWAY_SSH_DIR exists so a disposable
+# consumer (for example a negative host-key test) can run against a copy without
+# relabelling or editing the live, privately labelled material.
+BASE="${HERMES_GATEWAY_SSH_DIR:-/opt/hermes/gateway-ssh}"
+SOCK="${HERMES_WORKER_SOCKET:-/run/hermes-transport/worker.sock}"
+
+exec /usr/bin/ssh \
+  -o "ProxyCommand=/usr/bin/python3 $BASE/unix-bridge.py $SOCK" \
+  -o StrictHostKeyChecking=yes \
+  -o "UserKnownHostsFile=$BASE/known_hosts" \
+  -o GlobalKnownHostsFile=/dev/null \
+  -o "IdentityFile=$BASE/worker_client_ed25519" \
+  -o IdentitiesOnly=yes \
+  -o ForwardAgent=no \
+  -o ClearAllForwardings=yes \
+  "$@"

@@ -1,0 +1,21 @@
+{
+  "started_at": "2026-09-07T23:08:08.809505+00:00",
+  "lease": "56c680a9f88132f0991ee7e6ad68ccbd",
+  "model": "gpt-5.6-luna",
+  "issued": true,
+  "revoked": true,
+  "procedure_sha256": "5119e1d1825de24c15b9122d0698f32d6ff1776b988b60201f4b9b8288bc442b",
+  "issue_attempted": true,
+  "guest": {
+    "credential_restored": false,
+    "error_type": "Failure",
+    "failed_stage": "credential-delivery",
+    "inference": false,
+    "model": "gpt-5.6-luna",
+    "model_access": true,
+    "model_http_status": 200,
+    "restore_error": true
+  },
+  "finished_at": "2026-09-07T23:08:28.268876+00:00",
+  "pass": false
+}

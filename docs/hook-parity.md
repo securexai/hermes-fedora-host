@@ -34,7 +34,7 @@ project extension rather than silently dropped.
 | Source gate | Source command | Decision |
 | --- | --- | --- |
 | `test-hermes-guide` | `./tests/test-hermes-guide.sh` | Ported as a project `pre-push` hook |
-| `test-hermes-deploy-spec` | `shellspec spec/hermes/` | Ported once the ShellSpec 0.28.1 extension is installed |
+| `test-hermes-deploy-spec` | `shellspec spec/hermes/` | **N/A** — the only upstream spec exercises the deployment entrypoints (`hermes-deploy.sh`, `hermes-certify-vm.sh`, provider auth, VM lifecycle) that are out of scope. ShellSpec stays installed as a declared extension for future in-scope unit specs |
 | `test-routeros` | `./tests/test-routeros.sh` | Out of scope — stays in the source repository |
 | `test-vlan30-firewall` | `./tests/test-vlan30-firewall-deploy.sh` | Out of scope — stays in the source repository |
 | `test-nix-guide` | `./tests/test-nix-guide.sh` | Out of scope — stays in the source repository |

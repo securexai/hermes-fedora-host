@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-09-09T14:48:45.013241+00:00",
+  "service_window": "2026-09-09 09:43:14 through 09:43:16 -05",
+  "service": {
+    "Result": "exit-code",
+    "ExecMainStatus": 1,
+    "MainPID": 0,
+    "ActiveState": "failed"
+  },
+  "journal_findings": [
+    "SRK public file matches existing TPM SRK",
+    "Permission denied creating blkid probe for /dev/nvme0n1p2",
+    "Permission denied finding XBOOTLDR",
+    "Two NvPCRs already initialized"
+  ],
+  "audit_probe": {
+    "original": "LC_ALL=C ausearch -m AVC,USER_AVC -ts 09/09/2026 09:43:14 --raw",
+    "original_result": "Date parsing failed",
+    "corrected": "LC_ALL=C ausearch -m AVC,USER_AVC -ts 09/09/26 09:43:10 -te 09/09/26 09:43:25 --raw",
+    "corrected_result": "Date parsing accepted; unprivileged audit configuration/log access denied"
+  },
+  "policy_state": "Enforcing; expected on-disk hash and executable label unchanged",
+  "unverified": [
+    "Exact AVC permission/cause",
+    "Original process sampling and audit-before values were not saved",
+    "Current anchor/SRK/LUKS/firmware preservation awaits privileged read-only recovery"
+  ],
+  "actions": [
+    "No service retry, policy mutation or reboot",
+    "Local observation helper corrected, original remote helper retained",
+    "Read-only recovery helper staged with verified hash"
+  ],
+  "recovery_helper_sha256": "372ac2e5a34b066b769a4819367584e617487ab8576e3e7deb515e8dec3c1d3e",
+  "local_corrected_run_helper_sha256": "f8e57069d746b5d7ffaa479c30b968749ee8cfe9d33b3978b245cce2b207300c",
+  "regression_checks": [
+    "Python syntax",
+    "Audit error diagnostic retained before raising",
+    "Valid empty query and AVC output handling",
+    "Corrected date accepted by host ausearch parser"
+  ],
+  "infrastructure_failure": "Concurrent Devbox read raced on .cmd.sh; serial retry succeeded"
+}

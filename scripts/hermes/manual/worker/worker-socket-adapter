@@ -1,0 +1,19 @@
+#!/bin/sh
+# Worker-side transport adapter.
+#
+# Listens on the minimal shared transport directory and hands each accepted
+# stream to a fresh inetd-mode sshd. Only this socket is shared with the
+# gateway container; the worker keeps its own network namespace.
+set -eu
+
+SOCK="${WORKER_SOCKET:-/run/transport/worker.sock}"
+
+mkdir -p "$(dirname "$SOCK")"
+rm -f "$SOCK"
+
+# mode=0666: the gateway's ssh/scp run as the image's hermes user (UID 10000),
+# not as container root, so the socket must be connectable by that mapped UID.
+# Exposure is bounded by /home/hermes/transport (host) and by the fact that the
+# only other container with this mount is the intended gateway.
+exec socat "UNIX-LISTEN:${SOCK},fork,mode=0666,unlink-early" \
+  EXEC:/usr/local/bin/worker-sshd-inetd

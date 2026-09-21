@@ -1,0 +1,40 @@
+# Worker sshd configuration.
+#
+# This sshd never opens a TCP listener: it is started once per connection in
+# inetd mode (sshd -i) by the Unix-socket adapter, so the worker can keep
+# Network=none with no loopback service and no route anywhere.
+#
+# The host key comes from the persistent, worker-only mount at
+# /etc/ssh/host-keys so image rebuilds preserve the pinned identity.
+
+HostKey /etc/ssh/host-keys/ssh_host_ed25519_key
+PidFile none
+
+UsePAM no
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+AuthenticationMethods publickey
+AuthorizedKeysFile /etc/ssh/authorized_keys/%u
+AllowUsers worker
+
+# authorized_keys is root-owned mode 0644 in a root-owned directory, so the
+# StrictModes home/ownership checks are not the control that protects it here;
+# the worker account cannot write either path.
+StrictModes no
+
+# Disabled forwarding: the worker is a command/file execution target only.
+AllowTcpForwarding no
+AllowAgentForwarding no
+AllowStreamLocalForwarding no
+X11Forwarding no
+PermitTunnel no
+PermitUserEnvironment no
+GatewayPorts no
+
+# No AcceptEnv on purpose: the gateway's SSH-specific environment passthrough
+# stays empty, so provider credentials cannot ride into the worker.
+PrintMotd no
+Subsystem sftp internal-sftp
+LogLevel VERBOSE

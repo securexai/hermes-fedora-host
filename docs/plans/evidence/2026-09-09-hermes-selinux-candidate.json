@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-09-09T03:41:07.543906+00:00",
+  "environment": "isolated rootless Fedora toolbox 44 container; no host TPM or production mounts",
+  "revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9",
+  "artifact_sha256": {
+    "scripts/hermes/selinux/hermes_tpm2_setup.te": "588528f0127a783f4087790e5fb11b52656eee8f70118edc3608b9ad0d5a547a",
+    "scripts/hermes/selinux/hermes_tpm2_setup.fc": "9ed6c47aded948615d3eceaf7ddf2b5c816204bc2da35bdf186c723ea04e2bea",
+    "scripts/hermes/selinux/verify_policy.py": "77fa175398e667f5160e560a03b5b98bc5d6adf82806d5dae08c340dbee29883"
+  },
+  "host_policy_sha256": "bf58d5f5ae23502d844f70c153ef5366c31bf16ac9c77f548b94f3cf1aea1949",
+  "package_policy_version": "44.8-1.fc44",
+  "systemd_version": "259.8-1.fc44",
+  "build_tools": {
+    "checkpolicy": "3.11-1.fc44",
+    "policycoreutils": "3.11-2.fc44",
+    "setools-console": "4.6.0-6.fc44"
+  },
+  "module_sha256": "1ce86147143ac668910e5136e89e54f69a9f1d62a55073a0c5d1b37406372a5a",
+  "inspection": {
+    "base_sha256": "e30826ec08760844f2254cd522f2e93de3d0ec6d3ed6eac45fb1c68cb34be811",
+    "merged_sha256": "0198889d4fe351c5a73d95d784857b2ba9bb24ab7e4ebbb593b28593cdcf2a18",
+    "checks": {
+      "candidate_enforcing": true,
+      "no_new_permissive_types": true,
+      "init_transition": true,
+      "access_dosfs_t": true,
+      "access_syslogd_var_run_t": true,
+      "access_tpm_device_t": true,
+      "access_init_var_lib_t": true,
+      "access_init_var_run_t": true,
+      "access_hermes_tpm2_setup_exec_t": true,
+      "no_capability": true,
+      "no_capability2": true,
+      "no_create_tcp_socket": true,
+      "no_create_udp_socket": true,
+      "no_create_rawip_socket": true,
+      "no_mutation_shadow_t": true,
+      "no_mutation_security_t": true,
+      "no_mutation_efivarfs_t": true,
+      "unchanged_init_dosfs_t": true,
+      "unchanged_init_syslogd_var_run_t": true
+    },
+    "passed": true,
+    "scope": "offline policy inspection only; not hardware or persistence acceptance"
+  },
+  "checks": [
+    {
+      "method": "make -f /usr/share/selinux/devel/Makefile hermes_tpm2_setup.pp",
+      "result": "PASS"
+    },
+    {
+      "method": "semodule -n -i candidate.pp in isolated matching Fedora store",
+      "result": "PASS"
+    },
+    {
+      "method": "python3 verify_policy.py package-base.35 package-merged.35",
+      "result": "PASS: 19 checks"
+    },
+    {
+      "method": "semodule_unpackage then matchpathcon -f unpacked.fc /usr/lib/systemd/systemd-tpm2-setup",
+      "result": "PASS: hermes_tpm2_setup_exec_t"
+    },
+    {
+      "method": "sediff --stats host-policy.35 package-base.35",
+      "result": "MISMATCH: installed store required"
+    }
+  ],
+  "failed_attempts": [
+    "Binary conversion initially omitted checkpolicy -M and failed MLS validation. Corrected conversion passed, but linking failed at missing roleattributeset cil_gen_require. Binary reconstruction abandoned; matching package store used with limitations.",
+    "Initial matchpathcon used an absent file from the failed direct link. Corrected to unpack the successfully built policy package; exact mapping passed.",
+    "Initial documentation lint found four pre-existing bare URLs in the execution record; formatting corrected and nonfix lint rerun passed."
+  ],
+  "limits": [
+    "Exact installed module-store compatibility BLOCKED on operator export; unprivileged store access denied.",
+    "No production policy installation, restart, TPM operation or reboot performed.",
+    "Type-wide dosfs_t and systemd-state writes require explicit review.",
+    "Actual domain transition, late service success, idempotency and hardware persistence untested."
+  ],
+  "private_artifacts": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909",
+  "documentation_checks": {
+    "timestamp": "2026-09-09T03:42:50.665562+00:00",
+    "hermes_guide": "PASS: 217 checks",
+    "local_links": "PASS: 5 new-guide targets",
+    "python_syntax": "PASS",
+    "markdownlint": "PASS: 5 documents, zero errors after formatting 4 pre-existing bare URLs",
+    "git_diff_check": "PASS"
+  },
+  "container": "Stopped; retained hermes-selinux-build-20260909 for continuation. Stop escalated to SIGKILL for sleep infinity after 10 seconds; no build operation was running."
+}

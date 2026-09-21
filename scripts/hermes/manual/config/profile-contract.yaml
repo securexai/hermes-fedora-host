@@ -1,0 +1,111 @@
+# Manual-profile configuration contract — the single source of truth for the
+# reviewed posture of the narrow CLI/Telegram text profile.
+#
+# Consumed by config/harden-config.py and asserted by
+# tests/test-hermes-manual-profile.sh. Changing a value here changes the
+# deployed configuration and the test expectation at the same time, which is
+# intentional: a posture change must be one reviewed edit with one justification.
+#
+# Deliberately NOT here: `_config_version`. The pinned upstream refuses to
+# auto-migrate an explicit version below its support floor, and asserting a
+# schema version this procedure cannot substantiate would be a compatibility
+# claim the deployment has not earned.
+version: 1
+profile: manual-offline-worker
+
+# Security-controlled collections that must be REPLACED, not merged. The generic
+# merge below only replaces scalars and lists; an empty mapping patch such as
+# `hooks: {}` would otherwise merge into the existing mapping and leave every
+# pre-existing integration in force while the run reported success. Each path
+# here is deleted from the existing configuration before the contract is merged,
+# so "no hooks, no MCP servers, no extra toolsets" is what actually lands.
+replace:
+  - hooks
+  - mcp_servers
+  - plugins
+  - toolsets
+  - platform_toolsets
+  - approvals
+  - security
+  - skills.external_dirs
+  - skills.trusted_project_dirs
+
+config:
+  approvals:
+    mode: manual
+    timeout: 300
+    cron_mode: deny
+    single_query_mode: deny
+    unattended_mode: deny
+    mcp_reload_confirm: true
+    destructive_slash_confirm: true
+  security:
+    allow_private_urls: false
+    redact_secrets: true
+    protected_instruction_files: true
+    tirith_enabled: true
+    tirith_fail_open: false
+    allow_lazy_installs: false
+  hooks_auto_accept: false
+  hooks: {}
+  mcp_servers: {}
+  plugins:
+    enabled: []
+    disabled: []
+  cron:
+    allow_agent_scheduling: false
+  checkpoints:
+    enabled: true
+  tool_loop_guardrails:
+    hard_stop_enabled: true
+    hard_stop_after:
+      exact_failure: 5
+      idempotent_no_progress: 5
+      same_tool_failure: 8
+  skills:
+    external_dirs: []
+    trusted_project_dirs: []
+    project_discovery: false
+    guard_agent_created: true
+    write_approval: true
+  memory:
+    provider: ''
+    write_approval: true
+  web:
+    keyless_fallback: false
+    keyless_rescue: false
+  terminal:
+    backend: ssh
+    ssh_host: worker
+    ssh_user: worker
+    ssh_port: 22
+    ssh_key: /opt/hermes/gateway-ssh/worker_client_ed25519
+    docker_mount_cwd_to_workspace: false
+  # Narrow allowlist, using the pinned image's REAL config keys: `toolsets` is the
+  # global list and `platform_toolsets.<platform>` is the per-surface override.
+  # Values are toolset names from the image's toolsets.py. `hermes-cli` and
+  # `hermes-telegram` are broad composites (every core tool, including browser,
+  # code execution, computer-use and delegation) and are intentionally not used.
+  # Runtime resolution must still be confirmed on the image before acceptance.
+  toolsets:
+    - terminal
+    - file
+    - memory
+    - clarify
+  platform_toolsets:
+    cli:
+      - terminal
+      - file
+      - memory
+      - clarify
+    telegram:
+      - terminal
+      - file
+      - memory
+      - clarify
+
+env:
+  API_SERVER_ENABLED: 'false'
+  HERMES_DASHBOARD: '0'
+  GATEWAY_ALLOW_ALL_USERS: 'false'
+  WEBHOOK_ENABLED: 'false'

@@ -1,0 +1,35 @@
+[Unit]
+Description=Hermes offline worker (Unix-socket SSH target)
+
+[Container]
+ContainerName=hermes-worker
+Image=localhost/hermes-worker:1
+
+# No network namespace connectivity at all: the only transport is the shared
+# Unix socket mounted below. sshd is reached in inetd mode, never over TCP.
+Network=none
+
+# Requirements are known and satisfiable read-only; the two writable paths the
+# container needs are explicitly provided (see worker-entrypoint).
+ReadOnly=true
+Tmpfs=/run
+Tmpfs=/tmp
+
+NoNewPrivileges=true
+PidsLimit=512
+Memory=2g
+
+# Minimal shared transport directory: only the socket is shared with the gateway.
+Volume=/home/hermes/transport:/run/transport:z
+# Persistent worker home and the pinned worker host identity (worker only).
+Volume=/home/hermes/worker-state/home:/home/worker:Z
+Volume=/home/hermes/worker-state/ssh-host-keys:/etc/ssh/host-keys:ro,Z
+
+Exec=/usr/local/bin/worker-entrypoint
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=120
+
+[Install]
+WantedBy=default.target

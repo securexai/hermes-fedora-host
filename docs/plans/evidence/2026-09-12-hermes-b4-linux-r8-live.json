@@ -1,0 +1,657 @@
+{
+  "schema": "hermes-b4-linux-live-v1",
+  "complete": true,
+  "case": "b4-linux",
+  "revision": 8,
+  "progress": "COMPLETE",
+  "validation": "PASS",
+  "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+  "root": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19",
+  "unit": "hermes-remaining-20260912-b4-linux-r8-6d576e19.service",
+  "package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-b4-linux-review-r8",
+  "manifest_sha256": "06c830f554eedb415d5240e8840a01cfc428790e341b9905c185f6fc0df1f039",
+  "source_archive_sha256": "0a82bef486cd0d0ceed018fef8fe5902623587c32b871166d7116031da7407d7",
+  "started_at": "2026-09-12T02:07:28.959567+00:00",
+  "mandatory_cleanup_deadline": "2026-09-12T06:07:28.959567+00:00",
+  "dispatches": 1,
+  "authorization_reference": "User: keep performing all pre productions tasks with no confirmation; fresh bounded lab authorization",
+  "L0": {
+    "timestamp": "2026-09-12T02:07:33.809454+00:00",
+    "operation": "AR04-L0",
+    "result": "PASS",
+    "root": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19",
+    "source_archive_sha256": "0a82bef486cd0d0ceed018fef8fe5902623587c32b871166d7116031da7407d7",
+    "source_files": 79,
+    "actual_certifier_tool_readiness": {
+      "ok": true,
+      "resolved": {
+        "restic": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/repository/scripts/hermes/unattended/bin/restic",
+        "ssh": "/usr/bin/ssh",
+        "sudo": "/usr/bin/sudo",
+        "trivy": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/repository/scripts/hermes/unattended/bin/trivy"
+      },
+      "stage": "certifier-tools-ready",
+      "tools": [
+        "ssh",
+        "sudo",
+        "restic",
+        "trivy"
+      ],
+      "uid": 984,
+      "versions": {
+        "restic": "restic 0.19.1 compiled with go1.26.7 on linux/amd64",
+        "trivy": "Version: 0.74.0"
+      }
+    },
+    "r1_r2_preserved": true,
+    "broker_before_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_during_sha256": "3c3e16074e883f9cfb7fe77684efd404e43bfa561855f08636f7366ac96e6c71",
+    "test_uid": 984,
+    "production_disabled": true,
+    "grant_issued": false,
+    "services_started": false,
+    "temporary_control_hashes": {
+      "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+      "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+      "90-hermes-remaining-20260912-b4-linux-r8-6d576e19.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+      "hermes-remaining-20260912-b4-linux-r8-6d576e19-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+      "hermes-remaining-20260912-b4-linux-r8-6d576e19.service": "cc377e588a8d4174d78c4b45d56fa0a034b1631715520bd69445bc5d687b31fa",
+      "hermes-remaining-20260912-b4-linux-r8-6d576e19-failed.service": "83afa21aaf522ea447120c38be2da14dbc826ed2208a191f9f3cb2c72dc55472"
+    }
+  },
+  "L1-dispatch": {
+    "timestamp": "2026-09-12T02:11:51.026203+00:00",
+    "operation": "AR04-L1",
+    "status": "DISPATCHED_ONCE",
+    "grant": {
+      "schema": "hermes-lifecycle-lab-window-v1",
+      "binding": "b974ef4e357c097e8154c1992935c3309729d78fc384774b2ec185f8ff6623e7",
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+      "issued_at": 1789179110,
+      "expires_at": 1789189310
+    },
+    "unit": [
+      "ActiveState=activating",
+      "SubState=start",
+      "InvocationID=6bff0b83b2a340709093917544e6292f"
+    ],
+    "release_signed": false
+  },
+  "L2": {
+    "timestamp": "2026-09-12T04:43:30.575299+00:00",
+    "operation": "AR04-L2",
+    "result": "PASS",
+    "lifecycle_stage": "failed-cleaned",
+    "provider_credential": "revoked",
+    "fixed_domain_disk_nvram_swtpm_absent": true,
+    "private_material_absent": true,
+    "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_metadata_xattrs_restored": true,
+    "test_uid_restored": 987,
+    "production_role_disabled": true,
+    "socket_runtime_credential_absent": true,
+    "temporary_units_override_power_grant_helpers_removed": true,
+    "consumed_grant_archived_and_active_grant_removed": true,
+    "old_policy_journal_timers_preserved": true,
+    "unit_results_before_removal": {
+      "hermes-remaining-20260912-b4-linux-r8-6d576e19.service": [
+        "ActiveState=failed",
+        "SubState=failed",
+        "InvocationID=6bff0b83b2a340709093917544e6292f",
+        "Result=exit-code",
+        "ExecMainStatus=69"
+      ],
+      "hermes-remaining-20260912-b4-linux-r8-6d576e19-failed.service": [
+        "ActiveState=inactive",
+        "SubState=dead",
+        "InvocationID=a4dfaea7464743f9863bf2658ef85c32",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.service": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=19f58442fb5c41338c412cae8f9de859",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.socket": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=bca5c35a7a504344ab896eead7523f5e",
+        "Result=success"
+      ]
+    },
+    "release_signed": false
+  },
+  "lifecycle": {
+    "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+    "candidate_sha256": "a88a306ba515570c1f3c2e63543bac036721826f29d9c8a6120fc4e5dc474166",
+    "certified": false,
+    "credentials_cleaned": true,
+    "failure": "lifecycle-execution-failed",
+    "guest_purged": true,
+    "private_purged": true,
+    "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+    "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+    "stage": "failed-cleaned",
+    "supplemental_result": "PASS",
+    "vm_destroyed": true
+  },
+  "case-evidence": {
+    "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+    "candidate_sha256": "a88a306ba515570c1f3c2e63543bac036721826f29d9c8a6120fc4e5dc474166",
+    "case": "b4-linux",
+    "cleanup": "PENDING; case result triggers frozen cleanup and independent L2 is still required",
+    "files": {
+      "after.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/after.json",
+        "sha256": "427914f16f92c5b5014827f837b081dc75e75be60b6ea293b062892f7c83b0fa"
+      },
+      "before.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/before.json",
+        "sha256": "75fd76bda691011121eeaab02a8c226a795439123928bc6502fa6aebed6d2b5c"
+      },
+      "esp-capacity.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/esp-capacity.json",
+        "sha256": "88189397af9c42068a565c4a16d59e8ee3e72165204ae30e279ec0e65b7421fe"
+      },
+      "initial-control.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/initial-control.json",
+        "sha256": "91d578ebe48074c317607397d8cf40a8699ac5826d39d054f581123097afad72"
+      },
+      "negative-capture.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/negative-capture.json",
+        "sha256": "4b574291c57d3a835c2d2ed4460a423c7d722eff36d60dc672dbb1c013ea1869"
+      },
+      "negative-started.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/negative-started.json",
+        "sha256": "867da1f8c1f81f4da4da289b5a9c5e7916437301fff240bb553f8763f050861a"
+      },
+      "pre-negative-control.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/pre-negative-control.json",
+        "sha256": "1c4e05eded638210847bd418f24920753da936caab774cfa0727077aa8535e6f"
+      },
+      "prepare-started.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/prepare-started.json",
+        "sha256": "0a51217a14490564d322dc625b46d08fdf05e9116d5acfd4fe3bfaf7efe5a38d"
+      },
+      "preselect.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/preselect.json",
+        "sha256": "0fdaac3f3fb5c32b25eb0d86e21dbc15c47cacf44338613637feba158f0c4d85"
+      },
+      "preservation.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/preservation.json",
+        "sha256": "ceb1531a7ed3e078da6fc86db8058ca95e29c59d845e27fb9585cdd756bbb70f"
+      },
+      "recover-started.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/recover-started.json",
+        "sha256": "18a062604873bd8fd27435bae86478d3596acf722bd9c3dc13a737bd7ff3e0ab"
+      },
+      "recovered-control.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/recovered-control.json",
+        "sha256": "49be58bb361a4f3e738ba3009460ebbd03c1fc01174fa728bfe85a21651e38aa"
+      },
+      "recovery-poweroff.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/recovery-poweroff.json",
+        "sha256": "e6fbb49952d2da046a615be8df08703daef237e1816a412de2c35777f5c45dfa"
+      },
+      "selection.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/selection.json",
+        "sha256": "d5cfe9578d42608e7606f13db5d9593d5c2a13d917de36b866f2d65be9a16a39"
+      },
+      "signature-verification.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/signature-verification.json",
+        "sha256": "ac3b5bdefa7689198a5fe9cf1bb330363c3cb7b748d000950624cf77175c3646"
+      },
+      "tamper.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/tamper.json",
+        "sha256": "b7e0d9b26bf8117caa3625c2beee1a630bc08a9cb3064ac6d9711a91d794f4e4"
+      },
+      "trial-installed.json": {
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/trial-installed.json",
+        "sha256": "4a16bef05756740f23ab5e24cfdf1d56ecb8a1357cb89529077aaf89dc7199be"
+      }
+    },
+    "prerequisites": {
+      "acceptance_sha256": "518fdcccb2b455c7ea69c2c3d7a95cb8405a51c4e056c90386b4d9746be2515f",
+      "gates": [
+        "boot",
+        "credential_revocation",
+        "inference",
+        "package_replay",
+        "previous_boot",
+        "restore",
+        "runtime",
+        "vulnerability_scan"
+      ],
+      "result": "PASS"
+    },
+    "preservation": {
+      "approved_esp_artifacts": true,
+      "candidate_sha256": true,
+      "files": true,
+      "host_phase": true,
+      "inventory": true,
+      "luks_metadata_sha256": true,
+      "new_control_boot": true,
+      "only_exact_trial_added": true,
+      "persistent_default_unchanged": true,
+      "previous": true,
+      "replay": true,
+      "run_id": true,
+      "selinux": true,
+      "trial_sha256": true
+    },
+    "recovered_control": {
+      "boot_id": "5c237ef5-1c61-4e13-ae76-99e8adeb7302",
+      "bounded_credential_leak_check": true,
+      "completed_at": 1789183486,
+      "credential_matches": true,
+      "encrypted_credential_sha256": "252372f9c6ae882df69936808b6fd9ddd689a32e1b75553cf7fb8b0d99ced47f",
+      "kernel": "7.2.4-200.fc44.x86_64",
+      "luks_metadata_sha256": "e767cc9b1613cc04fd60ff473ed0daf4057cd4caf9c88c9c14e672165c4afd1f",
+      "no_ports": true,
+      "ok": true,
+      "overlay_read_only": true,
+      "package_inventory": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+      "pcr_public_key_sha256": "fb594639c28bae60afce58d8fd6d53cacd5ee03d1e64fe4008a26970b0513709",
+      "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+      "root_read_only": true,
+      "runtime_healthy": true,
+      "secure_boot": true,
+      "security_config": true,
+      "selinux": "Enforcing",
+      "stage": "observed",
+      "tpm_profile": {
+        "profile": "standard-tpm2",
+        "srk_public_files_match": true,
+        "srk_services": {
+          "systemd-tpm2-setup-early.service": "passed",
+          "systemd-tpm2-setup.service": "passed"
+        }
+      },
+      "tpm_services": true,
+      "uki_sha256": "80589462749181145d0178b4a9b0893413353580bee4aa3ca364414971374b1d",
+      "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+    },
+    "result": "PASS",
+    "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+    "schema": "hermes-artifact-rejection-evidence-v1",
+    "selection": {
+      "approved_control_boot_id": "7df86077-4b11-4e7c-a581-cd56da9555c7",
+      "entry": "hermes-b4-linux-6d576e193ff4.efi",
+      "oneshot_readback": "hermes-b4-linux-6d576e193ff4.efi",
+      "path": "/boot/efi/EFI/Linux/hermes-b4-linux-6d576e193ff4.efi",
+      "sha256": "ea72894705fb755749ed1e06b7d8f5461e34fcd1e4074e2bd7ebe7bb7d295698"
+    },
+    "tamper": {
+      "changed_bytes": 1,
+      "changed_offset": 145920,
+      "resigned": false,
+      "section": ".linux",
+      "source_sha256": "80589462749181145d0178b4a9b0893413353580bee4aa3ca364414971374b1d",
+      "tested_sha256": "ea72894705fb755749ed1e06b7d8f5461e34fcd1e4074e2bd7ebe7bb7d295698"
+    },
+    "timestamp": "2026-09-12T04:41:34.069499+00:00",
+    "witness": {
+      "boot_manager_package": "systemd-boot-unsigned-259.8-1.fc44.x86_64",
+      "frame": {
+        "elapsed_seconds": 9.696,
+        "path": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19/state/6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421/artifact-probe/boot-frames/frame-0013.png",
+        "sha256": "b0cac9333702aa3e61cb6f22fac22ca2e6c4384486f48bfb29903646587d2b09"
+      },
+      "interpretation": "Explicit EFI image-loading platform-policy denial of the one-byte unsigned kernel mutation; supported by signature control/trial checks and healthy approved control before and after. Fallback alone is not acceptance.",
+      "limitations": [
+        "serial keyword filter found no matching line; image witness is authoritative for this observation",
+        "systemd v259 family source consulted; exact v259.8 upstream source retrieval unavailable",
+        "trusted Fedora fallback observed; not counted as rejection evidence or as the required recovered control"
+      ],
+      "method": "visual review of hash-verified boot frame",
+      "observed_text": "Error loading EFI binary \\EFI\\Linux\\hermes-b4-linux-6d576e193ff4.efi: Access denied",
+      "references": [
+        "https://raw.githubusercontent.com/systemd/systemd/v259/src/boot/boot.c",
+        "https://raw.githubusercontent.com/systemd/systemd/v259/src/boot/shim.c",
+        "https://uefi.org/specs/UEFI/2.10_A/07_Services_Boot_Services.html#efi-boot-services-loadimage"
+      ]
+    }
+  },
+  "operator-result": {
+    "candidate_sha256": "a88a306ba515570c1f3c2e63543bac036721826f29d9c8a6120fc4e5dc474166",
+    "case": "b4-linux",
+    "evidence_sha256": "638ea957b538ac8dc5279c4b57659588d5f52cbe8fc0cd7beb980e333a86c578",
+    "result": "PASS",
+    "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421"
+  },
+  "acceptance": {
+    "boot": {
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "cold": {
+        "boot_id": "b76367f5-67de-4e07-9371-dc3f9e79d6d9",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1789182369,
+        "credential_matches": true,
+        "encrypted_credential_sha256": "60c94592ce6d2c0e256817a4337973cba2bfc278df22106a2f4215fd44befb74",
+        "kernel": "7.2.4-200.fc44.x86_64",
+        "luks_metadata_sha256": "e767cc9b1613cc04fd60ff473ed0daf4057cd4caf9c88c9c14e672165c4afd1f",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+        "pcr_public_key_sha256": "fb594639c28bae60afce58d8fd6d53cacd5ee03d1e64fe4008a26970b0513709",
+        "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+        "root_read_only": true,
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_profile": {
+          "profile": "standard-tpm2",
+          "srk_public_files_match": true,
+          "srk_services": {
+            "systemd-tpm2-setup-early.service": "passed",
+            "systemd-tpm2-setup.service": "passed"
+          }
+        },
+        "tpm_services": true,
+        "uki_sha256": "80589462749181145d0178b4a9b0893413353580bee4aa3ca364414971374b1d",
+        "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+      },
+      "completed_at": 1789182369,
+      "gate": "boot",
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+      "warm": {
+        "boot_id": "6c00cc7a-5078-4666-ad29-99239d505cb4",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1789182248,
+        "credential_matches": true,
+        "encrypted_credential_sha256": "60c94592ce6d2c0e256817a4337973cba2bfc278df22106a2f4215fd44befb74",
+        "kernel": "7.2.4-200.fc44.x86_64",
+        "luks_metadata_sha256": "e767cc9b1613cc04fd60ff473ed0daf4057cd4caf9c88c9c14e672165c4afd1f",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+        "pcr_public_key_sha256": "fb594639c28bae60afce58d8fd6d53cacd5ee03d1e64fe4008a26970b0513709",
+        "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+        "root_read_only": true,
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_profile": {
+          "profile": "standard-tpm2",
+          "srk_public_files_match": true,
+          "srk_services": {
+            "systemd-tpm2-setup-early.service": "passed",
+            "systemd-tpm2-setup.service": "passed"
+          }
+        },
+        "tpm_services": true,
+        "uki_sha256": "80589462749181145d0178b4a9b0893413353580bee4aa3ca364414971374b1d",
+        "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+      }
+    },
+    "credential_revocation": {
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "attempts": [
+        {
+          "attempt": 1,
+          "reason": "broker-rejected",
+          "result": "FAIL"
+        },
+        {
+          "attempt": 2,
+          "result": "PASS"
+        }
+      ],
+      "completed_at": 1789182852,
+      "gate": "credential_revocation",
+      "lease": "6d576e193ff4c6239bb40f6dd5d71f5c",
+      "ok": true,
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "revoked": true,
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421"
+    },
+    "inference": {
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "completed_at": 1789182248,
+      "exact_output": "HERMES_OK",
+      "gate": "inference",
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+      "source": "candidate Host.acceptance before and after persistence reboot"
+    },
+    "package_replay": {
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "completed_at": 1789182248,
+      "gate": "package_replay",
+      "inventory_sha256": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+      "ordered_stages": [
+        "reboot-pending",
+        "persistence-reboot",
+        "closed"
+      ],
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421"
+    },
+    "previous_boot": {
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "completed_at": 1789182610,
+      "gate": "previous_boot",
+      "post_update": true,
+      "previous": {
+        "boot_id": "f79f07b7-7fd4-47ad-b65e-161a5af99f75",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1789182497,
+        "credential_matches": true,
+        "encrypted_credential_sha256": "60c94592ce6d2c0e256817a4337973cba2bfc278df22106a2f4215fd44befb74",
+        "inference": "HERMES_OK",
+        "kernel": "6.19.10-300.fc44.x86_64",
+        "luks_metadata_sha256": "e767cc9b1613cc04fd60ff473ed0daf4057cd4caf9c88c9c14e672165c4afd1f",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+        "pcr_public_key_sha256": "fb594639c28bae60afce58d8fd6d53cacd5ee03d1e64fe4008a26970b0513709",
+        "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+        "root_read_only": true,
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_profile": {
+          "profile": "standard-tpm2",
+          "srk_public_files_match": true,
+          "srk_services": {
+            "systemd-tpm2-setup-early.service": "passed",
+            "systemd-tpm2-setup.service": "passed"
+          }
+        },
+        "tpm_services": true,
+        "uki_sha256": "865dd6a44381b6d1b8e8ee71e00ab9a239e81bae743b72b9c22c389b2d5a64ed",
+        "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+      },
+      "reenrollment": false,
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "returned": {
+        "boot_id": "cf870182-8beb-40b1-87c1-a122542eaffb",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1789182609,
+        "credential_matches": true,
+        "encrypted_credential_sha256": "60c94592ce6d2c0e256817a4337973cba2bfc278df22106a2f4215fd44befb74",
+        "inference": "HERMES_OK",
+        "kernel": "7.2.4-200.fc44.x86_64",
+        "luks_metadata_sha256": "e767cc9b1613cc04fd60ff473ed0daf4057cd4caf9c88c9c14e672165c4afd1f",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+        "pcr_public_key_sha256": "fb594639c28bae60afce58d8fd6d53cacd5ee03d1e64fe4008a26970b0513709",
+        "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+        "root_read_only": true,
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_profile": {
+          "profile": "standard-tpm2",
+          "srk_public_files_match": true,
+          "srk_services": {
+            "systemd-tpm2-setup-early.service": "passed",
+            "systemd-tpm2-setup.service": "passed"
+          }
+        },
+        "tpm_services": true,
+        "uki_sha256": "80589462749181145d0178b4a9b0893413353580bee4aa3ca364414971374b1d",
+        "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+      },
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+      "updated": {
+        "boot_id": "b76367f5-67de-4e07-9371-dc3f9e79d6d9",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1789182369,
+        "credential_matches": true,
+        "encrypted_credential_sha256": "60c94592ce6d2c0e256817a4337973cba2bfc278df22106a2f4215fd44befb74",
+        "kernel": "7.2.4-200.fc44.x86_64",
+        "luks_metadata_sha256": "e767cc9b1613cc04fd60ff473ed0daf4057cd4caf9c88c9c14e672165c4afd1f",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+        "pcr_public_key_sha256": "fb594639c28bae60afce58d8fd6d53cacd5ee03d1e64fe4008a26970b0513709",
+        "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+        "root_read_only": true,
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_profile": {
+          "profile": "standard-tpm2",
+          "srk_public_files_match": true,
+          "srk_services": {
+            "systemd-tpm2-setup-early.service": "passed",
+            "systemd-tpm2-setup.service": "passed"
+          }
+        },
+        "tpm_services": true,
+        "uki_sha256": "80589462749181145d0178b4a9b0893413353580bee4aa3ca364414971374b1d",
+        "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+      }
+    },
+    "restore": {
+      "application_loaded_state": true,
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "completed_at": 1789182705,
+      "encrypted_roundtrip": true,
+      "gate": "restore",
+      "ok": true,
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+      "snapshot": "635c5865baf55c4535d7f0138b6c2f43774928231e5d46de00898599fc57cff7",
+      "stage": "restore-check"
+    },
+    "runtime": {
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "boot_id": "b76367f5-67de-4e07-9371-dc3f9e79d6d9",
+      "bounded_credential_leak_check": true,
+      "completed_at": 1789182369,
+      "credential_matches": true,
+      "encrypted_credential_sha256": "60c94592ce6d2c0e256817a4337973cba2bfc278df22106a2f4215fd44befb74",
+      "gate": "runtime",
+      "kernel": "7.2.4-200.fc44.x86_64",
+      "luks_metadata_sha256": "e767cc9b1613cc04fd60ff473ed0daf4057cd4caf9c88c9c14e672165c4afd1f",
+      "no_ports": true,
+      "ok": true,
+      "overlay_read_only": true,
+      "package_inventory": "ef5cf79284061a3c6d5c48852500324abe7addae761b477a1d2ad4da261e338b",
+      "pcr_public_key_sha256": "fb594639c28bae60afce58d8fd6d53cacd5ee03d1e64fe4008a26970b0513709",
+      "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "root_read_only": true,
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+      "runtime_healthy": true,
+      "secure_boot": true,
+      "security_config": true,
+      "selinux": "Enforcing",
+      "stage": "observed",
+      "tpm_profile": {
+        "profile": "standard-tpm2",
+        "srk_public_files_match": true,
+        "srk_services": {
+          "systemd-tpm2-setup-early.service": "passed",
+          "systemd-tpm2-setup.service": "passed"
+        }
+      },
+      "tpm_services": true,
+      "uki_sha256": "80589462749181145d0178b4a9b0893413353580bee4aa3ca364414971374b1d",
+      "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+    },
+    "vulnerability_scan": {
+      "advisory": true,
+      "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+      "completed_at": 1789182740,
+      "findings": {
+        "CRITICAL": 20,
+        "HIGH": 467,
+        "LOW": 983,
+        "MEDIUM": 1537,
+        "UNKNOWN": 42
+      },
+      "gate": "vulnerability_scan",
+      "policy": "advisory-denylist-v1",
+      "policy_sha256": "a5c084a0b4879376ba307c85ea8c76a05857c217b09417cce19a72f472d2340d",
+      "release_id": "lifecycle-6d576e193ff4c6239bb40f6d",
+      "result": "PASS",
+      "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421"
+    }
+  },
+  "cleanup": {
+    "candidate_sha256": "a88a306ba515570c1f3c2e63543bac036721826f29d9c8a6120fc4e5dc474166",
+    "completed_at": 1789188199,
+    "credentials_reconciled": true,
+    "domain_absent": true,
+    "guest_purged": true,
+    "logical_deletion": true,
+    "private_material_absent": true,
+    "release_signed": false,
+    "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+    "schema": "hermes-lifecycle-cleanup-v1"
+  },
+  "independent_restoration": {
+    "timestamp": "2026-09-12T04:43:49.225578+00:00",
+    "status": "PASS",
+    "broker_hash": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_bytes_metadata_xattrs_restored": true,
+    "provider_lease_prefix": "6d576e193ff4c6239bb40f6dd5d71f5c",
+    "provider_state": "revoked",
+    "provider_credential_file_absent": true,
+    "fixed_vm_and_private_resources_absent": true,
+    "temporary_controls_and_grants_absent": true,
+    "historical_and_current_source_snapshots_preserved": true,
+    "socket": [
+      "ActiveState=inactive",
+      "SocketUser=hermes-lab-certifier",
+      "SocketGroup=hermes-lab-certifier",
+      "SocketMode=0600"
+    ],
+    "production_role_disabled": true
+  },
+  "elapsed_seconds": 9380.266,
+  "within_four_hours": true,
+  "scope_limitation": "Supplemental B4-linux validation passed. Lifecycle intentionally ends failed-cleaned/exit69 without certifying or signing a production release.",
+  "next_case": "b4-initrd"
+}

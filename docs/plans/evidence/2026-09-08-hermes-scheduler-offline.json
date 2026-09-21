@@ -1,0 +1,164 @@
+{
+  "schema": "hermes-offline-observation-v1",
+  "observed_at": "2026-09-08T12:56:17.074336+00:00",
+  "scope": "U06 enrolled-recipe scheduler; offline observation, not promotion evidence",
+  "environment": "Fedora workstation; commands through Devbox; installed Fedora systemd validator",
+  "base_revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9",
+  "branch": "codex/hermes-unattended",
+  "artifact_sha256": {
+    "scripts/hermes/unattended/schedule.py": "16b6dbfa241b235cce5b5ded401bc5e009428d750b78aa2f45e1f59a9f01719d",
+    "tests/test_hermes_schedule.py": "39ba8af6ff52bdf9f7dfdb22c3468dabf2cd9c851df439dac48459d4d8e73ce6",
+    "scripts/hermes/unattended/systemd/hermes-certification.service": "c70d9b82134f3f7ff71f79f27dcb9907b6b14164004910a422fc3ea3080e29b4",
+    "scripts/hermes/unattended/systemd/hermes-certification.timer": "8e31a5a75d9b87d6d6b245b292e434db78b1bd150b5a4c6c35f3b76400c365df",
+    "scripts/hermes/unattended/systemd/hermes-certification-failed.service": "4fbbd844b7cb22e82a1fc6540036e715fab2a253fdf6e7f6d412869e15706397"
+  },
+  "checks": [
+    {
+      "method": "unittest discovery: test_hermes_schedule.py, test_hermes_unattended.py, test_hermes_certify.py, test_hermes_lab_enroll_boot.py, test_hermes_transaction.py, test_hermes_offline.py",
+      "result": "PASS",
+      "tests": 189,
+      "note": "Scheduler command was subsequently changed to explicit -B; focused suite repeated below. Other 167 tests remain applicable."
+    },
+    {
+      "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_schedule.py",
+      "result": "PASS",
+      "tests": 22
+    },
+    {
+      "command": "devbox run -- shellspec spec/hermes/ spec/vm/",
+      "result": "PASS",
+      "examples": 138
+    },
+    {
+      "command": "devbox run -- ./tests/test-hermes-guide.sh",
+      "result": "PASS",
+      "checks": 217
+    },
+    {
+      "method": "devbox run -- /usr/bin/systemd-analyze verify --man=no on the three recorded unit files; repeated after explicit -B change",
+      "result": "PASS"
+    },
+    {
+      "method": "Installed systemd-analyze calendar invoked by Python argument vector for Sun *-*-* 02:00:00 America/Bogota",
+      "result": "PASS",
+      "next_elapse": "2026-09-13T07:00:00Z"
+    },
+    {
+      "method": "markdownlint-cli2 --no-globs with temporary fix:false repository config, four changed Markdown documents",
+      "result": "PASS"
+    },
+    {
+      "method": "Python local Markdown target and heading-anchor check on the four changed documents",
+      "result": "PASS",
+      "links": 57
+    },
+    {
+      "command": "devbox run -- git diff --check",
+      "result": "PASS"
+    },
+    {
+      "method": "Trailing whitespace and final-newline check on five new source/test/unit files",
+      "result": "PASS"
+    },
+    {
+      "method": "Final closure text nonfix Markdown, local links, git diff --check and recorded artifact hash equality",
+      "result": "PASS"
+    }
+  ],
+  "preserved_failures": [
+    "Expanded scheduler tests initially failed to import due to quoting in a new synthetic child fixture; repaired before successful suite.",
+    "Bundled systemd-analyze could not resolve America/Bogota and sysinit.target; installed Fedora validator passed.",
+    "First Markdown check found one overlong line; wrapped and rechecked successfully.",
+    "Direct Devbox calendar invocation expanded the wildcard; corrected using a Python subprocess argument vector."
+  ],
+  "not_performed": [
+    "live scheduled certification",
+    "VM provisioning/enrollment/destruction",
+    "provider credential writes",
+    "service installation or activation",
+    "production changes",
+    "commits or pushes"
+  ],
+  "remaining": [
+    "Fresh enrolled disposable fixture and live scheduler validation",
+    "Automatic fixture and exact per-candidate guest enrollment",
+    "Automatic UA-04 purge/destruction and subsequent signing handoff"
+  ],
+  "subsequent_observations": [
+    {
+      "observed_at": "2026-09-08T14:10:03.745686+00:00",
+      "scope": "S4 source revalidation; live certification pending",
+      "artifact_sha256": {
+        "scripts/hermes/unattended/schedule.py": "10d81f7af2b26ac5d35b905a41889e1ef11f3cdfd80902f41f8ad1d8b87b9dd1",
+        "tests/test_hermes_schedule.py": "84dddd9be7b65742a0ddaa57a6709f1eff20a108d9820c0d17589607e6b890f7",
+        "scripts/hermes/unattended/systemd/hermes-certification.service": "c70d9b82134f3f7ff71f79f27dcb9907b6b14164004910a422fc3ea3080e29b4",
+        "scripts/hermes/unattended/systemd/hermes-certification.timer": "8e31a5a75d9b87d6d6b245b292e434db78b1bd150b5a4c6c35f3b76400c365df",
+        "scripts/hermes/unattended/systemd/hermes-certification-failed.service": "4fbbd844b7cb22e82a1fc6540036e715fab2a253fdf6e7f6d412869e15706397",
+        "vm/create-hermes-server-vm.sh": "54ed7f60cb462d098b70a471d8e5204554bb69d1f983b78801f5554755f0593f"
+      },
+      "checks": [
+        {
+          "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_*.py",
+          "result": "PASS",
+          "tests": 193,
+          "note": "Includes disposable libguestfs disk integration"
+        },
+        {
+          "command": "devbox run -- shellspec spec/hermes/ spec/vm/",
+          "result": "PASS",
+          "examples": 138
+        },
+        {
+          "command": "devbox run -- ./tests/test-hermes-guide.sh",
+          "result": "PASS",
+          "checks": 217
+        },
+        {
+          "method": "Installed systemd-analyze verify --man=no on all three scheduler unit files",
+          "result": "PASS"
+        }
+      ],
+      "preserved_failures": [
+        "Readiness probe could not read root-only UUID; pinned SSH independently worked.",
+        "Second probe timed out while guest was in offline replay.",
+        "Temporary Markdown config filename rejected before lint; corrected and five-file focused lint passed."
+      ]
+    },
+    {
+      "observed_at": "2026-09-08T15:37:37.236409+00:00",
+      "scope": "Approved bounded lab window and S4 documentation closure",
+      "artifact_sha256": {
+        "scripts/hermes/unattended/schedule.py": "0c2412f18217ce2d7131d3c7f2a44d84edf391ebf799e9dda0eb773e3f2ce188",
+        "tests/test_hermes_schedule.py": "5dc18fa23d090fabf8a309ad8fe605ea7f9aff8cf702c1868db3725a70faa1b2",
+        "scripts/hermes/unattended/systemd/hermes-certification.service": "c70d9b82134f3f7ff71f79f27dcb9907b6b14164004910a422fc3ea3080e29b4",
+        "scripts/hermes/unattended/systemd/hermes-certification.timer": "8e31a5a75d9b87d6d6b245b292e434db78b1bd150b5a4c6c35f3b76400c365df",
+        "scripts/hermes/unattended/systemd/hermes-certification-failed.service": "4fbbd844b7cb22e82a1fc6540036e715fab2a253fdf6e7f6d412869e15706397"
+      },
+      "checks": [
+        {
+          "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_schedule.py",
+          "result": "PASS",
+          "tests": 31
+        },
+        {
+          "command": "devbox run -- ./tests/test-hermes-guide.sh",
+          "result": "PASS",
+          "checks": 217
+        },
+        {
+          "method": "Focused six-document Markdown lint with --no-globs",
+          "result": "PASS"
+        },
+        {
+          "method": "Local file-link validation across six documents",
+          "result": "PASS",
+          "links": 80
+        },
+        {
+          "method": "Tracked diff whitespace, seven new-file whitespace checks and live source hash equality",
+          "result": "PASS"
+        }
+      ]
+    }
+  ]
+}

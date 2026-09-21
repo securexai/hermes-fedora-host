@@ -1,0 +1,71 @@
+{
+  "schema": "hermes-throughput-preparation-v1",
+  "recorded_at": "2026-09-12T01:56:30.210109+00:00",
+  "scope": "preparation optimization only; live matrix and production remain incomplete",
+  "active_fixture_observed": false,
+  "fixture_actions": false,
+  "preparation_report": {
+    "path": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/throughput-preflight-final.json",
+    "sha256": "58eed134a587b099880726c8d60fbc7a69136f41c109ea173309270cfd515464",
+    "files": 168,
+    "tools": 12,
+    "case_static_results": {
+      "b4-linux": "PASS",
+      "b4-initrd": "PASS",
+      "b4-cmdline": "PASS",
+      "b4-pcr11": "PASS",
+      "b4-external": "PASS",
+      "b4-credential": "PASS",
+      "b7-before-copy": "PASS",
+      "b7-during-copy": "PASS",
+      "b7-before-publish": "PASS",
+      "b7-during-replay": "PASS",
+      "b7-before-select": "PASS",
+      "b7-after-select": "PASS",
+      "b7-notifications": "PASS"
+    }
+  },
+  "environment": {
+    "observed_at": "2026-09-12T01:55:47.410447+00:00",
+    "available_memory_kib": 7762952,
+    "minimum_memory_kib": 9437184,
+    "sudo_noninteractive": true,
+    "no_libvirt_domains": true,
+    "resource_and_access_ready": false,
+    "must_repeat_at_L0": true
+  },
+  "tests": {
+    "new_preparation_tests": 5,
+    "result": "PASS",
+    "command": "devbox run -- python3 -m unittest discover -s tests -p test_remaining_preflight.py"
+  },
+  "documentation": {
+    "documents": 7,
+    "local_paths": 222,
+    "result": "PASS"
+  },
+  "package_validation": {
+    "timestamp": "2026-09-12T01:54:02.516363+00:00",
+    "result": "PASS",
+    "manifest_sha256": "06c830f554eedb415d5240e8840a01cfc428790e341b9905c185f6fc0df1f039",
+    "package_files": 103,
+    "archive_members": 79,
+    "repository_matches": 77,
+    "missing_approval_refusals": 4,
+    "enrolled": false,
+    "dispatched": false
+  },
+  "next_package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-b4-linux-review-r8",
+  "grant_issued": false,
+  "parallel_fixtures": "not selected: memory and fixed-resource redesign cost",
+  "reusable_install_image": "not selected: identity/TPM isolation validation cost exceeds estimated remaining savings",
+  "expected_savings_estimate_minutes": [
+    26,
+    65
+  ],
+  "late_failure_avoidance_estimate_minutes": [
+    65,
+    75
+  ],
+  "next_action": "Recheck resource capacity and r8 hashes; enroll/dispatch once only when >=9 GiB is available; preserve gate order and four-hour cleanup bound"
+}

@@ -1,0 +1,212 @@
+{
+  "schema": "hermes-b4-linux-r5-live-v1",
+  "progress": "CLOSED",
+  "validation": "FAIL",
+  "observed_at": "2026-09-11T23:48:32.041092+00:00",
+  "authorization_reference": "User: do not request approval until production deployment and keep completing all tasks",
+  "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+  "root": "/var/lib/hermes-remaining-20260911-b4-linux-r5-6fc9af81",
+  "package_manifest_sha256": "d43397263837c24e8a3ea1085af55d5cd79a6d8dbce997ac3a027c09856bbd5c",
+  "source_archive_sha256": "28d10ed215410166143f81053267b9686c4e053b57334a71bf9ba70108a36d44",
+  "block_started_at": "2026-09-11T22:58:04.396662+00:00",
+  "mandatory_cleanup_deadline": "2026-09-12T02:58:04.396662+00:00",
+  "L0": "PASS",
+  "dispatches": 1,
+  "dispatch_at": "2026-09-11T22:58:24.336002+00:00",
+  "candidate_sha256": "6f4ea32c2763048928d65263dd375301f5b0e33fe368dee414a41bf25fd0155d",
+  "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+  "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+  "preparation": {
+    "baseline_initrd": "PASS",
+    "updated_initrd": "PASS",
+    "verified_cold_baseline": true,
+    "kernel": "7.2.4-200.fc44.x86_64",
+    "baseline_inventory": "88687312ab0603300b8f5a4abcbf3846ac80d1f99af3592bd222f00194faa73a"
+  },
+  "certifier": {
+    "stage": "persistence-reboot",
+    "updated_at": 1789170452,
+    "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+    "stages": [
+      "reboot-pending",
+      "persistence-reboot"
+    ],
+    "sha256": "a954f9fff280bc877101a0131de843f3e1f8b53f5c8dbdfca3cf8f5a076f51f5"
+  },
+  "replay_return": {
+    "observed_at": "2026-09-11T23:46:35.985453+00:00",
+    "boot_id": "88d36261-5d1d-4987-a489-bdb47c2287c1",
+    "kernel": "7.2.4-200.fc44.x86_64",
+    "offline_service": "inactive/success",
+    "system_update_present": false,
+    "credential_service": "active/exited",
+    "host_phase": "runtime-pending"
+  },
+  "tamper_experiment": "N/A: prerequisite certification failed before operator-ready",
+  "cleanup": {
+    "candidate_sha256": "6f4ea32c2763048928d65263dd375301f5b0e33fe368dee414a41bf25fd0155d",
+    "completed_at": 1789171379,
+    "credentials_reconciled": true,
+    "domain_absent": true,
+    "guest_purged": true,
+    "logical_deletion": true,
+    "private_material_absent": true,
+    "release_signed": false,
+    "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+    "schema": "hermes-lifecycle-cleanup-v1"
+  },
+  "complete": true,
+  "next_action": "Validate bounded idempotent revocation retries, prepare and execute a fresh replacement B4-linux block under standing authorization.",
+  "prerequisite_certification": "FAIL",
+  "certifier_failure": {
+    "stage": "failed",
+    "failure": "provider-revocation-failed",
+    "primary_failure": null,
+    "cleanup_failure": "provider-revocation-failed",
+    "failure_stage": "ua03-acceptance-passed",
+    "stages": [
+      "reboot-pending",
+      "persistence-reboot",
+      "closed"
+    ],
+    "updated_at": 1789171198
+  },
+  "gates": {
+    "package_replay": {
+      "gate": "package_replay",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789170590
+    },
+    "inference": {
+      "gate": "inference",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789170590
+    },
+    "boot": {
+      "gate": "boot",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789170697
+    },
+    "runtime": {
+      "gate": "runtime",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789170697
+    },
+    "previous_boot": {
+      "gate": "previous_boot",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789170946
+    },
+    "restore": {
+      "gate": "restore",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789171042
+    },
+    "vulnerability_scan": {
+      "gate": "vulnerability_scan",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789171090
+    },
+    "credential_revocation": {
+      "gate": "credential_revocation",
+      "result": "PASS",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "artifact_fingerprint": "053959fd267f141bef8e6ffdf9ba1bcad9aae5b991dbc90dbae6c5c1de38fc91",
+      "release_id": "lifecycle-6fc9af8163e7b1e96e703b5e",
+      "completed_at": 1789171278
+    }
+  },
+  "gate_timing_note": "Seven gates passed before failure; credential_revocation PASS was recorded by subsequent cleanup, not by a completed certification.",
+  "L2": {
+    "timestamp": "2026-09-12T00:03:34.855226+00:00",
+    "operation": "AR04-L2",
+    "result": "PASS",
+    "lifecycle_stage": "failed-cleaned",
+    "provider_credential": "revoked",
+    "fixed_domain_disk_nvram_swtpm_absent": true,
+    "private_material_absent": true,
+    "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_metadata_xattrs_restored": true,
+    "test_uid_restored": 987,
+    "production_role_disabled": true,
+    "socket_runtime_credential_absent": true,
+    "temporary_units_override_power_grant_helpers_removed": true,
+    "consumed_grant_archived_and_active_grant_removed": true,
+    "old_policy_journal_timers_preserved": true,
+    "unit_results_before_removal": {
+      "hermes-remaining-20260911-b4-linux-r5-6fc9af81.service": [
+        "ActiveState=failed",
+        "SubState=failed",
+        "InvocationID=46d180908e0b4344ac97833c658d50bd",
+        "Result=exit-code",
+        "ExecMainStatus=69"
+      ],
+      "hermes-remaining-20260911-b4-linux-r5-6fc9af81-failed.service": [
+        "ActiveState=inactive",
+        "SubState=dead",
+        "InvocationID=b90c0ed14ea34aa099c184226537d977",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.service": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=c0ee5762c7e1491e89e3e692b056aa3a",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.socket": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=a4b9e959452a40cf802f7e489a4b8494",
+        "Result=success"
+      ]
+    },
+    "release_signed": false
+  },
+  "independent_restoration": {
+    "status": "PASS",
+    "timestamp": "2026-09-12T00:04:12.474318+00:00",
+    "provider_state": "revoked",
+    "encrypted_test_credential_absent": true,
+    "fixed_vm_private_material_controls_grants_absent": true,
+    "original_broker_restored": true,
+    "source_history_preserved": true
+  },
+  "elapsed_seconds": 3968.077656,
+  "within_four_hours": true,
+  "scan_policy_result": {
+    "result": "PASS",
+    "policy": "advisory-denylist-v1",
+    "findings": {
+      "CRITICAL": 20,
+      "HIGH": 467,
+      "LOW": 983,
+      "MEDIUM": 1537,
+      "UNKNOWN": 42
+    },
+    "advisory": true,
+    "completed_at": 1789171090
+  }
+}

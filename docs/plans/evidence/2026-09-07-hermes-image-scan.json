@@ -1,0 +1,21 @@
+{
+  "schema": "hermes-scan-observation-v1",
+  "artifact": "docker.io/nousresearch/hermes-agent@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79",
+  "repository_digests": [
+    "nousresearch/hermes-agent@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79"
+  ],
+  "created_at": "2026-09-06T22:14:56.81466015-05:00",
+  "scanner": "Trivy 0.74.0",
+  "report_sha256": "2fe792fb5027b1ef739058d2f437a76d8b66054cbc3659e880ae0f0bc7b773da",
+  "package_finding_counts": {
+    "LOW": 978,
+    "HIGH": 463,
+    "MEDIUM": 1364,
+    "UNKNOWN": 191,
+    "CRITICAL": 20
+  },
+  "gate": "FAIL",
+  "reason": "undispositioned-vulnerability",
+  "dispositions": [],
+  "scope": "Public registry scan only; no container execution, production access, or exploitability validation. Counts are package findings, not unique CVEs."
+}

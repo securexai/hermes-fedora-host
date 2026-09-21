@@ -1,0 +1,42 @@
+FROM registry.fedoraproject.org/fedora@sha256:2648f667bd180801195d3f3a385cf0d2e390bd80611dbedac8275253c89cdbc7
+
+# Offline Hermes worker: tools are baked in, so the running container needs no
+# package downloads and no network at all (Network=none).
+
+RUN dnf -y install \
+      openssh-server openssh-clients socat \
+      bash coreutils findutils grep sed gawk \
+      tar gzip xz bzip2 unzip file diffutils patch \
+      rsync git jq procps-ng iproute less which \
+      python3 ca-certificates \
+ && dnf clean all \
+ && rm -rf /var/cache/dnf
+
+# Fixed unprivileged login identity. The home directory is a persistent bind
+# mount at runtime; the image copy is only a placeholder.
+#
+# The shadow field must NOT be "!" or "*": with UsePAM no, sshd's allowed_user()
+# refuses accounts whose password field is empty, "!" or "*" for every
+# authentication method, publickey included. A random non-matching value keeps
+# the account unusable for password login while PasswordAuthentication and
+# KbdInteractiveAuthentication remain disabled in sshd_worker_config.
+RUN useradd --create-home --home-dir /home/worker --shell /bin/bash --uid 1000 worker \
+ && usermod -p "$(od -An -tx1 -N32 /dev/urandom | tr -d ' \n')" worker \
+ && install -d -m 0755 /run/sshd /etc/ssh/authorized_keys
+
+# Host keys are NOT baked in. They live in a persistent, worker-only directory
+# (mounted at /etc/ssh/host-keys) so that rebuilding the image cannot silently
+# change the worker identity the gateway has pinned.
+
+COPY sshd_worker_config /etc/ssh/sshd_worker_config
+COPY authorized_keys /etc/ssh/authorized_keys/worker
+COPY worker-entrypoint /usr/local/bin/worker-entrypoint
+COPY worker-socket-adapter /usr/local/bin/worker-socket-adapter
+COPY worker-sshd-inetd /usr/local/bin/worker-sshd-inetd
+
+RUN chmod 0755 /usr/local/bin/worker-entrypoint \
+                /usr/local/bin/worker-socket-adapter \
+                /usr/local/bin/worker-sshd-inetd \
+ && chmod 0644 /etc/ssh/sshd_worker_config /etc/ssh/authorized_keys/worker
+
+CMD ["/usr/local/bin/worker-entrypoint"]

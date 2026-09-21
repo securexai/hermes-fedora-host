@@ -19,6 +19,19 @@ Scope and boundaries of the current milestone:
   privileged runtime work (rootless Podman, SELinux relabelling, DAC, systemd
   recovery, reboot, guest/provider acceptance) remain out of scope and unrun.
 
+## Checks
+
+Development checks run inside the `dev-infra-hermes` Toolbox, from the
+repository root. The primary parity gate is
+`bash tests/test-hermes-manual-profile.sh`; the full list is in
+[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md). Declared tool extensions are
+validated with `toolbox/verify-extensions.sh`.
+
+```bash
+toolbox run --container dev-infra-hermes bash -c \
+  'cd ~/code/repos/hermes-fedora-host && bash tests/test-hermes-manual-profile.sh'
+```
+
 ## License
 
 Not yet declared.

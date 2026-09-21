@@ -1,0 +1,62 @@
+[Unit]
+Description=Hermes gateway with the offline worker backend
+Wants=hermes-worker.service
+After=hermes-worker.service
+
+[Container]
+ContainerName=hermes-gateway
+# Official upstream image, pinned by the digest of release v2026.9.11.
+# Never replace this with a floating tag.
+Image=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+
+# Network deliberately left at the default: the gateway needs provider and
+# messaging egress, and publishes no ports.
+NoNewPrivileges=true
+PidsLimit=256
+Memory=2g
+
+# Read-only root, validated: the s6 bootstrap and the gateway write only to the
+# /opt/data volume and to tmpfs-backed /run and /tmp. /var/run is a symlink to
+# /run in this image, so the /run tmpfs covers it.
+ReadOnly=true
+Tmpfs=/run
+Tmpfs=/tmp
+
+# Gateway state is the image's declared /opt/data volume.
+Volume=/home/hermes/gateway-state:/opt/data:z
+# Shared transport: the worker socket only.
+Volume=/home/hermes/transport:/run/hermes-transport:z
+# Gateway-only SSH material: client key, pinned known_hosts, bridge and shims.
+Volume=/home/hermes/gateway-ssh:/opt/hermes/gateway-ssh:ro,Z
+Volume=/home/hermes/gateway-ssh/ssh:/opt/hermes/bin/ssh:ro,Z
+Volume=/home/hermes/gateway-ssh/scp:/opt/hermes/bin/scp:ro,Z
+Volume=/home/hermes/gateway-ssh/sftp:/opt/hermes/bin/sftp:ro,Z
+
+# Select the SSH terminal backend and point it at the pinned worker alias.
+#
+# IMPORTANT: these are only authoritative for unscoped CLI runs. The gateway
+# binds a per-profile terminal scope, and while it is bound `terminal_env`
+# resolves ONLY from the profile's /opt/data/.env and /opt/data/config.yaml.
+# The profile config is therefore written with `hermes config set` and MUST
+# stay consistent with these values.
+Environment=TERMINAL_ENV=ssh
+Environment=TERMINAL_SSH_HOST=worker
+Environment=TERMINAL_SSH_USER=worker
+Environment=TERMINAL_SSH_PORT=22
+Environment=TERMINAL_SSH_KEY=/opt/hermes/gateway-ssh/worker_client_ed25519
+Environment=TERMINAL_SSH_PERSISTENT=true
+
+# The default image command is bare `hermes`, which exits immediately. The
+# messaging gateway is the long-running process; inside the s6 image it is
+# redirected to the supervised service.
+Exec=gateway run
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=180
+
+# Autostart is enabled because M03/M05 validated the gateway as a stable supervised
+# daemon and M04 validates reboot persistence. The user manager is kept alive by
+# lingering, so this unit starts at boot without an interactive login.
+[Install]
+WantedBy=default.target

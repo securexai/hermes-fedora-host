@@ -1,0 +1,87 @@
+{
+  "cold_boot_changed_id": true,
+  "credential_kind": "generated non-provider canary",
+  "domain_uuid": "4db6369a-2b8b-427f-a47a-a5d83bb40cff",
+  "limitations": [
+    "API credential delivery and inference pending model clarification.",
+    "Clean exact-candidate UA-03 certification and UA-04 cleanup/signing remain pending.",
+    "This guest required SELinux label repair and a signed Podman update; it is not a clean certification fixture."
+  ],
+  "observed_at": "2026-09-07T22:27:31.338506+00:00",
+  "private_fixture_scripts_sha256": {
+    "hermes-ua02-diagnose-guest.py": "bec219f1a18c7c0836fea83c77475a4a50978b0e88a12426ed9cb0466ffc8ba8",
+    "hermes-ua02-evidence.py": "3ac7a87145d0b78c76035643de277a7f2233c29e63e72a9c7b08e443270d6fae",
+    "hermes-ua02-inspect-app.py": "4b2bdeef20c83422e612e33a514401b53dc2298134707c8de69cb16e0f73ef9f",
+    "hermes-ua02-links.py": "368a73bd1127fd4f399218c24067d080303ac77c2f3ab880a30d382c221ecf12",
+    "hermes-ua02-lint.py": "23304d0e604336b55a922385f1d1d4755eaf110866879070b09d5bed1a909088",
+    "hermes-ua02-restore.py": "a6b1ee40f891cb3c1b0f147693905adab057c56554a60cbd714dbf00c46d3d9f",
+    "hermes-ua02-rollback-guest.py": "2c2cdd5bc8e699d8a3eaad14e283406a60618e6e12fa19c3a88faded8363b6dd",
+    "hermes-ua02-run-guest.py": "c0b65d95f905c72c95f3cc0c7b0cf004d74ad2fbe5c9d9fab1d43ee0a1f463cb",
+    "hermes-ua02-runtime-guest.py": "a2963d0aa6c20738b6b612bf262c3dfef17163c2236834aaa4a147ee5f90506c",
+    "hermes-ua02-runtime-status.py": "b549d8f7d37f698b0728c694f34c7c27c512895af97203ba54a71a21df15818a",
+    "hermes-ua02-stage.py": "a15fddc726b32d9809b6ad5ae0502965f189af760657fc66acfd435a573acd81",
+    "hermes-ua02-verify-runtime.py": "dd42f088bcf5fb64ae9bb16d0772b04c3d8246e83c56050e454489c0ba6b4796",
+    "hermes-ua02-wait-ssh.py": "15e01ac78cab1a214de0f7aef738b49c9d465d6c481985623b741e37257f0c8f"
+  },
+  "production_changes": false,
+  "provider_key_issued": false,
+  "release_signed": false,
+  "retained_domain_state": "shut off",
+  "scope": "UA-02 repaired disposable fixture only; no release certification",
+  "source_sha256": {
+    "scripts/hermes/unattended/host.py": "b216bde77681ebb900e26c8edf84beec65d938ba7b6cd3f476d2f4e1f3f45dee",
+    "scripts/hermes/unattended/materialize.py": "f8135eaebf0820fbba73eed7a7f52790594666b6d390d9122492667cf3765561",
+    "tests/test_hermes_unattended.py": "65a7316a8b4a4b93a9be38e503328c7d0ad84019104b1c2119d5486b54e8453a"
+  },
+  "ua02-rollback": {
+    "application_config_restored": true,
+    "current_credential_preserved": true,
+    "restored_runtime_healthy": true,
+    "result": "PASS"
+  },
+  "ua02-runtime-after": {
+    "boot_id": "064b18d0-bab2-428c-be34-bb4f2c448bd9",
+    "channel_settings_preserved": true,
+    "credential_matches": true,
+    "credential_service": "active",
+    "no_canary_in_container_metadata": true,
+    "no_canary_in_last_200_runtime_log_lines": true,
+    "no_ports": true,
+    "overlay_read_only": true,
+    "root_read_only": true,
+    "runtime_healthy": true,
+    "selinux": "Enforcing",
+    "user_manager": "active"
+  },
+  "ua02-runtime-before": {
+    "boot_id": "3f5eddd9-b908-44ab-aaa3-95d7cdce6ae9",
+    "channel_settings_preserved": true,
+    "credential_matches": true,
+    "credential_service": "active",
+    "no_ports": true,
+    "overlay_read_only": true,
+    "root_read_only": true,
+    "runtime_healthy": true,
+    "selinux": "Enforcing",
+    "user_manager": "active"
+  },
+  "ua02-semantic-restore": {
+    "application_loaded_restored_state": true,
+    "application_loaded_seed": true,
+    "certification": false,
+    "changed_state_observed": true,
+    "encrypted_roundtrip": true,
+    "restored_runtime_healthy": true,
+    "result": "PASS",
+    "scope": "UA-02 semantic application restore",
+    "security_config_preserved": true
+  },
+  "validation": {
+    "guide": "217 checks passed",
+    "local_links": "45 file targets exist",
+    "markdown": "4 files passed isolated-copy nonfix lint",
+    "python": "121 tests passed in 10.463s",
+    "shellspec": "138 examples passed in 20.53s",
+    "whitespace": "git diff --check passed; concurrent Devbox attempt failed before Git, sequential retry passed"
+  }
+}

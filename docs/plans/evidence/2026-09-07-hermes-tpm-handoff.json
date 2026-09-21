@@ -1,0 +1,34 @@
+{
+  "automatic_boot": true,
+  "certification_complete": false,
+  "domain_uuid": "4db6369a-2b8b-427f-a47a-a5d83bb40cff",
+  "first_boot_id": "42a23bc0-e626-4504-b9fb-3a30093e4391",
+  "limitations": [
+    "Repaired staging run; clean UA-03 certification remains",
+    "Package replay, credential lifecycle, semantic restore and cleanup gates remain"
+  ],
+  "observed_at": "2026-09-07T17:57:20.653627+00:00",
+  "offline_recovery_key_access": true,
+  "recovery_boot_id": "d6deee7d-ce0c-455b-9b21-51a7ac0523ad",
+  "restored_automatic_boot": true,
+  "screenshot": "2026-09-07-hermes-tamper-rejection.png",
+  "secure_boot": "SecureBoot enabled",
+  "selinux": "Enforcing",
+  "tamper_firmware_rejection": true,
+  "tpm_tokens": [
+    {
+      "keyslots": [
+        "1"
+      ],
+      "tpm2-pcr-bank": "sha256",
+      "tpm2-pcrs": [
+        7
+      ],
+      "tpm2_pubkey_pcrs": [
+        11
+      ],
+      "type": "systemd-tpm2"
+    }
+  ],
+  "uki_sha256": "b705c8e74abc8b43ea8be7fb0b627cb3fdb4ac6ad63b8e1a3e6d8d122e103e97"
+}

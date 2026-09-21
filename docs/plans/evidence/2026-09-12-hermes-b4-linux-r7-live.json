@@ -1,0 +1,186 @@
+{
+  "schema": "hermes-b4-linux-live-v1",
+  "case": "b4-linux",
+  "revision": 7,
+  "run_id": "ef1bc7331132dd4cb43d4475347139b24cae0cd879e2165b2df708c7b101ef0a",
+  "root": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733",
+  "unit": "hermes-remaining-20260912-b4-linux-r7-ef1bc733.service",
+  "package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-b4-linux-review-r7",
+  "manifest_sha256": "6aebf7b654f0f3b19efa73bd5f9700834a92744f9621dac9bb482ae9ea090211",
+  "source_archive_sha256": "9fc151e19e1114ebbe02fade229e3b65b7509e960112eb69fcf62c9f7ea7bfc1",
+  "policy_binding": "7200322b23fd50ae8377c85170f453ee0b01e701015398685217cbb392cddb78",
+  "started_at": "2026-09-12T01:30:11.550540+00:00",
+  "mandatory_cleanup_deadline": "2026-09-12T05:30:11.550540+00:00",
+  "dispatches": 1,
+  "dispatch_at": "2026-09-12T01:30:32.194915+00:00",
+  "invocation": "6db32239207144fca0fd0aeeba57cedb",
+  "grant_expires_at": 1789186832,
+  "complete": true,
+  "validation": "FAIL",
+  "progress": "COMPLETE",
+  "cleanup": "PASS",
+  "independent_restoration": {
+    "timestamp": "2026-09-12T01:32:13.516218+00:00",
+    "status": "PASS",
+    "broker_hash": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_bytes_metadata_xattrs_restored": true,
+    "provider_lease_prefix": "ef1bc7331132dd4cb43d4475347139b2",
+    "provider_state": "not-issued",
+    "provider_credential_file_absent": true,
+    "fixed_vm_and_private_resources_absent": true,
+    "temporary_controls_and_grants_absent": true,
+    "historical_and_current_source_snapshots_preserved": true,
+    "socket": [
+      "ActiveState=inactive",
+      "SocketUser=hermes-lab-certifier",
+      "SocketGroup=hermes-lab-certifier",
+      "SocketMode=0600"
+    ],
+    "production_role_disabled": true
+  },
+  "elapsed_seconds": 121.966,
+  "L0": {
+    "timestamp": "2026-09-12T01:30:15.092473+00:00",
+    "operation": "AR04-L0",
+    "result": "PASS",
+    "root": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733",
+    "source_archive_sha256": "9fc151e19e1114ebbe02fade229e3b65b7509e960112eb69fcf62c9f7ea7bfc1",
+    "source_files": 79,
+    "actual_certifier_tool_readiness": {
+      "ok": true,
+      "resolved": {
+        "restic": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733/repository/scripts/hermes/unattended/bin/restic",
+        "ssh": "/usr/bin/ssh",
+        "sudo": "/usr/bin/sudo",
+        "trivy": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733/repository/scripts/hermes/unattended/bin/trivy"
+      },
+      "stage": "certifier-tools-ready",
+      "tools": [
+        "ssh",
+        "sudo",
+        "restic",
+        "trivy"
+      ],
+      "uid": 984,
+      "versions": {
+        "restic": "restic 0.19.1 compiled with go1.26.7 on linux/amd64",
+        "trivy": "Version: 0.74.0"
+      }
+    },
+    "r1_r2_preserved": true,
+    "broker_before_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_during_sha256": "3c3e16074e883f9cfb7fe77684efd404e43bfa561855f08636f7366ac96e6c71",
+    "test_uid": 984,
+    "production_disabled": true,
+    "grant_issued": false,
+    "services_started": false,
+    "temporary_control_hashes": {
+      "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+      "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+      "90-hermes-remaining-20260912-b4-linux-r7-ef1bc733.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+      "hermes-remaining-20260912-b4-linux-r7-ef1bc733-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+      "hermes-remaining-20260912-b4-linux-r7-ef1bc733.service": "505fe3aab3cc0a802f879548802b0ce8f7211a6456c99c9807c2ab21a0339bab",
+      "hermes-remaining-20260912-b4-linux-r7-ef1bc733-failed.service": "f5b34d245d0b5c91c537ad2a330a003b1aae43049280725031303eeec7df2cb4"
+    }
+  },
+  "L1_dispatch": {
+    "timestamp": "2026-09-12T01:30:32.194915+00:00",
+    "operation": "AR04-L1",
+    "status": "DISPATCHED_ONCE",
+    "grant": {
+      "schema": "hermes-lifecycle-lab-window-v1",
+      "binding": "7200322b23fd50ae8377c85170f453ee0b01e701015398685217cbb392cddb78",
+      "run_id": "ef1bc7331132dd4cb43d4475347139b24cae0cd879e2165b2df708c7b101ef0a",
+      "issued_at": 1789176632,
+      "expires_at": 1789186832
+    },
+    "unit": [
+      "ActiveState=activating",
+      "SubState=start",
+      "InvocationID=6db32239207144fca0fd0aeeba57cedb"
+    ],
+    "release_signed": false
+  },
+  "L2": {
+    "timestamp": "2026-09-12T01:31:41.564539+00:00",
+    "operation": "AR04-L2",
+    "result": "PASS",
+    "lifecycle_stage": "failed-cleaned",
+    "provider_credential": "not-issued",
+    "fixed_domain_disk_nvram_swtpm_absent": true,
+    "private_material_absent": true,
+    "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_metadata_xattrs_restored": true,
+    "test_uid_restored": 987,
+    "production_role_disabled": true,
+    "socket_runtime_credential_absent": true,
+    "temporary_units_override_power_grant_helpers_removed": true,
+    "consumed_grant_archived_and_active_grant_removed": true,
+    "old_policy_journal_timers_preserved": true,
+    "unit_results_before_removal": {
+      "hermes-remaining-20260912-b4-linux-r7-ef1bc733.service": [
+        "ActiveState=failed",
+        "SubState=failed",
+        "InvocationID=6db32239207144fca0fd0aeeba57cedb",
+        "Result=exit-code",
+        "ExecMainStatus=69"
+      ],
+      "hermes-remaining-20260912-b4-linux-r7-ef1bc733-failed.service": [
+        "ActiveState=inactive",
+        "SubState=dead",
+        "InvocationID=2534821cadbf4e03b18041334433725c",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.service": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=64d835b917014aa4887f554e5956ef0b",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.socket": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=18e216b649034822872e1027a5ab6948",
+        "Result=success"
+      ]
+    },
+    "release_signed": false
+  },
+  "lifecycle": {
+    "stage": "failed-cleaned",
+    "run_id": "ef1bc7331132dd4cb43d4475347139b24cae0cd879e2165b2df708c7b101ef0a",
+    "certified": false,
+    "failure": "lifecycle-execution-failed",
+    "failure_context": {
+      "locations": [
+        {
+          "file": "lifecycle.py",
+          "function": "execute",
+          "line": 136
+        },
+        {
+          "file": "lifecycle_fixture.py",
+          "function": "prepare",
+          "line": 368
+        },
+        {
+          "file": "common.py",
+          "function": "run",
+          "line": 117
+        },
+        {
+          "file": "common.py",
+          "function": "require",
+          "line": 24
+        }
+      ],
+      "type": "Failure"
+    },
+    "cleanup_failure": null,
+    "install_started": true,
+    "private_purged": true
+  },
+  "cleanup_sha256": "ded2cd9ab8e2f9a621d1cc47dba0963782f21461abe14448b1591f14167b3bb3"
+}

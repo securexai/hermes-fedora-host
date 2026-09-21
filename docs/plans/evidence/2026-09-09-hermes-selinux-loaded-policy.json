@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-09T14:19:53.782181+00:00",
+  "loaded_policy_sha256": "1055f582b19e650040870d799e8ab3cc44ccc56b9c59d6207ddadd969450c34a",
+  "recovery_archive_sha256": "b1f3cdb0cdce74a075a289b437240cf4c7a6559a2423ea31d5265d26c4303f3f",
+  "off_host_backup": "PASS: pinned transfer hashes; safe archive paths/types; required policy and encrypted anchors present",
+  "policy_comparison": {
+    "method": "checkpolicy -b -C -M on expected and loaded policies; cmp; seinfo; scoped sesearch and SETools permissive check",
+    "cil_identical": true,
+    "cil_sha256": "b17f2453a842d8b38e21287e111b96ebdcad4b76a8bae1015f8cf299670436d9",
+    "properties_counts_match": true,
+    "loaded_transition": "init_t + hermes_tpm2_setup_exec_t -> hermes_tpm2_setup_t",
+    "candidate_enforcing": true
+  },
+  "incomplete_attempts": [
+    "Full sediff --stats terminated after more than seven minutes CPU work, about 8 GiB RSS and memory pressure. It returned no comparison result. Replaced with identical CIL conversion and matched properties/counts plus direct transition/domain checks."
+  ],
+  "helper_sha256": "c5eb5fce4a16d65d0ae2618ee5a9ad2ed7e53b85157b1685186d8c982434ca5d",
+  "helper_checks": [
+    "Python syntax",
+    "acceptance fixture and rejection of exit76, missing domain, AVC/audit and preservation failures"
+  ],
+  "documentation_checks": [
+    "217 guide checks passed",
+    "two-document nonfix lint passed",
+    "nine repair-guide local links passed"
+  ],
+  "limits": [
+    "Different binary hashes remain recorded; CIL output is identical and properties/counts match. Full sediff did not complete.",
+    "Service helper has not run on production.",
+    "Runtime and cold-boot acceptance remain open."
+  ],
+  "private_artifacts": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909"
+}

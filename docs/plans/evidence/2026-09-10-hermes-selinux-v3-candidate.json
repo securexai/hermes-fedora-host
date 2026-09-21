@@ -1,0 +1,80 @@
+{
+  "recorded_at": "2026-09-10T14:33:04.811426+00:00",
+  "scope": "Separate v3 candidate and offline validation only; no production staging, installation or service invocation",
+  "private_artifacts": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.19/include/uapi/linux/fs.h",
+      "sha256": "26eb8b143da9ae1ba435f18ceb3eaad96d212f508937fc71094ccf9eb2493bb0",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/fs.h",
+      "matches": [
+        "264: #define BLKGETSIZE _IO(0x12,96)\t/* return device size /512 (long *arg) */",
+        "272: #define BLKSSZGET  _IO(0x12,104)/* get block device sector size */",
+        "284: #define BLKBSZGET  _IOR(0x12,112,size_t)",
+        "286: #define BLKGETSIZE64 _IOR(0x12,114,size_t)\t/* return device size in bytes (u64 *arg) */",
+        "292: #define BLKIOMIN _IO(0x12,120)",
+        "293: #define BLKIOOPT _IO(0x12,121)",
+        "300: #define BLKGETDISKSEQ _IOR(0x12,128,__u64)"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.19/include/uapi/linux/fd.h",
+      "sha256": "20ef925ca1fea6f1e2b1ad4c4e9b5a953bf5839e553062c5d5d7b43152ecab6c",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/fd.h",
+      "matches": [
+        "57: #define FDGETPRM _IOR(2, 0x04, struct floppy_struct)",
+        "59: #define FDGETMEDIAPRM FDGETPRM",
+        "290: #define FDGETFDCSTAT _IOR(2, 0x15, struct floppy_fdc_state)"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.19/include/uapi/linux/cdrom.h",
+      "sha256": "00562c409fb33938411d803e7355298f7fac7d76e93dbfa2b1b4c0c7284fb456",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/cdrom.h",
+      "matches": [
+        "131: #define CDROM_GET_CAPABILITY\t0x5331\t/* get capabilities */",
+        "148: #define CDROM_LAST_WRITTEN\t0x5395\t/* get last block written on disc */"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.19/security/selinux/hooks.c",
+      "sha256": "1c7b8ba89e482115e4a562115e0d372571a0a6a54d0899a9ec16bded80c7af43",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/hooks.c",
+      "matches": [
+        "3858: rc = avc_has_extended_perms(ssid, isec->sid, isec->sclass, requested,",
+        "6127: return avc_has_extended_perms(current_sid(), sksec->sid, sksec->sclass,"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.19/include/uapi/linux/blkzoned.h",
+      "sha256": "9987da54d25f330a284ae2e5eb7b5be008f151e88d22db24de6abfb0dc0d8b8e",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/blkzoned.h",
+      "matches": [
+        "85: #define BLK_ZONE_COND_ACTIVE\tBLK_ZONE_COND_ACTIVE",
+        "105: #define BLK_ZONE_REP_CACHED\tBLK_ZONE_REP_CACHED",
+        "202: #define BLKREPORTZONE\t_IOWR(0x12, 130, struct blk_zone_report)",
+        "203: #define BLKRESETZONE\t_IOW(0x12, 131, struct blk_zone_range)",
+        "204: #define BLKGETZONESZ\t_IOR(0x12, 132, __u32)",
+        "205: #define BLKGETNRZONES\t_IOR(0x12, 133, __u32)",
+        "206: #define BLKOPENZONE\t_IOW(0x12, 134, struct blk_zone_range)",
+        "207: #define BLKCLOSEZONE\t_IOW(0x12, 135, struct blk_zone_range)",
+        "208: #define BLKFINISHZONE\t_IOW(0x12, 136, struct blk_zone_range)",
+        "209: #define BLKREPORTZONEV2\t_IOWR(0x12, 142, struct blk_zone_report)"
+      ]
+    }
+  ],
+  "SE23": {
+    "progress": "IN_PROGRESS",
+    "validation": "TODO"
+  },
+  "SE24": {
+    "progress": "TODO",
+    "validation": "TODO"
+  },
+  "SE25": {
+    "progress": "TODO",
+    "validation": "TODO"
+  },
+  "production_mutations": [],
+  "validation": []
+}

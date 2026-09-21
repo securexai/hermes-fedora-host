@@ -1,0 +1,965 @@
+{
+  "recorded_at": "2026-09-10T13:27:15.407720+00:00",
+  "provenance": "Operator-pasted sanitized JSON; HTML whitespace and escaped underscores normalized. Not yet an independent read of root-private saved evidence.",
+  "operator_reported_helper_hash_check": "OK",
+  "helper_sha256": "0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3",
+  "operator_summary": {
+    "passed": false,
+    "service_requested": true,
+    "checks": {
+      "srk_preserved": true,
+      "luks_metadata_preserved": true,
+      "firmware_preserved": true,
+      "boot_status_preserved": true,
+      "boot_id_preserved": true,
+      "cmdline_preserved": true,
+      "boot_paths_preserved": true,
+      "loaded_policy_preserved": true,
+      "disk_policy_preserved": true,
+      "label_preserved": true,
+      "mapping_preserved": true,
+      "packages_preserved": true,
+      "fresh_invocation": true,
+      "actual_domain_observed": true,
+      "early_unit_preserved": true,
+      "audit_collection_intact": true,
+      "anchor_copies_match": true,
+      "prior_anchors_preserved": true,
+      "enforcing": true,
+      "prior_attempt_preserved": true,
+      "restart_command_zero": false,
+      "service_exit_zero": false,
+      "no_scoped_avcs": false,
+      "esp_anchor_present": false
+    },
+    "errors": [],
+    "scoped_avc_count": 22,
+    "observed_domains": [
+      "hermes_tpm2_setup_t"
+    ],
+    "timestamp": "2026-09-10T13:25:13.134745+00:00"
+  },
+  "scope": "Existing read-only result review; the approved single service invocation is consumed. No retry, policy/anchor change or reboot.",
+  "environment": {
+    "repository": "/var/home/cloudops/code/repos/mikrotik",
+    "branch": "codex/hermes-unattended",
+    "base_revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9"
+  },
+  "SE22": {
+    "progress": "PASS: failure evidence review complete; superseded by SE23\u2013SE25 correction preparation",
+    "validation": "FAIL: runtime; grouped denial collection and read-only journal review complete; exact permission change still pending"
+  },
+  "assistant_production_mutations": [],
+  "limitations": [
+    "22 scoped AVC records are not necessarily 22 distinct missing permissions",
+    "The summary does not identify denied permissions or prove the denials caused the service exit or missing ESP anchor",
+    "Preservation checks describe sampled files/state; they do not prove every TPM internal object is unchanged"
+  ],
+  "live_probe": {
+    "timestamp": "2026-09-10T13:27:15.407720+00:00",
+    "ssh": [
+      "ssh",
+      "-T",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "IdentitiesOnly=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "-o",
+      "ServerAliveInterval=10",
+      "-o",
+      "ServerAliveCountMax=2",
+      "aicowork@10.0.30.10"
+    ],
+    "remote_program": "\nimport datetime,hashlib,json,os,stat,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C'\ndef run(*args):\n r=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)\n if r.returncode:raise RuntimeError('Read-only probe failed: '+args[0])\n return r.stdout.decode().strip()\np=Path('/home/aicowork/hermes-selinux-trial-20260909-v2');assert not any(x.is_symlink() for x in (p,*p.parents));info=p.stat();assert stat.S_ISDIR(info.st_mode) and stat.S_IMODE(info.st_mode)==0o700 and info.st_uid==os.getuid()\nr={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'hostname':run('hostname','-s'),'enforcing':run('getenforce'),'disk_policy':hashlib.sha256(Path('/etc/selinux/targeted/policy/policy.35').read_bytes()).hexdigest(),'label':run('stat','-c','%C','/usr/lib/systemd/systemd-tpm2-setup'),'mapping':run('matchpathcon','-n','/usr/lib/systemd/systemd-tpm2-setup'),'packages':run('rpm','-q','selinux-policy','selinux-policy-targeted','systemd').splitlines(),'units':{},'original_staged_hash':hashlib.sha256((p/'run-reviewed-service-v2.py').read_bytes()).hexdigest(),'new_staging_absent':{name:not os.path.lexists(p/name) for name in ('continue-reviewed-service-v2-audit.py',)},'directory_mode':'0700'}\nfor unit in ('systemd-tpm2-setup.service','systemd-tpm2-setup-early.service'):\n args=['systemctl','show','--all',unit]\n for key in ('LoadState','ActiveState','SubState','MainPID','ControlPID','InvocationID','ExecMainStartTimestamp','ExecMainStatus'):args+=['-p',key]\n r['units'][unit]=dict(x.split('=',1) for x in run(*args).splitlines())\nr['root_mount_active']=run('systemctl','show','-p','ActiveState','--value','--','-.mount')\nr['sudo_noninteractive_available']=subprocess.run(['sudo','-n','true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15).returncode==0\nr['audit_packages']=run('rpm','-q','audit','audit-libs').splitlines()\nr['preserved_staged_hashes']={name:hashlib.sha256((p/name).read_bytes()).hexdigest() for name in ('run-reviewed-service-v2-corrected.py','continue-reviewed-service-v2.py')}\nr['audit_wrapper_sha256']=hashlib.sha256((p/'continue-reviewed-service-v2-audit.py').read_bytes()).hexdigest()\nr['saved_evidence_readable']=os.access('/var/lib/hermes-selinux-trial-20260909-v2/service-continuation-2/scoped-avcs.log',os.R_OK)\nprint(json.dumps(r))\n",
+    "exit_code": 0
+  },
+  "live_observation": {
+    "timestamp": "2026-09-10T13:27:15.675653+00:00",
+    "hostname": "hermes",
+    "enforcing": "Enforcing",
+    "disk_policy": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+    "label": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+    "mapping": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+    "packages": [
+      "selinux-policy-44.8-1.fc44.noarch",
+      "selinux-policy-targeted-44.8-1.fc44.noarch",
+      "systemd-259.8-1.fc44.x86_64"
+    ],
+    "units": {
+      "systemd-tpm2-setup.service": {
+        "LoadState": "loaded",
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "InvocationID": "65b49476a60341369fd98bf447db9984",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Thu 2026-09-10 08:25:08 -05",
+        "ExecMainStatus": "1"
+      },
+      "systemd-tpm2-setup-early.service": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "exited",
+        "InvocationID": "856199b7545e421e84cec252c2106124",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Tue 2026-09-08 22:19:12 -05",
+        "ExecMainStatus": "0"
+      }
+    },
+    "original_staged_hash": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+    "new_staging_absent": {
+      "continue-reviewed-service-v2-audit.py": false
+    },
+    "directory_mode": "0700",
+    "root_mount_active": "active",
+    "sudo_noninteractive_available": false,
+    "audit_packages": [
+      "audit-4.2.1-1.fc44.x86_64",
+      "audit-libs-4.2.1-1.fc44.x86_64"
+    ],
+    "preserved_staged_hashes": {
+      "run-reviewed-service-v2-corrected.py": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+      "continue-reviewed-service-v2.py": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1"
+    },
+    "audit_wrapper_sha256": "0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3",
+    "saved_evidence_readable": false
+  },
+  "live_checks": {
+    "hostname": true,
+    "enforcing": true,
+    "disk_policy": true,
+    "label": true,
+    "mapping": true,
+    "packages": true,
+    "original_staged_hash": true,
+    "directory_mode": true,
+    "root_mount_active": true,
+    "audit_packages": true,
+    "preserved_staged_hashes": true,
+    "audit_wrapper_unchanged": true,
+    "early_unit_unchanged": true,
+    "late_invocation_changed": true,
+    "no_service_processes": true
+  },
+  "saved_avc_diagnostic": {
+    "scope": "Read only the fixed saved scoped-avcs.log; no helper import, live audit query, file write or service invocation; output groups omit raw paths, names, commands and journal text",
+    "program": "import collections, hashlib, json, os, re, stat\nfrom pathlib import Path\np = Path(\"/var/lib/hermes-selinux-trial-20260909-v2/service-continuation-2/scoped-avcs.log\")\nif any(q.is_symlink() for q in p.parents):\n    raise SystemExit(\"STOP: unexpected evidence path\")\nwith os.fdopen(os.open(p, os.O_RDONLY | os.O_NOFOLLOW), \"rb\") as f:\n    info = os.fstat(f.fileno())\n    if (not stat.S_ISREG(info.st_mode) or info.st_uid != 0\n            or stat.S_IMODE(info.st_mode) != 0o600 or info.st_nlink != 1\n            or info.st_size > 2 * 1024 * 1024):\n        raise SystemExit(\"STOP: unexpected evidence file\")\n    data = f.read(2 * 1024 * 1024 + 1)\nif len(data) > 2 * 1024 * 1024:\n    raise SystemExit(\"STOP: evidence exceeds limit\")\nrows = [line for line in data.decode(\"utf-8\").splitlines() if line.strip()]\ngroups = collections.Counter()\nunparsed = 0\nfor line in rows:\n    source = re.search(r\"\\bscontext=[^:\\s]+:[^:\\s]+:([a-zA-Z_][a-zA-Z0-9_]*_t):\", line)\n    target = re.search(r\"\\btcontext=[^:\\s]+:[^:\\s]+:([a-zA-Z_][a-zA-Z0-9_]*_t):\", line)\n    kind = re.search(r\"\\btclass=([a-z][a-z0-9_]*)\\b\", line)\n    perms = re.search(r\"\\bavc:\\s+denied\\s+\\{\\s*([a-z_ ]+?)\\s*\\}\", line)\n    enforcing = re.search(r\"\\bpermissive=([01])\\b\", line)\n    if not all((source, target, kind, perms)):\n        unparsed += 1\n        continue\n    key = (source[1], target[1], kind[1], tuple(sorted(set(perms[1].split()))),\n           int(enforcing[1]) if enforcing else -1)\n    groups[key] += 1\nprint(json.dumps({\n    \"scoped_log_sha256\": hashlib.sha256(data).hexdigest(),\n    \"record_count\": len(rows), \"unparsed_records\": unparsed,\n    \"groups\": [{\"source_type\": s, \"target_type\": t, \"class\": c,\n                \"permissions\": list(perms), \"permissive\": mode, \"count\": count}\n               for (s, t, c, perms, mode), count in sorted(groups.items())]\n}, indent=2))\n",
+    "command": "sudo python3 -I -B - <<'PYDIAG'\nimport collections, hashlib, json, os, re, stat\nfrom pathlib import Path\np = Path(\"/var/lib/hermes-selinux-trial-20260909-v2/service-continuation-2/scoped-avcs.log\")\nif any(q.is_symlink() for q in p.parents):\n    raise SystemExit(\"STOP: unexpected evidence path\")\nwith os.fdopen(os.open(p, os.O_RDONLY | os.O_NOFOLLOW), \"rb\") as f:\n    info = os.fstat(f.fileno())\n    if (not stat.S_ISREG(info.st_mode) or info.st_uid != 0\n            or stat.S_IMODE(info.st_mode) != 0o600 or info.st_nlink != 1\n            or info.st_size > 2 * 1024 * 1024):\n        raise SystemExit(\"STOP: unexpected evidence file\")\n    data = f.read(2 * 1024 * 1024 + 1)\nif len(data) > 2 * 1024 * 1024:\n    raise SystemExit(\"STOP: evidence exceeds limit\")\nrows = [line for line in data.decode(\"utf-8\").splitlines() if line.strip()]\ngroups = collections.Counter()\nunparsed = 0\nfor line in rows:\n    source = re.search(r\"\\bscontext=[^:\\s]+:[^:\\s]+:([a-zA-Z_][a-zA-Z0-9_]*_t):\", line)\n    target = re.search(r\"\\btcontext=[^:\\s]+:[^:\\s]+:([a-zA-Z_][a-zA-Z0-9_]*_t):\", line)\n    kind = re.search(r\"\\btclass=([a-z][a-z0-9_]*)\\b\", line)\n    perms = re.search(r\"\\bavc:\\s+denied\\s+\\{\\s*([a-z_ ]+?)\\s*\\}\", line)\n    enforcing = re.search(r\"\\bpermissive=([01])\\b\", line)\n    if not all((source, target, kind, perms)):\n        unparsed += 1\n        continue\n    key = (source[1], target[1], kind[1], tuple(sorted(set(perms[1].split()))),\n           int(enforcing[1]) if enforcing else -1)\n    groups[key] += 1\nprint(json.dumps({\n    \"scoped_log_sha256\": hashlib.sha256(data).hexdigest(),\n    \"record_count\": len(rows), \"unparsed_records\": unparsed,\n    \"groups\": [{\"source_type\": s, \"target_type\": t, \"class\": c,\n                \"permissions\": list(perms), \"permissive\": mode, \"count\": count}\n               for (s, t, c, perms, mode), count in sorted(groups.items())]\n}, indent=2))\nPYDIAG",
+    "validation": "PASS: synthetic privacy/grouping/read-only checks, shell syntax and ShellCheck, guide assertions, Markdown, links and whitespace"
+  },
+  "private_log_directory": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure",
+  "diagnostic_validation": {
+    "timestamp": "2026-09-10T13:30:16.278511+00:00",
+    "method": [
+      "devbox",
+      "run",
+      "--",
+      "python3",
+      "-B",
+      "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/validate-diagnostic.py"
+    ],
+    "expected_exit": 0,
+    "actual_exit": 0,
+    "validation_program_sha256": "764d2e6d74e8195b50016875d7ce98ff101a3da7e317f9e0e66e68821d2bcbf1",
+    "diagnostic_program_sha256": "5ca21e552367231deb5ac2a76fe9a48aedd3af33ef7b659ee474ed6309401ea0",
+    "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/diagnostic-validation.log",
+    "checks": {
+      "result": "PASS",
+      "checks": [
+        "22 synthetic records: duplicate/order-insensitive grouping, unknown accounting and missing permissive field",
+        "Private name/command canary excluded",
+        "Input bytes/hash unchanged",
+        "nonroot-owner rejected",
+        "insecure-mode rejected",
+        "oversize rejected",
+        "Symlink input rejected",
+        "Hardlinked input rejected"
+      ],
+      "fixture_scope": "Synthetic saved log; only fixed input path and fstat owner/size simulated for unprivileged fixtures; no production or policy execution"
+    }
+  },
+  "documentation_validation": [
+    {
+      "name": "guide",
+      "timestamp": "2026-09-10T13:31:06.146118+00:00",
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "environment": "Devbox; nonfix isolated Markdown copies",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/guide.log",
+      "output_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691",
+      "tail": [
+        "",
+        "========================================",
+        "Results: \u001b[0;32m217\u001b[0m passed, \u001b[0;31m0\u001b[0m failed, \u001b[0;33m0\u001b[0m skipped (217 total)",
+        "========================================"
+      ]
+    },
+    {
+      "name": "syntax",
+      "timestamp": "2026-09-10T13:31:06.146691+00:00",
+      "command": [
+        "sh",
+        "-n",
+        "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/diagnostic-handoff.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "environment": "Devbox; nonfix isolated Markdown copies",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/syntax.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+    },
+    {
+      "name": "shellcheck",
+      "timestamp": "2026-09-10T13:31:06.146916+00:00",
+      "command": [
+        "shellcheck",
+        "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/diagnostic-handoff.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "environment": "Devbox; nonfix isolated Markdown copies",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/shellcheck.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+    },
+    {
+      "name": "markdown",
+      "timestamp": "2026-09-10T13:31:06.161327+00:00",
+      "command": [
+        "markdownlint-cli2",
+        "--config",
+        "/tmp/hermes-runtime-failure-docs-_l92amv7/check.markdownlint-cli2.jsonc"
+      ],
+      "cwd": "/tmp/hermes-runtime-failure-docs-_l92amv7",
+      "environment": "Devbox; nonfix isolated Markdown copies",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/markdown.log",
+      "output_sha256": "73e7d952cf561dfd694deb544df77b78ced2539485d33bf0a6fe76433de41f65",
+      "tail": [
+        "markdownlint-cli2 v0.21.0 (markdownlint v0.40.0)",
+        "Finding: 2026-09-07-hermes-unattended.md HERMES_SELINUX_TPM_REPAIR.md HERMES_INSTALLATION_VERIFICATION.md DEPLOYMENT_TASKS.md",
+        "Linting: 4 file(s)",
+        "Summary: 0 error(s)"
+      ]
+    },
+    {
+      "name": "whitespace",
+      "timestamp": "2026-09-10T13:31:06.175145+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "environment": "Devbox; nonfix isolated Markdown copies",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/whitespace.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": []
+    }
+  ],
+  "documentation_checks": {
+    "timestamp": "2026-09-10T13:31:08.370902+00:00",
+    "local_links": 157,
+    "new_fragment_verified": "read-only-v2-runtime-failure-diagnostic",
+    "published_command_matches_tested_program": true,
+    "markdown_config": {
+      "globs": [
+        "2026-09-07-hermes-unattended.md",
+        "HERMES_SELINUX_TPM_REPAIR.md",
+        "HERMES_INSTALLATION_VERIFICATION.md",
+        "DEPLOYMENT_TASKS.md"
+      ],
+      "ignores": [],
+      "config": {
+        "MD024": {
+          "allow_different_nesting": true,
+          "siblings_only": true
+        },
+        "MD013": {
+          "line_length": 120,
+          "code_blocks": false,
+          "tables": false,
+          "headings": false
+        },
+        "MD033": true,
+        "MD036": true,
+        "MD040": true,
+        "MD045": true,
+        "MD047": true,
+        "MD051": true,
+        "MD053": true,
+        "MD059": true,
+        "MD060": false
+      },
+      "fix": false
+    },
+    "document_sha256": {
+      "docs/plans/2026-09-07-hermes-unattended.md": "6cf287f985bcfcd3c9778a151e5fab8bd91e28ba125ea830a6a3806796cd22d8",
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": "65155877d2afecd4f7ba2868f1a2c6a6a76f25a39e519e64d01f9e0aa51049ad",
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": "88a7ae387a0a063986c65bf4f46a92aa9244b2446b74ba68aed31cbb3f04b6e0",
+      "vm/DEPLOYMENT_TASKS.md": "520e8075f6c3a5f1a8f2b98f907d955c59c86fabde8e95b654fafac4406cf0eb"
+    }
+  },
+  "closure_validation": {
+    "timestamp": "2026-09-10T13:31:49.998440+00:00",
+    "reason": "Execution record validation prose appended; recheck record Markdown and whitespace",
+    "markdown_exit": 0,
+    "whitespace_exit": 0,
+    "plan_sha256": "5524598635f685fbd5401eccf8c06a5068603de8a6d6700ef2f478fd4f9f6dfb"
+  },
+  "operator_avc_groups": {
+    "received_at": "2026-09-10T13:36:21.563730+00:00",
+    "provenance": "Operator output from reviewed read-only saved-log diagnostic; escaping normalized",
+    "observation": {
+      "scoped_log_sha256": "896a6d7f3e58ce4e16480ff94e0391cca9244604dbed679a0e4e1a1a4779b32c",
+      "record_count": 22,
+      "unparsed_records": 0,
+      "groups": [
+        {
+          "source_type": "hermes_tpm2_setup_t",
+          "target_type": "cert_t",
+          "class": "file",
+          "permissions": [
+            "read"
+          ],
+          "permissive": 0,
+          "count": 1
+        },
+        {
+          "source_type": "hermes_tpm2_setup_t",
+          "target_type": "fixed_disk_device_t",
+          "class": "blk_file",
+          "permissions": [
+            "ioctl"
+          ],
+          "permissive": 0,
+          "count": 20
+        },
+        {
+          "source_type": "hermes_tpm2_setup_t",
+          "target_type": "fs_t",
+          "class": "filesystem",
+          "permissions": [
+            "getattr"
+          ],
+          "permissive": 0,
+          "count": 1
+        }
+      ]
+    },
+    "interpretation": "Three permission/type/class groups; no unparsed records. Specific ioctl command numbers, certificate object and fatal service message are not in this output."
+  },
+  "group_review_live_probe": {
+    "timestamp": "2026-09-10T13:36:21.563730+00:00",
+    "remote_program": "import json,subprocess\nfrom pathlib import Path\nr=subprocess.run(['rpm','-q','systemd','util-linux','util-linux-core','libblkid','tpm2-tss'],capture_output=True,text=True,timeout=30)\nunits=subprocess.run(['systemctl','show','systemd-tpm2-setup.service','-p','InvocationID','-p','ExecMainStatus','-p','MainPID','-p','ControlPID'],capture_output=True,text=True,timeout=30)\nj=subprocess.run(['journalctl','--no-pager','-o','json','--since','2026-09-10 08:25:00','--until','2026-09-10 08:25:30','-u','systemd-tpm2-setup.service'],capture_output=True,text=True,timeout=30)\nprint(json.dumps({'packages':r.stdout.splitlines(),'package_query_exit':r.returncode,'unit_fields':units.stdout.splitlines(),'journal_query_exit':j.returncode,'journal_lines':len(j.stdout.splitlines()),'journal_stderr_present':bool(j.stderr.strip())}))\n",
+    "observation": {
+      "packages": [
+        "systemd-259.8-1.fc44.x86_64",
+        "util-linux-2.41.5-1.fc44.x86_64",
+        "util-linux-core-2.41.5-1.fc44.x86_64",
+        "libblkid-2.41.5-1.fc44.x86_64",
+        "tpm2-tss-4.1.3-9.fc44.x86_64"
+      ],
+      "package_query_exit": 0,
+      "unit_fields": [
+        "InvocationID=65b49476a60341369fd98bf447db9984",
+        "MainPID=0",
+        "ControlPID=0",
+        "ExecMainStatus=1"
+      ],
+      "journal_query_exit": 0,
+      "journal_lines": 10,
+      "journal_stderr_present": false
+    }
+  },
+  "sanitized_live_journal": {
+    "method": {
+      "remote_program": "import datetime,hashlib,json,re,subprocess\nargv=['journalctl','--no-pager','-o','json','--since','2026-09-10 08:25:00','--until','2026-09-10 08:25:30','-u','systemd-tpm2-setup.service']\nr=subprocess.run(argv,capture_output=True,text=True,timeout=30,check=True)\npatterns={\n 'filesystem_type_check_failed':'Failed to check file system type',\n 'filesystem_open_failed':'Failed to open file system',\n 'filesystem_probe_failed':'Failed to probe file system',\n 'anchor_sync_failed':'Failed to synchronize',\n 'anchor_sync_failed_alt':'Failed to sync',\n 'anchor_write_failed':'Failed to write',\n 'srk_initialized':'SRK',\n 'starting_service':'Starting ',\n 'main_process_exited':'Main process exited',\n 'unit_failed_result':'Failed with result',\n 'unit_failed_start':'Failed to start',\n 'tpm_auth':'TPM2_RC',\n}\nresults=[]\nfor line in r.stdout.splitlines():\n row=json.loads(line);msg=row.get('MESSAGE','')\n if not isinstance(msg,str):\n  results.append({'unparsed_message':True});continue\n result={'timestamp_us':row.get('__REALTIME_TIMESTAMP'),'message_sha256':hashlib.sha256(msg.encode()).hexdigest(),'message_bytes':len(msg.encode()),'classifications':[key for key,value in patterns.items() if value in msg],'permission_denied':'Permission denied' in msg,'operation_not_permitted':'Operation not permitted' in msg,'public_paths':[path for path in ('/efi','/boot','/boot/efi') if '\"'+path+'\"' in msg]}\n m=re.search(r'code=(exited|killed|dumped), status=([0-9]+)',msg)\n if m:result['exit']={'code':m[1],'status':int(m[2])}\n results.append(result)\nprint(json.dumps({'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'journal_query_exit':r.returncode,'stderr_present':bool(r.stderr.strip()),'records':results}))\n",
+      "scope": "Existing failed-invocation journal only; literal message classifiers, errors, public boot paths and numeric exit fields; raw messages stay on host"
+    },
+    "observation": {
+      "timestamp": "2026-09-10T13:37:06.032209+00:00",
+      "journal_query_exit": 0,
+      "stderr_present": false,
+      "records": [
+        {
+          "timestamp_us": "1789046708389142",
+          "message_sha256": "3aefab2cc331388beb479d9cd47d21f9c27ffb2d7e74e9265abd189c22580e93",
+          "message_bytes": 54,
+          "classifications": [
+            "srk_initialized",
+            "starting_service"
+          ],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": []
+        },
+        {
+          "timestamp_us": "1789046708433111",
+          "message_sha256": "4e19553e42fb285a1dba91970269549753ebf35d61ccd4bf8e17a80b055b51b1",
+          "message_bytes": 30,
+          "classifications": [
+            "srk_initialized"
+          ],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": []
+        },
+        {
+          "timestamp_us": "1789046708433922",
+          "message_sha256": "4e1b1aa802a3dcac1674e57d483278faa81e6d7aef34387a9b518312b26a9e3a",
+          "message_bytes": 84,
+          "classifications": [
+            "srk_initialized"
+          ],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": []
+        },
+        {
+          "timestamp_us": "1789046708433994",
+          "message_sha256": "4e5a35b11c49bd4e427a1bae19222fd77a2d4cb5622aaeff262d312153348b3b",
+          "message_bytes": 76,
+          "classifications": [
+            "srk_initialized"
+          ],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": []
+        },
+        {
+          "timestamp_us": "1789046710793086",
+          "message_sha256": "afd520112a378a8d175586b9b0617f8bffd855ffb8358027eb362f899e76129a",
+          "message_bytes": 62,
+          "classifications": [
+            "filesystem_type_check_failed"
+          ],
+          "permission_denied": true,
+          "operation_not_permitted": false,
+          "public_paths": [
+            "/boot"
+          ]
+        },
+        {
+          "timestamp_us": "1789046710793499",
+          "message_sha256": "8c1a0170c088c5bf1c67470d26346901364102a38483b314713380ea9d2ac663",
+          "message_bytes": 47,
+          "classifications": [],
+          "permission_denied": true,
+          "operation_not_permitted": false,
+          "public_paths": []
+        },
+        {
+          "timestamp_us": "1789046710793555",
+          "message_sha256": "9cb2a24bb4444046869e65f372cd3bce4d5eb7495c36c0b6ad831ef9f24771d1",
+          "message_bytes": 29,
+          "classifications": [],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": []
+        },
+        {
+          "timestamp_us": "1789046710795674",
+          "message_sha256": "55f138e68dfd41cc54c5f9358edc47ed3a96d56fd87944d955e105bb286aa122",
+          "message_bytes": 78,
+          "classifications": [
+            "main_process_exited"
+          ],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": [],
+          "exit": {
+            "code": "exited",
+            "status": 1
+          }
+        },
+        {
+          "timestamp_us": "1789046710795967",
+          "message_sha256": "b5cf6a7abbdaeab352d5aad1f788abfcb977bb6393aa33d26f3d56cb9bfff177",
+          "message_bytes": 59,
+          "classifications": [
+            "unit_failed_result"
+          ],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": []
+        },
+        {
+          "timestamp_us": "1789046710796602",
+          "message_sha256": "8267d53f81c9001d30360417c71c59b070adc4673e858aa456677c5b946f793a",
+          "message_bytes": 59,
+          "classifications": [
+            "srk_initialized",
+            "unit_failed_start"
+          ],
+          "permission_denied": false,
+          "operation_not_permitted": false,
+          "public_paths": []
+        }
+      ]
+    }
+  },
+  "group_source_fetches": [
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd-stable/v259.8/src/tpm2-setup/tpm2-setup.c",
+      "timestamp": "2026-09-10T13:37:41.895345+00:00",
+      "http_status": 404,
+      "available": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/tpm2-setup/tpm2-setup.c",
+      "timestamp": "2026-09-10T13:37:41.897156+00:00",
+      "available": true,
+      "sha256": "982d91e1795f8a3c8895a8b0d3e07c405ac7706d5fc3af391b3cde0ce87b223d",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/group-review-sources/systemd-v259-tpm2-setup.c",
+      "focused_matches": [
+        "49: \"\\n%5$sSet up the TPM2 Storage Root Key (SRK), and initialize NvPCRs.%6$s\\n\"",
+        "345: r = flink_tmpfile(f, t, pem_path, LINK_TMPFILE_SYNC|LINK_TMPFILE_REPLACE);",
+        "375: r = flink_tmpfile(f, t, tpm2b_public_path, LINK_TMPFILE_SYNC|LINK_TMPFILE_REPLACE);",
+        "385: typedef struct SetupNvPCRContext {",
+        "387: struct iovec anchor_secret;",
+        "388: size_t n_already, n_anchored;",
+        "390: } SetupNvPCRContext;",
+        "392: static void setup_nvpcr_context_done(SetupNvPCRContext *c) {",
+        "395: iovec_done_erase(&c->anchor_secret);",
+        "400: static int setup_nvpcr_one(",
+        "401: SetupNvPCRContext *c,",
+        "417: r = tpm2_nvpcr_initialize(c->tpm2_context, /* session= */ NULL, name, &c->anchor_secret);",
+        "419: assert(!iovec_is_set(&c->anchor_secret));",
+        "421: /* If we get EUNATCH this means we actually need to initialize this NvPCR",
+        "422: * now, and haven't provided the anchor secret yet. Hence acquire it now. */",
+        "424: r = tpm2_nvpcr_acquire_anchor_secret(&c->anchor_secret, /* sync_secondary= */ !arg_early);",
+        "426: return log_error_errno(r, \"Failed to acquire anchor secret: %m\");",
+        "428: r = tpm2_nvpcr_initialize(c->tpm2_context, /* session= */ NULL, name, &c->anchor_secret);",
+        "431: return log_error_errno(r, \"Failed to extend NvPCR index with anchor secret: %m\");",
+        "434: c->n_anchored++;",
+        "444: static int setup_nvpcr(void) {",
+        "445: _cleanup_(setup_nvpcr_context_done) SetupNvPCRContext c = {};",
+        "451: \".nvpcr\",",
+        "454: CONF_PATHS_NULSTR(\"nvpcr\"));",
+        "456: return log_error_errno(r, \"Failed to find .nvpcr files: %m\");",
+        "459: r = setup_nvpcr_one(&c, *i);",
+        "464: if (c.n_already > 0 && c.n_anchored == 0 && !arg_early) {",
+        "465: /* If we didn't anchor anything right now, but we anchored something earlier, then it might",
+        "466: * have happened in the initrd, and thus the anchor ID was not committed to /var/ or the ESP",
+        "469: r = tpm2_nvpcr_acquire_anchor_secret(/* ret= */ NULL, /* sync_secondary= */ true);",
+        "474: if (c.n_anchored > 0) {",
+        "476: log_info(\"%zu NvPCRs initialized.\", c.n_anchored);",
+        "478: log_info(\"%zu NvPCRs initialized. (%zu NvPCRs were already initialized.)\", c.n_anchored, c.n_already);",
+        "480: log_info(\"%zu NvPCRs already initialized.\", c.n_already);",
+        "482: log_debug(\"No NvPCRs defined, nothing initialized.\");",
+        "504: RET_GATHER(r, setup_nvpcr());"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/shared/tpm2-util.c",
+      "timestamp": "2026-09-10T13:37:41.899567+00:00",
+      "available": true,
+      "sha256": "beea4f1834521243d104e6fdeb6109cf318dea3e219438a1dd2d24633e605eff",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/group-review-sources/systemd-v259-tpm2-util.c",
+      "focused_matches": [
+        "42: #include \"sync-util.h\"",
+        "5978: int tpm2_define_nvpcr_nv_index(",
+        "5991: /* Allocates an nvindex to use as a \"fake\" PCR. We call these \"NvPCR\" in our codebase */",
+        "6094: int tpm2_extend_nvpcr_nv_index(",
+        "6479: [TPM2_EVENT_NVPCR_INIT]      = \"nvpcr-init\",",
+        "6480: [TPM2_EVENT_NVPCR_SEPARATOR] = \"nvpcr-separator\",",
+        "6548: if (fsync(fd) < 0)",
+        "6549: return log_debug_errno(errno, \"Failed to sync JSON data: %m\");",
+        "6555: r = fsync_full(fd);",
+        "6557: return log_debug_errno(r, \"Failed to sync JSON log: %m\");",
+        "6757: typedef struct NvPCRData {",
+        "6761: } NvPCRData;",
+        "6763: static void nvpcr_data_done(NvPCRData *d) {",
+        "6769: static int nvpcr_data_load(const char *name, NvPCRData *ret) {",
+        "6774: if (!tpm2_nvpcr_name_is_valid(name))",
+        "6777: const char *fname = strjoina(name, \".nvpcr\");",
+        "6781: r = search_and_fopen_nulstr(fname, \"re\", /* root= */ NULL, CONF_PATHS_NULSTR(\"nvpcr\"), &f, &path);",
+        "6797: { \"name\",      SD_JSON_VARIANT_STRING,        sd_json_dispatch_string,      offsetof(NvPCRData, name),      SD_JSON_MANDATORY },",
+        "6798: { \"algorithm\", _SD_JSON_VARIANT_TYPE_INVALID, json_dispatch_tpm2_algorithm, offsetof(NvPCRData, algorithm), 0                 },",
+        "6799: { \"nvIndex\",   _SD_JSON_VARIANT_TYPE_INVALID, sd_json_dispatch_uint32,      offsetof(NvPCRData, nv_index),  SD_JSON_MANDATORY },",
+        "6803: _cleanup_(nvpcr_data_done) NvPCRData p = {",
+        "6811: return log_debug_errno(SYNTHETIC_ERRNO(ESTALE), \"NvPCR name doesn't match filename, refusing.\");",
+        "6817: int tpm2_nvpcr_get_index(const char *name, uint32_t *ret) {",
+        "6820: _cleanup_(nvpcr_data_done) NvPCRData p = {};",
+        "6821: r = nvpcr_data_load(name, &p);",
+        "6831: int tpm2_nvpcr_extend_bytes(",
+        "6849: _cleanup_(nvpcr_data_done) NvPCRData p = {};",
+        "6850: r = nvpcr_data_load(name, &p);",
+        "6858: /* Check if this NvPCR is already anchored */",
+        "6859: const char *anchor_fname = strjoina(\"/run/systemd/nvpcr/\", name, \".anchor\");",
+        "6860: if (faccessat(AT_FDCWD, anchor_fname, F_OK, AT_SYMLINK_NOFOLLOW) < 0) {",
+        "6862: return log_debug_errno(errno, \"Failed to check if '%s' exists: %m\", anchor_fname);",
+        "6864: return log_debug_errno(SYNTHETIC_ERRNO(ENETDOWN), \"NvPCR '%s' not anchored yet, refusing.\", name);",
+        "6869: return log_debug_errno(SYNTHETIC_ERRNO(EOPNOTSUPP), \"Unsupported algorithm for NvPCR, refusing.\");",
+        "6907: r = tpm2_extend_nvpcr_nv_index(",
+        "6938: static int tpm2_nvpcr_write_anchor_secret(",
+        "6949: /* Writes the encrypted credential of the anchor secret to directory 'dir' and file 'fname' */",
+        "6974: log_debug(\"Anchor secret file '%s' already matches expectations, not updating.\", joined);",
+        "6977: log_notice(\"Anchor secret file '%s' different from current anchor secret, updating.\", joined);",
+        "6983: WRITE_STRING_FILE_ATOMIC|WRITE_STRING_FILE_CREATE|WRITE_STRING_FILE_SYNC);",
+        "6985: return log_error_errno(r, \"Failed to write anchor secret file to '%s': %m\", joined);",
+        "6987: log_info(\"Successfully written anchor secret to '%s'.\", joined);",
+        "6991: static int tpm2_nvpcr_write_anchor_secret_to_var(const struct iovec *credential) {",
+        "6992: return tpm2_nvpcr_write_anchor_secret(\"/var/lib/systemd/nvpcr\", \"nvpcr-anchor.cred\", credential);",
+        "6995: static int tpm2_nvpcr_write_anchor_secret_to_boot(const struct iovec *credential) {"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/util-linux/util-linux/v2.41.5/lib/blkdev.c",
+      "timestamp": "2026-09-10T13:37:41.901255+00:00",
+      "available": true,
+      "sha256": "e9da2100af5ebbf46355710c201e0f2fe01e31a34a66d10cdbd363fa970661c8",
+      "path": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/group-review-sources/util-linux-v2.41.5-blkdev.c",
+      "focused_matches": [
+        "93: blkdev_get_size(int fd, unsigned long long *bytes)",
+        "97: if (ioctl(fd, DKIOCGETBLOCKCOUNT, bytes) >= 0) {",
+        "104: if (ioctl(fd, BLKGETSIZE64, bytes) >= 0)",
+        "112: if (ioctl(fd, BLKGETSIZE, &size) >= 0) {",
+        "122: if (ioctl(fd, DIOCGMEDIASIZE, bytes) >= 0)",
+        "130: if (ioctl(fd, FDGETPRM, &this_floppy) >= 0) {",
+        "157: if (part >= 0 && (ioctl(fd, DIOCGDINFO, (char *)&lab) >= 0)) {",
+        "186: blkdev_get_sectors(int fd, unsigned long long *sectors)",
+        "190: if (blkdev_get_size(fd, &bytes) == 0) {",
+        "205: int blkdev_get_sector_size(int fd, int *sector_size)",
+        "207: if (ioctl(fd, BLKSSZGET, sector_size) >= 0)",
+        "212: int blkdev_get_sector_size(int fd __attribute__((__unused__)), int *sector_size)",
+        "226: * rc = blkdev_get_physector_size(fd, &physec);",
+        "228: *\trc = blkdev_get_sector_size(fd, &physec);",
+        "234: int blkdev_get_physector_size(int fd, int *sector_size)",
+        "236: if (ioctl(fd, BLKPBSZGET, sector_size) >= 0)",
+        "243: int blkdev_get_physector_size(int fd __attribute__((__unused__)), int *sector_size)",
+        "258: if (ioctl(fd, BLKALIGNOFF, &aligned) < 0)",
+        "296: if ((ret = ioctl(fd, CDROM_GET_CAPABILITY, NULL)) < 0)",
+        "317: int blkdev_get_geometry(int fd, unsigned int *h, unsigned int *s)",
+        "321: if (ioctl(fd, HDIO_GETGEO, &geometry) == 0) {",
+        "327: int blkdev_get_geometry(int fd __attribute__((__unused__)),",
+        "429: struct blk_zone_report *blkdev_get_zonereport(int fd, uint64_t sector, uint32_t nzones)",
+        "443: ret = ioctl(fd, BLKREPORTZONE, rep);",
+        "474: if (blkdev_get_size(fd, &bytes) < 0)",
+        "475: err(EXIT_FAILURE, \"blkdev_get_size() failed\");",
+        "476: if (blkdev_get_sectors(fd, &sectors) < 0)",
+        "477: err(EXIT_FAILURE, \"blkdev_get_sectors() failed\");",
+        "478: if (blkdev_get_sector_size(fd, &sector_size) < 0)",
+        "479: err(EXIT_FAILURE, \"blkdev_get_sector_size() failed\");",
+        "480: if (blkdev_get_physector_size(fd, &phy_sector_size) < 0)",
+        "481: err(EXIT_FAILURE, \"blkdev_get_physector_size() failed\");"
+      ]
+    }
+  ],
+  "source_correlated_journal": {
+    "remote_program": "import datetime,json,re,subprocess\nj=subprocess.run(['journalctl','--no-pager','-o','json','--since','2026-09-10 08:25:00','--until','2026-09-10 08:25:30','-u','systemd-tpm2-setup.service'],capture_output=True,text=True,check=True,timeout=30)\nmessages=[json.loads(line).get('MESSAGE','') for line in j.stdout.splitlines()]\nknown=['Failed to find ESP: Permission denied','Failed to find ESP','Failed to acquire anchor secret','Failed to sync anchor secret','Failed to synchronize anchor secret','NvPCRs already initialized.','Failed to check file system type of \"/boot\": Permission denied']\nresult={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'literal_message_checks':{s:sum(s in msg for msg in messages if isinstance(msg,str)) for s in known}}\nf=subprocess.run(['findmnt','--json','-T','/boot','-o','TARGET,FSTYPE'],capture_output=True,text=True,check=True,timeout=30)\nresult['boot_mount']=json.loads(f.stdout)\nr=subprocess.run(['rpm','-q','--qf','%{SOURCERPM}\\n','systemd','libblkid'],capture_output=True,text=True,check=True,timeout=30);result['source_rpms']=r.stdout.splitlines()\nprint(json.dumps(result))\n",
+    "observation": {
+      "timestamp": "2026-09-10T13:38:29.716420+00:00",
+      "literal_message_checks": {
+        "Failed to find ESP: Permission denied": 0,
+        "Failed to find ESP": 1,
+        "Failed to acquire anchor secret": 0,
+        "Failed to sync anchor secret": 0,
+        "Failed to synchronize anchor secret": 0,
+        "NvPCRs already initialized.": 1,
+        "Failed to check file system type of \"/boot\": Permission denied": 1
+      },
+      "boot_mount": {
+        "filesystems": [
+          {
+            "target": "/boot",
+            "fstype": "xfs"
+          }
+        ]
+      },
+      "source_rpms": [
+        "systemd-259.8-1.fc44.src.rpm",
+        "util-linux-2.41.5-1.fc44.src.rpm"
+      ]
+    }
+  },
+  "request_metadata_diagnostic": {
+    "program": "import collections, hashlib, json, os, re, stat\nfrom pathlib import Path\np = Path(\"/var/lib/hermes-selinux-trial-20260909-v2/service-continuation-2/scoped-avcs.log\")\nif any(q.is_symlink() for q in p.parents):\n    raise SystemExit(\"STOP: unexpected evidence path\")\nwith os.fdopen(os.open(p, os.O_RDONLY | os.O_NOFOLLOW), \"rb\") as f:\n    info = os.fstat(f.fileno())\n    if (not stat.S_ISREG(info.st_mode) or info.st_uid != 0\n            or stat.S_IMODE(info.st_mode) != 0o600 or info.st_nlink != 1\n            or info.st_size > 2 * 1024 * 1024):\n        raise SystemExit(\"STOP: unexpected evidence file\")\n    data = f.read(2 * 1024 * 1024 + 1)\nif len(data) > 2 * 1024 * 1024:\n    raise SystemExit(\"STOP: evidence exceeds limit\")\nexpected = \"896a6d7f3e58ce4e16480ff94e0391cca9244604dbed679a0e4e1a1a4779b32c\"\nif hashlib.sha256(data).hexdigest() != expected:\n    raise SystemExit(\"STOP: saved log differs from reviewed evidence\")\nrows = [line for line in data.decode(\"utf-8\", errors=\"replace\").splitlines() if line.strip()]\nioctls = [line for line in rows if re.search(r\"\\bavc:\\s+denied\\s+\\{\\s*ioctl\\s*\\}\", line)]\nrequests = collections.Counter()\nmissing = 0\nfor line in ioctls:\n    match = re.search(r\"\\bioctlcmd=(0x[0-9a-fA-F]{1,8}|[0-9]{1,10})(?=\\s|$)\", line)\n    if match:\n        value = int(match[1], 16 if match[1].startswith(\"0x\") else 10)\n        requests[hex(value)] += 1\n    else:\n        missing += 1\ncerts = []\nfor line in rows:\n    if not re.search(r\"\\btcontext=[^:\\s]+:[^:\\s]+:cert_t:\", line):\n        continue\n    match = re.search(r'\\bname=\"([^\"\\n]*)\"', line)\n    name = match[1] if match else \"\"\n    known = name if name in {\"openssl.cnf\", \"ca-bundle.crt\", \"ca-bundle.trust.crt\", \"openssl-fips.cnf\"} else \"unidentified\"\n    certs.append({\"known_public_basename\": known, \"name_field_present\": bool(match)})\nprint(json.dumps({\"scoped_log_sha256\": expected, \"record_count\": len(rows),\n    \"ioctl_records\": len(ioctls), \"missing_ioctl_commands\": missing,\n    \"ioctl_commands\": dict(sorted(requests.items())), \"certificate_records\": certs}, indent=2))\n",
+    "command": "sudo python3 -I -B - <<'PYDIAG'\nimport collections, hashlib, json, os, re, stat\nfrom pathlib import Path\np = Path(\"/var/lib/hermes-selinux-trial-20260909-v2/service-continuation-2/scoped-avcs.log\")\nif any(q.is_symlink() for q in p.parents):\n    raise SystemExit(\"STOP: unexpected evidence path\")\nwith os.fdopen(os.open(p, os.O_RDONLY | os.O_NOFOLLOW), \"rb\") as f:\n    info = os.fstat(f.fileno())\n    if (not stat.S_ISREG(info.st_mode) or info.st_uid != 0\n            or stat.S_IMODE(info.st_mode) != 0o600 or info.st_nlink != 1\n            or info.st_size > 2 * 1024 * 1024):\n        raise SystemExit(\"STOP: unexpected evidence file\")\n    data = f.read(2 * 1024 * 1024 + 1)\nif len(data) > 2 * 1024 * 1024:\n    raise SystemExit(\"STOP: evidence exceeds limit\")\nexpected = \"896a6d7f3e58ce4e16480ff94e0391cca9244604dbed679a0e4e1a1a4779b32c\"\nif hashlib.sha256(data).hexdigest() != expected:\n    raise SystemExit(\"STOP: saved log differs from reviewed evidence\")\nrows = [line for line in data.decode(\"utf-8\", errors=\"replace\").splitlines() if line.strip()]\nioctls = [line for line in rows if re.search(r\"\\bavc:\\s+denied\\s+\\{\\s*ioctl\\s*\\}\", line)]\nrequests = collections.Counter()\nmissing = 0\nfor line in ioctls:\n    match = re.search(r\"\\bioctlcmd=(0x[0-9a-fA-F]{1,8}|[0-9]{1,10})(?=\\s|$)\", line)\n    if match:\n        value = int(match[1], 16 if match[1].startswith(\"0x\") else 10)\n        requests[hex(value)] += 1\n    else:\n        missing += 1\ncerts = []\nfor line in rows:\n    if not re.search(r\"\\btcontext=[^:\\s]+:[^:\\s]+:cert_t:\", line):\n        continue\n    match = re.search(r'\\bname=\"([^\"\\n]*)\"', line)\n    name = match[1] if match else \"\"\n    known = name if name in {\"openssl.cnf\", \"ca-bundle.crt\", \"ca-bundle.trust.crt\", \"openssl-fips.cnf\"} else \"unidentified\"\n    certs.append({\"known_public_basename\": known, \"name_field_present\": bool(match)})\nprint(json.dumps({\"scoped_log_sha256\": expected, \"record_count\": len(rows),\n    \"ioctl_records\": len(ioctls), \"missing_ioctl_commands\": missing,\n    \"ioctl_commands\": dict(sorted(requests.items())), \"certificate_records\": certs}, indent=2))\nPYDIAG",
+    "scope": "Read only the previously hashed saved scoped log; numeric ioctlcmd counters and an allowlist of public certificate/config basenames; no raw names or lines printed",
+    "validation": "PASS: synthetic pin/privacy/count/shared-reader checks, syntax, ShellCheck, guide, Markdown, links and whitespace"
+  },
+  "group_source_review": {
+    "timestamp": "2026-09-10T13:40:50.387462+00:00",
+    "findings": [
+      {
+        "status": "observed live",
+        "finding": "Service journal contains Failed to check file system type of /boot with Permission denied, then a Failed to find ESP message; /boot is xfs."
+      },
+      {
+        "status": "source-supported inference",
+        "finding": "The fs_t filesystem getattr denial is consistent with the observed boot-search failure. Upstream v259 find-esp searches /efi, /boot, /boot/efi and returns an unhandled access error; NvPCR anchor writing resolves the global boot credential directory first. Exact Fedora 259.8 downstream source was not retrieved."
+      },
+      {
+        "status": "source capability",
+        "finding": "SELinux extended ioctl permissions can be bounded by request numbers in conjunction with the underlying ioctl allow. Numeric saved ioctlcmd values are still required."
+      },
+      {
+        "status": "source context, not actual-call proof",
+        "finding": "Upstream util-linux v2.41.5 blkdev helpers issue size/sector/geometry-related ioctl requests. Do not assume these are the 20 observed denials without their numeric codes."
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://github.com/systemd/systemd/blob/v259/src/shared/find-esp.c",
+        "scope": "Version-family ESP search/error handling; not exact Fedora 259.8 source"
+      },
+      {
+        "url": "https://github.com/systemd/systemd/blob/v259/src/shared/tpm2-util.c",
+        "scope": "Version-family boot-anchor credential path; downloaded file hash recorded"
+      },
+      {
+        "url": "https://github.com/util-linux/util-linux/blob/v2.41.5/lib/blkdev.c",
+        "scope": "Matches installed upstream version; Fedora downstream differences unreviewed"
+      },
+      {
+        "url": "https://github.com/SELinuxProject/selinux/blob/master/secilc/docs/cil_access_vector_rules.md#allowx",
+        "scope": "Extended ioctl permission syntax/capability"
+      }
+    ],
+    "missing_evidence": [
+      "Exact numeric ioctlcmd values",
+      "Certificate/config basename or further identity evidence if the allowlist does not recognize it",
+      "Exact Fedora downstream systemd source was not retrieved; proposed policy changes require further review"
+    ]
+  },
+  "request_metadata_validation": {
+    "results": [
+      {
+        "name": "fixture",
+        "timestamp": "2026-09-10T13:42:21.394001+00:00",
+        "method": [
+          "python3",
+          "-B",
+          "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/validate-request-metadata.py"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "single Devbox runtime; nonfix isolated Markdown copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/fixture.log",
+        "output_sha256": "da84532297991920a71903f209ecf04f5f736ba5c96defd76afb687932b12703",
+        "tail": [
+          "    \"Unknown certificate basename redacted\",",
+          "    \"Changed saved log rejected before metadata output\"",
+          "  ],",
+          "  \"scope\": \"Synthetic fixture only; fixed path/hash and root-ownership metadata simulated. Shared private-file reader is byte-identical to the previously validated diagnostic.\"",
+          "}"
+        ]
+      },
+      {
+        "name": "guide",
+        "timestamp": "2026-09-10T13:42:21.394367+00:00",
+        "method": [
+          "./tests/test-hermes-guide.sh"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "single Devbox runtime; nonfix isolated Markdown copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/guide.log",
+        "output_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691",
+        "tail": [
+          "\u001b[1m=== Documentation and secret hygiene ===\u001b[0m",
+          "",
+          "========================================",
+          "Results: \u001b[0;32m217\u001b[0m passed, \u001b[0;31m0\u001b[0m failed, \u001b[0;33m0\u001b[0m skipped (217 total)",
+          "========================================"
+        ]
+      },
+      {
+        "name": "syntax",
+        "timestamp": "2026-09-10T13:42:21.394664+00:00",
+        "method": [
+          "sh",
+          "-n",
+          "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/handoff.sh"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "single Devbox runtime; nonfix isolated Markdown copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/syntax.log",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tail": []
+      },
+      {
+        "name": "shellcheck",
+        "timestamp": "2026-09-10T13:42:21.406355+00:00",
+        "method": [
+          "shellcheck",
+          "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/handoff.sh"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "single Devbox runtime; nonfix isolated Markdown copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/shellcheck.log",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tail": []
+      },
+      {
+        "name": "markdown",
+        "timestamp": "2026-09-10T13:42:21.447146+00:00",
+        "method": [
+          "markdownlint-cli2",
+          "--config",
+          "/tmp/hermes-request-docs-17dpmhf1/check.markdownlint-cli2.jsonc"
+        ],
+        "cwd": "/tmp/hermes-request-docs-17dpmhf1",
+        "environment": "single Devbox runtime; nonfix isolated Markdown copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/markdown.log",
+        "output_sha256": "73e7d952cf561dfd694deb544df77b78ced2539485d33bf0a6fe76433de41f65",
+        "tail": [
+          "markdownlint-cli2 v0.21.0 (markdownlint v0.40.0)",
+          "Finding: 2026-09-07-hermes-unattended.md HERMES_SELINUX_TPM_REPAIR.md HERMES_INSTALLATION_VERIFICATION.md DEPLOYMENT_TASKS.md",
+          "Linting: 4 file(s)",
+          "Summary: 0 error(s)"
+        ]
+      },
+      {
+        "name": "whitespace",
+        "timestamp": "2026-09-10T13:42:21.767458+00:00",
+        "method": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "single Devbox runtime; nonfix isolated Markdown copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v2-runtime-failure/request-metadata/whitespace.log",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tail": []
+      }
+    ],
+    "validator_sha256": "4114cd25cd38439e107e95c5439523deefe5fe6df55aecb6b95ca5d2186c02d7",
+    "program_sha256": "5d79ca01df719585cd5d83b84f4fcec71819daef99b549e60208966ee7b97ccc",
+    "local_file_links": 158,
+    "published_command_matches": true,
+    "markdown_config": {
+      "globs": [
+        "2026-09-07-hermes-unattended.md",
+        "HERMES_SELINUX_TPM_REPAIR.md",
+        "HERMES_INSTALLATION_VERIFICATION.md",
+        "DEPLOYMENT_TASKS.md"
+      ],
+      "ignores": [],
+      "config": {
+        "MD024": {
+          "allow_different_nesting": true,
+          "siblings_only": true
+        },
+        "MD013": {
+          "line_length": 120,
+          "code_blocks": false,
+          "tables": false,
+          "headings": false
+        },
+        "MD033": true,
+        "MD036": true,
+        "MD040": true,
+        "MD045": true,
+        "MD047": true,
+        "MD051": true,
+        "MD053": true,
+        "MD059": true,
+        "MD060": false
+      },
+      "fix": false
+    },
+    "document_sha256": {
+      "docs/plans/2026-09-07-hermes-unattended.md": "e7ff4cb1fabc8a86d46ffc53b9a33acd669066d606f026fbef1d788c50192ff0",
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": "2e431e3193b5ecc214e7c37cd8caf948ae07e848191f9e3b5301dfdede3fb6c1",
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": "ae4df5056c677388f66035bdef942f844abdc75caaae2ac0021e4f900a6ea1b1",
+      "vm/DEPLOYMENT_TASKS.md": "bfd6968da1ca92d423f04fba25c6afb87a6e26d71d9c1fba62a45be930513ac8"
+    }
+  },
+  "policy_artifact_preservation": {
+    "scripts/hermes/selinux/hermes_tpm2_setup.te": true,
+    "scripts/hermes/selinux/hermes_tpm2_setup.fc": true,
+    "scripts/hermes/selinux/verify_policy.py": true,
+    "scripts/hermes/selinux/install-reviewed-candidate-v2.sh": true
+  },
+  "request_metadata_closure": {
+    "timestamp": "2026-09-10T13:43:23.102286+00:00",
+    "reason": "Final execution-record validation paragraph added; recheck record Markdown and whitespace",
+    "markdown_exit": 0,
+    "whitespace_exit": 0,
+    "plan_sha256": "f5e773ba3c3ba294bacc2e201221de61de21c34835afe9c3822ab99003ca7f5b"
+  },
+  "operator_request_metadata": {
+    "received_at": "2026-09-10T14:32:02.331152+00:00",
+    "provenance": "Operator-pasted reviewed diagnostic result; escaping normalized",
+    "observation": {
+      "scoped_log_sha256": "896a6d7f3e58ce4e16480ff94e0391cca9244604dbed679a0e4e1a1a4779b32c",
+      "record_count": 22,
+      "ioctl_records": 20,
+      "missing_ioctl_commands": 0,
+      "ioctl_commands": {
+        "0x1260": 2,
+        "0x1268": 2,
+        "0x1270": 2,
+        "0x1272": 2,
+        "0x1278": 2,
+        "0x1279": 2,
+        "0x1284": 2,
+        "0x204": 2,
+        "0x215": 2,
+        "0x5331": 1,
+        "0x5395": 1
+      },
+      "certificate_records": [
+        {
+          "known_public_basename": "openssl.cnf",
+          "name_field_present": true
+        }
+      ]
+    }
+  },
+  "v3_config_metadata": {
+    "remote_program": "import datetime,json,subprocess\ncommands={'kernel':['uname','-r'],'config_metadata':['stat','-c','%F %a %U %G %C','/etc/pki/tls/openssl.cnf'],'config_mapping':['matchpathcon','-n','/etc/pki/tls/openssl.cnf'],'config_package':['rpm','-qf','/etc/pki/tls/openssl.cnf'],'unit':['systemctl','show','systemd-tpm2-setup.service','-p','InvocationID','-p','ExecMainStatus','-p','MainPID','-p','ControlPID']}\nr={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat()}\nfor name,cmd in commands.items():\n p=subprocess.run(cmd,capture_output=True,text=True,timeout=30);r[name]={'exit':p.returncode,'output':p.stdout.strip()}\nprint(json.dumps(r))\n",
+    "observation": {
+      "timestamp": "2026-09-10T14:32:02.956719+00:00",
+      "kernel": {
+        "exit": 0,
+        "output": "7.1.12-200.fc44.x86_64"
+      },
+      "config_metadata": {
+        "exit": 0,
+        "output": "regular file 644 root root system_u:object_r:cert_t:s0"
+      },
+      "config_mapping": {
+        "exit": 0,
+        "output": "system_u:object_r:cert_t:s0"
+      },
+      "config_package": {
+        "exit": 0,
+        "output": "openssl-libs-3.5.7-2.fc44.x86_64"
+      },
+      "unit": {
+        "exit": 0,
+        "output": "InvocationID=65b49476a60341369fd98bf447db9984\nMainPID=0\nControlPID=0\nExecMainStatus=1"
+      }
+    }
+  }
+}

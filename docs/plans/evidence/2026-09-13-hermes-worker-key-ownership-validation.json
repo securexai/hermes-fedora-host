@@ -1,0 +1,97 @@
+{
+  "record": "hermes-worker-client-key-ownership-validation",
+  "kind": "independent-review-offline-checks-plus-blocked-real-vm-attempt",
+  "profile": "manual-guide (docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md)",
+  "branch": "codex/hermes-manual-guide-plan",
+  "gate": "pre-M02 worker client key ownership fix (blocking finding on provision-worker-client-key.sh:104)",
+  "status": "OFFLINE PASS; real-VM ownership and M02 validation BLOCKED by sandbox prerequisites (no /dev/kvm, no privilege, no multi-range uid_map). Re-check confirms the same block. B6 remains open.",
+  "utc": "2026-09-13T23:22:51Z",
+  "authorization": "Operator authorized one disposable Fedora 44 VM, dependency installation, and deletion of only that fixture. No production access, existing VM use, commit, push or PR change.",
+  "artifacts": {
+    "helper": "scripts/hermes/manual/provision-worker-client-key.sh",
+    "helper_sha256": "979692cf7df63d45121cc9bae3299643dd6cda7ab5dc1d1a5a6e57a90b4c8de6",
+    "rehearsal": "scripts/hermes/manual/boot/rehearse-clean-install.sh",
+    "rehearsal_sha256": "271c86a6df19b5ca95d3b424593dcdb8d93524ae262d9ebdb70b71e459280795",
+    "guide": "docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md",
+    "guide_sha256": "015b827d6e67f503a2b10adef4bd400029aeee415d52069307c3be5190652561",
+    "bundle_readme": "scripts/hermes/manual/README.md",
+    "bundle_readme_sha256": "72bdd2feb4e004e00602348afe88249fbb864dadecf2078ee6b25e8df8bd5057"
+  },
+  "review_finding": {
+    "claim": "ssh-keygen runs as root, so the private key is root-owned; the pre-fix helper chowned only KEYDIR and key.pub to hermes and then ran rootless 'podman unshare chown 10000:10000 key', which cannot change a root-owned inode from inside hermes's user namespace.",
+    "verdict": "CONFIRMED as a fresh-install blocker. Consistent with the reference pattern: m02-deploy-and-validate.sh:115 transfers only known_hosts and worker_client_ed25519.pub, and the private key it mapped-chowns at :122 was already hermes-owned from an earlier stage.",
+    "fix": "provision-worker-client-key.sh:109 now chowns KEYDIR, key and key.pub to hermes:hermes before the mapped-UID chown at :110. The private key is re-established as hermes-owned on every rerun, which also makes the rerun path safe.",
+    "safety": "Strictly safe either way: if rootless Podman could chown a root-owned inode, the added transfer is harmless; it matches the only ownership state the validated M02 path ever started from."
+  },
+  "offline_validation": [
+    {
+      "command": "devbox run -- bash scripts/hermes/manual/boot/rehearse-clean-install.sh",
+      "result": "REHEARSAL=PASS failures=0 advisories=0; section 16 = 25 PASS including 5 ownership-sequence assertions"
+    },
+    {
+      "command": "devbox run -- ./tests/test-hermes-guide.sh",
+      "result": "217 passed, 0 failed, 0 skipped"
+    },
+    {
+      "command": "devbox run -- shellcheck scripts/hermes/manual/provision-worker-client-key.sh scripts/hermes/manual/boot/rehearse-clean-install.sh",
+      "result": "exit 0"
+    },
+    {
+      "command": "devbox run -- shfmt -d -l -i 2 -ci -bn scripts/hermes/manual/provision-worker-client-key.sh scripts/hermes/manual/boot/rehearse-clean-install.sh",
+      "result": "exit 0"
+    },
+    {
+      "command": "devbox run -- markdownlint-cli2 --no-globs docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md scripts/hermes/manual/README.md",
+      "result": "0 errors"
+    },
+    {
+      "command": "regression: revert line 109 to the pre-fix chown (KEYDIR and key.pub only) and rerun the rehearsal",
+      "result": "REHEARSAL=FAIL with 3 FAILs: helper never chowns the private key to the runtime account; rootless mapped chown must run after the runtime account owns the private key; private key transfer does not target the runtime account. Helper restored byte-identical (sha256 match)."
+    },
+    {
+      "command": "temp-dir exercise of provision_worker_client_key()",
+      "result": "fresh modes 600/644; rerun private hash unchanged; missing-pub rebuild leaves the private hash unchanged and the rebuilt public key matches the private key"
+    }
+  ],
+  "real_vm_attempt": {
+    "outcome": "BLOCKED before any fixture was created. No domain or storage was created, so there is nothing to destroy.",
+    "authoritative_prerequisite_check": {
+      "command": "devbox run -- ./vm/setup-hypervisor.sh --check",
+      "result": "MISSING KVM acceleration (/dev/kvm not found); MISSING libvirt storage permissions (root:UNKNOWN 711; run setup); OK virsh 12.0.0, virt-install 5.1.0, qemu-img 10.2.2, libvirtd active, OVMF, libvirt default pool, lab-vlans network"
+    },
+    "blockers": [
+      "/dev/kvm absent. The environment is a bubblewrap container (systemd-detect-virt=container-other, PID 1 comm=bwrap). vm/lib-vm-common.sh:91-93 check_kvm() hard-fails when /dev/kvm is missing, and docs/VM_TESTING_GUIDE.md:35 requires KVM, so the documented flow refuses to run. This was not bypassed; no TCG fallback was attempted.",
+      "No privilege. 'sudo: The \"no new privileges\" flag is set, which prevents sudo from running as root.' setup-hypervisor.sh (root) and create-hermes-server-vm.sh therefore cannot run, so libvirt storage permissions remain unfixed.",
+      "A Podman-equivalent user namespace cannot be constructed. 'unshare --map-users/--map-groups' with the Podman mapping fails 'newuidmap: write to uid_map failed: Operation not permitted', and 'podman unshare' fails 'acquiring runtime init lock: open /run/user/1000/libpod/tmp/alive.lck: read-only file system'."
+    ],
+    "unchanged_state": {
+      "existing_domains": "virsh -c qemu:///system list --all returned an empty list before and after the attempt",
+      "cached_media_present": "/var/lib/hermes-lifecycle-media/Fedora-Server-dvd-x86_64-44-1.7.iso",
+      "storage": "/var/lib/libvirt/images on /var: 338G available"
+    },
+    "exact_prerequisites_to_unblock": [
+      "Run from a host or namespace that exposes /dev/kvm (VM guide requires KVM acceleration).",
+      "Provide root/sudo with no_new_privs clear so 'sudo ./vm/setup-hypervisor.sh' can set libvirt storage permissions.",
+      "Then create one disposable Fedora 44 fixture, prepare the hermes account, a separate /home/hermes mount, subuid/subgid mappings and rootless Podman, stage the current manual bundle, run the helper through sudo, and run M02."
+    ]
+  },
+  "resume_check": {
+    "utc": "2026-09-13T23:37:09Z",
+    "result": "STILL BLOCKED, identical prerequisites",
+    "evidence": [
+      "systemd-detect-virt=container-other; /proc/1/comm=bwrap",
+      "/dev/kvm: No such file or directory",
+      "sudo: The \"no new privileges\" flag is set, which prevents sudo from running as root",
+      "unshare --map-users ... -> newuidmap: write to uid_map failed: Operation not permitted",
+      "podman unshare -> acquiring runtime init lock: open /run/user/1000/libpod/tmp/alive.lck: read-only file system",
+      "virsh -c qemu:///system list --all: no domains before or after"
+    ],
+    "offline_checks_repeated": false,
+    "offline_checks_note": "No validated artifact changed since the recorded pass, so the offline checks were not repeated, per instruction."
+  },
+  "limitations": [
+    "No real VM was created. The requested in-VM steps were NOT executed: mapped UID/GID 10000:10000 ownership with mode 0600, rerun hash stability, public-key recovery, and M02 KEY_READABLE / worker transport / negative isolation and trust checks.",
+    "The rehearsal ownership assertion proves the order and targets of the privileged calls under stubs, not the kernel or Podman outcome; only a real rootless Podman host can confirm 'podman unshare chown' returns 0 for this key.",
+    "This bounded test does not close B6 and does not establish end-to-end deployment readiness."
+  ]
+}

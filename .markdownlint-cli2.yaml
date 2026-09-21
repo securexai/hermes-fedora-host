@@ -36,5 +36,14 @@ ignores:
   - ".devbox/**"
   - "vendor/**"
   - "docs/archive/**"
+  # Preserved migration artifacts, kept byte-for-byte so their recorded SHA-256
+  # values in PROVENANCE.md and docs/extraction-manifest.txt stay accurate.
+  # Reformatting them would silently rewrite the evidence they exist to record.
+  # They carry a small number of inherited MD013 over-length lines; see the
+  # migration record for the exact list and the follow-up.
+  - "docs/HERMES_*.md"
+  - "docs/reviews/**"
+  - "docs/plans/2026-09-20-hermes-manual-*.md"
+  - "docs/plans/evidence/**"
 
 fix: true

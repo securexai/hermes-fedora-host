@@ -1,0 +1,44 @@
+# Manual-profile release manifest.
+#
+# This is the reviewed identity of one manual-profile release. It is deliberately
+# separate from the controller/unattended promotion records: it carries no
+# certification claim and does not authorize deployment.
+#
+# Digests below were read from public registry metadata on 2026-09-20 UTC, and the
+# revision was corroborated by the release tag and the image revision label. That
+# is metadata corroboration, not signature verification: the upstream Git tag is
+# unsigned. Dependencies (the Fedora worker base) move independently of the
+# gateway image, so a worker candidate must be rebuilt and retained per release.
+version: 1
+profile: manual-offline-worker
+
+platform:
+  os: Fedora Linux 44 (Server Edition)
+  arch: x86-64
+  cgroup: v2
+  selinux: enforcing
+
+upstream:
+  project: NousResearch/hermes-agent
+  release: v2026.9.11
+  application_version: 0.21.2
+  revision: 939e45c91d751fadd94dcd1b873ac3cb44846213
+  revision_evidence: image org.opencontainers.image.revision label, corroborated by the release tag
+  tag_signed: false
+
+images:
+  gateway:
+    ref: docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+    index_digest: sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+    amd64_manifest: sha256:930b5b8ebfed43857c3a993f437f0e3a1bffc045c5b241794b35bf102298bdb2
+    upstream_user: root
+    runtime_user: "10000:10000"
+    verification: public registry metadata only; no cosign or signature verification performed
+  worker:
+    ref: localhost/hermes-worker:1
+    base: registry.fedoraproject.org/fedora@sha256:2648f667bd180801195d3f3a385cf0d2e390bd80611dbedac8275253c89cdbc7
+    build_file: scripts/hermes/manual/worker/Containerfile
+    deploy_artifact: oci-archive
+    note: the :1 tag is a local convenience name, not an immutable identity; deploy a retained archive
+
+contract: scripts/hermes/manual/config/profile-contract.yaml

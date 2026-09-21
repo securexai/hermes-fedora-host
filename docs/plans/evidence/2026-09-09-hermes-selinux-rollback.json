@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-09-09T17:57:26.186789+00:00",
+  "operator_result": "POLICY_ROLLBACK_VERIFIED; last trial module removed; no restart, TPM operation or reboot requested",
+  "independent_method": "Pinned public-key SSH; sha256sum on-disk policy, getenforce, stat context, matchpathcon, systemctl show late unit",
+  "observed": {
+    "on_disk_policy_sha256": "bf58d5f5ae23502d844f70c153ef5366c31bf16ac9c77f548b94f3cf1aea1949",
+    "matches_original_baseline": true,
+    "selinux": "Enforcing",
+    "actual_executable_context": "system_u:object_r:init_exec_t:s0",
+    "expected_executable_context": "system_u:object_r:init_exec_t:s0",
+    "late_unit": "failed",
+    "main_pid": 0,
+    "exec_main_status": 1,
+    "last_start": "2026-09-09 09:43:14 -05",
+    "last_exit": "2026-09-09 09:43:16 -05"
+  },
+  "result": "PASS: bounded policy rollback; original service failure remains",
+  "limits": [
+    "First-run service and persistence acceptance remain failed/unpassed",
+    "Loaded kernel policy was not re-exported after rollback; independent policy comparison used on-disk binary",
+    "SRK/anchor/LUKS/firmware preservation is from the prior recovery snapshot; no fresh privileged snapshot was collected after rollback",
+    "No revised candidate or new service trial authorized by rollback completion"
+  ],
+  "next_action": "Review minimal permissions for namespace metadata, certificate directory traversal and partition probing; validate a revised candidate offline before requesting a new bounded production trial"
+}

@@ -21,8 +21,9 @@ extensions:
   - id: shellspec
     version: "0.28.1"
     purpose: >-
-      Runs spec/hermes/, replacing the retired Lefthook pre-push gate
-      `test-hermes-deploy-spec`.
+      Retained from the retired Lefthook pre-push gate `test-hermes-deploy-spec`
+      so in-scope shell unit specs can run. The only upstream spec exercises the
+      deployment entrypoints, which are out of scope, so no spec runs today.
     source:
       type: upstream-release
       url: https://github.com/shellspec/shellspec/releases/download/0.28.1/shellspec-dist.tar.gz

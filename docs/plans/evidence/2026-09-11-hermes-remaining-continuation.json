@@ -1,0 +1,1524 @@
+{
+  "schema": "hermes-remaining-continuation-v1",
+  "approved_at_recorded": "2026-09-11T21:19:50.073117+00:00",
+  "approval_reference": "User: proceed with all pending tasks",
+  "scope": "13 prepared B4/B7 blocks then ordered P2/P3/P4; mandatory prerequisites and one-dispatch/four-hour-per-lab-case bounds retained",
+  "package_manifest_sha256": "16b38ee626915b5c2f14c8a3d51e036fbacac55e1c239e4d813918240c48fc63",
+  "cases": {
+    "b4-linux": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-linux",
+      "case": "b4-linux",
+      "dependencies": [
+        "b3"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "249f735ddfebc81c4a6b837989b5241452dd09eb03820fa06620806f1b77de02",
+      "root": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f",
+      "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+      "unit": "hermes-remaining-20260911-b4-linux-dbf08d0f.service",
+      "authorization": "CONSUMED_BY_SINGLE_DISPATCH",
+      "progress": "BLOCKED",
+      "validation": "FAIL",
+      "dispatches": 1,
+      "L0": {
+        "timestamp": "2026-09-11T21:20:22.437567+00:00",
+        "operation": "AR04-L0",
+        "result": "PASS",
+        "root": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f",
+        "source_archive_sha256": "88ce89ee5c11c420c6d73185bab47e2b9e46fe318ec5a0c2e46ef2a2f83d1867",
+        "source_files": 79,
+        "actual_certifier_tool_readiness": {
+          "ok": true,
+          "resolved": {
+            "restic": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/repository/scripts/hermes/unattended/bin/restic",
+            "ssh": "/usr/bin/ssh",
+            "sudo": "/usr/bin/sudo",
+            "trivy": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/repository/scripts/hermes/unattended/bin/trivy"
+          },
+          "stage": "certifier-tools-ready",
+          "tools": [
+            "ssh",
+            "sudo",
+            "restic",
+            "trivy"
+          ],
+          "uid": 984,
+          "versions": {
+            "restic": "restic 0.19.1 compiled with go1.26.7 on linux/amd64",
+            "trivy": "Version: 0.74.0"
+          }
+        },
+        "r1_r2_preserved": true,
+        "broker_before_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+        "broker_during_sha256": "3c3e16074e883f9cfb7fe77684efd404e43bfa561855f08636f7366ac96e6c71",
+        "test_uid": 984,
+        "production_disabled": true,
+        "grant_issued": false,
+        "services_started": false,
+        "temporary_control_hashes": {
+          "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+          "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+          "90-hermes-remaining-20260911-b4-linux-dbf08d0f.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+          "hermes-remaining-20260911-b4-linux-dbf08d0f-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+          "hermes-remaining-20260911-b4-linux-dbf08d0f.service": "e8e5446983ba4b9db976b81d1f64952eae705e370569a9b313417e57a1fae237",
+          "hermes-remaining-20260911-b4-linux-dbf08d0f-failed.service": "879229619dcbefefad23e6df777c0fc01cb2d65ce89d75f1b35a6ab1e54960ff"
+        }
+      },
+      "block_started_at": "2026-09-11T21:20:18.877096+00:00",
+      "mandatory_cleanup_deadline": "2026-09-12T01:20:18.877096+00:00",
+      "L1_dispatch": {
+        "timestamp": "2026-09-11T21:20:43.233169+00:00",
+        "operation": "AR04-L1",
+        "status": "DISPATCHED_ONCE",
+        "grant": {
+          "schema": "hermes-lifecycle-lab-window-v1",
+          "binding": "249f735ddfebc81c4a6b837989b5241452dd09eb03820fa06620806f1b77de02",
+          "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+          "issued_at": 1789161643,
+          "expires_at": 1789171843
+        },
+        "unit": [
+          "ActiveState=activating",
+          "SubState=start",
+          "InvocationID=dd35e0b7080c4dca8990443ece08b45c"
+        ],
+        "release_signed": false
+      },
+      "operator_source": {
+        "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/artifact-probe-operator-v2.py",
+        "sha256": "ae0e67cd67dc65af3cc275b36c6dad38c2f5c7e7509161f698f62d1d1213081a",
+        "owner_uid": 0,
+        "mode": "0600",
+        "syntax": "PASS",
+        "executed": false,
+        "change": "Add bounded read-only boot-console rejection lines and stream hash alongside screen capture; no terminal input/settings change"
+      },
+      "observations_directory": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations",
+      "operator_preparation_history": [
+        {
+          "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/artifact-probe-operator.py",
+          "sha256": "287719b35a803c61c605773d2edfb0699fa451fd86dad24ce0b58eac68c6a919",
+          "owner_uid": 0,
+          "mode": "0600",
+          "syntax": "PASS",
+          "executed": false
+        }
+      ],
+      "failure": {
+        "observed_at": "2026-09-11T22:00:26Z",
+        "stage": "reboot-pending",
+        "primary": "lab-operation-failed",
+        "cleanup": "prior-credential-restoration-failed",
+        "operator_ready": false,
+        "tamper_attempted": false,
+        "provider_revocation": "PASS",
+        "recovery": "Original replay completed; expected inventory, Enforcing and previous image/modules verified; cleanup-only recovery passed without power interruption"
+      },
+      "L2": {
+        "timestamp": "2026-09-11T22:14:10.196367+00:00",
+        "operation": "AR04-L2",
+        "result": "PASS",
+        "lifecycle_stage": "failed-cleaned",
+        "provider_credential": "revoked",
+        "fixed_domain_disk_nvram_swtpm_absent": true,
+        "private_material_absent": true,
+        "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+        "broker_metadata_xattrs_restored": true,
+        "test_uid_restored": 987,
+        "production_role_disabled": true,
+        "socket_runtime_credential_absent": true,
+        "temporary_units_override_power_grant_helpers_removed": true,
+        "consumed_grant_archived_and_active_grant_removed": true,
+        "old_policy_journal_timers_preserved": true,
+        "unit_results_before_removal": {
+          "hermes-remaining-20260911-b4-linux-dbf08d0f.service": [
+            "ActiveState=failed",
+            "SubState=failed",
+            "InvocationID=dd35e0b7080c4dca8990443ece08b45c",
+            "Result=exit-code",
+            "ExecMainStatus=69"
+          ],
+          "hermes-remaining-20260911-b4-linux-dbf08d0f-failed.service": [
+            "ActiveState=inactive",
+            "SubState=dead",
+            "InvocationID=7bc8398c0fb64bbfabfdb85b6221de47",
+            "Result=success",
+            "ExecMainStatus=0"
+          ],
+          "hermes-lab-credentials.service": [
+            "ActiveState=active",
+            "SubState=running",
+            "InvocationID=05e08d5e54b6476a9647db5c1aaced8b",
+            "Result=success",
+            "ExecMainStatus=0"
+          ],
+          "hermes-lab-credentials.socket": [
+            "ActiveState=active",
+            "SubState=running",
+            "InvocationID=9c19a7d401b64f3bb24bc447988196e9",
+            "Result=success"
+          ]
+        },
+        "release_signed": false
+      },
+      "independent_restoration": {
+        "timestamp": "2026-09-11T22:14:22.300243+00:00",
+        "status": "PASS",
+        "broker_hash": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+        "broker_bytes_metadata_xattrs_restored": true,
+        "provider_lease_prefix": "dbf08d0fde674cb29e0a059d6565768d",
+        "provider_state": "revoked",
+        "provider_credential_file_absent": true,
+        "fixed_vm_and_private_resources_absent": true,
+        "temporary_controls_and_grants_absent": true,
+        "historical_and_current_source_snapshots_preserved": true,
+        "socket": [
+          "ActiveState=inactive",
+          "SocketUser=hermes-lab-certifier",
+          "SocketGroup=hermes-lab-certifier",
+          "SocketMode=0600"
+        ],
+        "production_role_disabled": true
+      },
+      "elapsed_seconds": 3243.423147,
+      "within_four_hours": true,
+      "live_evidence": "2026-09-11-hermes-b4-linux-live.json",
+      "recovery_probe_failure": {
+        "returncode": 1,
+        "operation": "direct sudo python read-only status probe",
+        "resolution": "Used existing authorized sudo bash wrapper; no privilege change; status readback PASS"
+      },
+      "replacement_attempt": "r5_b4_linux"
+    },
+    "b4-initrd": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-initrd",
+      "case": "b4-initrd",
+      "dependencies": [
+        "b4-linux"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "6e9c7f23145600ee72a3cd394edcc11366a291664a4ab30252fc1050a289031f",
+      "root": "/var/lib/hermes-remaining-20260911-b4-initrd-95041fe4",
+      "run_id": "95041fe49fd28bd66821e28d5ec3240364b980272dace31491d3419ca94473bf",
+      "unit": "hermes-remaining-20260911-b4-initrd-95041fe4.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b4-cmdline": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-cmdline",
+      "case": "b4-cmdline",
+      "dependencies": [
+        "b4-initrd"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "3b03c5dec392edbfdd01a1abb39a52a5b67620da111f6652d930b06e4977fbe5",
+      "root": "/var/lib/hermes-remaining-20260911-b4-cmdline-bbe555bc",
+      "run_id": "bbe555bce9c7a1a4b4760f092a9eec65766b451be73ecc2ef5206b92694feb2c",
+      "unit": "hermes-remaining-20260911-b4-cmdline-bbe555bc.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b4-pcr11": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-pcr11",
+      "case": "b4-pcr11",
+      "dependencies": [
+        "b4-cmdline"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "0b110189b3185572687f9ff6b4c57ae449d00acacc195415a8b6537377d9d499",
+      "root": "/var/lib/hermes-remaining-20260911-b4-pcr11-f51f454f",
+      "run_id": "f51f454fafe2a48a9dbd8cb13b690a126cf9defe57e3076e00ae0792fbc0997e",
+      "unit": "hermes-remaining-20260911-b4-pcr11-f51f454f.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b4-external": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-external",
+      "case": "b4-external",
+      "dependencies": [
+        "b4-pcr11"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "9471712b95c2e72b16bf08acf8173c22c58788d6f96a3b5f2be77473b300c338",
+      "root": "/var/lib/hermes-remaining-20260911-b4-external-4d0e0b29",
+      "run_id": "4d0e0b293e4420af0fd50f84b933b46fc2a5ad5ee8bec54f6e8036dda6a6f4b9",
+      "unit": "hermes-remaining-20260911-b4-external-4d0e0b29.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b4-credential": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-credential",
+      "case": "b4-credential",
+      "dependencies": [
+        "b4-external"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "892c4e4ccb2a60e5e069782d6a614c885e3f4bdc3a287151e6881bf565708151",
+      "root": "/var/lib/hermes-remaining-20260911-b4-credential-29fd3deb",
+      "run_id": "29fd3deb2a60560dafdcca8fc3db38e3a32d8aef48e394796a4c5b402e798744",
+      "unit": "hermes-remaining-20260911-b4-credential-29fd3deb.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b7-before-copy": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-before-copy",
+      "case": "b7-before-copy",
+      "dependencies": [
+        "b4-credential"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "44c1f27cbc0e571192d8d3ff242da169f63940748de33676a6d2041c444e09a9",
+      "root": "/var/lib/hermes-remaining-20260911-b7-before-copy-227f5c8e",
+      "run_id": "227f5c8eba553f1182e4c9d1e857ecbbfd9f285a7d3c5747afdfb2bdeb588d0e",
+      "unit": "hermes-remaining-20260911-b7-before-copy-227f5c8e.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b7-during-copy": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-during-copy",
+      "case": "b7-during-copy",
+      "dependencies": [
+        "b7-before-copy"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "8310edf2bbf135c8921e8d82c84ad89cbe5720cedaf071fc0efe2a97c6f20464",
+      "root": "/var/lib/hermes-remaining-20260911-b7-during-copy-cce74a51",
+      "run_id": "cce74a5177c5aca92ea25e9b9a07154255aab4ca7e9e1f8e1acd7007f5f2f835",
+      "unit": "hermes-remaining-20260911-b7-during-copy-cce74a51.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b7-before-publish": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-before-publish",
+      "case": "b7-before-publish",
+      "dependencies": [
+        "b7-during-copy"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "1fc58cb44272c98f8690c3d00be0906ec5e60ddceeced77890caf6e250664401",
+      "root": "/var/lib/hermes-remaining-20260911-b7-before-publish-0de1f3c5",
+      "run_id": "0de1f3c5c08d95a5e96753cf1382d45e7e58399deeb98208510d1d9d16ccf044",
+      "unit": "hermes-remaining-20260911-b7-before-publish-0de1f3c5.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b7-during-replay": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-during-replay",
+      "case": "b7-during-replay",
+      "dependencies": [
+        "b7-before-publish"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "09980a27bcf3263d4981c5a04012b1d81371efee39c6c630f32480b114349073",
+      "root": "/var/lib/hermes-remaining-20260911-b7-during-replay-17d29ef9",
+      "run_id": "17d29ef9a7954853474a519b273ed5a9fe1719b9cea11145a9bbfb7626d3d9d0",
+      "unit": "hermes-remaining-20260911-b7-during-replay-17d29ef9.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b7-before-select": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-before-select",
+      "case": "b7-before-select",
+      "dependencies": [
+        "b7-during-replay"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "658715c2ceedb990a3e527e090dfcf7c89ceafab428f7c6c791f7e4e79edc90e",
+      "root": "/var/lib/hermes-remaining-20260911-b7-before-select-aab3fb40",
+      "run_id": "aab3fb40dbf6418412ccf9ce3b825e5e8715e98d5c32423bb3d364fd0366834a",
+      "unit": "hermes-remaining-20260911-b7-before-select-aab3fb40.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b7-after-select": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-after-select",
+      "case": "b7-after-select",
+      "dependencies": [
+        "b7-before-select"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "d539aed60e74c20efa835e5838fe20a4233cb7582d5af357c7a3e463fa9e2f2b",
+      "root": "/var/lib/hermes-remaining-20260911-b7-after-select-df51c5b5",
+      "run_id": "df51c5b533d2d9fb5acaeff19714e33028888db7d6dbaaa7a0584335226a06ed",
+      "unit": "hermes-remaining-20260911-b7-after-select-df51c5b5.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    },
+    "b7-notifications": {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-notifications",
+      "case": "b7-notifications",
+      "dependencies": [
+        "b7-after-select"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "4aaf59836f8bd8a34a06203c45cdcf571ce265fdcb3c853959599dbeba86775b",
+      "root": "/var/lib/hermes-remaining-20260911-b7-notifications-a722feb2",
+      "run_id": "a722feb2e04116debffd4d83b1c0e59198f719f20c4479e615dde93cf8f04b16",
+      "unit": "hermes-remaining-20260911-b7-notifications-a722feb2.service",
+      "authorization": "APPROVED_BY_CONTINUATION",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dispatches": 0,
+      "blocked_by": "b4-linux prerequisite certification FAIL; allowance consumed"
+    }
+  },
+  "production": {
+    "P2": {
+      "authorization": "APPROVED_WITHIN_EXISTING_ORDERED_SCOPE",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dependency": "full AR04 and operation-specific readiness",
+      "blocked_by": "full AR04 lab matrix incomplete"
+    },
+    "P3": {
+      "authorization": "APPROVED_WITHIN_EXISTING_ORDERED_SCOPE",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dependency": "P2 PASS",
+      "blocked_by": "full AR04 lab matrix incomplete"
+    },
+    "P4": {
+      "authorization": "APPROVED_WITHIN_EXISTING_ORDERED_SCOPE",
+      "progress": "BLOCKED",
+      "validation": "TODO",
+      "dependency": "P3 PASS",
+      "blocked_by": "full AR04 lab matrix incomplete"
+    }
+  },
+  "retained_preflight_failures": [
+    {
+      "operation": "parallel devbox ledger read",
+      "result": "FAIL",
+      "reason": "shared .devbox/gen/scripts/.cmd.sh race",
+      "resolution": "sequential read PASS; use sequential Devbox commands"
+    }
+  ],
+  "next_action": "Monitor r6 prerequisite certification, execute one B4-linux rejection/control probe only after operator-ready, then mandatory cleanup and independent L2.",
+  "complete": false,
+  "operator_preparation": {
+    "artifact_helper": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-operators/artifact_probe.py",
+    "sha256": "ae0e67cd67dc65af3cc275b36c6dad38c2f5c7e7509161f698f62d1d1213081a",
+    "syntax": "PASS",
+    "scope": "Transcription of approved B4 .linux/.initrd/.cmdline procedure, executed only after operator-ready; no additional dispatch or trust changes",
+    "tool_environment": "Exact existing lifecycle PATH and LIBGUESTFS_BACKEND; verified signing tools resolve",
+    "prepared_at": "2026-09-11T21:31:10.639726+00:00"
+  },
+  "local_remediation": {
+    "progress": "COMPLETE",
+    "red_regression": {
+      "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_certify.py",
+      "tests": 15,
+      "failed_subcases": 4,
+      "result": "FAIL"
+    },
+    "focused_green": {
+      "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_certify.py",
+      "tests": 16,
+      "result": "PASS"
+    },
+    "validation": [
+      {
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_hermes_remaining_lab.py"
+        ],
+        "started_at": "2026-09-11T22:07:50.327032+00:00",
+        "completed_at": "2026-09-11T22:07:51.577006+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/remediation-00.log",
+        "sha256": "d3d15897d04c7e1b310933f28d0eb03dc13ab9c9a75ed28d9dbbf5cada67ed8e"
+      },
+      {
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_hermes_lifecycle.py"
+        ],
+        "started_at": "2026-09-11T22:07:51.577143+00:00",
+        "completed_at": "2026-09-11T22:07:55.325501+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/remediation-01.log",
+        "sha256": "71bc0f9fc319f056c1ac07012c2a928caebbf6a9a915d642cfa71ccacce47114"
+      },
+      {
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_hermes_schedule.py"
+        ],
+        "started_at": "2026-09-11T22:07:55.325662+00:00",
+        "completed_at": "2026-09-11T22:07:55.923862+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/remediation-02.log",
+        "sha256": "bf29199753c39d854ba6ebe6399ad93f7b64d98db72c289c74ce2bbbcaa7d5df"
+      },
+      {
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_hermes_offline.py"
+        ],
+        "started_at": "2026-09-11T22:07:55.924040+00:00",
+        "completed_at": "2026-09-11T22:07:56.294727+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/remediation-03.log",
+        "sha256": "ca18cc8e8cf94f56e58232f50620b1e8cacd8cccd6a6b7690d4968cc5d62d3ac"
+      },
+      {
+        "command": [
+          "shellspec",
+          "spec/hermes/",
+          "spec/vm/"
+        ],
+        "started_at": "2026-09-11T22:07:56.294871+00:00",
+        "completed_at": "2026-09-11T22:08:23.004557+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/remediation-04.log",
+        "sha256": "261e7565b31a3ef07f8f29a96afa205b31466c293f8adeb499dd72aa0c80b356"
+      }
+    ],
+    "python_tests_total": 142,
+    "shellspec_examples": 138,
+    "changed_runtime_source": "scripts/hermes/unattended/certify.py",
+    "source_sha256": "6df3cde29301ca89900572efb8720c60e471fd68338b7604fa400a3bd14a7821",
+    "replacement_package": {
+      "result": "PASS",
+      "recorded_at": "2026-09-11T22:17:13.343675+00:00",
+      "package": {
+        "result": "PASS",
+        "files": 103,
+        "cases": 1,
+        "manifest_sha256": "d43397263837c24e8a3ea1085af55d5cd79a6d8dbce997ac3a027c09856bbd5c",
+        "verification_only": true
+      },
+      "source_files": 79,
+      "repository_bytes_match": 77,
+      "changed_runtime_files": [
+        "scripts/hermes/unattended/certify.py"
+      ],
+      "approval_refusals": [
+        "install-controls.py",
+        "dispatch.py",
+        "restore-controls.py",
+        "verify-restoration.py"
+      ],
+      "enrolled": false,
+      "dispatched": false,
+      "policy_binding": "ae4771737c2ee1d13a33746078f44427fefc3415cc2103b324dd499b16b28c46",
+      "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+      "root": "/var/lib/hermes-remaining-20260911-b4-linux-r5-6fc9af81",
+      "source_archive_sha256": "28d10ed215410166143f81053267b9686c4e053b57334a71bf9ba70108a36d44"
+    },
+    "live_acceptance": "NOT_RUN",
+    "validation_result": "PASS",
+    "documentation_checks": [
+      {
+        "name": "guide",
+        "command": [
+          "./tests/test-hermes-guide.sh"
+        ],
+        "exit_code": 0,
+        "started_at": "2026-09-11T22:20:46.307580+00:00",
+        "completed_at": "2026-09-11T22:20:47.811287+00:00",
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/guide.log",
+        "sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691"
+      },
+      {
+        "name": "whitespace",
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exit_code": 0,
+        "started_at": "2026-09-11T22:20:47.811429+00:00",
+        "completed_at": "2026-09-11T22:20:47.826969+00:00",
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/whitespace.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "r4-preserved",
+        "command": [
+          "python3",
+          "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/verify-package.py"
+        ],
+        "exit_code": 0,
+        "started_at": "2026-09-11T22:20:47.827054+00:00",
+        "completed_at": "2026-09-11T22:20:47.974147+00:00",
+        "log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/r4-preserved.log",
+        "sha256": "fa84a96458cf9b80d9132bbd1f842b03e503b93daa749f4ec223e4b79755695b"
+      }
+    ],
+    "markdown_first_failure": {
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "cwd": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/isolated-markdown",
+      "exit_code": 1,
+      "files": [
+        "docs/plans/2026-09-07-hermes-unattended.md",
+        "docs/HERMES_REMAINING_LAB_TESTS.md",
+        "docs/HERMES_INSTALLATION_VERIFICATION.md",
+        "docs/HERMES_TPM_DEPENDENCY_REVIEW.md",
+        "docs/VM_TESTING_GUIDE.md",
+        "vm/DEPLOYMENT_TASKS.md"
+      ],
+      "unchanged": true,
+      "timestamp": "2026-09-11T22:21:12.356272+00:00"
+    },
+    "markdown_corrected": {
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "cwd": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-continuation-validation/isolated-markdown",
+      "exit_code": 0,
+      "files": [
+        "docs/plans/2026-09-07-hermes-unattended.md",
+        "docs/HERMES_REMAINING_LAB_TESTS.md",
+        "docs/HERMES_INSTALLATION_VERIFICATION.md",
+        "docs/HERMES_TPM_DEPENDENCY_REVIEW.md",
+        "docs/VM_TESTING_GUIDE.md",
+        "vm/DEPLOYMENT_TASKS.md"
+      ],
+      "unchanged": true,
+      "timestamp": "2026-09-11T22:21:53.915772+00:00"
+    },
+    "local_links": {
+      "result": "PASS",
+      "local_link_paths": 203,
+      "files": [
+        "docs/plans/2026-09-07-hermes-unattended.md",
+        "docs/HERMES_REMAINING_LAB_TESTS.md",
+        "docs/HERMES_INSTALLATION_VERIFICATION.md",
+        "docs/HERMES_TPM_DEPENDENCY_REVIEW.md",
+        "docs/VM_TESTING_GUIDE.md",
+        "vm/DEPLOYMENT_TASKS.md"
+      ],
+      "timestamp": "2026-09-11T22:21:53.943695+00:00",
+      "method": "Resolve local Markdown link paths outside fenced examples; internal anchors additionally checked by Markdown lint"
+    },
+    "diff_review": "PASS: reviewed certifier/test changes; historical B3/diagnostic edits preserved; only certify.py differs from r4 runtime snapshot",
+    "completed_at": "2026-09-11T22:23:14.015814+00:00"
+  },
+  "final_record_readback": {
+    "result": "PASS",
+    "timestamp": "2026-09-11T22:23:16.096865+00:00",
+    "plan_markdown": "PASS",
+    "whitespace": "PASS",
+    "plan_sha256": "cd86549edf4fb76c80e179bd1cc71d6bc3e8fe3f7ddca9b73e081ec4d9e481e1"
+  },
+  "authorization_amendments": [
+    {
+      "recorded_at": "2026-09-11T22:58:04.067366+00:00",
+      "reference": "User: do not request approval until production deployment and keep completing all tasks",
+      "scope": "Necessary local corrections, refreshed packages and fresh bounded replacement lab runs; no further per-run approval prompt; production deployment requires approval",
+      "limits": "One dispatch per fresh run, serial prerequisite gates, mandatory cleanup within four hours; never reuse consumed grants"
+    }
+  ],
+  "r5_b4_linux": {
+    "progress": "CLOSED",
+    "validation": "FAIL: initial provider revocation; no operator experiment",
+    "authorization": "APPROVED_BY_STANDING_CONTINUATION",
+    "dispatches": 1,
+    "run_id": "6fc9af8163e7b1e96e703b5e8adfcf2f8cb33bb62ca7c5b14b94d05eeedacc9e",
+    "root": "/var/lib/hermes-remaining-20260911-b4-linux-r5-6fc9af81",
+    "L0": "PASS",
+    "dispatch_at": "2026-09-11T22:58:24.336002+00:00",
+    "invocation": "46d180908e0b4344ac97833c658d50bd",
+    "block_started_at": "2026-09-11T22:58:04.396662+00:00",
+    "mandatory_cleanup_deadline": "2026-09-12T02:58:04.396662+00:00",
+    "evidence": "2026-09-11-hermes-b4-linux-r5-live.json",
+    "cleanup": "PASS",
+    "independent_restoration": {
+      "status": "PASS",
+      "timestamp": "2026-09-12T00:04:12.474318+00:00",
+      "provider_state": "revoked",
+      "encrypted_test_credential_absent": true,
+      "fixed_vm_private_material_controls_grants_absent": true,
+      "original_broker_restored": true,
+      "source_history_preserved": true
+    },
+    "within_four_hours": true,
+    "elapsed_seconds": 3968.077656
+  },
+  "revocation_correction": {
+    "progress": "COMPLETE",
+    "certifier_tests": 22,
+    "unattended_trust_tests": 131,
+    "red_regression": "20 tests, seven failing subcases before helper implementation",
+    "runtime_source": "scripts/hermes/unattended/certify.py",
+    "maximum_requests": 3,
+    "backoff_seconds": [
+      1,
+      5
+    ],
+    "actual_key_rejection_still_required": true,
+    "no_live_acceptance": true,
+    "validation": "PASS",
+    "python_tests": 279,
+    "shellspec_examples": 138,
+    "guide_checks": 217,
+    "markdown_files": 6,
+    "local_links": 202,
+    "live_acceptance": false,
+    "integration_regression": {
+      "old_r5_source": "FAIL: provider-revocation-failed",
+      "current_source": "PASS",
+      "no_new_credential_issued": true,
+      "completed_at": "2026-09-12T00:22:41.205425+00:00"
+    }
+  },
+  "r6_b4_linux": {
+    "progress": "IN_PROGRESS",
+    "validation": "L0 PASS; L1 dispatched once",
+    "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+    "root": "/var/lib/hermes-remaining-20260912-b4-linux-r6-f8cd5897",
+    "package_manifest_sha256": "ca338646561689dfe564f0a9744f565ca5fb5639b2f1d7ccfa3b5ea5af4bceab",
+    "source_archive_sha256": "4fde15f7b35b49dd83347b2e30c8482dc6ad4a950346e7e2dde522b18d34b311",
+    "dispatches": 1,
+    "authorization": "September 11 standing continuation instruction",
+    "L0_at": "2026-09-12T00:11:54.188776+00:00",
+    "block_started_at": "2026-09-12T00:11:43.321520+00:00",
+    "mandatory_cleanup_deadline": "2026-09-12T04:11:43.321520+00:00",
+    "dispatch_at": "2026-09-12T00:12:21.716131+00:00",
+    "invocation": "21fe426f079c4c3bacd3254498f58ba5",
+    "grant_expires_at": 1789182141
+  },
+  "b4_linux_r6": {
+    "schema": "hermes-b4-linux-live-v1",
+    "complete": true,
+    "case": "b4-linux",
+    "revision": 6,
+    "authorization_reference": "2026-09-11 user: do not request approval until production deployment and keep completing all tasks",
+    "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+    "root": "/var/lib/hermes-remaining-20260912-b4-linux-r6-f8cd5897",
+    "unit": "hermes-remaining-20260912-b4-linux-r6-f8cd5897.service",
+    "package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-b4-linux-review-r6",
+    "manifest_sha256": "ca338646561689dfe564f0a9744f565ca5fb5639b2f1d7ccfa3b5ea5af4bceab",
+    "source_archive_sha256": "4fde15f7b35b49dd83347b2e30c8482dc6ad4a950346e7e2dde522b18d34b311",
+    "policy_binding": "851c8ad90465684047665c934d8c6bbaf2fc7465223a4f98beb7ecb6dc5897fb",
+    "started_at": "2026-09-12T00:11:43.321520+00:00",
+    "mandatory_cleanup_deadline": "2026-09-12T04:11:43.321520+00:00",
+    "dispatches": 1,
+    "dispatch_at": "2026-09-12T00:12:21.716131+00:00",
+    "invocation": "21fe426f079c4c3bacd3254498f58ba5",
+    "grant_expires_at": 1789182141,
+    "operator": "/var/lib/hermes-remaining-20260912-b4-linux-r6-f8cd5897/run-artifact-operator.py",
+    "operator_sha256": "473f21db5427a78c13f3a2e3c4aa0715dce027a94da6b89ac1b906f65c496a85",
+    "monitor_store_key": "r6monitor",
+    "progress": "COMPLETE",
+    "validation": "FAIL",
+    "prerequisite_certification": "PASS",
+    "operator_failure": "EFI partition filled during trial copy; no negative boot",
+    "cleanup": "PASS",
+    "independent_restoration": {
+      "timestamp": "2026-09-12T01:26:22.143530+00:00",
+      "status": "PASS",
+      "broker_hash": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_bytes_metadata_xattrs_restored": true,
+      "provider_lease_prefix": "f8cd58976a1696b697734012f02cda0c",
+      "provider_state": "revoked",
+      "provider_credential_file_absent": true,
+      "fixed_vm_and_private_resources_absent": true,
+      "temporary_controls_and_grants_absent": true,
+      "historical_and_current_source_snapshots_preserved": true,
+      "socket": [
+        "ActiveState=inactive",
+        "SocketUser=hermes-lab-certifier",
+        "SocketGroup=hermes-lab-certifier",
+        "SocketMode=0600"
+      ],
+      "production_role_disabled": true
+    },
+    "elapsed_seconds": 4478.822,
+    "L0": {
+      "timestamp": "2026-09-12T00:11:54.188776+00:00",
+      "operation": "AR04-L0",
+      "result": "PASS",
+      "root": "/var/lib/hermes-remaining-20260912-b4-linux-r6-f8cd5897",
+      "source_archive_sha256": "4fde15f7b35b49dd83347b2e30c8482dc6ad4a950346e7e2dde522b18d34b311",
+      "source_files": 79,
+      "actual_certifier_tool_readiness": {
+        "ok": true,
+        "resolved": {
+          "restic": "/var/lib/hermes-remaining-20260912-b4-linux-r6-f8cd5897/repository/scripts/hermes/unattended/bin/restic",
+          "ssh": "/usr/bin/ssh",
+          "sudo": "/usr/bin/sudo",
+          "trivy": "/var/lib/hermes-remaining-20260912-b4-linux-r6-f8cd5897/repository/scripts/hermes/unattended/bin/trivy"
+        },
+        "stage": "certifier-tools-ready",
+        "tools": [
+          "ssh",
+          "sudo",
+          "restic",
+          "trivy"
+        ],
+        "uid": 984,
+        "versions": {
+          "restic": "restic 0.19.1 compiled with go1.26.7 on linux/amd64",
+          "trivy": "Version: 0.74.0"
+        }
+      },
+      "r1_r2_preserved": true,
+      "broker_before_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_during_sha256": "3c3e16074e883f9cfb7fe77684efd404e43bfa561855f08636f7366ac96e6c71",
+      "test_uid": 984,
+      "production_disabled": true,
+      "grant_issued": false,
+      "services_started": false,
+      "temporary_control_hashes": {
+        "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+        "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+        "90-hermes-remaining-20260912-b4-linux-r6-f8cd5897.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+        "hermes-remaining-20260912-b4-linux-r6-f8cd5897-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+        "hermes-remaining-20260912-b4-linux-r6-f8cd5897.service": "fffb6b6a72f9ba15e6208a8e44d281ab662df3e71d3e6de4d6c79ede6f30cdb9",
+        "hermes-remaining-20260912-b4-linux-r6-f8cd5897-failed.service": "a2d475aacbb8c0c7e9cb4b5f89c2c25d6f6ab01c568fd28c717999fcdb40ab72"
+      }
+    },
+    "L1_dispatch": {
+      "timestamp": "2026-09-12T00:12:21.716131+00:00",
+      "operation": "AR04-L1",
+      "status": "DISPATCHED_ONCE",
+      "grant": {
+        "schema": "hermes-lifecycle-lab-window-v1",
+        "binding": "851c8ad90465684047665c934d8c6bbaf2fc7465223a4f98beb7ecb6dc5897fb",
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+        "issued_at": 1789171941,
+        "expires_at": 1789182141
+      },
+      "unit": [
+        "ActiveState=activating",
+        "SubState=start",
+        "InvocationID=21fe426f079c4c3bacd3254498f58ba5"
+      ],
+      "release_signed": false
+    },
+    "L2": {
+      "timestamp": "2026-09-12T01:26:15.089737+00:00",
+      "operation": "AR04-L2",
+      "result": "PASS",
+      "lifecycle_stage": "failed-cleaned",
+      "provider_credential": "revoked",
+      "fixed_domain_disk_nvram_swtpm_absent": true,
+      "private_material_absent": true,
+      "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_metadata_xattrs_restored": true,
+      "test_uid_restored": 987,
+      "production_role_disabled": true,
+      "socket_runtime_credential_absent": true,
+      "temporary_units_override_power_grant_helpers_removed": true,
+      "consumed_grant_archived_and_active_grant_removed": true,
+      "old_policy_journal_timers_preserved": true,
+      "unit_results_before_removal": {
+        "hermes-remaining-20260912-b4-linux-r6-f8cd5897.service": [
+          "ActiveState=failed",
+          "SubState=failed",
+          "InvocationID=21fe426f079c4c3bacd3254498f58ba5",
+          "Result=exit-code",
+          "ExecMainStatus=69"
+        ],
+        "hermes-remaining-20260912-b4-linux-r6-f8cd5897-failed.service": [
+          "ActiveState=inactive",
+          "SubState=dead",
+          "InvocationID=c91e12940f9c4202b293234bf3b93116",
+          "Result=success",
+          "ExecMainStatus=0"
+        ],
+        "hermes-lab-credentials.service": [
+          "ActiveState=active",
+          "SubState=running",
+          "InvocationID=191ae67d22e942ca95b38ce2a02d62b0",
+          "Result=success",
+          "ExecMainStatus=0"
+        ],
+        "hermes-lab-credentials.socket": [
+          "ActiveState=active",
+          "SubState=running",
+          "InvocationID=361d4220010040a79d97a3e3f2364103",
+          "Result=success"
+        ]
+      },
+      "release_signed": false
+    },
+    "lifecycle": {
+      "stage": "failed-cleaned",
+      "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+      "candidate_sha256": "83419f27f8cc67210db2f596d3eda0f288fd942fcb1414863d44a966c332fecb",
+      "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+      "release_id": "lifecycle-f8cd58976a1696b697734012",
+      "certified": false,
+      "supplemental_result": "FAIL",
+      "failure": "lifecycle-execution-failed"
+    },
+    "acceptance": {
+      "boot": {
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "cold": {
+          "boot_id": "d64d573a-b01b-4990-aa5b-cc8cd5d1c04b",
+          "bounded_credential_leak_check": true,
+          "completed_at": 1789175225,
+          "credential_matches": true,
+          "encrypted_credential_sha256": "4b692e877c93ad174aa70228ed037112578a7f2afd97123516f52cfb898b4f1a",
+          "kernel": "7.2.4-200.fc44.x86_64",
+          "luks_metadata_sha256": "1ee5fd8c236819d50781e06554740860ff79ef445ec8db4db9ac085b3d372fb1",
+          "no_ports": true,
+          "ok": true,
+          "overlay_read_only": true,
+          "package_inventory": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+          "pcr_public_key_sha256": "3a4a6cf8ecbdc49765808e7ccd423ff386dabd626717100a244d64ba48c1321a",
+          "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+          "root_read_only": true,
+          "runtime_healthy": true,
+          "secure_boot": true,
+          "security_config": true,
+          "selinux": "Enforcing",
+          "stage": "observed",
+          "tpm_profile": {
+            "profile": "standard-tpm2",
+            "srk_public_files_match": true,
+            "srk_services": {
+              "systemd-tpm2-setup-early.service": "passed",
+              "systemd-tpm2-setup.service": "passed"
+            }
+          },
+          "tpm_services": true,
+          "uki_sha256": "5277e62b7777486fd6eb49db602ba477b21c7c51ddbb9d5920b30830b7eb2c67",
+          "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+        },
+        "completed_at": 1789175225,
+        "gate": "boot",
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+        "warm": {
+          "boot_id": "90183fa3-b52d-46ea-87fa-08fec86fb23e",
+          "bounded_credential_leak_check": true,
+          "completed_at": 1789175117,
+          "credential_matches": true,
+          "encrypted_credential_sha256": "4b692e877c93ad174aa70228ed037112578a7f2afd97123516f52cfb898b4f1a",
+          "kernel": "7.2.4-200.fc44.x86_64",
+          "luks_metadata_sha256": "1ee5fd8c236819d50781e06554740860ff79ef445ec8db4db9ac085b3d372fb1",
+          "no_ports": true,
+          "ok": true,
+          "overlay_read_only": true,
+          "package_inventory": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+          "pcr_public_key_sha256": "3a4a6cf8ecbdc49765808e7ccd423ff386dabd626717100a244d64ba48c1321a",
+          "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+          "root_read_only": true,
+          "runtime_healthy": true,
+          "secure_boot": true,
+          "security_config": true,
+          "selinux": "Enforcing",
+          "stage": "observed",
+          "tpm_profile": {
+            "profile": "standard-tpm2",
+            "srk_public_files_match": true,
+            "srk_services": {
+              "systemd-tpm2-setup-early.service": "passed",
+              "systemd-tpm2-setup.service": "passed"
+            }
+          },
+          "tpm_services": true,
+          "uki_sha256": "5277e62b7777486fd6eb49db602ba477b21c7c51ddbb9d5920b30830b7eb2c67",
+          "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+        }
+      },
+      "credential_revocation": {
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "attempts": [
+          {
+            "attempt": 1,
+            "result": "PASS"
+          }
+        ],
+        "completed_at": 1789175706,
+        "gate": "credential_revocation",
+        "lease": "f8cd58976a1696b697734012f02cda0c",
+        "ok": true,
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "revoked": true,
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3"
+      },
+      "inference": {
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "completed_at": 1789175117,
+        "exact_output": "HERMES_OK",
+        "gate": "inference",
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+        "source": "candidate Host.acceptance before and after persistence reboot"
+      },
+      "package_replay": {
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "completed_at": 1789175117,
+        "gate": "package_replay",
+        "inventory_sha256": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+        "ordered_stages": [
+          "reboot-pending",
+          "persistence-reboot",
+          "closed"
+        ],
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3"
+      },
+      "previous_boot": {
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "completed_at": 1789175479,
+        "gate": "previous_boot",
+        "post_update": true,
+        "previous": {
+          "boot_id": "fd366b56-cea3-490a-9532-573fff1a013e",
+          "bounded_credential_leak_check": true,
+          "completed_at": 1789175356,
+          "credential_matches": true,
+          "encrypted_credential_sha256": "4b692e877c93ad174aa70228ed037112578a7f2afd97123516f52cfb898b4f1a",
+          "inference": "HERMES_OK",
+          "kernel": "6.19.10-300.fc44.x86_64",
+          "luks_metadata_sha256": "1ee5fd8c236819d50781e06554740860ff79ef445ec8db4db9ac085b3d372fb1",
+          "no_ports": true,
+          "ok": true,
+          "overlay_read_only": true,
+          "package_inventory": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+          "pcr_public_key_sha256": "3a4a6cf8ecbdc49765808e7ccd423ff386dabd626717100a244d64ba48c1321a",
+          "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+          "root_read_only": true,
+          "runtime_healthy": true,
+          "secure_boot": true,
+          "security_config": true,
+          "selinux": "Enforcing",
+          "stage": "observed",
+          "tpm_profile": {
+            "profile": "standard-tpm2",
+            "srk_public_files_match": true,
+            "srk_services": {
+              "systemd-tpm2-setup-early.service": "passed",
+              "systemd-tpm2-setup.service": "passed"
+            }
+          },
+          "tpm_services": true,
+          "uki_sha256": "bbf8e5c22c4ec7fef53642cfcd6b36286e543827f22396759b77539f2ebf226d",
+          "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+        },
+        "reenrollment": false,
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "returned": {
+          "boot_id": "4255eec2-012b-4c6a-9e1d-066e6449f37b",
+          "bounded_credential_leak_check": true,
+          "completed_at": 1789175479,
+          "credential_matches": true,
+          "encrypted_credential_sha256": "4b692e877c93ad174aa70228ed037112578a7f2afd97123516f52cfb898b4f1a",
+          "inference": "HERMES_OK",
+          "kernel": "7.2.4-200.fc44.x86_64",
+          "luks_metadata_sha256": "1ee5fd8c236819d50781e06554740860ff79ef445ec8db4db9ac085b3d372fb1",
+          "no_ports": true,
+          "ok": true,
+          "overlay_read_only": true,
+          "package_inventory": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+          "pcr_public_key_sha256": "3a4a6cf8ecbdc49765808e7ccd423ff386dabd626717100a244d64ba48c1321a",
+          "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+          "root_read_only": true,
+          "runtime_healthy": true,
+          "secure_boot": true,
+          "security_config": true,
+          "selinux": "Enforcing",
+          "stage": "observed",
+          "tpm_profile": {
+            "profile": "standard-tpm2",
+            "srk_public_files_match": true,
+            "srk_services": {
+              "systemd-tpm2-setup-early.service": "passed",
+              "systemd-tpm2-setup.service": "passed"
+            }
+          },
+          "tpm_services": true,
+          "uki_sha256": "5277e62b7777486fd6eb49db602ba477b21c7c51ddbb9d5920b30830b7eb2c67",
+          "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+        },
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+        "updated": {
+          "boot_id": "d64d573a-b01b-4990-aa5b-cc8cd5d1c04b",
+          "bounded_credential_leak_check": true,
+          "completed_at": 1789175225,
+          "credential_matches": true,
+          "encrypted_credential_sha256": "4b692e877c93ad174aa70228ed037112578a7f2afd97123516f52cfb898b4f1a",
+          "kernel": "7.2.4-200.fc44.x86_64",
+          "luks_metadata_sha256": "1ee5fd8c236819d50781e06554740860ff79ef445ec8db4db9ac085b3d372fb1",
+          "no_ports": true,
+          "ok": true,
+          "overlay_read_only": true,
+          "package_inventory": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+          "pcr_public_key_sha256": "3a4a6cf8ecbdc49765808e7ccd423ff386dabd626717100a244d64ba48c1321a",
+          "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+          "root_read_only": true,
+          "runtime_healthy": true,
+          "secure_boot": true,
+          "security_config": true,
+          "selinux": "Enforcing",
+          "stage": "observed",
+          "tpm_profile": {
+            "profile": "standard-tpm2",
+            "srk_public_files_match": true,
+            "srk_services": {
+              "systemd-tpm2-setup-early.service": "passed",
+              "systemd-tpm2-setup.service": "passed"
+            }
+          },
+          "tpm_services": true,
+          "uki_sha256": "5277e62b7777486fd6eb49db602ba477b21c7c51ddbb9d5920b30830b7eb2c67",
+          "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+        }
+      },
+      "restore": {
+        "application_loaded_state": true,
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "completed_at": 1789175575,
+        "encrypted_roundtrip": true,
+        "gate": "restore",
+        "ok": true,
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+        "snapshot": "f5b07055a4cb67e8496961edccd1d63ebf1009ce2a9420938d9f887b22285523",
+        "stage": "restore-check"
+      },
+      "runtime": {
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "boot_id": "d64d573a-b01b-4990-aa5b-cc8cd5d1c04b",
+        "bounded_credential_leak_check": true,
+        "completed_at": 1789175225,
+        "credential_matches": true,
+        "encrypted_credential_sha256": "4b692e877c93ad174aa70228ed037112578a7f2afd97123516f52cfb898b4f1a",
+        "gate": "runtime",
+        "kernel": "7.2.4-200.fc44.x86_64",
+        "luks_metadata_sha256": "1ee5fd8c236819d50781e06554740860ff79ef445ec8db4db9ac085b3d372fb1",
+        "no_ports": true,
+        "ok": true,
+        "overlay_read_only": true,
+        "package_inventory": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+        "pcr_public_key_sha256": "3a4a6cf8ecbdc49765808e7ccd423ff386dabd626717100a244d64ba48c1321a",
+        "previous_modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "root_read_only": true,
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3",
+        "runtime_healthy": true,
+        "secure_boot": true,
+        "security_config": true,
+        "selinux": "Enforcing",
+        "stage": "observed",
+        "tpm_profile": {
+          "profile": "standard-tpm2",
+          "srk_public_files_match": true,
+          "srk_services": {
+            "systemd-tpm2-setup-early.service": "passed",
+            "systemd-tpm2-setup.service": "passed"
+          }
+        },
+        "tpm_services": true,
+        "uki_sha256": "5277e62b7777486fd6eb49db602ba477b21c7c51ddbb9d5920b30830b7eb2c67",
+        "updated_modules_sha256": "24946489fab765cf0f77a00d3e314f78d470d68b994bb4f888b22d97916c5677"
+      },
+      "vulnerability_scan": {
+        "advisory": true,
+        "artifact_fingerprint": "117ec5500e8a92a203a2afe71a77182f1ccc34d84278c21f4966d0db62862314",
+        "completed_at": 1789175625,
+        "findings": {
+          "CRITICAL": 20,
+          "HIGH": 467,
+          "LOW": 983,
+          "MEDIUM": 1537,
+          "UNKNOWN": 42
+        },
+        "gate": "vulnerability_scan",
+        "policy": "advisory-denylist-v1",
+        "policy_sha256": "a5c084a0b4879376ba307c85ea8c76a05857c217b09417cce19a72f472d2340d",
+        "release_id": "lifecycle-f8cd58976a1696b697734012",
+        "result": "PASS",
+        "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3"
+      }
+    },
+    "acceptance_sha256": "49596c45044efc75c9ee90a5aecfbd3582f1aac133af4433a99cde63d576b093",
+    "operator_result": {
+      "candidate_sha256": "83419f27f8cc67210db2f596d3eda0f288fd942fcb1414863d44a966c332fecb",
+      "case": "b4-linux",
+      "evidence_sha256": "b84ae895c17df6482557b870a0657e6da1b2bff0e1725fdf6aa947a57c5970ec",
+      "result": "FAIL",
+      "run_id": "f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3"
+    },
+    "case_evidence": {
+      "path": "/var/lib/hermes-remaining-20260912-b4-linux-r6-f8cd5897/state/f8cd58976a1696b697734012f02cda0cd5853b97a1392e065941a84d90ca63b3/case-evidence.json",
+      "sha256": "b84ae895c17df6482557b870a0657e6da1b2bff0e1725fdf6aa947a57c5970ec"
+    },
+    "partial_trial": {
+      "exact_prefix": true,
+      "intended_size": 66915256,
+      "path": "/boot/efi/EFI/Linux/hermes-b4-linux-f8cd58976a16.efi",
+      "sha256": "1e055e5c4b8f13e93a180204dc440608f55804edc834f1b5d229f1caa3e12ca2",
+      "size": 28143616
+    },
+    "recovery_preservation": {
+      "candidate_sha256": true,
+      "esp": true,
+      "files": true,
+      "host_phase": true,
+      "inventory": true,
+      "luks_metadata_sha256": true,
+      "new_boot": true,
+      "persistent_default_unchanged": true,
+      "previous": true,
+      "replay": true,
+      "run_id": true,
+      "selinux": true
+    },
+    "cleanup_sha256": "3bfbf1010d72fa0fde24b054ce2b5a63974e6d6a0d14e6a6cd52f54eea95e229",
+    "watcher": [
+      {
+        "timestamp": "2026-09-12T01:13:47.330253+00:00",
+        "state": "ready",
+        "record_sha256": "e1faa6b0810071f2b041062cc0497ae19f2be41131296f4530a976f73254bfe9",
+        "encrypted_credential_present": true,
+        "certifier_stage": "ua03-acceptance-passed"
+      },
+      {
+        "timestamp": "2026-09-12T01:15:06.917379+00:00",
+        "state": "revoked",
+        "record_sha256": "0f94d249883210800df4e4951048c579e7ebb877b04b0e08424bdecb769f7e1f",
+        "encrypted_credential_present": false,
+        "certifier_stage": "ua03-complete"
+      }
+    ]
+  },
+  "current_action": "Recheck resource capacity and r8 hashes; enroll/dispatch once only when >=9 GiB is available; preserve gate order and four-hour cleanup bound",
+  "b4_linux_r7": {
+    "schema": "hermes-b4-linux-live-v1",
+    "case": "b4-linux",
+    "revision": 7,
+    "run_id": "ef1bc7331132dd4cb43d4475347139b24cae0cd879e2165b2df708c7b101ef0a",
+    "root": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733",
+    "unit": "hermes-remaining-20260912-b4-linux-r7-ef1bc733.service",
+    "package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-b4-linux-review-r7",
+    "manifest_sha256": "6aebf7b654f0f3b19efa73bd5f9700834a92744f9621dac9bb482ae9ea090211",
+    "source_archive_sha256": "9fc151e19e1114ebbe02fade229e3b65b7509e960112eb69fcf62c9f7ea7bfc1",
+    "policy_binding": "7200322b23fd50ae8377c85170f453ee0b01e701015398685217cbb392cddb78",
+    "started_at": "2026-09-12T01:30:11.550540+00:00",
+    "mandatory_cleanup_deadline": "2026-09-12T05:30:11.550540+00:00",
+    "dispatches": 1,
+    "dispatch_at": "2026-09-12T01:30:32.194915+00:00",
+    "invocation": "6db32239207144fca0fd0aeeba57cedb",
+    "grant_expires_at": 1789186832,
+    "complete": true,
+    "validation": "FAIL",
+    "progress": "COMPLETE",
+    "cleanup": "PASS",
+    "independent_restoration": {
+      "timestamp": "2026-09-12T01:32:13.516218+00:00",
+      "status": "PASS",
+      "broker_hash": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_bytes_metadata_xattrs_restored": true,
+      "provider_lease_prefix": "ef1bc7331132dd4cb43d4475347139b2",
+      "provider_state": "not-issued",
+      "provider_credential_file_absent": true,
+      "fixed_vm_and_private_resources_absent": true,
+      "temporary_controls_and_grants_absent": true,
+      "historical_and_current_source_snapshots_preserved": true,
+      "socket": [
+        "ActiveState=inactive",
+        "SocketUser=hermes-lab-certifier",
+        "SocketGroup=hermes-lab-certifier",
+        "SocketMode=0600"
+      ],
+      "production_role_disabled": true
+    },
+    "elapsed_seconds": 121.966,
+    "L0": {
+      "timestamp": "2026-09-12T01:30:15.092473+00:00",
+      "operation": "AR04-L0",
+      "result": "PASS",
+      "root": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733",
+      "source_archive_sha256": "9fc151e19e1114ebbe02fade229e3b65b7509e960112eb69fcf62c9f7ea7bfc1",
+      "source_files": 79,
+      "actual_certifier_tool_readiness": {
+        "ok": true,
+        "resolved": {
+          "restic": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733/repository/scripts/hermes/unattended/bin/restic",
+          "ssh": "/usr/bin/ssh",
+          "sudo": "/usr/bin/sudo",
+          "trivy": "/var/lib/hermes-remaining-20260912-b4-linux-r7-ef1bc733/repository/scripts/hermes/unattended/bin/trivy"
+        },
+        "stage": "certifier-tools-ready",
+        "tools": [
+          "ssh",
+          "sudo",
+          "restic",
+          "trivy"
+        ],
+        "uid": 984,
+        "versions": {
+          "restic": "restic 0.19.1 compiled with go1.26.7 on linux/amd64",
+          "trivy": "Version: 0.74.0"
+        }
+      },
+      "r1_r2_preserved": true,
+      "broker_before_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_during_sha256": "3c3e16074e883f9cfb7fe77684efd404e43bfa561855f08636f7366ac96e6c71",
+      "test_uid": 984,
+      "production_disabled": true,
+      "grant_issued": false,
+      "services_started": false,
+      "temporary_control_hashes": {
+        "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+        "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+        "90-hermes-remaining-20260912-b4-linux-r7-ef1bc733.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+        "hermes-remaining-20260912-b4-linux-r7-ef1bc733-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+        "hermes-remaining-20260912-b4-linux-r7-ef1bc733.service": "505fe3aab3cc0a802f879548802b0ce8f7211a6456c99c9807c2ab21a0339bab",
+        "hermes-remaining-20260912-b4-linux-r7-ef1bc733-failed.service": "f5b34d245d0b5c91c537ad2a330a003b1aae43049280725031303eeec7df2cb4"
+      }
+    },
+    "L1_dispatch": {
+      "timestamp": "2026-09-12T01:30:32.194915+00:00",
+      "operation": "AR04-L1",
+      "status": "DISPATCHED_ONCE",
+      "grant": {
+        "schema": "hermes-lifecycle-lab-window-v1",
+        "binding": "7200322b23fd50ae8377c85170f453ee0b01e701015398685217cbb392cddb78",
+        "run_id": "ef1bc7331132dd4cb43d4475347139b24cae0cd879e2165b2df708c7b101ef0a",
+        "issued_at": 1789176632,
+        "expires_at": 1789186832
+      },
+      "unit": [
+        "ActiveState=activating",
+        "SubState=start",
+        "InvocationID=6db32239207144fca0fd0aeeba57cedb"
+      ],
+      "release_signed": false
+    },
+    "L2": {
+      "timestamp": "2026-09-12T01:31:41.564539+00:00",
+      "operation": "AR04-L2",
+      "result": "PASS",
+      "lifecycle_stage": "failed-cleaned",
+      "provider_credential": "not-issued",
+      "fixed_domain_disk_nvram_swtpm_absent": true,
+      "private_material_absent": true,
+      "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_metadata_xattrs_restored": true,
+      "test_uid_restored": 987,
+      "production_role_disabled": true,
+      "socket_runtime_credential_absent": true,
+      "temporary_units_override_power_grant_helpers_removed": true,
+      "consumed_grant_archived_and_active_grant_removed": true,
+      "old_policy_journal_timers_preserved": true,
+      "unit_results_before_removal": {
+        "hermes-remaining-20260912-b4-linux-r7-ef1bc733.service": [
+          "ActiveState=failed",
+          "SubState=failed",
+          "InvocationID=6db32239207144fca0fd0aeeba57cedb",
+          "Result=exit-code",
+          "ExecMainStatus=69"
+        ],
+        "hermes-remaining-20260912-b4-linux-r7-ef1bc733-failed.service": [
+          "ActiveState=inactive",
+          "SubState=dead",
+          "InvocationID=2534821cadbf4e03b18041334433725c",
+          "Result=success",
+          "ExecMainStatus=0"
+        ],
+        "hermes-lab-credentials.service": [
+          "ActiveState=active",
+          "SubState=running",
+          "InvocationID=64d835b917014aa4887f554e5956ef0b",
+          "Result=success",
+          "ExecMainStatus=0"
+        ],
+        "hermes-lab-credentials.socket": [
+          "ActiveState=active",
+          "SubState=running",
+          "InvocationID=18e216b649034822872e1027a5ab6948",
+          "Result=success"
+        ]
+      },
+      "release_signed": false
+    },
+    "lifecycle": {
+      "stage": "failed-cleaned",
+      "run_id": "ef1bc7331132dd4cb43d4475347139b24cae0cd879e2165b2df708c7b101ef0a",
+      "certified": false,
+      "failure": "lifecycle-execution-failed",
+      "failure_context": {
+        "locations": [
+          {
+            "file": "lifecycle.py",
+            "function": "execute",
+            "line": 136
+          },
+          {
+            "file": "lifecycle_fixture.py",
+            "function": "prepare",
+            "line": 368
+          },
+          {
+            "file": "common.py",
+            "function": "run",
+            "line": 117
+          },
+          {
+            "file": "common.py",
+            "function": "require",
+            "line": 24
+          }
+        ],
+        "type": "Failure"
+      },
+      "cleanup_failure": null,
+      "install_started": true,
+      "private_purged": true
+    },
+    "cleanup_sha256": "ded2cd9ab8e2f9a621d1cc47dba0963782f21461abe14448b1591f14167b3bb3"
+  },
+  "throughput_preparation": {
+    "evidence": "2026-09-12-hermes-throughput-preparation.json",
+    "static_cases_passed": 13,
+    "live_work": "BLOCKED_ON_RAM",
+    "next_package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-b4-linux-review-r8",
+    "grant_issued": false
+  },
+  "b4_linux_r8": {
+    "progress": "COMPLETE",
+    "validation": "PASS",
+    "authorization": "standing user authorization; fresh grant consumed by one dispatch",
+    "block_started_at": "2026-09-12T02:07:28.959567+00:00",
+    "mandatory_cleanup_deadline": "2026-09-12T06:07:28.959567+00:00",
+    "L0": {
+      "result": "PASS",
+      "timestamp": "2026-09-12T02:07:33.809454+00:00"
+    },
+    "dispatches": 1,
+    "dispatch_timestamp": "2026-09-12T02:11:51.026203+00:00",
+    "invocation_id": "6bff0b83b2a340709093917544e6292f",
+    "run_id": "6d576e193ff4c6239bb40f6dd5d71f5c6b53773ce4af74e79e94a510b265f421",
+    "root": "/var/lib/hermes-remaining-20260912-b4-linux-r8-6d576e19",
+    "package_manifest_sha256": "06c830f554eedb415d5240e8840a01cfc428790e341b9905c185f6fc0df1f039",
+    "source_archive_sha256": "0a82bef486cd0d0ceed018fef8fe5902623587c32b871166d7116031da7407d7",
+    "next_action": "Observe prerequisites without interrupting active VM; execute artifact phases once after all eight gates and operator-ready, then cleanup and independent L2",
+    "observed_at": "2026-09-12T03:15:38.440454+00:00",
+    "installation": "COMPLETE",
+    "recovery_readback": "PASS",
+    "baseline_initrd_review": "PASS",
+    "live_acceptance": "PENDING",
+    "stage": "certifying",
+    "candidate_sha256": "a88a306ba515570c1f3c2e63543bac036721826f29d9c8a6120fc4e5dc474166",
+    "artifact_fingerprint": "c418b714903ffca71376fa443f24a3ee41acd7504c90134f501add570c3e294c",
+    "updated_initrd_review": "PASS",
+    "prerequisite_certification": "PASS",
+    "acceptance_sha256": "518fdcccb2b455c7ea69c2c3d7a95cb8405a51c4e056c90386b4d9746be2515f",
+    "operator_ready": true,
+    "operator_prepare": "PASS",
+    "revocation_attempts": [
+      {
+        "attempt": 1,
+        "result": "FAIL",
+        "reason": "broker-rejected"
+      },
+      {
+        "attempt": 2,
+        "result": "PASS"
+      }
+    ],
+    "supplemental_result": "PASS",
+    "case_evidence_sha256": "638ea957b538ac8dc5279c4b57659588d5f52cbe8fc0cd7beb980e333a86c578",
+    "cleanup": "PASS",
+    "independent_restoration": "PASS",
+    "closed_at": "2026-09-12T04:43:49.225578+00:00",
+    "live_evidence": "2026-09-12-hermes-b4-linux-r8-live.json"
+  },
+  "next_case": "b4-initrd",
+  "b4_initrd_r9": {
+    "case": "b4-initrd",
+    "progress": "IN_PROGRESS",
+    "validation": "PENDING",
+    "run_id": "27e260fb33323387beb24f251cd67c6af37dff3438853d8c72a5c38979da6f51",
+    "root": "/var/lib/hermes-remaining-20260912-b4-initrd-r9-27e260fb",
+    "package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260912-b4-initrd-review-r9",
+    "manifest_sha256": "c2834610d397185ffb23a783034f50fd31bfcc649e0e891ba5c8336075c7ce32",
+    "source_archive_sha256": "0a82bef486cd0d0ceed018fef8fe5902623587c32b871166d7116031da7407d7",
+    "block_started_at": "2026-09-12T04:46:01.309637+00:00",
+    "mandatory_cleanup_deadline": "2026-09-12T08:46:01.309637+00:00",
+    "L0": "PASS",
+    "L0_at": "2026-09-12T04:46:05.022381+00:00",
+    "dispatches": 1,
+    "dispatch_at": "2026-09-12T04:46:33.631949+00:00",
+    "invocation_id": "6be67d69fd6f46c894a906a2bf9552bb",
+    "next_action": "Preserve active run; require all eight gates and operator-ready before prepare/negative/recover once; independent L2 before b4-cmdline"
+  }
+}

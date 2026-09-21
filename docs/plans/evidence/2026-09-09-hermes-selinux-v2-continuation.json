@@ -1,0 +1,300 @@
+{
+  "recorded_at": "2026-09-09T23:28:17.555836+00:00",
+  "scope": "Continuation of previously approved one real late-service invocation; first attempt failed before request; preserve original evidence and require exclusive continuation",
+  "environment": {
+    "repository": "/var/home/cloudops/code/repos/mikrotik",
+    "branch": "codex/hermes-unattended",
+    "base_revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9",
+    "worktree": "uncommitted; unrelated changes preserved"
+  },
+  "operator_preflight_diagnostic": "before.json present, audit/process/restart markers absent; original preflight reproduces systemctl failure",
+  "validation": [
+    {
+      "timestamp": "2026-09-09T23:28:17.563885+00:00",
+      "method": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_selinux_*v2.py",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/offline-validation.log"
+    },
+    {
+      "timestamp": "2026-09-09T23:29:25.315027+00:00",
+      "method": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_selinux_*v2.py",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/final-offline-validation.log"
+    }
+  ],
+  "artifact_sha256": {
+    "scripts/hermes/selinux/continue-reviewed-service-v2.py": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1",
+    "scripts/hermes/selinux/run-reviewed-service-v2.py": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+    "tests/test_hermes_selinux_continuation_v2.py": "6403710cbb1fe2077401e3d9d01bdf63658fc8c113ca81caad3fbac6ff01f81a",
+    "tests/test_hermes_selinux_service_v2.py": "e8a59ac6c040f450ca66cec54c3b52f2265f3ed5c034c4b55f0766bafc8dc161"
+  },
+  "private_log_directory": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation",
+  "production_mutations": [
+    "Created only the two named mode-0600 files in existing operator-private v2 directory; original helper and result directory untouched; no service or boot action"
+  ],
+  "SE16": {
+    "progress": "PASS: complete",
+    "validation": "PASS: source/boundary review and fixed core identity"
+  },
+  "SE17": {
+    "progress": "PASS: complete",
+    "validation": "PASS"
+  },
+  "SE18": {
+    "progress": "BLOCKED on interactive operator sudo; private staging complete",
+    "validation": "Staging PASS: independent hashes/private modes and unchanged original; runtime TODO"
+  },
+  "limitations": [
+    "Single-service runtime, repeat/idempotency and cold-boot acceptance remain open",
+    "Full root-private prior-evidence/state/audit guards are rechecked by the operator continuation before any request",
+    "No service request, policy/TPM/LUKS action or reboot performed during preparation/staging"
+  ],
+  "live_method": {
+    "ssh": "BatchMode=yes StrictHostKeyChecking=yes ConnectTimeout=10 aicowork@10.0.30.10; existing identity/pin unchanged",
+    "remote_program": "\nimport datetime,hashlib,json,os,stat,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C'\ndef run(*args):\n r=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)\n if r.returncode:raise RuntimeError('Read-only probe failed: '+args[0])\n return r.stdout.decode().strip()\np=Path('/home/aicowork/hermes-selinux-trial-20260909-v2');assert not any(x.is_symlink() for x in (p,*p.parents));info=p.stat();assert stat.S_ISDIR(info.st_mode) and stat.S_IMODE(info.st_mode)==0o700 and info.st_uid==os.getuid()\nr={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'hostname':run('hostname','-s'),'enforcing':run('getenforce'),'disk_policy':hashlib.sha256(Path('/etc/selinux/targeted/policy/policy.35').read_bytes()).hexdigest(),'label':run('stat','-c','%C','/usr/lib/systemd/systemd-tpm2-setup'),'mapping':run('matchpathcon','-n','/usr/lib/systemd/systemd-tpm2-setup'),'packages':run('rpm','-q','selinux-policy','selinux-policy-targeted','systemd').splitlines(),'units':{},'original_staged_hash':hashlib.sha256((p/'run-reviewed-service-v2.py').read_bytes()).hexdigest(),'new_staging_absent':{name:not os.path.lexists(p/name) for name in ('run-reviewed-service-v2-corrected.py','continue-reviewed-service-v2.py')},'directory_mode':'0700'}\nfor unit in ('systemd-tpm2-setup.service','systemd-tpm2-setup-early.service'):\n args=['systemctl','show','--all',unit]\n for key in ('LoadState','ActiveState','SubState','MainPID','ControlPID','InvocationID','ExecMainStartTimestamp','ExecMainStatus'):args+=['-p',key]\n r['units'][unit]=dict(x.split('=',1) for x in run(*args).splitlines())\nr['root_mount_active']=run('systemctl','show','-p','ActiveState','--value','--','-.mount')\nr['sudo_noninteractive_available']=subprocess.run(['sudo','-n','true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15).returncode==0\nprint(json.dumps(r))\n",
+    "exit_code": 0
+  },
+  "live_preflight": {
+    "timestamp": "2026-09-09T23:30:03.683494+00:00",
+    "hostname": "hermes",
+    "enforcing": "Enforcing",
+    "disk_policy": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+    "label": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+    "mapping": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+    "packages": [
+      "selinux-policy-44.8-1.fc44.noarch",
+      "selinux-policy-targeted-44.8-1.fc44.noarch",
+      "systemd-259.8-1.fc44.x86_64"
+    ],
+    "units": {
+      "systemd-tpm2-setup.service": {
+        "LoadState": "loaded",
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "InvocationID": "4cce6a53c01c4dff8c480b530fd16661",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Wed 2026-09-09 09:43:14 -05",
+        "ExecMainStatus": "1"
+      },
+      "systemd-tpm2-setup-early.service": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "exited",
+        "InvocationID": "856199b7545e421e84cec252c2106124",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Tue 2026-09-08 22:19:12 -05",
+        "ExecMainStatus": "0"
+      }
+    },
+    "original_staged_hash": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+    "new_staging_absent": {
+      "run-reviewed-service-v2-corrected.py": true,
+      "continue-reviewed-service-v2.py": true
+    },
+    "directory_mode": "0700",
+    "root_mount_active": "active",
+    "sudo_noninteractive_available": false
+  },
+  "live_preflight_checks": {
+    "host": true,
+    "enforcing": true,
+    "disk_policy": true,
+    "labels": true,
+    "packages": true,
+    "units_unchanged": true,
+    "original_staged_hash": true,
+    "new_paths_absent": true,
+    "root_mount_active": true
+  },
+  "live_preflight_passed": true,
+  "operator_handoff": {
+    "command": "sudo sh -eu -c '\n  umask 077\n  src=/home/aicowork/hermes-selinux-trial-20260909-v2\n  dst=/var/lib/hermes-selinux-trial-20260909-v2\n  core=run-reviewed-service-v2-corrected.py\n  wrapper=continue-reviewed-service-v2.py\n  for name in \"$core\" \"$wrapper\"; do\n    if [ -e \"$dst/$name\" ] || [ -L \"$dst/$name\" ]; then\n      printf \"%s\\n\" \"STOP: destination exists; preserve evidence\" >&2\n      exit 1\n    fi\n  done\n  set -C\n  for name in \"$core\" \"$wrapper\"; do\n    cat \"$src/$name\" > \"$dst/$name\"\n  done\n  printf \"%s  %s\\n\" 6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07 \"$dst/$core\" fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1 \"$dst/$wrapper\" | sha256sum -c -\n  exec /usr/bin/python3 -I -B \"$dst/$wrapper\" --approved-v2-continuation\n'",
+    "scope": "Same previously approved one real late-service invocation; original attempt had no request; requires physical console/manual LUKS recovery",
+    "copy_behavior": "Explicit existing-target rejection and POSIX noclobber protect both new root-owned mode-0600 files; original helper and service-first remain unchanged",
+    "staging": "PASS: both artifacts staged and independently verified"
+  },
+  "documentation_validation": [
+    {
+      "name": "hermes-guide",
+      "timestamp": "2026-09-09T23:33:26.344275+00:00",
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/hermes-guide.log"
+    },
+    {
+      "name": "handoff-syntax",
+      "timestamp": "2026-09-09T23:33:26.351264+00:00",
+      "command": [
+        "sh",
+        "-n",
+        "/tmp/hermes-v2-continuation-docs-tr4uoly6/handoff.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/handoff-syntax.log"
+    },
+    {
+      "name": "handoff-shellcheck",
+      "timestamp": "2026-09-09T23:33:26.400975+00:00",
+      "command": [
+        "shellcheck",
+        "-s",
+        "sh",
+        "/tmp/hermes-v2-continuation-docs-tr4uoly6/handoff-inner.sh"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/handoff-shellcheck.log"
+    },
+    {
+      "name": "markdownlint",
+      "timestamp": "2026-09-09T23:33:28.267325+00:00",
+      "command": [
+        "markdownlint-cli2"
+      ],
+      "cwd": "/tmp/hermes-v2-continuation-docs-tr4uoly6",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/markdownlint.log"
+    },
+    {
+      "name": "diff-whitespace",
+      "timestamp": "2026-09-09T23:33:28.279774+00:00",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/diff-whitespace.log"
+    },
+    {
+      "name": "handoff-copy-fixtures",
+      "timestamp": "2026-09-09T23:33:28.360895+00:00",
+      "method": "Disposable copy/hash-only command; final privileged invocation replaced with marker",
+      "actual": "PASS",
+      "cases": [
+        {
+          "case": "clean",
+          "exit": 0,
+          "passed": true
+        },
+        {
+          "case": "existing",
+          "exit": 1,
+          "passed": true
+        },
+        {
+          "case": "dangling-symlink",
+          "exit": 1,
+          "passed": true
+        },
+        {
+          "case": "intervening-destination",
+          "exit": 1,
+          "passed": true
+        },
+        {
+          "case": "hash-mismatch",
+          "exit": 1,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "local-links",
+      "timestamp": "2026-09-09T23:33:28.381797+00:00",
+      "method": "Exclude code fences; resolve repair-guide and changed plan/ledger/task/contributor sections",
+      "count": 48,
+      "actual": "PASS",
+      "errors": []
+    },
+    {
+      "name": "staged-documents",
+      "timestamp": "2026-09-09T23:37:06.049801+00:00",
+      "method": "Nonfix Markdown lint of five exact final document copies",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/staged-documents.log"
+    },
+    {
+      "name": "final-closure",
+      "timestamp": "2026-09-09T23:37:07.785218+00:00",
+      "method": "Nonfix Markdown lint of five exact final document copies",
+      "actual_exit": 0,
+      "expected_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-continuation/final-closure.log"
+    }
+  ],
+  "documentation_status": "PASS",
+  "staging_attempt": {
+    "timestamp": "2026-09-09T23:34:36.272315+00:00",
+    "method": "Pinned SSH transfer; bounded exact allowlist and hashes before mutation; existing private directory; all names absent; exclusive O_NOFOLLOW mode-0600 creation; file and directory fsync",
+    "remote_program": "\nimport base64,hashlib,json,os,stat,sys\nfrom pathlib import Path\nexpected={'run-reviewed-service-v2-corrected.py':'6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07','continue-reviewed-service-v2.py':'fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1'}\nraw=sys.stdin.buffer.read(131073);assert len(raw)<=131072\nincoming=json.loads(raw);assert set(incoming)==set(expected)\nfiles={name:base64.b64decode(data,validate=True) for name,data in incoming.items()}\nassert all(hashlib.sha256(files[name]).hexdigest()==digest for name,digest in expected.items())\nos.umask(0o077);p=Path('/home/aicowork/hermes-selinux-trial-20260909-v2')\nassert not any(q.is_symlink() for q in (p,*p.parents))\nfd=os.open(p,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)\ntry:\n info=os.fstat(fd);assert stat.S_IMODE(info.st_mode)==0o700 and info.st_uid==os.getuid()\n assert hashlib.sha256((p/'run-reviewed-service-v2.py').read_bytes()).hexdigest()=='3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500'\n assert all(not os.path.lexists(p/name) for name in files)\n for name,data in files.items():\n  out=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=fd)\n  with os.fdopen(out,'wb') as stream:stream.write(data);stream.flush();os.fsync(stream.fileno())\n os.fsync(fd)\n print(json.dumps({'created':expected,'directory_mode':'0700','file_mode':'0600','owner_uid':info.st_uid,'exclusive':True}))\nfinally:\n os.close(fd)\n",
+    "exit_code": 0
+  },
+  "staging": {
+    "created": {
+      "run-reviewed-service-v2-corrected.py": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+      "continue-reviewed-service-v2.py": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1"
+    },
+    "directory_mode": "0700",
+    "file_mode": "0600",
+    "owner_uid": 1000,
+    "exclusive": true
+  },
+  "staging_verification_method": {
+    "timestamp": "2026-09-09T23:35:10.435544+00:00",
+    "method": "Independent pinned SSH read of directory/file owner/modes/type/link count and content SHA-256; original helper included",
+    "remote_program": "\nimport hashlib,json,os,stat\nfrom pathlib import Path\np=Path('/home/aicowork/hermes-selinux-trial-20260909-v2')\nassert not any(q.is_symlink() for q in (p,*p.parents))\ns=p.stat();assert s.st_uid==os.getuid() and stat.S_IMODE(s.st_mode)==0o700\nresult={}\nfor name in ('run-reviewed-service-v2-corrected.py','continue-reviewed-service-v2.py','run-reviewed-service-v2.py'):\n path=p/name;s=path.lstat();assert stat.S_ISREG(s.st_mode) and stat.S_IMODE(s.st_mode)==0o600 and s.st_uid==os.getuid() and s.st_nlink==1\n result[name]={'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'mode':'0600','owner_uid':s.st_uid,'size':s.st_size}\nprint(json.dumps({'directory_mode':'0700','files':result}))\n",
+    "exit_code": 0
+  },
+  "remote_verification": {
+    "directory_mode": "0700",
+    "files": {
+      "run-reviewed-service-v2-corrected.py": {
+        "sha256": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+        "mode": "0600",
+        "owner_uid": 1000,
+        "size": 20935
+      },
+      "continue-reviewed-service-v2.py": {
+        "sha256": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1",
+        "mode": "0600",
+        "owner_uid": 1000,
+        "size": 6631
+      },
+      "run-reviewed-service-v2.py": {
+        "sha256": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+        "mode": "0600",
+        "owner_uid": 1000,
+        "size": 20929
+      }
+    }
+  },
+  "next_action": "Operator runs canonical guarded continuation command once with console/manual LUKS recovery available, returns sanitized JSON; existing one-invocation approval applies",
+  "final_closure": {
+    "timestamp": "2026-09-09T23:37:07.800578+00:00",
+    "result": "PASS: final five-document nonfix lint, whitespace, exact artifact hashes, published-command equality and current handoff/evidence links",
+    "document_sha256": {
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": "035214324f4bed6a8602414c9be884a70c24578c947f66b7b0513baae90eace8",
+      "docs/plans/2026-09-07-hermes-unattended.md": "d2f450584dd80840edec87448007db179f95a01e8f9f2d87e02257c0095bab53",
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": "58ae9ecb9a91621fa26ff82ade76b0bea7f07420e62ea5d03a5a5bb7ffa70b39",
+      "vm/DEPLOYMENT_TASKS.md": "921738155455467e66a01fb049bcb26fc6f5ea10c5dd8b655e72ffe3916f5e7a",
+      "docs/CONTRIBUTING.md": "c401acc2c017e5a1af90f50e29d177d99fb9987c5ac271c3215da73396138f05"
+    },
+    "runtime": "TODO: operator continuation pending"
+  }
+}

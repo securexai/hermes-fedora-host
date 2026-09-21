@@ -1,0 +1,54 @@
+{
+  "record": "hermes-m05-telegram",
+  "kind": "live-server-activation",
+  "profile": "manual-guide (docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md)",
+  "branch": "codex/hermes-manual-guide-plan",
+  "gate": "M05 - Telegram",
+  "status": "PASS - daemon stability (14h+ continuous), Telegram polling connectivity, authorized reply, worker tool routing from Telegram, manual approval gate, unauthorized-account rejection, and worker-failure containment all verified",
+  "operator_results": {
+    "authorized_user_reply": "PASS - the authorized account (<redacted-telegram-user-id>) sent a message and received a reply",
+    "worker_tool_routing_from_telegram": "PASS - asked the bot to run `cat /etc/fedora-release` and reply with the exact output; it replied 'Fedora release 44 (Forty Four)', which can only come from the Fedora worker because the gateway itself is Debian 13",
+    "approval_prompt": "PASS - asked the bot to run `touch /home/worker/.m05-approval-probe`; it requested approval first, and only after approval reported that the file was created",
+    "unauthorized_account": "PASS - with TELEGRAM_ALLOWED_USERS temporarily set to 1 (the helper saved only the original numeric value, never the token), a message from the authorized account received NO reply; the helper then restored the real ID with match=yes and saved_file=removed, and the bot replied again afterwards",
+    "worker_failure_containment": "PASS - with the worker stopped, the terminal request `cat /etc/os-release | head -2` returned 'Unable to run the command: SSH connection to the worker failed.' with no gateway-local (Debian) output, proving no fallback; the worker was then restarted to active with the socket recreated",
+    "exposed_token_revoked": "CONFIRMED by the operator via BotFather"
+  },
+  "operator_pending": [],
+  "utc": "2026-09-13T03:36:15Z",
+  "configuration": {
+    "keys_in_profile_env": ["TELEGRAM_BOT_TOKEN", "TELEGRAM_ALLOWED_USERS", "TELEGRAM_ALLOW_ALL_USERS=false"],
+    "authorized_user_ids": "<redacted-telegram-user-id>. The numeric ID was captured during the run and is not a credential, but it was replaced with this placeholder at the operator's request on 2026-09-14, before the first commit, because a commit makes a personal identifier permanent. Nothing else about the allowlist finding changed: exactly one authorized account, allow_all=false.",
+    "env_file": "/home/hermes/gateway-state/.env mode 0600 owner 599823:599823 (container UID 10000)",
+    "provisioning": "hidden-input prompt; the token travelled over stdin only and was never placed in argv, logs, evidence or Git"
+  },
+  "root_cause_fixed": {
+    "symptom": "hermes-gateway.service went inactive after ~15s and the container was removed",
+    "cause": "the installed hermes-gateway.container predated the Exec= line, so the container ran bare `hermes` (interactive banner, then 'Warning: Input is not a terminal (fd=0)' and 'Goodbye!'). The Quadlet edit had been made after the last time Quadlets were installed.",
+    "fix": "reinstalled the Quadlets from the current bundle so the unit carries Exec=gateway run, then daemon-reload and restart"
+  },
+  "second_finding": {
+    "observation": "the s6 image already supervises a per-profile gateway: cont-init 02-reconcile-profiles reports 'profile=default prior_state=running action=started'",
+    "consequence": "`hermes gateway run` from a shell is refused while the supervised gateway exists ('A gateway is already running under s6'); Exec=gateway run attaches to/wait for the supervised service and keeps the container alive, which is the correct unit command"
+  },
+  "validation": {
+    "service_stability": "PASS - active at 30s and still active at 90s; container Up; no restart loop",
+    "long_run_stability": "PASS - re-checked at 2026-09-13T17:28:22Z: gateway and worker both Up ~14 hours on the M01 boot (boot_id 8cf2e255-6d0e-4360-8944-0164064bf6e2), user@1001 active, linger enabled, zero failed units, still no public listener beyond sshd 22 and systemd-resolved 53/5355",
+    "gateway_status": "PASS - 'Gateway is running (PID: 145)'",
+    "telegram_connection": "PASS - '[Telegram] Connected to Telegram (polling mode)' at 2026-09-13T03:36:39Z",
+    "no_public_listener": "PASS - no published container ports; host listeners remain sshd 22 and systemd-resolved 53/5355 only",
+    "avc_denials": "none",
+    "unavailable_toolsets": "observed disabled/unavailable: browser, browser-cdp, computer_use, connections, discord, feishu, homeassistant, image_gen, spotify, video, vision, x_search, a2a - consistent with the guide's initial-scope restrictions"
+  },
+  "operator_pending_removed": [
+    "authorized account reply - COMPLETED (PASS)",
+    "worker routing from Telegram - COMPLETED (PASS)",
+    "manual approval gate - COMPLETED (PASS)",
+    "unauthorized-account rejection and exact restore - COMPLETED (PASS)",
+    "worker-failure containment with no local fallback - COMPLETED (PASS)"
+  ],
+  "security_incident": {
+    "event": "the operator transmitted a Telegram bot token in plaintext in the task conversation instead of using the hidden prompt",
+    "handling": "the agent did not store, echo or use that value; it was recorded without the value and the operator was directed to revoke it in BotFather and re-provision through the hidden prompt",
+    "action_required": "RESOLVED - the operator confirmed the exposed token was revoked in BotFather, and the working token was entered through the hidden prompt and never exposed"
+  }
+}

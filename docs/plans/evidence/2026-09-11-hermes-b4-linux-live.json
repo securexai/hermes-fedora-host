@@ -1,0 +1,786 @@
+{
+  "schema": "hermes-b4-linux-live-v1",
+  "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+  "recorded_at": "2026-09-11T22:15:38.622763+00:00",
+  "case": "b4-linux",
+  "result": "FAIL",
+  "tamper_attempted": false,
+  "operator_ready": false,
+  "progress": "BLOCKED",
+  "cleanup": {
+    "candidate_sha256": "b0f2e394c529655962b846512fe7dae6935688526b688ae8753648bcfa03b1de",
+    "completed_at": 1789164738,
+    "credentials_reconciled": true,
+    "domain_absent": true,
+    "guest_purged": true,
+    "logical_deletion": true,
+    "private_material_absent": true,
+    "release_signed": false,
+    "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+    "schema": "hermes-lifecycle-cleanup-v1"
+  },
+  "files": {
+    "L0": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/L0.json",
+      "sha256": "fdb258ffd67414abc82bd346bde2c3ee5e3336c2137378a42785f60ca351dc50"
+    },
+    "L1": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/L1-dispatch.json",
+      "sha256": "de922e46fbc61b1863e5d2ee09b174831b8967b6a50d9fbb31a691dab1249156"
+    },
+    "L2": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/L2.json",
+      "sha256": "41903e75d0cbec04d8075f6286d7d8854a4360e51149bd5ff8f85340ac49b017"
+    },
+    "lifecycle": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/state/dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44/lifecycle.json",
+      "sha256": "4589b9f37b5fb443b9340db826673cfa7a32de2de06accb63e029b3aa2495f30"
+    },
+    "certifier": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/state/dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44/work/state/state.json",
+      "sha256": "61c0b79994121e61809dc330f7301de73337c2190283927a4f1de42041caa629"
+    },
+    "schedule": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/state/dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44/work/schedule/schedule.json",
+      "sha256": "5e3ae97327d798cd6cd4f35635e5b546e8bd3435fbf14b1c3beb93f80bd8fafd"
+    },
+    "cleanup": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/state/dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44/cleanup.json",
+      "sha256": "517f0591c756ec37a4fa9c977864d46e4800670528ca888bc545911778d5de4d"
+    },
+    "recovered_guest": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/state/dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44/recovered-guest-status.json",
+      "sha256": "067b7b2520bc2f80e55e49cd0e228918f874e2ba7b085f48935784df97c8e79e"
+    },
+    "recovered_snapshot": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/state/dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44/recovered-guest-snapshot.json",
+      "sha256": "a4d74484d0c7c9dba6c649c73d95886c6258ec0e2ea90a7742994a3b42012464"
+    },
+    "provider_revocation": {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/state/dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44/work/evidence/credential_revocation.json",
+      "sha256": "621585759eaf998c8a5a42bba87492626e086022573e873f1c1750d3fd0208c9"
+    }
+  },
+  "L0": {
+    "timestamp": "2026-09-11T21:20:22.437567+00:00",
+    "operation": "AR04-L0",
+    "result": "PASS",
+    "root": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f",
+    "source_archive_sha256": "88ce89ee5c11c420c6d73185bab47e2b9e46fe318ec5a0c2e46ef2a2f83d1867",
+    "source_files": 79,
+    "actual_certifier_tool_readiness": {
+      "ok": true,
+      "resolved": {
+        "restic": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/repository/scripts/hermes/unattended/bin/restic",
+        "ssh": "/usr/bin/ssh",
+        "sudo": "/usr/bin/sudo",
+        "trivy": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/repository/scripts/hermes/unattended/bin/trivy"
+      },
+      "stage": "certifier-tools-ready",
+      "tools": [
+        "ssh",
+        "sudo",
+        "restic",
+        "trivy"
+      ],
+      "uid": 984,
+      "versions": {
+        "restic": "restic 0.19.1 compiled with go1.26.7 on linux/amd64",
+        "trivy": "Version: 0.74.0"
+      }
+    },
+    "r1_r2_preserved": true,
+    "broker_before_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_during_sha256": "3c3e16074e883f9cfb7fe77684efd404e43bfa561855f08636f7366ac96e6c71",
+    "test_uid": 984,
+    "production_disabled": true,
+    "grant_issued": false,
+    "services_started": false,
+    "temporary_control_hashes": {
+      "lab-power": "c9b96858ddc473087d56fc949e73de273f21632583831cd88cc673642f427e6c",
+      "certify_power.py": "ef270dbb4e1482b5266cd38ecb600193bd578b1a7ed6af3fab3f4b96b1a06451",
+      "90-hermes-remaining-20260911-b4-linux-dbf08d0f.conf": "9d01bea66177b3faad41142b9881ec35c98afdb209022268ab03a3a53d5fb31b",
+      "hermes-remaining-20260911-b4-linux-dbf08d0f-power.sudoers": "16f003c928c48f1734c617ba1384375571618c8504b04e459f897abad72c444e",
+      "hermes-remaining-20260911-b4-linux-dbf08d0f.service": "e8e5446983ba4b9db976b81d1f64952eae705e370569a9b313417e57a1fae237",
+      "hermes-remaining-20260911-b4-linux-dbf08d0f-failed.service": "879229619dcbefefad23e6df777c0fc01cb2d65ce89d75f1b35a6ab1e54960ff"
+    }
+  },
+  "L1": {
+    "timestamp": "2026-09-11T21:20:43.233169+00:00",
+    "operation": "AR04-L1",
+    "status": "DISPATCHED_ONCE",
+    "grant": {
+      "schema": "hermes-lifecycle-lab-window-v1",
+      "binding": "249f735ddfebc81c4a6b837989b5241452dd09eb03820fa06620806f1b77de02",
+      "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+      "issued_at": 1789161643,
+      "expires_at": 1789171843
+    },
+    "unit": [
+      "ActiveState=activating",
+      "SubState=start",
+      "InvocationID=dd35e0b7080c4dca8990443ece08b45c"
+    ],
+    "release_signed": false
+  },
+  "L2": {
+    "timestamp": "2026-09-11T22:14:10.196367+00:00",
+    "operation": "AR04-L2",
+    "result": "PASS",
+    "lifecycle_stage": "failed-cleaned",
+    "provider_credential": "revoked",
+    "fixed_domain_disk_nvram_swtpm_absent": true,
+    "private_material_absent": true,
+    "broker_before_restored_sha256": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+    "broker_metadata_xattrs_restored": true,
+    "test_uid_restored": 987,
+    "production_role_disabled": true,
+    "socket_runtime_credential_absent": true,
+    "temporary_units_override_power_grant_helpers_removed": true,
+    "consumed_grant_archived_and_active_grant_removed": true,
+    "old_policy_journal_timers_preserved": true,
+    "unit_results_before_removal": {
+      "hermes-remaining-20260911-b4-linux-dbf08d0f.service": [
+        "ActiveState=failed",
+        "SubState=failed",
+        "InvocationID=dd35e0b7080c4dca8990443ece08b45c",
+        "Result=exit-code",
+        "ExecMainStatus=69"
+      ],
+      "hermes-remaining-20260911-b4-linux-dbf08d0f-failed.service": [
+        "ActiveState=inactive",
+        "SubState=dead",
+        "InvocationID=7bc8398c0fb64bbfabfdb85b6221de47",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.service": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=05e08d5e54b6476a9647db5c1aaced8b",
+        "Result=success",
+        "ExecMainStatus=0"
+      ],
+      "hermes-lab-credentials.socket": [
+        "ActiveState=active",
+        "SubState=running",
+        "InvocationID=9c19a7d401b64f3bb24bc447988196e9",
+        "Result=success"
+      ]
+    },
+    "release_signed": false
+  },
+  "lifecycle": {
+    "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+    "stage": "failed-cleaned",
+    "certified": false,
+    "failure": "lifecycle-execution-failed",
+    "failure_context": {
+      "locations": [
+        {
+          "file": "lifecycle.py",
+          "function": "execute",
+          "line": 143
+        },
+        {
+          "file": "lab_session.py",
+          "function": "certify",
+          "line": 43
+        },
+        {
+          "file": "lifecycle_fixture.py",
+          "function": "certify",
+          "line": 557
+        },
+        {
+          "file": "lifecycle_fixture.py",
+          "function": "as_certifier",
+          "line": 431
+        },
+        {
+          "file": "common.py",
+          "function": "run",
+          "line": 117
+        },
+        {
+          "file": "common.py",
+          "function": "require",
+          "line": 24
+        }
+      ],
+      "type": "Failure"
+    },
+    "cleanup_failure": null,
+    "cleanup_context": {
+      "locations": [
+        {
+          "file": "lifecycle.py",
+          "function": "execute",
+          "line": 153
+        },
+        {
+          "file": "lifecycle_fixture.py",
+          "function": "cleanup",
+          "line": 600
+        },
+        {
+          "file": "lifecycle_fixture.py",
+          "function": "as_certifier",
+          "line": 431
+        },
+        {
+          "file": "common.py",
+          "function": "run",
+          "line": 117
+        },
+        {
+          "file": "common.py",
+          "function": "require",
+          "line": 24
+        }
+      ],
+      "type": "Failure"
+    },
+    "credentials_cleaned": true,
+    "guest_purged": true,
+    "vm_destroyed": true,
+    "private_purged": true,
+    "candidate_sha256": "b0f2e394c529655962b846512fe7dae6935688526b688ae8753648bcfa03b1de",
+    "artifact_fingerprint": "2deb20099f2fc7dbfe0d47d5e8cb2959371046067c262c0a3021c7905fd67c33",
+    "release_id": "lifecycle-dbf08d0fde674cb29e0a059d",
+    "kernel": "7.2.4-200.fc44.x86_64",
+    "guest_identity": {
+      "machine_id_sha256": "ce845a56a29708dbae487106e0841a5b57af6c7dcd2772ce65730221acafea5f",
+      "ssh_fingerprint": "SHA256:wlqlF4cOtmPz7RgCkgoCtpuNMCH/yAzOzfhktk+RQmY"
+    },
+    "baseline_initrd_review": {
+      "archive_unchanged": true,
+      "boot_verified": false,
+      "mask_checks": {
+        "etc/nvpcr/cryptsetup.nvpcr": {
+          "accepted": true,
+          "directory_chain_verified": true,
+          "entries": 1,
+          "symbolic_link": true,
+          "target_kind": "relative-null"
+        },
+        "etc/nvpcr/hardware.nvpcr": {
+          "accepted": true,
+          "directory_chain_verified": true,
+          "entries": 1,
+          "symbolic_link": true,
+          "target_kind": "relative-null"
+        },
+        "etc/systemd/system/systemd-pcrproduct.service": {
+          "accepted": true,
+          "directory_chain_verified": true,
+          "entries": 1,
+          "symbolic_link": true,
+          "target_kind": "relative-null"
+        }
+      },
+      "masks": [
+        "etc/nvpcr/hardware.nvpcr",
+        "etc/nvpcr/cryptsetup.nvpcr",
+        "etc/systemd/system/systemd-pcrproduct.service"
+      ],
+      "passed": true,
+      "profile": "standard-tpm2",
+      "required_modules_present": true,
+      "sha256": "07bf5b6a2e58afdd9a14b60bc304ff6abba4270f42e7b78e59f203de1c3cf5c3",
+      "unknown_definition_count": 0
+    },
+    "updated_initrd_review": {
+      "archive_unchanged": true,
+      "boot_verified": false,
+      "mask_checks": {
+        "etc/nvpcr/cryptsetup.nvpcr": {
+          "accepted": true,
+          "directory_chain_verified": true,
+          "entries": 1,
+          "symbolic_link": true,
+          "target_kind": "relative-null"
+        },
+        "etc/nvpcr/hardware.nvpcr": {
+          "accepted": true,
+          "directory_chain_verified": true,
+          "entries": 1,
+          "symbolic_link": true,
+          "target_kind": "relative-null"
+        },
+        "etc/systemd/system/systemd-pcrproduct.service": {
+          "accepted": true,
+          "directory_chain_verified": true,
+          "entries": 1,
+          "symbolic_link": true,
+          "target_kind": "relative-null"
+        }
+      },
+      "masks": [
+        "etc/nvpcr/hardware.nvpcr",
+        "etc/nvpcr/cryptsetup.nvpcr",
+        "etc/systemd/system/systemd-pcrproduct.service"
+      ],
+      "passed": true,
+      "profile": "standard-tpm2",
+      "required_modules_present": true,
+      "sha256": "f12d560956e8f2a51679cf170b1fab76f7bb7522e75a52da3939600919cc05d2",
+      "unknown_definition_count": 0
+    }
+  },
+  "certifier": {
+    "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+    "stage": "failed",
+    "failure": "lab-operation-failed",
+    "primary_failure": "lab-operation-failed",
+    "cleanup_failure": "prior-credential-restoration-failed",
+    "failure_stage": "reboot-pending",
+    "stages": [
+      "reboot-pending"
+    ],
+    "artifact_fingerprint": "2deb20099f2fc7dbfe0d47d5e8cb2959371046067c262c0a3021c7905fd67c33",
+    "updated_at": 1789163992
+  },
+  "schedule": {
+    "artifact_fingerprint": "2deb20099f2fc7dbfe0d47d5e8cb2959371046067c262c0a3021c7905fd67c33",
+    "binding": "82e80b3613824e626741d36eb207df8453720b572884c0f52507820c36a77e76",
+    "candidate_sha256": "b0f2e394c529655962b846512fe7dae6935688526b688ae8753648bcfa03b1de",
+    "cleanup_failure": "credential-cleanup-failed",
+    "failure": "scheduled-certification-failed",
+    "lab_window_grant_sha256": "82fb0ff8a7b2ba3025698d62152dcbfc32fe23d83b9109a7f39b5ee3ff99beed",
+    "schema": "hermes-schedule-state-v1",
+    "stage": "failed"
+  },
+  "recovered_guest": {
+    "boot_id": "be698289-9267-4f81-8fab-5f720d766d27",
+    "kernel": "7.2.4-200.fc44.x86_64",
+    "hermes-offline-replay.service": [
+      "ActiveState=inactive",
+      "SubState=dead",
+      "Result=success",
+      "ExecMainStatus=0"
+    ],
+    "hermes-runtime-credentials.service": [
+      "ActiveState=active",
+      "SubState=exited",
+      "Result=success",
+      "ExecMainStatus=0"
+    ],
+    "sshd.service": [
+      "ActiveState=active",
+      "SubState=running",
+      "Result=success",
+      "ExecMainStatus=0"
+    ],
+    "system_update_present": false,
+    "lifecycle-dbf08d0fde674cb29e0a059d.state.json": {
+      "phase": "reboot-pending",
+      "boot_before": "d38ee7c1-a4cc-4401-abda-d40e7f6bc597"
+    },
+    "observed_at": "2026-09-11T22:09:38.977952+00:00"
+  },
+  "recovered_snapshot": {
+    "boot_id": "be698289-9267-4f81-8fab-5f720d766d27",
+    "candidate_sha256": "b0f2e394c529655962b846512fe7dae6935688526b688ae8753648bcfa03b1de",
+    "entries": [
+      {
+        "addons": null,
+        "cmdline": "root=/dev/mapper/vg_root-root ro rd.lvm.lv=vg_root/root rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.luks.options=tpm2-device=auto",
+        "id": "hermes-lifecycle-dbf08d0fde674cb29e0a059d.efi",
+        "isDefault": true,
+        "isReported": true,
+        "isSelected": true,
+        "linux": "/EFI/Linux/hermes-lifecycle-dbf08d0fde674cb29e0a059d.efi",
+        "options": "root=/dev/mapper/vg_root-root ro rd.lvm.lv=vg_root/root rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.luks.options=tpm2-device=auto",
+        "path": "/boot/efi/EFI/Linux/hermes-lifecycle-dbf08d0fde674cb29e0a059d.efi",
+        "profile": 0,
+        "root": "/boot/efi",
+        "showTitle": "Fedora Linux 44 (Server Edition) (44 (Server Edition)) (hermes-lifecycle-dbf08d0fde674cb29e0a059d.efi)",
+        "sortKey": "fedora",
+        "source": "esp",
+        "title": "Fedora Linux 44 (Server Edition)",
+        "type": "type2",
+        "version": "44 (Server Edition)"
+      },
+      {
+        "addons": null,
+        "cmdline": "root=/dev/mapper/vg_root-root ro rd.lvm.lv=vg_root/root rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.luks.options=tpm2-device=auto",
+        "id": "hermes-enrollment.efi",
+        "isDefault": false,
+        "isReported": true,
+        "isSelected": false,
+        "linux": "/EFI/Linux/hermes-enrollment.efi",
+        "options": "root=/dev/mapper/vg_root-root ro rd.lvm.lv=vg_root/root rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.luks.options=tpm2-device=auto",
+        "path": "/boot/efi/EFI/Linux/hermes-enrollment.efi",
+        "profile": 0,
+        "root": "/boot/efi",
+        "showTitle": "Fedora Linux 44 (Server Edition) (44 (Server Edition)) (hermes-enrollment.efi)",
+        "sortKey": "fedora",
+        "source": "esp",
+        "title": "Fedora Linux 44 (Server Edition)",
+        "type": "type2",
+        "version": "44 (Server Edition)"
+      },
+      {
+        "addons": null,
+        "cmdline": "root=/dev/mapper/vg_root-root ro rd.auto=1 resume=UUID=acbd6804-9cd7-4ccf-b07c-f9be193d5894 rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.lvm.lv=vg_root/root rd.lvm.lv=vg_root/swap console=tty0 console=ttyS0,115200n8 systemd.machine_id=ff22939279ee460b85b4cb68b63b8b5d",
+        "id": "ff22939279ee460b85b4cb68b63b8b5d-7.2.4-200.fc44.x86_64.conf",
+        "initrd": [
+          "/ff22939279ee460b85b4cb68b63b8b5d/7.2.4-200.fc44.x86_64/initrd"
+        ],
+        "isDefault": false,
+        "isReported": true,
+        "isSelected": false,
+        "linux": "/ff22939279ee460b85b4cb68b63b8b5d/7.2.4-200.fc44.x86_64/linux",
+        "machineId": "ff22939279ee460b85b4cb68b63b8b5d",
+        "options": "root=/dev/mapper/vg_root-root ro rd.auto=1 resume=UUID=acbd6804-9cd7-4ccf-b07c-f9be193d5894 rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.lvm.lv=vg_root/root rd.lvm.lv=vg_root/swap console=tty0 console=ttyS0,115200n8 systemd.machine_id=ff22939279ee460b85b4cb68b63b8b5d",
+        "path": "/boot/efi/loader/entries/ff22939279ee460b85b4cb68b63b8b5d-7.2.4-200.fc44.x86_64.conf",
+        "root": "/boot/efi",
+        "showTitle": "Fedora Linux 44 (Server Edition) (7.2.4-200.fc44.x86_64)",
+        "sortKey": "fedora",
+        "source": "esp",
+        "title": "Fedora Linux 44 (Server Edition)",
+        "type": "type1",
+        "version": "7.2.4-200.fc44.x86_64"
+      },
+      {
+        "addons": null,
+        "cmdline": "root=/dev/mapper/vg_root-root ro rd.auto=1 resume=UUID=acbd6804-9cd7-4ccf-b07c-f9be193d5894 rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.lvm.lv=vg_root/root rd.lvm.lv=vg_root/swap console=tty0 console=ttyS0,115200n8",
+        "id": "ff22939279ee460b85b4cb68b63b8b5d-0-rescue.conf",
+        "initrd": [
+          "/ff22939279ee460b85b4cb68b63b8b5d/0-rescue/initrd"
+        ],
+        "isDefault": false,
+        "isReported": true,
+        "isSelected": false,
+        "linux": "/ff22939279ee460b85b4cb68b63b8b5d/0-rescue/linux",
+        "machineId": "ff22939279ee460b85b4cb68b63b8b5d",
+        "options": "root=/dev/mapper/vg_root-root ro rd.auto=1 resume=UUID=acbd6804-9cd7-4ccf-b07c-f9be193d5894 rd.luks.uuid=luks-44cbcfbc-a6b8-42e3-b208-e094858a3951 rd.lvm.lv=vg_root/root rd.lvm.lv=vg_root/swap console=tty0 console=ttyS0,115200n8",
+        "path": "/boot/efi/loader/entries/ff22939279ee460b85b4cb68b63b8b5d-0-rescue.conf",
+        "root": "/boot/efi",
+        "showTitle": "Fedora Linux 44 (Server Edition) - Rescue Image",
+        "source": "esp",
+        "title": "Fedora Linux 44 (Server Edition) - Rescue Image",
+        "type": "type1",
+        "version": "7.2.4-200.fc44.x86_64"
+      },
+      {
+        "addons": null,
+        "id": "auto-reboot-to-firmware-setup",
+        "isDefault": false,
+        "isReported": true,
+        "isSelected": false,
+        "path": "/sys/firmware/efi/efivars/LoaderEntries-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f",
+        "showTitle": "Reboot Into Firmware Interface",
+        "source": "esp",
+        "title": "Reboot Into Firmware Interface",
+        "type": "auto"
+      }
+    ],
+    "esp": {
+      "hermes-enrollment.efi": {
+        "sha256": "98e8aa1cf51a837f916c26b2032b8547536ea004852fe25a229381d1bd22a2fc",
+        "size": 65499064
+      },
+      "hermes-lifecycle-dbf08d0fde674cb29e0a059d.efi": {
+        "sha256": "9d1dd3e0e99b2b6e98640cf34079c8f062c4fb2855cf8ba11b11d1f5ff03eb36",
+        "size": 66915256
+      }
+    },
+    "files": {
+      "/boot/efi/loader/loader.conf": {
+        "gid": 0,
+        "mode": 448,
+        "sha256": "7d50641a28433292268d6092ba847dc5c11535d96a068671ba58286f89261dd4",
+        "uid": 0,
+        "xattrs_sha256": "bc0ca2b9a25fbc79b035f76c728e7630f2bbebcc5bb633b43b7a4519f511d741"
+      },
+      "/etc/credstore.encrypted/hermes-openai-api": {
+        "gid": 0,
+        "mode": 384,
+        "sha256": "0f739991a9eb9c44406a610f19cbf26fdb502de3584fd85936f5825d2e3edd84",
+        "uid": 0,
+        "xattrs_sha256": "7f22a9f711ccb10471a4eec4227143be6246098d2469e74ee85554f36f482b68"
+      },
+      "/etc/crypttab": {
+        "gid": 0,
+        "mode": 384,
+        "sha256": "f156a9f0e1115b1bbf6e8fde3240d8417f31f2872a1fbb088d931150d82343b3",
+        "uid": 0,
+        "xattrs_sha256": "029c4dc5f526c37ccbfd4e66e2b12e1ef336fcfc85e5fb4a6a32d47a48739338"
+      },
+      "/etc/dracut.conf.d/99-hermes-standard-tpm2.conf": {
+        "gid": 0,
+        "mode": 420,
+        "sha256": "5ed0c35c3cd0f282f2569b3b37810ef8d86b82328069def2feb4a3b696ead8cc",
+        "uid": 0,
+        "xattrs_sha256": "029c4dc5f526c37ccbfd4e66e2b12e1ef336fcfc85e5fb4a6a32d47a48739338"
+      },
+      "/etc/fstab": {
+        "gid": 0,
+        "mode": 420,
+        "sha256": "fa0713d7b7d8e036b4f3e2a0a0f53627ffa79853d8fb7c835a69b77ce05005da",
+        "uid": 0,
+        "xattrs_sha256": "029c4dc5f526c37ccbfd4e66e2b12e1ef336fcfc85e5fb4a6a32d47a48739338"
+      },
+      "/etc/hermes-unattended/host.json": {
+        "gid": 0,
+        "mode": 384,
+        "sha256": "4a1e6e6500426a85d4a9969c321abcad16cf3da28b0117fa49dacdf70665f6c0",
+        "uid": 0,
+        "xattrs_sha256": "7f22a9f711ccb10471a4eec4227143be6246098d2469e74ee85554f36f482b68"
+      },
+      "/etc/machine-id": {
+        "gid": 0,
+        "mode": 292,
+        "sha256": "ce845a56a29708dbae487106e0841a5b57af6c7dcd2772ce65730221acafea5f",
+        "uid": 0,
+        "xattrs_sha256": "e1ef7b9138f1c06779eb8759526de801fe99f96c5346475065089fecf2fb0c79"
+      },
+      "/etc/nvpcr/cryptsetup.nvpcr": {
+        "link": "/dev/null"
+      },
+      "/etc/nvpcr/hardware.nvpcr": {
+        "link": "/dev/null"
+      },
+      "/etc/ssh/ssh_host_ed25519_key.pub": {
+        "gid": 0,
+        "mode": 420,
+        "sha256": "8fe5090475a9c398083b697ce79b6e0b9f370e5ec08ed7eb09c97d1fad272b44",
+        "uid": 0,
+        "xattrs_sha256": "f9ef1939dacf3790c34b1bae8bd09c17408710639de18472d5b8933f7c3e1940"
+      },
+      "/etc/systemd/system/systemd-pcrproduct.service": {
+        "link": "/dev/null"
+      },
+      "/etc/systemd/tpm2-pcr-public-key.pem": {
+        "gid": 0,
+        "mode": 420,
+        "sha256": "5b107a52e8d3cf43474908cd544ac356ba2c909636884aa6b5a28108d3f25bae",
+        "uid": 0,
+        "xattrs_sha256": "029c4dc5f526c37ccbfd4e66e2b12e1ef336fcfc85e5fb4a6a32d47a48739338"
+      },
+      "/home/hermes/data/config.yaml": {
+        "gid": 599823,
+        "mode": 416,
+        "sha256": "ad6f8787595d0ab98c4a9da420c9a73cb815ac228de35d92b423903ed52119f0",
+        "uid": 599823,
+        "xattrs_sha256": "c39bf4af8e09bb8a934266afc31ae62d4abcc9916ed591ccc0f4120502bf02b5"
+      },
+      "/var/lib/systemd/tpm2-srk-public-key.tpm2b_public": {
+        "gid": 0,
+        "mode": 292,
+        "sha256": "b2176bba2cd7ac7490ed3d87fe546addf1d8bbd9b86fd07ee99165fa03c9c560",
+        "uid": 0,
+        "xattrs_sha256": "f055d06ffc5a693d5aee755441bef63ab34d519fa7f3f74a5ce0f66863b07abd"
+      }
+    },
+    "host_phase": "reboot-pending",
+    "inventory": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+    "luks_metadata_sha256": "a477f71443c272dda03b91d03ad760d43b5b2a5ff521dc8d0007d933b1862afa",
+    "previous": {
+      "candidate_sha256": "b0f2e394c529655962b846512fe7dae6935688526b688ae8753648bcfa03b1de",
+      "entry": "hermes-enrollment.efi",
+      "kernel": "6.19.10-300.fc44.x86_64",
+      "modules_sha256": "1c256bea9228fe45477b47e4365ff3b278fb8aa6e69719236254937c6df31dba",
+      "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+      "uki_sha256": "98e8aa1cf51a837f916c26b2032b8547536ea004852fe25a229381d1bd22a2fc"
+    },
+    "replay": {
+      "baseline": "88687312ab0603300b8f5a4abcbf3846ac80d1f99af3592bd222f00194faa73a",
+      "boot": {
+        "entry": "hermes-lifecycle-dbf08d0fde674cb29e0a059d.efi",
+        "sha256": "9d1dd3e0e99b2b6e98640cf34079c8f062c4fb2855cf8ba11b11d1f5ff03eb36"
+      },
+      "boot_before": "d38ee7c1-a4cc-4401-abda-d40e7f6bc597",
+      "completed_at": 1789164469,
+      "directory": "/var/lib/hermes-lab-certification/candidate/packages",
+      "expected": "81fd81ed0de3c64db14e61c439e6c62d263f0b0803a6abad358e142897b423eb",
+      "started_at": 1789163974,
+      "status": "complete",
+      "unit_sha256": "4f3064d1eb1598318d3fbfc09927d8417a3e22b26add487bd4dd5712f3d101fc",
+      "update_boot": "ac9e0fd7-8b2c-4772-ad4e-47705de63ffa"
+    },
+    "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+    "selinux": "Enforcing",
+    "timestamp": 1789164620
+  },
+  "provider_revocation": {
+    "artifact_fingerprint": "2deb20099f2fc7dbfe0d47d5e8cb2959371046067c262c0a3021c7905fd67c33",
+    "completed_at": 1789163992,
+    "gate": "credential_revocation",
+    "lease": "dbf08d0fde674cb29e0a059d6565768d",
+    "ok": true,
+    "release_id": "lifecycle-dbf08d0fde674cb29e0a059d",
+    "result": "PASS",
+    "revoked": true,
+    "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44"
+  },
+  "observation_files": [
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162448460766302.json",
+      "sha256": "15924263ac1b7e7de7633f7f05f87bba51cb8cda7e06e84990907d67e1960d5e"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162530160017753.json",
+      "sha256": "c222dcb4e1956e3ee9fc032256d97a49943fa06d15c14d0a7c5f1e139be605d1"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162607031952500.json",
+      "sha256": "0fb4f68037ea4df02e0d26fecfd8e2257c2c0b097c4587c833b7e98946c4a612"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162683432718624.json",
+      "sha256": "85ac17d68e8f5136f650728328c075a719d3604019f978eda013898b9a0634a4"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162762872226103.json",
+      "sha256": "e4406bd8abd9e70e1a6a81ab03bc952f085b0f727fbbce5df4adb87bc70f35c4"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162836164872156.json",
+      "sha256": "267906e30738209a8572461efa400d94f2ae6c843d762ac265c5d4008d8b09d8"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162904526236575.json",
+      "sha256": "66f372db6f66088a96a9231e9df4739c2639ba64dd79470bba035c96bdf1450b"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789162971453601116.json",
+      "sha256": "96cbc4649bcb140670a9db83b8a9e555ff87bbde4768c37da00f4bf0ddedbd9f"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163032656449055.json",
+      "sha256": "df3b2345b13ed0695d642cfdc536cfc4ff904b88271913a7797109f9bfc27288"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163086536911959.json",
+      "sha256": "5e4ea8e996dad350dd3ca8832140f8fb8dce18d69e5d2fddb6e725f09238c438"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163151785348346.json",
+      "sha256": "8b14368969afcae93e5fd870bc65992f10a4eab7e202d0581763f35d4ed811b2"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163206608385412.json",
+      "sha256": "76289f6f4fd7b3199ae077afe4ac7acd9ad0ddd3e5f39814ea4dd080968de11d"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163261965696017.json",
+      "sha256": "22a479eb2151cc4583d034940e89c72c961fb120495a2e47fa3c8f6236a747bb"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163316899257201.json",
+      "sha256": "8eee876f5735af7d26efb1dc781485f57eb90494139691bea2b20e27cfcc633d"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163375749642492.json",
+      "sha256": "dc216c6869ca0163a6cd04527b77a89b018b1709de4b8d9ac4ecc2d6e7be6fb7"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163433661819071.json",
+      "sha256": "a47b364b6e45a9f6b4fe77a38e038bf6836a2b4b6f1490ae11202e027a80aa7e"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163494934400903.json",
+      "sha256": "32df252e9d63a1888f19f749e50c35f562407bcc9d388f3d38157d282a8dc414"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163557907515934.json",
+      "sha256": "e6c8999e08a6f17c14f60858977a49f900d109ff6362d2f7952908ba3fe479c4"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163619425547908.json",
+      "sha256": "3a01e698f0974d182b66c22728b92082754253ec2582d6b6fe06720f52f1c969"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163685081729364.json",
+      "sha256": "920abc4d679b0a1f8c5d6e382a10bf8899be49128e52ea72c7cb97bec9cc482f"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163770671365311.json",
+      "sha256": "1f3bb2ce40e050d0c2515f3504349a88c2701630a220c6c2a974b759e8d0dd2e"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163828262794591.json",
+      "sha256": "53762006258df496e38bf556397a40047d12c67ef1b5839cb69c06362efa25e6"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163897109954018.json",
+      "sha256": "2f71ed709bab76d6faca49c377a3ade08e1f95bf65e9055b0a43e6cb12eb93e5"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789163958113260988.json",
+      "sha256": "c05f3832c971decf415a5da70ff138752abf44e5bf629a2c3d120103d686953c"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789164026932015118.json",
+      "sha256": "dec204d7f53fe461af537506702db4a7da1238b1b43b1307027e6fca713bd61a"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789164061937085043.json",
+      "sha256": "ba35680ae0f5974f7be38ade8dd2d999f809a5ffa9a1e095425ca5d90f985194"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789164687187530606.json",
+      "sha256": "7ff5afe5085665aca5bbc2d6aea7137100621c9d3ca9e3b62d5ae403e2806021"
+    },
+    {
+      "path": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f/observations/1789164827220669023.json",
+      "sha256": "fffd91b24f87400db048d3aeda2ae3f00521595ed898afcc8d363c7f3520a119"
+    }
+  ],
+  "independent_restoration": {
+    "b4_linux": {
+      "timestamp": "2026-09-11T22:14:22.300243+00:00",
+      "status": "PASS",
+      "broker_hash": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_bytes_metadata_xattrs_restored": true,
+      "provider_lease_prefix": "dbf08d0fde674cb29e0a059d6565768d",
+      "provider_state": "revoked",
+      "provider_credential_file_absent": true,
+      "fixed_vm_and_private_resources_absent": true,
+      "temporary_controls_and_grants_absent": true,
+      "historical_and_current_source_snapshots_preserved": true,
+      "socket": [
+        "ActiveState=inactive",
+        "SocketUser=hermes-lab-certifier",
+        "SocketGroup=hermes-lab-certifier",
+        "SocketMode=0600"
+      ],
+      "production_role_disabled": true
+    },
+    "b3_after_b4": {
+      "timestamp": "2026-09-11T22:14:22.730623+00:00",
+      "status": "PASS",
+      "broker_hash": "eb5013ab097de85bc0106bb217dc9de62621b6fe17983b28c13d91edec1e5d79",
+      "broker_bytes_metadata_xattrs_restored": true,
+      "provider_lease_prefix": "c618944cdf9ab726cd663548b1f47c83",
+      "provider_state": "revoked",
+      "provider_credential_file_absent": true,
+      "fixed_vm_and_private_resources_absent": true,
+      "temporary_controls_and_grants_absent": true,
+      "historical_and_current_source_snapshots_preserved": true,
+      "socket": [
+        "ActiveState=inactive",
+        "SocketUser=hermes-lab-certifier",
+        "SocketGroup=hermes-lab-certifier",
+        "SocketMode=0600"
+      ],
+      "production_role_disabled": true
+    }
+  },
+  "block_started_at": "2026-09-11T21:20:18.877096+00:00",
+  "block_finished_at": "2026-09-11T22:14:22.300243+00:00",
+  "elapsed_seconds": 3243.423147,
+  "within_four_hours": true,
+  "approval_reference": "User: proceed with all pending tasks",
+  "allowance": "CONSUMED",
+  "production_operations": false,
+  "diagnosis": {
+    "observed": "Parsed response without protocol error became lab-operation-failed after an acknowledged reboot-pending stage; existing guest replay completed afterward",
+    "limit": "Original SSH exit code and response shape were not retained; exact transport cause remains unconfirmed",
+    "offline_reproduction": "Four pending-stage/SSH-exit subcases failed before the correction and passed afterward",
+    "correction": "Retry classification only for exact same-release positive pending-reboot deploy replies with exit 255/143; existing acknowledged-stage/deadline guard retained; guest errors remain terminal; allowlisted failure transport metadata retained"
+  }
+}

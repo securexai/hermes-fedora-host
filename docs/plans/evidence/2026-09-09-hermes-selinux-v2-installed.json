@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-09-09T19:36:38.140077+00:00",
+  "operator_report": "POLICY_INSTALL_VERIFIED and successful export; systemd-boot-not-installed and module-name messages retained in execution record",
+  "installation": "PASS: independent pinned SSH disk hash, labels, Enforcing and package versions match",
+  "host_observation": {
+    "timestamp": "2026-09-09T19:32:08.126868+00:00",
+    "observations": [
+      {
+        "command": [
+          "hostname",
+          "-s"
+        ],
+        "stdout": "hermes",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "getenforce"
+        ],
+        "stdout": "Enforcing",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "sha256sum",
+          "/etc/selinux/targeted/policy/policy.35"
+        ],
+        "stdout": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360  /etc/selinux/targeted/policy/policy.35",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "stat",
+          "-c",
+          "%C",
+          "/usr/lib/systemd/systemd-tpm2-setup"
+        ],
+        "stdout": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "matchpathcon",
+          "-n",
+          "/usr/lib/systemd/systemd-tpm2-setup"
+        ],
+        "stdout": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "rpm",
+          "-q",
+          "selinux-policy",
+          "selinux-policy-targeted",
+          "systemd"
+        ],
+        "stdout": "selinux-policy-44.8-1.fc44.noarch\nselinux-policy-targeted-44.8-1.fc44.noarch\nsystemd-259.8-1.fc44.x86_64",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "systemctl",
+          "show",
+          "-p",
+          "ActiveState",
+          "-p",
+          "MainPID",
+          "-p",
+          "ExecMainStatus",
+          "-p",
+          "ExecMainStartTimestamp",
+          "systemd-tpm2-setup.service",
+          "systemd-tpm2-setup-early.service"
+        ],
+        "stdout": "ActiveState=failed\nMainPID=0\nExecMainStartTimestamp=Wed 2026-09-09 09:43:14 -05\nExecMainStatus=1\n\nActiveState=active\nMainPID=0\nExecMainStartTimestamp=Tue 2026-09-08 22:19:12 -05\nExecMainStatus=0",
+        "stderr": ""
+      }
+    ]
+  },
+  "loaded_policy_sha256": "28f3153377e6b7065dcf0e235936ffa360b1f1fdf1e68896f5fda681e020487e",
+  "expected_disk_policy_sha256": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+  "recovery_archive_sha256": "31f460c94d9b363ba5a54b6b414a7c664b387a03433c80789233dedc6590a07b",
+  "policy_comparison": {
+    "cil_identical": true,
+    "cil_sha256": "983663d0f5c42218d37efe35e417325c7492e07d01a3d5f4e6f98a203a9dac54",
+    "init_transition": true,
+    "candidate_enforcing": true,
+    "seinfo_properties_counts_match": true
+  },
+  "archive_validation": {
+    "timestamp": "2026-09-09T19:35:02.054781+00:00",
+    "operator_hashes_match": true,
+    "archive_allowlist_types_modes_pass": true,
+    "archive_file_count": 11,
+    "backup_payload_hashes": {
+      "boot.before": "f026c395243d85ccbba492290f7375e547be6f8e84d367c94d2091f31ae311e7",
+      "candidate.pp": "37643c3428ee847e82643056142d1ff5702d7249ed8046e71326c1e01b00a6b8",
+      "executable-context.before": "311ea3aa8aa0c1b2aa6908b0b5b7d15f5ae79ffc5fab00f3fae07ace9220b703",
+      "firmware.before": "93788cd5e4d64661356d6a152c1faf86bc69023f717e532c14d0b20909786f89",
+      "installation-started": "6f35d4bcf40f754f7c342dcb76d868023217450dfa82def0d080c3cfb921b393",
+      "journal-cursor.before": "e436e0102d2b56360635a3db3fde6327b87a65627712578cc6fba59b138ed957",
+      "modules.before": "63bfe64b3b3bfb75b18eff1696df25572ac76f53d55e212fc6cf558a5202b12b",
+      "policy.before": "bf58d5f5ae23502d844f70c153ef5366c31bf16ac9c77f548b94f3cf1aea1949",
+      "run/systemd/nvpcr/nvpcr-anchor.cred": "62ebf942a151100b883fcb8c41eaf37ad98e2a1f33b820ff4e0386d462064dd7",
+      "targeted-active.tar.gz": "1623077e2f24d57ff9cfd3f85ea71f445849e589cec1135e53fedc7af2532879",
+      "var/lib/systemd/nvpcr/nvpcr-anchor.cred": "62ebf942a151100b883fcb8c41eaf37ad98e2a1f33b820ff4e0386d462064dd7"
+    },
+    "archive_member_modes": {
+      "boot.before": "0o600",
+      "candidate.pp": "0o600",
+      "executable-context.before": "0o600",
+      "firmware.before": "0o600",
+      "installation-started": "0o600",
+      "journal-cursor.before": "0o600",
+      "modules.before": "0o600",
+      "policy.before": "0o644",
+      "run/systemd/nvpcr/nvpcr-anchor.cred": "0o644",
+      "targeted-active.tar.gz": "0o600",
+      "var/lib/systemd/nvpcr/nvpcr-anchor.cred": "0o644"
+    },
+    "anchors_match_each_other_and_preserved_failed_trial_recovery": true,
+    "nested_store_safe": true,
+    "stored_original_policy_sha256": "bf58d5f5ae23502d844f70c153ef5366c31bf16ac9c77f548b94f3cf1aea1949",
+    "failed_validations": [
+      "Initial check incorrectly required every archived file to be mode 0600 and rejected public policy.before.",
+      "Second check still assumed encrypted anchors had source mode 0600 and rejected a preserved mode 0644. Reassessed against the installation cp --preserve=mode contract and original archived metadata; confirmed identical modes, private outer directory/archive and matching encrypted payload hashes. No host permissions were changed."
+    ]
+  },
+  "remote_export_modes": {
+    "directory": "0700",
+    "archive": "0600",
+    "loaded_policy": "0600"
+  },
+  "methods": [
+    "Pinned SSH read-only observations recorded with commands",
+    "Pinned SCP: hashes match both operator report and summary.json",
+    "tarfile metadata/path/allowlist validation without filesystem extraction; payload hash comparisons only",
+    "Nested targeted/active archive path/type safety and original policy.kern hash",
+    "Container checkpolicy -b -C -M -o expected.cil reviewed-policy.kern and equivalent loaded-policy conversion; exact CIL comparison",
+    "Container SETools init transition and permissive-type check; normalized seinfo properties/counts comparison"
+  ],
+  "private_artifacts": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/revised-v2/export",
+  "limits": [
+    "Loaded and on-disk binaries have different hashes; represented CIL and seinfo metadata match",
+    "No privileged live TPM/SRK/LUKS snapshot in this continuation; anchors verified at export/pre-install observation times",
+    "Late service retains its failed first-trial invocation; no revised runtime trial or reboot",
+    "Current approval covers installation/export/recovery only; service execution requires its own reviewed helper and approval"
+  ],
+  "validation_notes": [
+    "Initial parallel Devbox commands raced on generated .cmd.sh; Git status succeeded when rerun sequentially. No repository files were changed by the failed command."
+  ],
+  "documentation_checks": {
+    "timestamp": "2026-09-09T19:37:30.137641+00:00",
+    "hermes_guide": "PASS: 217 assertions",
+    "markdownlint": "PASS: four exact document copies, fix false",
+    "local_file_links": 20,
+    "git_diff_check": "PASS"
+  },
+  "container": "Stopped and retained after comparisons; idle sleep required SIGKILL after one-second timeout"
+}

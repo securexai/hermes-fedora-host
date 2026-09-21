@@ -1,0 +1,1380 @@
+{
+  "recorded_at": "2026-09-10T15:02:06.313973+00:00",
+  "scope": "Read-only production dependency review and local preparation; no production mutation, service invocation, reboot, TPM/slot/anchor/privilege operation, commit, push or delegation.",
+  "environment": {
+    "repository": "/var/home/cloudops/code/repos/mikrotik",
+    "branch": "codex/hermes-unattended",
+    "base_revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9",
+    "private_evidence_directory": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z"
+  },
+  "SE22": "Request metadata already received; failure review PASS, runtime FAIL, invocation consumed.",
+  "SE23_SE25": "Prepared separate v3 correction paused and preserved; not superseded by a v3 permission expansion.",
+  "live_public_probe": {
+    "timestamp": "2026-09-10T14:42:35.712999+00:00",
+    "hostname": {
+      "exit": 0,
+      "output": "hermes"
+    },
+    "kernel": {
+      "exit": 0,
+      "output": "7.1.12-200.fc44.x86_64"
+    },
+    "selinux": {
+      "exit": 0,
+      "output": "Enforcing"
+    },
+    "packages": {
+      "exit": 0,
+      "output": "systemd-259.8-1.fc44.x86_64\nsystemd-udev-259.8-1.fc44.x86_64\ndracut-108-7.fc44.x86_64\ncryptsetup-2.8.7-1.fc44.x86_64\nselinux-policy-targeted-44.8-1.fc44.noarch"
+    },
+    "secure_boot": {
+      "exit": 0,
+      "output": "SecureBoot enabled"
+    },
+    "boot_status": {
+      "exit": 1,
+      "output": null
+    },
+    "root_mount": {
+      "exit": 0,
+      "output": "/dev/mapper/fedora_hermes-root xfs"
+    },
+    "units": {
+      "systemd-tpm2-setup-early.service": {
+        "exit": 0,
+        "output": "Requires=system.slice\nWants=\nRequiredBy=\nWantedBy=sysinit.target\nBefore=systemd-repart.service shutdown.target sysinit.target systemd-tpm2-setup.service systemd-pcrnvdone.service \"systemd-cryptsetup@luks\\\\x2d566d41dd\\\\x2d003d\\\\x2d4e65\\\\x2d8a42\\\\x2d652fee07c40f.service\"\nAfter=tpm2.target systemd-journald.socket systemd-pcrphase-initrd.service system.slice\nLoadState=loaded\nActiveState=active\nSubState=exited\nFragmentPath=/usr/lib/systemd/system/systemd-tpm2-setup-early.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nInvocationID=856199b7545e421e84cec252c2106124\nExecMainStatus=0"
+      },
+      "systemd-tpm2-setup.service": {
+        "exit": 0,
+        "output": "Requires=system.slice -.mount\nWants=\nRequiredBy=\nWantedBy=sysinit.target\nBefore=sysinit.target shutdown.target\nAfter=-.mount systemd-journald.socket system.slice systemd-tpm2-setup-early.service tpm2.target systemd-remount-fs.service\nLoadState=loaded\nActiveState=failed\nSubState=failed\nFragmentPath=/usr/lib/systemd/system/systemd-tpm2-setup.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nInvocationID=65b49476a60341369fd98bf447db9984\nExecMainStatus=1"
+      },
+      "systemd-pcrproduct.service": {
+        "exit": 0,
+        "output": "Requires=system.slice -.mount\nWants=\nRequiredBy=\nWantedBy=sysinit.target\nBefore=sysinit.target shutdown.target\nAfter=-.mount tpm2.target system.slice systemd-pcrnvdone.service systemd-journald.socket\nLoadState=loaded\nActiveState=active\nSubState=exited\nFragmentPath=/usr/lib/systemd/system/systemd-pcrproduct.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nInvocationID=5f139223f2944380b397d4177ed2c19b\nExecMainStatus=0"
+      },
+      "systemd-pcrphase-initrd.service": {
+        "exit": 0,
+        "output": "Requires=system.slice\nWants=\nRequiredBy=\nWantedBy=initrd.target\nBefore=shutdown.target cryptsetup-pre.target systemd-sysext.service cryptsetup.target initrd-switch-root.target systemd-tpm2-setup-early.service sysinit.target\nAfter=tpm2.target system.slice systemd-journald.socket\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrphase-initrd.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nInvocationID=500bb81586d844a2afc5ae10529f7e11\nExecMainStatus=0"
+      },
+      "systemd-pcrphase-sysinit.service": {
+        "exit": 0,
+        "output": "Requires=system.slice\nWants=\nRequiredBy=\nWantedBy=sysinit.target\nBefore=shutdown.target basic.target\nAfter=tpm2.target sysinit.target system.slice systemd-journald.socket\nLoadState=loaded\nActiveState=active\nSubState=exited\nFragmentPath=/usr/lib/systemd/system/systemd-pcrphase-sysinit.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nInvocationID=1d319c8a45dc4e9ea281082edcbbd716\nExecMainStatus=0"
+      },
+      "systemd-pcrphase.service": {
+        "exit": 0,
+        "output": "Requires=sysinit.target system.slice\nWants=\nRequiredBy=\nWantedBy=sysinit.target\nBefore=shutdown.target systemd-user-sessions.service\nAfter=remote-fs.target remote-cryptsetup.target basic.target systemd-journald.socket sysinit.target system.slice tpm2.target\nLoadState=loaded\nActiveState=active\nSubState=exited\nFragmentPath=/usr/lib/systemd/system/systemd-pcrphase.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nInvocationID=b00f370334574e6f8d8cc74854e123d3\nExecMainStatus=0"
+      },
+      "hermes-runtime-credentials.service": {
+        "exit": 0,
+        "output": "Requires=\nWants=\nRequiredBy=\nWantedBy=\nBefore=\nAfter=\nLoadState=not-found\nActiveState=inactive\nSubState=dead\nFragmentPath=\nDropInPaths=\nInvocationID=\nExecMainStatus=0"
+      },
+      "user@1001.service": {
+        "exit": 0,
+        "output": "Requires=sysinit.target user-1001.slice\nWants=\nRequiredBy=\nWantedBy=\nBefore=shutdown.target\nAfter=user-runtime-dir@1001.service basic.target systemd-oomd.service dbus-broker.service systemd-journald.socket systemd-logind.service systemd-user-sessions.service user-1001.slice sysinit.target\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/usr/lib/systemd/system/user@.service\nDropInPaths=/usr/lib/systemd/system/user@.service.d/10-login-barrier.conf /usr/lib/systemd/system/service.d/10-timeout-abort.conf\nInvocationID=192d7f321f384c61ba477946cc66eedd\nExecMainStatus=0"
+      }
+    },
+    "nvpcr": {
+      "/etc/nvpcr": [],
+      "/run/nvpcr": [],
+      "/usr/local/lib/nvpcr": [],
+      "/usr/lib/nvpcr": [
+        {
+          "name": "hardware.nvpcr",
+          "mode": "0o644",
+          "uid": 0,
+          "size": 82,
+          "symlink": false,
+          "definition": {
+            "name": "hardware",
+            "algorithm": "sha256",
+            "nvIndex": 30474752
+          }
+        },
+        {
+          "name": "cryptsetup.nvpcr",
+          "mode": "0o644",
+          "uid": 0,
+          "size": 84,
+          "symlink": false,
+          "definition": {
+            "name": "cryptsetup",
+            "algorithm": "sha256",
+            "nvIndex": 30474753
+          }
+        }
+      ]
+    },
+    "metadata": {
+      "/etc/crypttab": {
+        "mode": "0o600",
+        "uid": 0,
+        "size": 130,
+        "symlink": false
+      },
+      "/etc/credstore.encrypted/hermes-openai-api": {
+        "unavailable": true
+      },
+      "/var/lib/systemd/credential.secret": {
+        "exists": false
+      },
+      "/run/systemd/nvpcr/nvpcr-anchor.cred": {
+        "mode": "0o644",
+        "uid": 0,
+        "size": 6700,
+        "symlink": false
+      },
+      "/var/lib/systemd/nvpcr/nvpcr-anchor.cred": {
+        "mode": "0o644",
+        "uid": 0,
+        "size": 6700,
+        "symlink": false
+      },
+      "/var/lib/systemd/pcrlock.json": {
+        "exists": false
+      },
+      "/run/systemd/pcrlock.json": {
+        "exists": false
+      },
+      "/etc/systemd/pcrlock.json": {
+        "exists": false
+      }
+    },
+    "crypttab": {
+      "unavailable": true
+    },
+    "cmdline": {
+      "sha256": "b286f02d26ed6313dc662ebeb195fc9958caf65ad0def9162a6b34abf9fdefce",
+      "options": [
+        "root=/dev/mapper/fedora_hermes-root",
+        "rd.lvm.lv=fedora_hermes/root",
+        "rd.luks.uuid=luks-566d41dd-003d-4e65-8a42-652fee07c40f",
+        "rd.luks.options=tpm2-device=auto"
+      ]
+    }
+  },
+  "installed_package_config_evidence": {
+    "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/package-config.json",
+    "sha256": "8dad78074f86d20e5245f9ba4d79ca3695833a0c435b965f934f35632cfbb40b"
+  },
+  "retained_initrd_inspection": {
+    "image_sha256": "09238a4a1be13e15bfa40fa55c42cc3b5eb7d607ddcec69a3f3d417fc34e7682",
+    "crypttab": [
+      {
+        "keyfile_configured": false,
+        "options": [
+          "discard",
+          "x-initrd.attach",
+          "tpm2-device=auto"
+        ]
+      }
+    ]
+  },
+  "retained_artifacts": {
+    "retained_initrd_sha256": "09238a4a1be13e15bfa40fa55c42cc3b5eb7d607ddcec69a3f3d417fc34e7682",
+    "retained_uki_sha256": "9ec0a06a4ac5fc556d8896d19f23146966ee87d66a1f54bc328b7f7f5ff63922",
+    "recorded_build": {
+      "ok": true,
+      "stage": "uki-built",
+      "uki_sha256": "9ec0a06a4ac5fc556d8896d19f23146966ee87d66a1f54bc328b7f7f5ff63922",
+      "inputs": {
+        "linux": "f4dad3d8abb5b8e00fa5b52fbb525220916573daa2e48820e5b0567806fcf218",
+        "initrd": "09238a4a1be13e15bfa40fa55c42cc3b5eb7d607ddcec69a3f3d417fc34e7682",
+        "osrel": "2890125749be45d481dc554b3f777a91e1a7a335e1d456049af353fde625bda6",
+        "cmdline": "b286f02d26ed6313dc662ebeb195fc9958caf65ad0def9162a6b34abf9fdefce",
+        "stub": "61500e5fe1ed2993bef56be2d1aeee91a75615c3676011c7acbf4819c35dc76f"
+      },
+      "secureboot_certificate_sha256": "d55704d85a768e1b6b6e5be6d3452bbcf9b75f403ac1a53081c737dde9f6fba0",
+      "pcr_public_key_sha256": "2d57d5f85c46512552154c9b88075703a819d39b2aa6e42832865db3deace85f",
+      "pcr_bank": "sha256",
+      "signed_pcr": 11,
+      "phases": [
+        "enter-initrd",
+        "enter-initrd:leave-initrd",
+        "enter-initrd:leave-initrd:sysinit",
+        "enter-initrd:leave-initrd:sysinit:ready"
+      ],
+      "purpose": "installed",
+      "boot_verified": false
+    },
+    "retained_hashes_match_recorded_build": true
+  },
+  "recorded_operator_evidence": {
+    "luks_device": "/dev/nvme0n1p3",
+    "token_id": "1",
+    "keyslots": [
+      "2"
+    ],
+    "pcr_bank": "sha256",
+    "pcrs": [
+      0,
+      7
+    ],
+    "public_key_policy": false,
+    "pcrlock_policy": false,
+    "recovery_test": "2026-09-09 cryptsetup --test-passphrase exit 0; not offline recovery-boot proof",
+    "source": "docs/plans/2026-09-07-hermes-unattended.md"
+  },
+  "dependency_conclusion": "Standard signed-PCR11 LUKS2 and host+tpm2 credential code do not require NvPCR anchoring. Received root/generated/retained-initrd metadata supports the standard path; vendor definitions and product measurement create the identified anchor dependency. Custom/external consumers remain unverified. Keep SRK/PCR11 services; minimal profile needs fresh lab certification and concrete production approvals.",
+  "unverified": [
+    "Custom/external attestation, sealing, scripts and arbitrary TPM consumers outside the bounded inventory",
+    "Next-boot firmware/loader default and fresh measured-image/unattended boot acceptance",
+    "Production unattended credential enrollment, actual policy binding, availability and isolation after reboot",
+    "Fedora 259.8 runtime behavior with the prepared profile, dracut mask copying and hardware boots",
+    "Offline recovery-key access, approved updated/previous image, trust rejection and interrupted-update recovery"
+  ],
+  "sources": [
+    {
+      "source": "src/tpm2-setup/tpm2-setup.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/tpm2-setup/tpm2-setup.c",
+      "sha256": "982d91e1795f8a3c8895a8b0d3e07c405ac7706d5fc3af391b3cde0ce87b223d"
+    },
+    {
+      "source": "src/tpm2-setup/nvpcr/cryptsetup.nvpcr.in",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/tpm2-setup/nvpcr/cryptsetup.nvpcr.in",
+      "sha256": "169acbfb4a7741926e91ca97807800092334ec6a2e50607854db17ec441ffa4b"
+    },
+    {
+      "source": "src/tpm2-setup/nvpcr/hardware.nvpcr.in",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/tpm2-setup/nvpcr/hardware.nvpcr.in",
+      "sha256": "0f072ba91eb8b543b41e259dc8d11d610d0c612c4aeba4105da3e9570731a914"
+    },
+    {
+      "source": "src/shared/tpm2-util.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/shared/tpm2-util.c",
+      "sha256": "beea4f1834521243d104e6fdeb6109cf318dea3e219438a1dd2d24633e605eff"
+    },
+    {
+      "source": "src/cryptsetup/cryptsetup-tpm2.c",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "source": "src/cryptenroll/cryptenroll-tpm2.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/cryptenroll/cryptenroll-tpm2.c",
+      "sha256": "876267b45a02694f38502c16bf017ae529f2a284ae71bec9180828201dac4b9f"
+    },
+    {
+      "source": "src/shared/creds-util.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/shared/creds-util.c",
+      "sha256": "8dfe0f7191d5972af638d9fcb3289519f4409a033ec62506011ed403965ed3ad"
+    },
+    {
+      "source": "units/systemd-pcrproduct.service.in",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/units/systemd-pcrproduct.service.in",
+      "sha256": "faa234eab4c7c6b72b3a6fbbb18f6e2460ec1e45c2c69a989c77614098aff590"
+    },
+    {
+      "source": "units/systemd-tpm2-setup.service.in",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/units/systemd-tpm2-setup.service.in",
+      "sha256": "8024f4a96c3ed8c523edbdd4dd7b427c8b0ac1aa589a04019440bbd357bc3454"
+    },
+    {
+      "source": "units/systemd-tpm2-setup-early.service.in",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/units/systemd-tpm2-setup-early.service.in",
+      "sha256": "4445dc428f4dcaea5452457d63b21fd84ff3da7482c93c5af1dde65319dbb449"
+    },
+    {
+      "source": "man/systemd-creds.xml",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/man/systemd-creds.xml",
+      "sha256": "4e9a7660d8fb4a84ad3b111e8be52fbca460497da26a1456b11b39ab3e483a87"
+    },
+    {
+      "source": "man/systemd-cryptenroll.xml",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/man/systemd-cryptenroll.xml",
+      "sha256": "9657ad28a7f5b892a6fb8ff6f3cbbd64b884c1fff7442b4b8a44571efbf80456"
+    },
+    {
+      "source": "man/systemd-stub.xml",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/man/systemd-stub.xml",
+      "sha256": "038ab2cea151d794fc715053e586e966446a09ec79fd9c7d5bee8028373e9d6d"
+    },
+    {
+      "source": "src/pcrphase/pcrphase.c",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "source": "src/basic/conf-files.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/basic/conf-files.c",
+      "sha256": "c93745b2849ec942574a7025f40172e63f5168f9b4321872d87935afc0d2cc6b"
+    },
+    {
+      "source": "src/shared/cryptsetup-tpm2.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/shared/cryptsetup-tpm2.c",
+      "sha256": "bbaef9dd391ab6c73c5e285dee9fbd7da32ab240ad73af9bb8693923794ed500"
+    },
+    {
+      "source": "src/cryptsetup/cryptsetup.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/cryptsetup/cryptsetup.c",
+      "sha256": "e08ea83e53b92d403ca1eab5a32c7bc3de772196d27f03a3e761a419c92d17c1"
+    },
+    {
+      "source": "src/pcrextend/pcrextend.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/pcrextend/pcrextend.c",
+      "sha256": "196faafb82adfa6aa3e384e99fbbbdb76d3e5e88b1db6048803ee35c467eec82"
+    },
+    {
+      "source": "src/shared/pcrextend-util.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/shared/pcrextend-util.c",
+      "sha256": "0d1c0852a6d001e338a650a29bc6b3d29a2a157a844767b8e2a958e66f8dd74d"
+    },
+    {
+      "source": "src/basic/fileio.c",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/src/basic/fileio.c",
+      "sha256": "691d77b7655f522473d2c0baba78f285bfe5ff344e3ebd4357b63a7b87402d86"
+    },
+    {
+      "source": "man/systemd-pcrphase.service.xml",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/man/systemd-pcrphase.service.xml",
+      "sha256": "1ceb9f4d293bd5501a81d6e7a46c244b8defc2cbd7b0c6758755fc8463b67636"
+    },
+    {
+      "source": "man/crypttab.xml",
+      "url": "https://raw.githubusercontent.com/systemd/systemd/v259/man/crypttab.xml",
+      "sha256": "e1871892e12e75025d55ae8bf25215c6fd74aa48a53822b4dfaf5252ce1e68d5"
+    }
+  ],
+  "preservation": {
+    "baseline_manifest": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/before.json",
+    "changed_preexisting_files": {
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": {
+        "before": "2e431e3193b5ecc214e7c37cd8caf948ae07e848191f9e3b5301dfdede3fb6c1",
+        "after": "aed4eb0357f6c632aa3b867ba61326af437a2fd1ef03287ea09e0d3be85bfa4e"
+      },
+      "scripts/hermes/unattended/lifecycle_guest.py": {
+        "before": "8726d7d5977a3c2e755cdb71399800b178933777b5ade41b18e2749190894de1",
+        "after": "09a3720ca36be6c1077c19881b43064156e2614b5641e64eb4f5dd2c7f0aaa7f"
+      },
+      "docs/CONTRIBUTING.md": {
+        "before": "c401acc2c017e5a1af90f50e29d177d99fb9987c5ac271c3215da73396138f05",
+        "after": "33ba2469d761da2e9c90d34351140b7c412ade073cfa3525018e21367a898722"
+      },
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": {
+        "before": "ae4df5056c677388f66035bdef942f844abdc75caaae2ac0021e4f900a6ea1b1",
+        "after": "ad568eb6033752184c39dcf0c8b34bd50f1162fcc1f4a01af2dd490b2bd1582c"
+      },
+      "docs/HERMES_UNATTENDED_DEPLOYMENT.md": {
+        "before": "a5ff42c4a4dcf245b403f1b0b9687f43fb400fb731415953d4816944301c752c",
+        "after": "bb70fca444c6baa00a71af4c37c09ee297db22587fac605721117dedebb37212"
+      },
+      "docs/plans/2026-09-07-hermes-unattended.md": {
+        "before": "be0106d32158583519014af19f94c362506dfb9c6ffce5647df900c89011557e",
+        "after": "5695b6fa501560f68b404414f6775b579f9ab3c9ab59ce9abfe803c2caeebbef"
+      },
+      "scripts/hermes/unattended/certify_observe.py": {
+        "before": "31c61dc6716e8bb2302877a9b4dbf77d2ec7d3c80efd76e925704a5482967a65",
+        "after": "856d1345320466faffe1e165f41cd9c593a22b47eed42f8f7d52b3efa7f050cf"
+      },
+      "scripts/hermes/unattended/host.py": {
+        "before": "14c98e19a70371357b4707bbef8e9cc8934b03808f0024ef136c557e9e60af2c",
+        "after": "0c8c96ed5682467b2f93d437b8dd313b5acaad2c28ef31ebd37002d0df055bde"
+      },
+      "scripts/hermes/unattended/prepare.py": {
+        "before": "985c7c1950adddbff30ce827b37d117b54055e40d27047c21519834e57adec39",
+        "after": "83bdb319dd4bbf80a0f9264d379468d9e97273814f7d577de59d68e309df5fef"
+      },
+      "tests/test_hermes_unattended.py": {
+        "before": "505ec36535189e47d9138521aa583d87ed153eb47d202c92a1c2ae6fa69c17e5",
+        "after": "292ed91dfd4c158c40984548a845d7728e6e3d3017a44e3f524ac49f232e9870"
+      },
+      "vm/DEPLOYMENT_TASKS.md": {
+        "before": "bfd6968da1ca92d423f04fba25c6afb87a6e26d71d9c1fba62a45be930513ac8",
+        "after": "2b72034b65298a6f097dc814111688b9269d7b8a99abbb3ef9801c10278e6a80"
+      }
+    },
+    "preserved_policy_source_test_and_evidence_hashes": {
+      "docs/plans/evidence/2026-09-09-hermes-selinux-candidate.json": "48767c1ee4ae903c3e9077ff048c8ff31386ee729375468ea04af57d17695598",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-exact-store.json": "b9af9f46ae872063e6f7e7331353646867650ec793c761683edfd254c6e74348",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-first-run-failure.json": "253390ce555d4d173ccfedb56660af21c325ca93540bfe11f5a19713d2dde21c",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-loaded-policy.json": "d0d4025f761db915ac6d0b39f9ed574ce6dc02f9df065b868b9e02cb24d736a6",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-recovery.json": "d50cd490d848b0d67b2d10e3e273ac81dbcf7bf625fcbadea1c75953ec9c8b7e",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-revised.json": "63315dc75f4296ef39696a28539eea9b2786670623e78b6c226a0aa2d7a56100",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-rollback.json": "567b6a36fd05bda6962436207bf8e5205d3cc0269fa1a647b5095e886e4ddc9a",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-audit-continuation.json": "c3af7f0fd8e79c72deb4e35fac8e77f08b0da55d7f4f4f9295d6f83ceb31bfe7",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-continuation-failure.json": "b4ee73f2d74713f1af4eae0c7507e2943125c59052b44b2f466f1719b4242325",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-continuation.json": "20d38f271941771e6b2c1eb8a5b55bec6431db76a7b626d5897a15f3af726e36",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-installed.json": "c4dc627a554a4d0884f60029907fa11f8bf9bd61a75b45e0e574ee6d9f21aae0",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-preflight-failure.json": "3af00f3587f8e49d6f10772ee1bf79728fbb257da162d7a45cd6d63c53049399",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-service-preparation.json": "d1a531d220c94dd7d97ad409ce4103753130314b40b564682c2fdf232485e0aa",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-service-staging.json": "cf41f4ad06ffff606dd0ac43af047e90f4cf37eb62defa1a6de77aaf373df324",
+      "docs/plans/evidence/2026-09-09-hermes-selinux-v2-staging.json": "2e1ca84bc4fd033f03d653d5e3c2a713c9069bbc3d9544eb2ef465783e2704ef",
+      "docs/plans/evidence/2026-09-10-hermes-selinux-v2-runtime-failure.json": "cd58c6d920f70930fc22456d76ebcb1d55aa29dc2b7ebda442db19c1b8223e5b",
+      "docs/plans/evidence/2026-09-10-hermes-selinux-v3-candidate.json": "f622980b8fb381b68eb9799510fe9b6c7b71c53610a4701ae4cddd8e13649eed",
+      "scripts/hermes/selinux/continue-reviewed-service-v2-audit.py": "0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3",
+      "scripts/hermes/selinux/continue-reviewed-service-v2.py": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1",
+      "scripts/hermes/selinux/export-reviewed-policy-v2.py": "53512c68fe2c76393c50788ca0682a046348eaa0a3177c522bb0bf8353896150",
+      "scripts/hermes/selinux/hermes_tpm2_setup.fc": "9ed6c47aded948615d3eceaf7ddf2b5c816204bc2da35bdf186c723ea04e2bea",
+      "scripts/hermes/selinux/hermes_tpm2_setup.te": "2c6ee81b7f96b2886f18c6d89eae26e2da800315d2eccb48db1e15e751aa8ddb",
+      "scripts/hermes/selinux/install-reviewed-candidate-v2.sh": "fe4624900d47aa5c910f9234b5fce290abc32d0e005194d4c1255d438628b914",
+      "scripts/hermes/selinux/install-reviewed-candidate.sh": "54b057c6f5a174013fbd4019eae77db690cb89f2392bb53f3d85902e712bb36f",
+      "scripts/hermes/selinux/recover-first-service.py": "372ac2e5a34b066b769a4819367584e617487ab8576e3e7deb515e8dec3c1d3e",
+      "scripts/hermes/selinux/rollback-reviewed-candidate.sh": "d3ce2ef743b5602449832858aa685eaf5a4960a5615b3f297ad353843cd95579",
+      "scripts/hermes/selinux/run-reviewed-service-v2.py": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+      "scripts/hermes/selinux/run-reviewed-service.py": "f8e57069d746b5d7ffaa479c30b968749ee8cfe9d33b3978b245cce2b207300c",
+      "scripts/hermes/selinux/verify_policy.py": "8f1895db26f4cdcb72b31be4960b8ee85d05abe2103bd53925cd8a1229cf1646",
+      "tests/test_hermes_selinux_audit_v2.py": "545b1bd00dc0d7045ce360bdd06a7d25e44a7f89bf9252db209d9e45f5fc5cfd",
+      "tests/test_hermes_selinux_continuation_v2.py": "6403710cbb1fe2077401e3d9d01bdf63658fc8c113ca81caad3fbac6ff01f81a",
+      "tests/test_hermes_selinux_export.py": "219ab645965bee366ddf11b965c7fafa2596e372b3b653bfdd200c4b944d5d10",
+      "tests/test_hermes_selinux_service_v2.py": "e8a59ac6c040f450ca66cec54c3b52f2265f3ed5c034c4b55f0766bafc8dc161"
+    },
+    "v3_source_hashes_match_recorded": {
+      "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/fs.h": true,
+      "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/fd.h": true,
+      "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/cdrom.h": true,
+      "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/hooks.c": true,
+      "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260910/v3/blkzoned.h": true
+    }
+  },
+  "local_checks": [
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_unattended.py"
+      ],
+      "timestamp": "2026-09-10T14:50:41.308256+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-1.log",
+      "log_sha256": "ca20271286329857e0fc753f0088af0beb8eb867e9f3856be69adf7dc371fda1"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_certify.py"
+      ],
+      "timestamp": "2026-09-10T14:50:54.835530+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-2.log",
+      "log_sha256": "378835dfcd1a3745d724bbc79aa32b8ce02046db20c8d9d4d5c73615d1fe5954"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_lifecycle.py"
+      ],
+      "timestamp": "2026-09-10T14:50:55.172320+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-3.log",
+      "log_sha256": "5309b7b33e2ebb36c8bdfdec2dd6178a39d6cc69aa904276617cdda432f865a9"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_transaction.py"
+      ],
+      "timestamp": "2026-09-10T14:50:59.233803+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-4.log",
+      "log_sha256": "b3422b145032ac3a56ce40c0e8bbe6f04030fe26a1ce1f5388afec7a5b7cbee0"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_offline.py"
+      ],
+      "timestamp": "2026-09-10T14:50:59.477432+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-5.log",
+      "log_sha256": "991618c95b4a91fba650266403a1e40606f888fe0c8e5a51095901b903cd3485"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "systemd-analyze",
+        "--root=/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/profile",
+        "cat-config",
+        "nvpcr/hardware.nvpcr"
+      ],
+      "timestamp": "2026-09-10T14:56:50.034972+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-6.log",
+      "log_sha256": "f886fb30ae022ccaa43bcbdf45c0dc699ab9fdcd3e96b1a72fa970707bb09dc7"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "systemctl",
+        "--root=/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/profile",
+        "is-enabled",
+        "systemd-pcrproduct.service"
+      ],
+      "timestamp": "2026-09-10T14:56:50.053527+00:00",
+      "exit_code": 1,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-7.log",
+      "log_sha256": "71692b9801e6e1a49440510df456ae0704544147099c51ef95a7278bc46d27f0",
+      "expected_exit": 1,
+      "expected_output": "masked"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "./tests/test-hermes-guide.sh"
+      ],
+      "timestamp": "2026-09-10T14:56:50.063515+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-8.log",
+      "log_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "shellspec",
+        "spec/hermes/",
+        "spec/vm/"
+      ],
+      "timestamp": "2026-09-10T14:56:51.519852+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-9.log",
+      "log_sha256": "9c7a71916b08939b1a2406d128a2ff59c80bd616c3d4f0cf77e9247ada47521c"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_tpm_profile.py"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "timestamp": "2026-09-10T15:06:24.692177+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-10.log",
+      "log_sha256": "37f8fbdbf326a8dc63c7cd55993ab2ca3d0af0dc23cb52d267ce4127428d3f2a"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/validate-docs.py"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "timestamp": "2026-09-10T15:06:24.908275+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-11.log",
+      "log_sha256": "b469a7e5458a67ab1bf5c8652a849a67028cdceb6f59803cab1413c19ff2afe4"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "markdownlint-cli2"
+      ],
+      "cwd": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/markdown-review",
+      "timestamp": "2026-09-10T15:06:25.341602+00:00",
+      "exit_code": 1,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-12.log",
+      "log_sha256": "f29947643cebfb4958523ae6690f53b4d4ab99ac83047481216e70148776fbbc"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "timestamp": "2026-09-10T15:06:27.159594+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-13.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "markdownlint-cli2"
+      ],
+      "cwd": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/markdown-review",
+      "timestamp": "2026-09-10T15:08:27.873398+00:00",
+      "exit_code": 1,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-14.log",
+      "log_sha256": "a86f874a7eeacd4b3d50208dace843519222cb548da23345f306a0abc60fd9b0"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "timestamp": "2026-09-10T15:08:27.889343+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-15.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "markdownlint-cli2"
+      ],
+      "cwd": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/markdown-review",
+      "timestamp": "2026-09-10T15:09:56.499689+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-16.log",
+      "log_sha256": "4a5f4987cf30a38363a604aa10213b4145a832027ff2ba1cfa2b792f6789009e"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "timestamp": "2026-09-10T15:09:56.516280+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-17.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/validate-docs.py"
+      ],
+      "cwd": "/var/home/cloudops/code/repos/mikrotik",
+      "timestamp": "2026-09-10T15:11:28.214343+00:00",
+      "exit_code": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-18.log",
+      "log_sha256": "1ccf40b0d36c6ce99929c9073bf3152ea657103e5841b75a5b666d8921584e7a"
+    }
+  ],
+  "profile_test_history": [
+    {
+      "result": "PASS",
+      "tests": 14,
+      "method": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_tpm_profile.py",
+      "time": "2026-09-10 before 14:50 UTC",
+      "superseded": "Renderer live-root alias guard changed; final rerun pending"
+    },
+    {
+      "result": "PASS",
+      "tests": 14,
+      "method": [
+        "devbox",
+        "run",
+        "--",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_tpm_profile.py"
+      ],
+      "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/check-10.log",
+      "timestamp": "2026-09-10T15:06:24.692177+00:00",
+      "coverage": "Final renderer, canonical live-root rejection and service-observation boundaries"
+    }
+  ],
+  "gates": {
+    "AR01": "PASS: supplied privileged inventory and independent service correlation; custom/external consumer confirmation remains open",
+    "AR02": "PASS: local implementation and final profile tests",
+    "AR03": "PASS: updated inventory guidance; 217 guide checks, 225 links, collector/syntax/ShellCheck and seven-file isolated nonfix lint",
+    "AR04": "BLOCKED: fresh lab authorization and candidate certification",
+    "AR05": "BLOCKED: AR04, custom/external consumer confirmation and concrete production approvals"
+  },
+  "recertification": {
+    "stale_for_amended_candidate": [
+      "UA-01 offline source gate",
+      "UA-02 enrollment/credential fixture",
+      "UA-03 boot/runtime/replay/credential certification",
+      "UA-04 candidate cleanup/signing/promotion binding",
+      "S4/F4 evidence for changed observer/host inputs"
+    ],
+    "historical_preserved": [
+      "Original UA-01\u2013UA-04 and S4/F4 artifacts only",
+      "SE22 runtime FAIL and review PASS",
+      "Reviewed v2 and prepared v3 exact-source evidence"
+    ],
+    "production": "P2 never passed; P3/P4 remain blocked"
+  },
+  "next_action": "Ask only whether custom/external attestation or sealing consumers use hardware/cryptsetup NvPCR; the requested inventory JSON, SE22 metadata and LUKS diagnostics are already received. Then prepare a concrete fresh bounded lab grant; AR04 precedes production P2/P3/P4 and operation-specific approvals.",
+  "completed_at": "2026-09-10T15:11:28.215816+00:00",
+  "additional_harness_failures": [
+    {
+      "result": "FAIL",
+      "reason": "ShellCheck SC2016 for deliberately single-quoted inner staging shell; documented narrow suppression; subsequent PASS"
+    },
+    {
+      "result": "FAIL",
+      "reason": "Unsupported Markdown .json configuration suffix; changed to .jsonc"
+    },
+    {
+      "result": "FAIL",
+      "reason": "Repository config overrode external lint globs; 26 files checked, three new long lines found; no extra preexisting files changed. Switched to isolated seven-file mirror."
+    },
+    {
+      "result": "FAIL",
+      "reason": "Final next-action prose wrapping initially left a second overlong line; paragraph wrapped with textwrap; final lint PASS."
+    }
+  ],
+  "local_check_summary": {
+    "python_tests": 242,
+    "shellspec_examples": 138,
+    "guide_checks": 217,
+    "final_markdown_files": 7,
+    "final_local_links": 224,
+    "production_boot_tests": 0,
+    "dracut_archive_builds": 0,
+    "lab_runs": 0
+  },
+  "final_artifact_hashes": {
+    "scripts/hermes/unattended/tpm_profile.py": "ae78868d759927e5ab641443b7de672127f716cd083f27040033f375666f1186",
+    "scripts/hermes/unattended/host.py": "0c8c96ed5682467b2f93d437b8dd313b5acaad2c28ef31ebd37002d0df055bde",
+    "scripts/hermes/unattended/prepare.py": "83bdb319dd4bbf80a0f9264d379468d9e97273814f7d577de59d68e309df5fef",
+    "scripts/hermes/unattended/certify_observe.py": "856d1345320466faffe1e165f41cd9c593a22b47eed42f8f7d52b3efa7f050cf",
+    "scripts/hermes/unattended/lifecycle_guest.py": "09a3720ca36be6c1077c19881b43064156e2614b5641e64eb4f5dd2c7f0aaa7f",
+    "tests/test_hermes_tpm_profile.py": "dfc3e9a7aa1c7101ae80365b02013664ad4c1f05d68198cbf18cd437a3d11ad2",
+    "tests/test_hermes_unattended.py": "292ed91dfd4c158c40984548a845d7728e6e3d3017a44e3f524ac49f232e9870",
+    "docs/HERMES_TPM_DEPENDENCY_REVIEW.md": "c550d70d61a19f23f48b15b8b48111d08170625c2d24650e4407fc1fbef65708",
+    "docs/HERMES_SELINUX_TPM_REPAIR.md": "aed4eb0357f6c632aa3b867ba61326af437a2fd1ef03287ea09e0d3be85bfa4e",
+    "docs/HERMES_INSTALLATION_VERIFICATION.md": "ad568eb6033752184c39dcf0c8b34bd50f1162fcc1f4a01af2dd490b2bd1582c",
+    "docs/HERMES_UNATTENDED_DEPLOYMENT.md": "bb70fca444c6baa00a71af4c37c09ee297db22587fac605721117dedebb37212",
+    "docs/plans/2026-09-07-hermes-unattended.md": "5695b6fa501560f68b404414f6775b579f9ab3c9ab59ce9abfe803c2caeebbef",
+    "docs/CONTRIBUTING.md": "33ba2469d761da2e9c90d34351140b7c412ade073cfa3525018e21367a898722",
+    "vm/DEPLOYMENT_TASKS.md": "2b72034b65298a6f097dc814111688b9269d7b8a99abbb3ef9801c10278e6a80"
+  },
+  "diagnostic_program": {
+    "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/validate-docs.py",
+    "sha256": "9e007ecc06842068c9bba70fdfdb728999fbb750c19f8610b2f5df32b2ba89d6",
+    "production_collector_provenance": "Embedded in docs/HERMES_TPM_DEPENDENCY_REVIEW.md; validated on synthetic local data only"
+  },
+  "public_probe_program": {
+    "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/public-probe.py",
+    "sha256": "77c2da68217a7abf6fa0b36f54f235ce32939ef15b77f1ed0551afa0e4c0aecf",
+    "ssh_options": [
+      "BatchMode=yes",
+      "StrictHostKeyChecking=yes",
+      "IdentitiesOnly=yes",
+      "ConnectTimeout=10"
+    ],
+    "target": "aicowork@10.0.30.10",
+    "mode": "python3 -I -B - with read-only source over stdin"
+  },
+  "inventory_followup": {
+    "recorded_at": "2026-09-10T15:51:29.599077+00:00",
+    "status": "PASS: supplied inventory, independent read-only correlation and updated documentation validated",
+    "authorization": "Existing local/read-only architecture review; user supplied diagnostics, no new operational approval",
+    "source": {
+      "attachment_sha256": "8bd4cd7a84fc2e7e12d1382a5c742eada5e9bfb7a09072fd27567b16ccfcd34e",
+      "operator_timestamp": "2026-09-10T15:44:01.044947+00:00",
+      "source_kind": "User-supplied read-only collector result; not assistant-executed privileged observation",
+      "received_review_at": "2026-09-10T15:47:38.965398+00:00"
+    },
+    "operator_inventory": {
+      "timestamp": "2026-09-10T15:44:01.044947+00:00",
+      "selected_boot_entries": [
+        {
+          "id": "hermes-trial-rsa2048-20260909.conf",
+          "linux": null,
+          "efi": "/EFI/hermes-trial-20260909/hermes-production-rsa2048-v2.efi"
+        }
+      ],
+      "firmware_selection": [
+        "BootCurrent: 0006",
+        "BootOrder: 0001,0008,0003,0000"
+      ],
+      "crypttab": [
+        {
+          "keyfile_configured": false,
+          "tpm_auto": true,
+          "nvpcr_measurement": false,
+          "pcrlock_option": false
+        }
+      ],
+      "boot_hashes": {
+        "/boot/initramfs-7.1.12-200.fc44.x86_64.img": "09238a4a1be13e15bfa40fa55c42cc3b5eb7d607ddcec69a3f3d417fc34e7682",
+        "/boot/efi/EFI/hermes-trial-20260909/hermes-production-rsa2048-v2.efi": "9ec0a06a4ac5fc556d8896d19f23146966ee87d66a1f54bc328b7f7f5ff63922"
+      },
+      "public_key_hashes": {
+        "/etc/systemd/tpm2-pcr-public-key.pem": null,
+        "/run/systemd/tpm2-pcr-public-key.pem": "2d57d5f85c46512552154c9b88075703a819d39b2aa6e42832865db3deace85f"
+      },
+      "credentials": {
+        "/etc/credstore.encrypted/hermes-openai-api": {
+          "exists": false
+        },
+        "/var/lib/systemd/credential.secret": {
+          "exists": false
+        }
+      },
+      "consumer_references": [
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock-file-system.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock-firmware-code.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock-firmware-config.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock-machine-id.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock-make-policy.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock-secureboot-authority.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock-secureboot-policy.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrlock@.service",
+          "kinds": [
+            "pcrlock"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrnvdone.service",
+          "kinds": [
+            "nvpcr"
+          ]
+        },
+        {
+          "file": "/usr/lib/systemd/system/systemd-pcrproduct.service",
+          "kinds": [
+            "nvpcr"
+          ]
+        }
+      ],
+      "pcrlock_paths": {
+        "/var/lib/systemd/pcrlock.json": false,
+        "/run/systemd/pcrlock.json": false,
+        "/etc/systemd/pcrlock.json": false
+      }
+    },
+    "independent_read_only_service_correlation": {
+      "timestamp": "2026-09-10T15:47:39.228251+00:00",
+      "units": {
+        "systemd-pcrlock-file-system.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrlock-file-system.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=disabled\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrlock-firmware-code.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrlock-firmware-code.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=disabled\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrlock-firmware-config.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrlock-firmware-config.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=disabled\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrlock-machine-id.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrlock-machine-id.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=disabled\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrlock-make-policy.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrlock-make-policy.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=disabled\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrlock-secureboot-authority.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrlock-secureboot-authority.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=disabled\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrlock-secureboot-policy.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrlock-secureboot-policy.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=disabled\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrlock@.service": {
+          "exit": 1,
+          "output": null
+        },
+        "systemd-pcrnvdone.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=sysinit.target\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/usr/lib/systemd/system/systemd-pcrnvdone.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=static\nConditionResult=no\nInvocationID=\nExecMainStatus=0"
+        },
+        "systemd-pcrproduct.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=sysinit.target\nLoadState=loaded\nActiveState=active\nSubState=exited\nFragmentPath=/usr/lib/systemd/system/systemd-pcrproduct.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=static\nConditionResult=yes\nInvocationID=5f139223f2944380b397d4177ed2c19b\nExecMainStatus=0"
+        },
+        "systemd-tpm2-setup-early.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=sysinit.target\nLoadState=loaded\nActiveState=active\nSubState=exited\nFragmentPath=/usr/lib/systemd/system/systemd-tpm2-setup-early.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=static\nConditionResult=yes\nInvocationID=856199b7545e421e84cec252c2106124\nExecMainStatus=0"
+        },
+        "systemd-tpm2-setup.service": {
+          "exit": 0,
+          "output": "RequiredBy=\nWantedBy=sysinit.target\nLoadState=loaded\nActiveState=failed\nSubState=failed\nFragmentPath=/usr/lib/systemd/system/systemd-tpm2-setup.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf\nUnitFileState=static\nConditionResult=yes\nInvocationID=65b49476a60341369fd98bf447db9984\nExecMainStatus=1"
+        }
+      },
+      "public_files": {
+        "/etc/systemd/tpm2-pcr-public-key.pem": {
+          "exists": false
+        },
+        "/run/systemd/tpm2-pcr-public-key.pem": {
+          "exists": true,
+          "regular": true,
+          "symlink": false,
+          "mode": "0o444",
+          "uid": 0,
+          "sha256": "2d57d5f85c46512552154c9b88075703a819d39b2aa6e42832865db3deace85f"
+        }
+      },
+      "generated_cryptsetup": [
+        {
+          "file": "/run/systemd/generator/systemd-cryptsetup@luks\\x2d566d41dd\\x2d003d\\x2d4e65\\x2d8a42\\x2d652fee07c40f.service",
+          "sha256": "4ce2d07c55b1f2ddd5e4d3ab60a90a7ca142e809b5bb10cacd40467e8ef19c50",
+          "nvpcr_reference": false,
+          "pcrlock_reference": false,
+          "tpm_auto": true,
+          "execstart_count": 1
+        }
+      ],
+      "package_units": {
+        "systemd-pcrlock-file-system.service": {
+          "sha256": "1418807eb58f73fd8f58012b47583db567a6e45eb780b607e68ee545e9416c7f",
+          "exec_and_conditions": [
+            "Before=sysinit.target shutdown.target systemd-pcrlock-make-policy.service",
+            "After=systemd-remount-fs.service var.mount",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock lock-file-system",
+            "WantedBy=sysinit.target"
+          ]
+        },
+        "systemd-pcrlock-firmware-code.service": {
+          "sha256": "500ef4237e014aea244e270817450a3c8fae07839ee542999338e2825d3dbef7",
+          "exec_and_conditions": [
+            "After=systemd-tpm2-setup.service systemd-remount-fs.service var.mount",
+            "Before=sysinit.target shutdown.target systemd-pcrlock-make-policy.service",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock lock-firmware-code",
+            "WantedBy=sysinit.target"
+          ]
+        },
+        "systemd-pcrlock-firmware-config.service": {
+          "sha256": "b6e1bfa1cc2894b6c8b26e64ae48ee4d172cc09d0e66244d8a3c13b03d60a482",
+          "exec_and_conditions": [
+            "After=systemd-tpm2-setup.service systemd-remount-fs.service var.mount",
+            "Before=sysinit.target shutdown.target systemd-pcrlock-make-policy.service",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock lock-firmware-config",
+            "WantedBy=sysinit.target"
+          ]
+        },
+        "systemd-pcrlock-machine-id.service": {
+          "sha256": "6f57a388ec24a3a07a2a9cb434c1defb1d7004adca38742dc1a69ebd589f7fd1",
+          "exec_and_conditions": [
+            "Before=sysinit.target shutdown.target systemd-pcrlock-make-policy.service",
+            "After=systemd-remount-fs.service var.mount",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock lock-machine-id",
+            "WantedBy=sysinit.target"
+          ]
+        },
+        "systemd-pcrlock-make-policy.service": {
+          "sha256": "926f28756f0902fa355b0f9f24b285da0842b6f6dca3aa8007065b8e0689c897",
+          "exec_and_conditions": [
+            "After=systemd-tpm2-setup.service",
+            "Before=sysinit.target shutdown.target",
+            "After=systemd-remount-fs.service var.mount",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock make-policy --location=770",
+            "WantedBy=sysinit.target"
+          ]
+        },
+        "systemd-pcrlock-secureboot-authority.service": {
+          "sha256": "c1c94eccd4f1d5ddd6f54eb3c1bb009061d4fdb10c5f8a41215f2d3cf6126883",
+          "exec_and_conditions": [
+            "After=systemd-tpm2-setup.service",
+            "Before=sysinit.target shutdown.target systemd-pcrlock-make-policy.service",
+            "After=systemd-remount-fs.service var.mount",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock lock-secureboot-authority",
+            "WantedBy=sysinit.target"
+          ]
+        },
+        "systemd-pcrlock-secureboot-policy.service": {
+          "sha256": "15f8faf5172d9e563fb5a8404a005575d9916f819313b0cb55e9d9cba14e8891",
+          "exec_and_conditions": [
+            "After=systemd-tpm2-setup.service",
+            "Before=sysinit.target shutdown.target systemd-pcrlock-make-policy.service",
+            "After=systemd-remount-fs.service var.mount",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock lock-secureboot-policy",
+            "WantedBy=sysinit.target"
+          ]
+        },
+        "systemd-pcrlock@.service": {
+          "sha256": "9fd13d2eb867287b90e442f700c91fef742cbaeb9beea1d4b51fd00ed06eddd4",
+          "exec_and_conditions": [
+            "After=systemd-tpm2-setup.service",
+            "Before=sysinit.target shutdown.target",
+            "After=systemd-remount-fs.service var.mount",
+            "ExecStart=/usr/lib/systemd/systemd-pcrlock --location=770"
+          ]
+        },
+        "systemd-pcrnvdone.service": {
+          "sha256": "f457fad1b06020253b8e3a02a95c72417f3e46f2541ab781bb5b8ebd7c747d05",
+          "exec_and_conditions": [
+            "After=tpm2.target",
+            "After=systemd-tpm2-setup-early.service",
+            "Before=sysinit.target cryptsetup-pre.target cryptsetup.target shutdown.target initrd-switch-root.target",
+            "ConditionSecurity=measured-uki",
+            "ConditionPathExists=/etc/initrd-release",
+            "ExecStart=/usr/lib/systemd/systemd-pcrextend --graceful --pcr=kernel-initrd --event-type=nvpcr-separator nvpcr-separator"
+          ]
+        },
+        "systemd-pcrproduct.service": {
+          "sha256": "51205024e86c1100eb3d2c2d2ca7f9525a016de3a85e9aa777480cbcd2359df3",
+          "exec_and_conditions": [
+            "After=tpm2.target systemd-pcrnvdone.service",
+            "Before=sysinit.target shutdown.target",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ConditionSecurity=measured-uki",
+            "ExecStart=/usr/lib/systemd/systemd-pcrextend --graceful --product-id"
+          ]
+        },
+        "systemd-tpm2-setup-early.service": {
+          "sha256": "c183108475b675886df738a719ef3f86137f870beb0140cc7f4411bbb0c35597",
+          "exec_and_conditions": [
+            "After=tpm2.target systemd-pcrphase-initrd.service",
+            "Before=sysinit.target shutdown.target",
+            "ConditionSecurity=measured-uki",
+            "ConditionPathExists=!/run/systemd/tpm2-srk-public-key.pem",
+            "ExecStart=/usr/lib/systemd/systemd-tpm2-setup --early=yes --graceful"
+          ]
+        },
+        "systemd-tpm2-setup.service": {
+          "sha256": "56e562eaa0e236bf33c0c6bc22171a5fcf0470b9ff185220ea8e3fd8810fe679",
+          "exec_and_conditions": [
+            "After=tpm2.target systemd-tpm2-setup-early.service systemd-remount-fs.service",
+            "Before=sysinit.target shutdown.target",
+            "ConditionSecurity=measured-uki",
+            "ConditionPathExists=!/etc/initrd-release",
+            "ExecStart=/usr/lib/systemd/systemd-tpm2-setup --graceful"
+          ]
+        }
+      },
+      "pcrlock_instances": {
+        "exit": 0,
+        "output": ""
+      }
+    },
+    "effective_options_followup": {
+      "timestamp": "2026-09-10T15:48:06.333381+00:00",
+      "loaded_cryptsetup": {
+        "systemd-cryptsetup@luks\\x2d566d41dd\\x2d003d\\x2d4e65\\x2d8a42\\x2d652fee07c40f.service": {
+          "properties": {
+            "exit": 0,
+            "output": "LoadState=loaded\nFragmentPath=/run/systemd/generator/systemd-cryptsetup@luks\\x2d566d41dd\\x2d003d\\x2d4e65\\x2d8a42\\x2d652fee07c40f.service\nDropInPaths=/usr/lib/systemd/system/service.d/10-timeout-abort.conf"
+          },
+          "execstart_query_exit": 0,
+          "execstart_flags": {
+            "nvpcr_reference": false,
+            "pcrlock_reference": false,
+            "tpm_auto": true
+          }
+        }
+      },
+      "pcrlock_unit_files": {
+        "exit": 0,
+        "output": "systemd-pcrlock@.service static -"
+      }
+    },
+    "comparisons": {
+      "current_initrd_matches_retained_build": true,
+      "selected_entry_points_to_retained_uki": true,
+      "selected_uki_file_matches_retained_build": true,
+      "running_public_key_matches_build": true
+    },
+    "resolved": [
+      "Root crypttab has no keyfile, NvPCR measurement or PCR-lock option",
+      "Selected UKI on-disk and current initrd hashes match retained build; running public key matches",
+      "Expected encrypted runtime credential and host credential secret absent",
+      "Persistent public-key file absent; approved enrollment must install matching public key",
+      "Packaged PCR-lock services disabled/inactive; no template instances loaded or enabled; generated cryptsetup has no NvPCR/PCR-lock reference"
+    ],
+    "limits": [
+      "Selected-file hash binding is not fresh measured-boot/cold-boot evidence or next-boot default proof",
+      "Bounded scan does not establish absence of arbitrary custom/external TPM consumers",
+      "Production credential creation and reboot/isolation acceptance remain unperformed"
+    ],
+    "nonzero_read_only_query": {
+      "unit": "systemd-pcrlock@.service",
+      "command": "systemctl show --all systemd-pcrlock@.service with metadata properties",
+      "exit": 1,
+      "resolution": "Uninstantiated template is not a runnable unit. Packaged template file, list-unit-files and empty loaded-instance list reviewed; no retry/start."
+    },
+    "reused_source_hashes": {
+      "scripts/hermes/unattended/tpm_profile.py": "ae78868d759927e5ab641443b7de672127f716cd083f27040033f375666f1186",
+      "scripts/hermes/unattended/host.py": "0c8c96ed5682467b2f93d437b8dd313b5acaad2c28ef31ebd37002d0df055bde",
+      "scripts/hermes/unattended/prepare.py": "83bdb319dd4bbf80a0f9264d379468d9e97273814f7d577de59d68e309df5fef",
+      "scripts/hermes/unattended/certify_observe.py": "856d1345320466faffe1e165f41cd9c593a22b47eed42f8f7d52b3efa7f050cf",
+      "scripts/hermes/unattended/lifecycle_guest.py": "09a3720ca36be6c1077c19881b43064156e2614b5641e64eb4f5dd2c7f0aaa7f",
+      "tests/test_hermes_tpm_profile.py": "dfc3e9a7aa1c7101ae80365b02013664ad4c1f05d68198cbf18cd437a3d11ad2",
+      "tests/test_hermes_unattended.py": "292ed91dfd4c158c40984548a845d7728e6e3d3017a44e3f524ac49f232e9870"
+    },
+    "previous_unverified": [
+      "Live root crypttab/effective generated options and complete custom/remote consumers",
+      "Current selected UKI and initrd identities bound to retained copies",
+      "Production credential presence, actual binding, availability and isolation after reboot",
+      "Fedora 259.8 binary behavior under rendered profile; dracut mask copying and hardware no-input boots",
+      "Offline recovery-key boot, approved updated/previous image, negative trust tests and production interruption handling"
+    ],
+    "previous_next_action": "Return the new bounded operator collector JSON and confirm custom/external NvPCR consumers; reuse SE22 metadata and recorded LUKS policy. Review before a fresh lab grant; production remains blocked on AR04 then concrete operation approvals.",
+    "private_files": {
+      "operator-inventory.json": {
+        "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/operator-inventory.json",
+        "sha256": "a79a09fc03c80bdf706068b92d3c57f143fe321c0222cd6d91efd08b03627fe3"
+      },
+      "operator-source.json": {
+        "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/operator-source.json",
+        "sha256": "656ad8dae6f5e885623d41f4596f43ad9c710b07613a649e240bf81dbb1584b4"
+      },
+      "service-correlation.py": {
+        "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/service-correlation.py",
+        "sha256": "ec37b085ed7a8d749cc60635175e9b474ede0d01d6a3fe4c8734b4b6e29e5850"
+      },
+      "service-correlation.json": {
+        "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/service-correlation.json",
+        "sha256": "50d483c723d75702b4fdada317cc2c10148d0977093128f92a2c6787a5748bfe"
+      },
+      "effective-options.py": {
+        "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/effective-options.py",
+        "sha256": "37e60fbd3427c72cf8917e763ec071e44d1455aea5653b41463221e40b2ba591"
+      },
+      "effective-options.json": {
+        "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/effective-options.json",
+        "sha256": "af62ba7d93012dd132dfc65df1381335a4e30981d76643f6903840522f8f9091"
+      },
+      "before.json": {
+        "path": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/before.json",
+        "sha256": "1affe6b430ddad475bff66a21e0a36be0a1b649a4671adad17b9a98e4bba7be8"
+      }
+    },
+    "next_action": "Ask only whether custom/external attestation or sealing consumers use hardware/cryptsetup NvPCR; the requested inventory JSON, SE22 metadata and LUKS diagnostics are already received. Then prepare a concrete fresh bounded lab grant; AR04 precedes production P2/P3/P4 and operation-specific approvals.",
+    "checks": [
+      {
+        "name": "guide",
+        "command": [
+          "devbox",
+          "run",
+          "--",
+          "./tests/test-hermes-guide.sh"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "Devbox",
+        "timestamp": "2026-09-10T15:52:04.491612+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/guide.log",
+        "log_sha256": "0d8731f3d015ae6ec4a768df6aafc2db99d973f8c5f742b7b8437aec979dee28"
+      },
+      {
+        "name": "documents",
+        "command": [
+          "devbox",
+          "run",
+          "--",
+          "python3",
+          "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/validate-docs.py"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "Devbox",
+        "timestamp": "2026-09-10T15:52:04.580197+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/documents.log",
+        "log_sha256": "c405bf6623c2cd5c25620695eaa3cf5e7eb50cd6d0941b09980ba6cdf01be58b"
+      },
+      {
+        "name": "markdown",
+        "command": [
+          "markdownlint-cli2"
+        ],
+        "cwd": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/markdown-review",
+        "environment": "Devbox",
+        "timestamp": "2026-09-10T15:53:08.466161+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/markdown.log",
+        "log_sha256": "4a5f4987cf30a38363a604aa10213b4145a832027ff2ba1cfa2b792f6789009e"
+      },
+      {
+        "name": "whitespace",
+        "command": [
+          "devbox",
+          "run",
+          "--",
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "Devbox",
+        "timestamp": "2026-09-10T15:53:08.495712+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/whitespace.log",
+        "log_sha256": "1a6d1aa37d5211b465fd494f1aa8bde4af11dea06559e93811d592af32b0fc34"
+      }
+    ],
+    "initial_passing_checks": [
+      {
+        "name": "markdown",
+        "command": [
+          "markdownlint-cli2"
+        ],
+        "cwd": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/markdown-review",
+        "environment": "Devbox",
+        "timestamp": "2026-09-10T15:52:04.654453+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/markdown.log",
+        "log_sha256": "4a5f4987cf30a38363a604aa10213b4145a832027ff2ba1cfa2b792f6789009e"
+      },
+      {
+        "name": "whitespace",
+        "command": [
+          "devbox",
+          "run",
+          "--",
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "Devbox",
+        "timestamp": "2026-09-10T15:52:04.681035+00:00",
+        "exit_code": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/whitespace.log",
+        "log_sha256": "1a6d1aa37d5211b465fd494f1aa8bde4af11dea06559e93811d592af32b0fc34"
+      }
+    ],
+    "completed_at": "2026-09-10T15:53:54.797946+00:00",
+    "preservation": {
+      "baseline_manifest": "/var/home/cloudops/.local/state/hermes-architecture-review/20260910T144108Z/inventory-followup/before.json",
+      "changed_files": [
+        "docs/HERMES_INSTALLATION_VERIFICATION.md",
+        "docs/HERMES_SELINUX_TPM_REPAIR.md",
+        "docs/HERMES_TPM_DEPENDENCY_REVIEW.md",
+        "docs/HERMES_UNATTENDED_DEPLOYMENT.md",
+        "docs/plans/2026-09-07-hermes-unattended.md",
+        "docs/plans/evidence/2026-09-10-hermes-tpm-dependency-review.json",
+        "vm/DEPLOYMENT_TASKS.md"
+      ],
+      "all_other_existing_files_unchanged": true,
+      "unchanged_file_count": 247,
+      "v2_v3_source_tests_and_evidence_unchanged": true,
+      "repository_file_set_unchanged": true
+    },
+    "artifact_hashes": {
+      "docs/HERMES_INSTALLATION_VERIFICATION.md": "6dac024ce2b62e4f51175f619f0bc34b532dae4dcf8178a04ab15cc3ba372459",
+      "docs/HERMES_SELINUX_TPM_REPAIR.md": "af5bcfab1dcb50f0bbcb7b2d5f878e29d8ab79d6afc440a97359cc0f4905b677",
+      "docs/HERMES_TPM_DEPENDENCY_REVIEW.md": "540b181273487675d732d8b7139b8da53332b5a40914d075cf4a5acc902acc98",
+      "docs/HERMES_UNATTENDED_DEPLOYMENT.md": "826dfc3e4f59d1b6ca0f0732b8b05b1d3d15b1a6b621f633858d416c7c33bcbd",
+      "docs/plans/2026-09-07-hermes-unattended.md": "f44eb8a801c8dbb12432540e8616bb4ba2e33778da2370b261452cf5fc0defa0",
+      "vm/DEPLOYMENT_TASKS.md": "4da2b0075b5e528ec149d604eefff12336c195a0aeb2b2ea3e66d3c36e05a682"
+    },
+    "validation_summary": {
+      "guide_checks": 217,
+      "local_links": 225,
+      "isolated_nonfix_markdown_files": 7,
+      "collector_canary_and_immutability": "PASS",
+      "bash_syntax_shellcheck_python_compile": "PASS",
+      "diff_whitespace": "PASS",
+      "reused_previous_python_tests": 242,
+      "reused_previous_shellspec_examples": 138,
+      "new_lab_runs": 0,
+      "new_production_mutations": 0,
+      "new_service_invocations": 0
+    }
+  },
+  "final_artifact_hashes_scope": "Original architecture-review closure at completed_at; later documentation/evidence-only follow-up identities are under inventory_followup.artifact_hashes."
+}

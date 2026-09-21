@@ -1,0 +1,48 @@
+{
+  "checked_at_utc": "2026-09-18T23:32:27Z",
+  "target": "lab-hermes-server / 172.16.99.12",
+  "image_digest": "sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1",
+  "probe": "scripts/hermes/manual/gateway/memory-approval-probe.py",
+  "probe_sha256": "ad9d3e53fb51d5af20f592f39882d468c87a12b5306fb13813e23c17ff362148",
+  "source_sha256": {
+    "tools/memory_tool.py": "ed9c5db6b3144b88425f7039280239b29a047143aa8ffdfd3b7f47bf7e707143",
+    "tools/write_approval.py": "4a6416e6edc75fda0313adf32e2f4a6740f2ffcc5eb1a6addfd5846e69b02232",
+    "hermes_cli/write_approval_commands.py": "de520311f9da69d171b8896be05740adc00823829cfcc1207d55f38f379609c9",
+    "hermes_cli/cli_commands_mixin.py": "e803531c9f52fd566a5baca05567b0aaef9360042de1412a128d83bb566d7186",
+    "gateway/slash_commands.py": "cb7a1b99575fb17913a27a3f97039aa98700acad88dba5f62bed314146ae64bd"
+  },
+  "deterministic_probe": {
+    "cli_stage_approve_reject": "PASS",
+    "gateway_stage_approve_reject": "PASS",
+    "fresh_process_recall": "PASS",
+    "approval_gate_preserved": "PASS",
+    "documented_ssh_command": "PASS"
+  },
+  "model_probe": {
+    "provider": "openai-api",
+    "model": "gpt-5.6-luna",
+    "model_calls": 2,
+    "profile": "temporary, isolated from live queue; removed afterward",
+    "staging_response": "The fact was staged for approval but is not yet saved. Review it with `/memory pending`.",
+    "committed_before_approval": false,
+    "explicit_approval": "PASS",
+    "fresh_session_exact_codeword": "PASS"
+  },
+  "runtime_changed": false,
+  "live_memory_queue_changed": false,
+  "live_approval_enabled": true,
+  "conclusion": "The claimed undrainable queue and misleading model confirmation were not reproduced; supported interactive handlers work. Corrected the operating documentation rather than changing the pinned image or bypassing approval.",
+  "limitations": [
+    "Gateway slash-handler test is not end-to-end Telegram testing.",
+    "Two successful model calls do not guarantee all future natural-language confirmations are accurate.",
+    "Historical misleading-confirmation report retained; its exact cause is unproven."
+  ],
+  "repository_checks": {
+    "hermes_guide": "217 passed",
+    "clean_install_rehearsal": "PASS, zero failures/advisories",
+    "python_syntax": "PASS",
+    "changed_relative_links": "PASS",
+    "markdownlint": "PASS, isolated copies and fixes disabled",
+    "git_diff_check": "PASS"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "record": "hermes-m01-fedora-readiness",
+  "kind": "live-server-preparation",
+  "profile": "manual-guide (docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md)",
+  "branch": "codex/hermes-manual-guide-plan",
+  "gate": "M01 - Access and baseline / Fedora readiness",
+  "status": "PASS for the host-readiness scope; M02-M06 not started",
+  "operator_authorization": "explicit deploy request; manual-guide profile selected; privileged commands entered by the operator",
+  "timeline_utc": {
+    "baseline_inventory": "2026-09-13T02:26:44Z",
+    "recovery_backup": "2026-09-13T02:29:25Z",
+    "update_and_tools": "2026-09-13T02:32:26Z",
+    "firewall_journal_updates": "2026-09-13T02:34:50Z",
+    "runtime_account": "2026-09-13T02:36:04Z",
+    "controlled_reboot": "2026-09-13T02:37Z"
+  },
+  "transport": {
+    "target": "aicowork@10.0.30.10",
+    "identity": "id_ed25519_cloudops",
+    "strict_host_key_checking": true,
+    "local_note": "workstation system ssh config unreadable to the agent; pinned -F /dev/null plus explicit UserKnownHostsFile"
+  },
+  "staged_scripts_sha256": {
+    "hermes-m01-baseline.sh": "6d1930fa47cefe76f61904653d9888831a531ba47ed40e70b4f544173d0b84b6",
+    "hermes-m01-recovery.sh": "6face31a527ca38075ce7439a084653bb8bd69aa2704a6d2c60505cadf45cf27",
+    "hermes-m01-review.sh": "77a9518ecb47e88d405e31246d5e0eb9a6f6b925cbdb5125c0363067e55a4bd5",
+    "hermes-m01-update.sh": "d2eae0feadd6bdaf2ed8d54220f538013f065a2df8f6b665cee9d60c5cbe26d8",
+    "hermes-m01-firewall-journal.sh": "2b6cea0786f7ba14aa2daa38088516277199392f637c103da942e50e2fff55cb",
+    "hermes-m01-runtime-account.sh": "ba2b5512f41e152fab06f41becbcab36873c6e6c787fb6664c443944e1099688",
+    "hermes-m01-reboot.sh": "cefd981255e9976d49844e0c03912edee11695c35d0a2472d8b9c90641f76768"
+  },
+  "access": {
+    "sudo": "aicowork (ALL) ALL, password required; operator rotated the exposed password before privileged work",
+    "ssh_effective": "pubkeyauthentication yes, passwordauthentication no, kbdinteractiveauthentication no, authenticationmethods publickey, permitrootlogin no",
+    "ssh_negative_test": "PASS - public-key-disabled connection denied (Permission denied (publickey))",
+    "ssh_positive_test": "PASS - key-only, ControlPath=none, ForwardAgent=no",
+    "static_hostname_set": "hermes.ai.lab.local",
+    "console_recovery": "operator confirmed physical console plus LUKS passphrase before reboot"
+  },
+  "recovery_backup": {
+    "luks_header": "/root/recovery/nvme0n1p3-20260913T022925Z.header, 16777216 bytes, luksDump parse verified",
+    "luks_header_sha256": "94ee4ad9d392301090c2bdb7cf0772f22d7f86fb120670245a980862fcf8c8f1",
+    "lvm_metadata": "vgcfgbackup fedora_hermes",
+    "lvm_metadata_sha256": "42950ed08339f8dc5d9efee8cadbf81c688e9d810e1b7c0098fe0c0bbd199bfa",
+    "offdisk_copy": "private/hermes-production-recovery/ on the LUKS-encrypted workstation, checksums re-verified after transfer",
+    "server_staging": "removed after verified transfer"
+  },
+  "updates_and_tools": {
+    "dnf_upgrade": "Nothing to do (system current; install media kernel 6.19.10 plus running 7.2.4-200)",
+    "installed": ["git 2.55.0", "skopeo 1.22.2", "sysstat 12.7.9", "dnf5-plugin-automatic 5.4.4.0", "plus 9 dependencies"],
+    "chrony": "enabled, active, synchronized (stratum 3, sub-millisecond offset)",
+    "secure_boot": "enabled",
+    "transient_mirror_error": "one Curl error 56 on mirrors.fedoraproject.org metalink during review; metalink subsequently returned HTTP 200"
+  },
+  "firewall": {
+    "active_zone": "FedoraServer on eno1, services reduced from 'cockpit dhcpv6-client ssh' to 'dhcpv6-client ssh'",
+    "cockpit": "cockpit.socket disabled and inactive; port 9090 no longer listening",
+    "rollback_guard": "5-minute firewall-cmd --reload timer armed during the change and cancelled after verification",
+    "listeners_after": ["sshd 22", "systemd-resolved 53/5355", "chronyd 323 loopback"]
+  },
+  "logging_and_updates": {
+    "journald_override": "/etc/systemd/journald.conf.d/60-hermes-host.conf; Storage=persistent SystemMaxUse=1G SystemKeepFree=2G MaxRetentionSec=14day; label systemd_conf_t",
+    "auditd": "active, no lost events",
+    "dnf_automatic": "created /etc/dnf/automatic.conf override (upgrade_type=default, download_updates=yes, apply_updates=no, reboot=never, emit_via=stdio); defaults remain in /usr/share/dnf5/dnf5-plugins/automatic.conf",
+    "dnf5_automatic_timer": "enabled and active; first run 2026-09-13 06:44 America/Bogota"
+  },
+  "runtime_account": {
+    "user": "hermes uid=1001 gid=1001, shell /usr/sbin/nologin, password locked, no sudo",
+    "subuid": "hermes:589824:65536",
+    "subgid": "hermes:589824:65536",
+    "newuidmap_newgidmap": "present",
+    "directories": ["/home/hermes/.config", "/home/hermes/.local", "/home/hermes/.cache/podman-tmp", "/home/hermes/gateway-state", "/home/hermes/workspace", "/home/hermes/worker-state", "/home/hermes/transport"],
+    "admin_dirs": ["/etc/containers/systemd/users/1001 root:root 0755", "/etc/hermes root:root 0755", "/etc/hermes/secrets root:root 0700"],
+    "user_manager": "linger enabled; user@1001.service active; SystemState running; no failed units",
+    "rootless_podman": "rootless=true cgroups=v2 manager=systemd driver=overlay graphroot=/home/hermes/.local/share/containers/storage",
+    "uid_map": "0->1001, 1->589824 (65536)",
+    "gid_map": "0->1001, 1->589824 (65536)"
+  },
+  "controlled_reboot": {
+    "boot_id_before": "a1ee05bd67c54fbba1c6847e34a4e84c",
+    "boot_id_after": "8cf2e255-6d0e-4360-8944-0164064bf6e2",
+    "console_unlock": "required (no TPM token in LUKS keyslot 0, crypttab keyfile none); operator unlocked",
+    "persisted": ["static hostname", "SELinux enforcing", "firewalld active with Cockpit removed", "linger and active user@1001", "/home/hermes mount", "journald limits", "dnf5-automatic.timer"],
+    "failed_units": "none"
+  },
+  "deviations_and_open_items": [
+    "M01 formal dependency MP04 is unstarted; the operator authorized direct manual-guide execution",
+    "13 GiB RAM is below the guide's >=16 GiB example row; the example 16 GiB slice budget was deliberately NOT applied",
+    "Resource limits (section 15) deferred until containers exist and can be measured",
+    "SSH source restriction to the management subnet was not applied; the guide requires establishing the workstation/subnet first and it risks lockout",
+    "Secure Boot, LUKS, and TPM state were not modified (as required)",
+    "No production release signing, promotion, or scheduler enablement performed"
+  ],
+  "next": "M02 - artifact and worker validation: pin gateway image, build recorded Fedora worker image, implement Unix-socket SSH transport, Quadlets, and isolation tests"
+}

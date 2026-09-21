@@ -1,0 +1,105 @@
+{
+  "timestamp": "2026-09-09T18:06:06.216631+00:00",
+  "environment": "retained rootless Fedora 44 container hermes-selinux-build-20260909; no production access",
+  "base_input": "captured targeted/active store; exact baseline rebuild matches recorded rollback disk policy",
+  "inspection": {
+    "base_sha256": "bf58d5f5ae23502d844f70c153ef5366c31bf16ac9c77f548b94f3cf1aea1949",
+    "merged_sha256": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+    "checks": {
+      "candidate_enforcing": true,
+      "no_new_permissive_types": true,
+      "init_transition": true,
+      "access_dosfs_t": true,
+      "access_syslogd_var_run_t": true,
+      "access_tpm_device_t": true,
+      "access_init_var_lib_t": true,
+      "access_init_var_run_t": true,
+      "access_hermes_tpm2_setup_exec_t": true,
+      "access_nsfs_t": true,
+      "access_cert_t": true,
+      "access_fixed_disk_device_t": true,
+      "no_capability": true,
+      "no_capability2": true,
+      "no_create_tcp_socket": true,
+      "no_create_udp_socket": true,
+      "no_create_rawip_socket": true,
+      "no_mutation_shadow_t": true,
+      "no_mutation_security_t": true,
+      "no_mutation_efivarfs_t": true,
+      "bounded_nsfs_t": true,
+      "bounded_cert_t": true,
+      "bounded_fixed_disk_device_t": true,
+      "no_cert_file_read": true,
+      "unchanged_init_dosfs_t": true,
+      "unchanged_init_syslogd_var_run_t": true,
+      "unchanged_init_nsfs_t": true,
+      "unchanged_init_cert_t": true,
+      "unchanged_init_fixed_disk_device_t": true,
+      "exact_previous_te_delta": true,
+      "unchanged_type_attributes": true
+    },
+    "passed": true,
+    "previous_te_delta": {
+      "added": [
+        "allow hermes_tpm2_setup_t cert_t:dir search;",
+        "allow hermes_tpm2_setup_t fixed_disk_device_t:blk_file { getattr open read };",
+        "allow hermes_tpm2_setup_t nsfs_t:file getattr;"
+      ],
+      "removed": []
+    },
+    "scope": "offline policy inspection only; not hardware or persistence acceptance"
+  },
+  "artifacts": {
+    "scripts/hermes/selinux/hermes_tpm2_setup.te": "2c6ee81b7f96b2886f18c6d89eae26e2da800315d2eccb48db1e15e751aa8ddb",
+    "scripts/hermes/selinux/hermes_tpm2_setup.fc": "9ed6c47aded948615d3eceaf7ddf2b5c816204bc2da35bdf186c723ea04e2bea",
+    "scripts/hermes/selinux/verify_policy.py": "8f1895db26f4cdcb72b31be4960b8ee85d05abe2103bd53925cd8a1229cf1646",
+    "scripts/hermes/selinux/install-reviewed-candidate-v2.sh": "fe4624900d47aa5c910f9234b5fce290abc32d0e005194d4c1255d438628b914"
+  },
+  "module_sha256": "37643c3428ee847e82643056142d1ff5702d7249ed8046e71326c1e01b00a6b8",
+  "private_artifacts": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/revised-v2",
+  "methods": [
+    "make -f /usr/share/selinux/devel/Makefile hermes_tpm2_setup.pp",
+    "Container only: semodule -n -s targeted -S /tmp/hermes-revised/base-store -B",
+    "Container only: semodule -n -s targeted -S /tmp/hermes-revised/merged-store -X 400 -i hermes_tpm2_setup.pp",
+    "python3 verify_policy_v2.py base-store/targeted/active/policy.kern merged-store/targeted/active/policy.kern --previous /tmp/hermes-exact/merged-store/targeted/active/policy.kern",
+    "matchpathcon -f merged-store/targeted/active/file_contexts /usr/lib/systemd/systemd-tpm2-setup"
+  ],
+  "file_context": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+  "helper_checks": [
+    "bash -n PASS",
+    "shellcheck PASS",
+    "shfmt -d -l -i 2 -ci -bn PASS",
+    "Missing scope argument, nonregular module and corrupt module rejected before privileged operations"
+  ],
+  "limits": [
+    "No live host refresh, installation, service retry, TPM operation or reboot",
+    "Raw fixed-disk reads are type-wide, not limited to the boot partition",
+    "No block ioctl is added; further runtime requirements remain unknown",
+    "Namespace/certificate exact caller not established by sanitized AVCs",
+    "Installation success, loaded-policy equivalence, runtime and persistence gates remain pending"
+  ],
+  "sources": [
+    "https://github.com/systemd/systemd/blob/v259/src/shared/find-esp.c",
+    "docs/plans/evidence/2026-09-09-hermes-selinux-recovery.json"
+  ],
+  "negative_control": {
+    "method": "Run revised verifier on original 1.0.0 merged policy; inspect retained JSON",
+    "passed": true,
+    "rejected_checks": [
+      "access_cert_t",
+      "access_fixed_disk_device_t",
+      "access_nsfs_t"
+    ]
+  },
+  "validation_notes": [
+    "Negative-control shell wrapper expanded its status variables before container execution and exited 1; completed verifier JSON was independently inspected and correctly rejects exactly the three missing permission sets. No negative-control process exit-code assertion is claimed."
+  ],
+  "documentation_checks": {
+    "timestamp": "2026-09-09T18:07:10.163103+00:00",
+    "markdownlint": "PASS: four exact document copies, fix false",
+    "local_file_links": 17,
+    "git_diff_check": "PASS",
+    "hermes_guide": "PASS: 217 assertions, zero failed or skipped"
+  },
+  "container": "Stopped and retained after verifier completion; idle sleep required SIGKILL after one-second timeout"
+}

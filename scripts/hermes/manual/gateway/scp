@@ -1,0 +1,23 @@
+#!/bin/sh
+# Hermes gateway scp enforcement shim.
+#
+# The backend's scp call carries no host-key, proxy or identity options at all
+# (only -o ControlPath=... and the -P/-i target flags), so every required
+# option has to be supplied here.
+set -eu
+
+# The live pin is the default. HERMES_GATEWAY_SSH_DIR exists so a disposable
+# consumer (for example a negative host-key test) can run against a copy without
+# relabelling or editing the live, privately labelled material.
+BASE="${HERMES_GATEWAY_SSH_DIR:-/opt/hermes/gateway-ssh}"
+SOCK="${HERMES_WORKER_SOCKET:-/run/hermes-transport/worker.sock}"
+
+exec /usr/bin/scp \
+  -o "ProxyCommand=/usr/bin/python3 $BASE/unix-bridge.py $SOCK" \
+  -o StrictHostKeyChecking=yes \
+  -o "UserKnownHostsFile=$BASE/known_hosts" \
+  -o GlobalKnownHostsFile=/dev/null \
+  -o "IdentityFile=$BASE/worker_client_ed25519" \
+  -o IdentitiesOnly=yes \
+  -o ForwardAgent=no \
+  "$@"

@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-09-09T15:51:48.645757+00:00",
+  "archive_sha256": "61ccca46c39741583770c1bca31f819be98951c651ab18dfceba4ba4d3f0332e",
+  "archive_validation": "PASS: pinned transfer hash, paths/types, encrypted anchor payload hashes",
+  "independent_snapshot_comparison": {
+    "srk": true,
+    "luks_metadata": true,
+    "firmware": true,
+    "loaded_policy": true,
+    "label": true,
+    "enforcing": true,
+    "prior_anchors": true
+  },
+  "scoped_denials": [
+    {
+      "scontext": "system_u:system_r:hermes_tpm2_setup_t:s0",
+      "tcontext": "system_u:object_r:nsfs_t:s0",
+      "tclass": "file",
+      "permissive": "0",
+      "denied": [
+        "getattr"
+      ]
+    },
+    {
+      "scontext": "system_u:system_r:hermes_tpm2_setup_t:s0",
+      "tcontext": "system_u:object_r:cert_t:s0",
+      "tclass": "dir",
+      "permissive": "0",
+      "denied": [
+        "search"
+      ]
+    },
+    {
+      "scontext": "system_u:system_r:hermes_tpm2_setup_t:s0",
+      "tcontext": "system_u:object_r:fixed_disk_device_t:s0",
+      "tclass": "blk_file",
+      "permissive": "0",
+      "denied": [
+        "read"
+      ]
+    }
+  ],
+  "actual_domain_evidence": "Recovered AVC scontext confirms hermes_tpm2_setup_t; original process sampling remains unavailable",
+  "esp_anchor_present": false,
+  "audit_continuity": "Unknown; false recovery audit_collection_intact field denotes unavailable original observations, not confirmed audit loss",
+  "service_acceptance": "FAIL; prior first run exited 1",
+  "rollback": "Prepared/staged, not executed; only trial priority-400 module and exact executable context",
+  "rollback_helper_sha256": "d3ce2ef743b5602449832858aa685eaf5a4960a5615b3f297ad353843cd95579",
+  "rollback_checks": [
+    "bash -n passed",
+    "ShellCheck passed",
+    "shfmt applied",
+    "Missing explicit scope argument rejected"
+  ],
+  "private_archive": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/service-first-recovery.tar.gz"
+}

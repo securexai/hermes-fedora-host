@@ -1,0 +1,44 @@
+{
+  "base": "/var/lib/hermes-lab-unattended",
+  "broker": "BLOCKED: test project ID and encrypted admin credential path missing",
+  "certification_complete": false,
+  "kind": "isolated-lab-signer-enrollment",
+  "missing_certification_test": {
+    "error": "invalid-or-unavailable-input",
+    "expected_failed_state_reset": true,
+    "no_archive_published": true,
+    "service_exit_status": 78
+  },
+  "observed_at": "2026-09-07T18:01:41.649671+00:00",
+  "permissions": {
+    "certifier_and_deployer_cannot_read_key": true,
+    "certifier_and_deployer_cannot_write_releases": true,
+    "deployer_cannot_read_handoff": true,
+    "signer_and_deployer_cannot_write_handoff": true
+  },
+  "procedure_sha256": {
+    "hermes-lab-enroll-signer.py": "f12eb1d2c9fda503c38508bdaec500b297bf2c91a674224a8acf3c5abaa9fc97",
+    "hermes-lab-fault.py": "96da07a7bfc173eb1df882a71d76a2dde4fc6d5e919c041374c5c593c3a6afec",
+    "hermes-lab-first-boot.py": "2db103855b6b36edd911ceac43b163f2082bbf36de755ee336c91c5be540db01",
+    "hermes-lab-installed-handoff.py": "422889016fd67206774fb1b2f03480ad7403ac13df5d9defc59ab86cec0fda43",
+    "hermes-lab-live-evidence.py": "f7d6a25b62734bba19877a37e701ec4eba7aafd6b6fed4f6c909a80fcc3dd2f8",
+    "hermes-lab-recovery-evidence.py": "21efc30e43d09fa63835b7cf857fd230192240744290f6936a224dd9e43a5760",
+    "hermes-lab-recovery-provision.py": "3153542b4b399ecd5983499986c1183901303dea415c52c83d7de8bec4ed1284"
+  },
+  "production_changed": false,
+  "production_trigger": false,
+  "reviewed_source_matches": true,
+  "source_files": 21,
+  "uids": {
+    "hermes-lab-certifier": 987,
+    "hermes-lab-deploy": 986,
+    "hermes-lab-signing": 992
+  },
+  "unit": "hermes-lab-sign.service",
+  "unit_file_state": "static",
+  "validation_methods": [
+    "systemd-analyze verify /etc/systemd/system/hermes-lab-sign.service",
+    "sudo -u ROLE test -r/-w on enrolled key, handoff and output paths",
+    "systemctl start hermes-lab-sign.service followed by ExecMainStatus, journal JSON and empty-output inspection"
+  ]
+}

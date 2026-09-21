@@ -1,0 +1,4 @@
+#!/bin/sh
+# One sshd per accepted socket connection, serving the stream on stdin/stdout.
+set -eu
+exec /usr/sbin/sshd -i -e -f /etc/ssh/sshd_worker_config

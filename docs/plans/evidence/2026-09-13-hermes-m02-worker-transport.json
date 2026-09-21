@@ -1,0 +1,63 @@
+{
+  "record": "hermes-m02-artifact-worker-validation",
+  "kind": "live-server-deployment-and-validation",
+  "profile": "manual-guide (docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md)",
+  "branch": "codex/hermes-manual-guide-plan",
+  "gate": "M02 - Artifact and worker validation",
+  "status": "PASS for the transport/isolation scope; gateway activation, credentials and hardening remain M03/M04",
+  "utc": "2026-09-13T03:01:58Z",
+  "authorization": "operator deploy request; privileged steps entered by the operator",
+  "artifacts": {
+    "worker_recipe": "scripts/hermes/manual/worker/",
+    "worker_image_id": "3d83d9410a172212b7bf412ff970fc57b69aaaaa4ba44f057afb9b878a67edb9",
+    "worker_base": "registry.fedoraproject.org/fedora@sha256:2648f667bd180801195d3f3a385cf0d2e390bd80611dbedac8275253c89cdbc7",
+    "gateway_image": "docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1",
+    "gateway_image_id": "3d1c312980e7d400ebf1fabca40f855a6ff16cab11e80930a9b3d4d3c920ef5e",
+    "gateway_release": "v2026.9.11 (amd64, built 2026-09-11)",
+    "gateway_base_os": "Debian GNU/Linux 13 (trixie)",
+    "shims": "scripts/hermes/manual/gateway/{ssh,scp,sftp}, gateway/unix-bridge.py",
+    "quadlets": "scripts/hermes/manual/quadlets/{hermes-worker,hermes-gateway}.container",
+    "deploy_script_sha256": "f3598aee26792ceaf78c767aea101c8ee027bf38cc080fa60e2a375e4941ca75"
+  },
+  "design": {
+    "transport": "worker socat UNIX-LISTEN -> sshd -i (inetd mode); no TCP listener and no loopback service",
+    "gateway_bridge": "ProxyCommand runs bind-mounted Unix-socket bridge; the gateway image ships neither socat nor nc",
+    "enforcement": "shims bind-mounted over /opt/hermes/bin/{ssh,scp,sftp}, first on the image PATH; OpenSSH first-wins option order defeats the backend's -o StrictHostKeyChecking=accept-new",
+    "worker_host_key": "persistent worker-only directory, not baked into the image, so rebuilds cannot change pinned identity",
+    "env_passthrough": "worker sshd sets no AcceptEnv, so the gateway SSH passthrough stays empty"
+  },
+  "identity_finding": {
+    "observed_runtime_uid": "10000(hermes)",
+    "cause": "gateway main-wrapper.sh drops the user command with s6-setuidgid hermes",
+    "consequences_fixed": [
+      "/home/hermes/gateway-ssh must be 0711 so UID 10000 can traverse",
+      "the pinned private key must be owned by the mapped UID 10000 (host 599823) at mode 0600 because OpenSSH refuses group/world-readable keys",
+      "/home/hermes/transport must be 0711 and the socket 0666 for UID 10000 to connect",
+      "the worker account must not have an empty, '!' or '*' shadow field: with UsePAM no sshd rejects locked accounts for publickey too; a random non-matching value is used instead"
+    ]
+  },
+  "validation": {
+    "worker_service": "active (rootless Quadlet, linger)",
+    "socket": "srw-rw-rw- hermes hermes container_file_t /home/hermes/transport/worker.sock",
+    "option_precedence": "PASS - ssh -G with -o StrictHostKeyChecking=accept-new reports stricthostkeychecking true",
+    "positive_transport": "PASS - output TRANSPORT_OK, user worker, Fedora release 44 (execution lands in the worker, not the Debian gateway)",
+    "negative_missing_key": "PASS - Host key verification failed (rc 255)",
+    "negative_changed_key": "PASS - Host key for worker has changed and you have requested strict checking (rc 255)",
+    "scp_round_trip": "PASS - rc 0, remote file read back and SCP_OK",
+    "worker_isolation": "PASS - empty /proc/net/route, EGRESS_NO, DNS_UNRESOLVED",
+    "avc_denials": "none",
+    "gateway_service": "inactive (activation belongs to M03)"
+  },
+  "limitations": [
+    "Gateway read-only root filesystem is not yet validated; the image bootstrap writes outside /opt/data",
+    "Resource limits are provisional (13 GiB host): gateway 2 GiB, worker 2 GiB, PID caps 256/512",
+    "The gateway Quadlet intentionally has no [Install] section until M03/M04 pass",
+    "sftp shim present but not exercised by the current backend",
+    "No provider credential loaded, no inference, no Telegram, no backup restore"
+  ],
+  "superseded_attempts": [
+    "first run: client used the s6 entrypoint and root, and the private key was 0644 - permission denied",
+    "second run: transport dir 0700 and socket 0600 - UID 10000 could not connect",
+    "third run: remote user defaulted to hermes and the worker account was locked - publickey denied"
+  ]
+}

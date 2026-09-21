@@ -1,0 +1,171 @@
+# Extraction manifest
+#
+# Files copied from the Hermes source working tree at branch
+# codex/hermes-fedora44-manual-review, HEAD 130bf8f2, dirty-input fingerprint
+# d7a336b635f13100164a71054f8528f03565fe1100171c02112a5892ed403d87.
+#
+# NOTE: 16 shell files were then reformatted with
+#   shfmt -w -i 2 -ci -bn
+# as an explicit, behavior-preserving formatting step, because they did not
+# satisfy the adopted shfmt gate. File modes were also normalised to satisfy
+# the adopted shebang hooks. Hashes below describe the FINAL tree, not the
+# pre-format source bytes. All offline suites were re-run afterwards and
+# reproduce their recorded results.
+#
+# Format: <sha256>  <path>
+# Paths authored in this repository (README.md, docs/CONTRIBUTING.md,
+# docs/hook-parity.md, PROVENANCE.md, pyproject.toml, toolbox/*, this file)
+# are not listed.
+8f2bf8db4cc25a814853da53f514386f0d76455866e86153f85ad6d77fd85818  docs/HERMES_B6_CLEAN_INSTALL_HANDOFF.md
+5df3b517c24593c0f4d77fe8687bf8a8a1e6c3dd971825c3a24ade26e838704d  docs/HERMES_BOOT_AUTOMATION.md
+3e29287bbdcd0469e4825893dd7f4d9520b8a1cd600d0580018f74ace0dd9ba2  docs/HERMES_BOOT_CLEAN_INSTALL.md
+e28969a9d63096b41f1cf8463a2c2efe309a954ddac628a3d75f68f466c8c0ea  docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md
+3b9fa6364e6e3227d6481898821c65ed4ab34bd869f9bd3d4a39f749bf6af7bf  docs/HERMES_MANUAL_HANDOFF.md
+4a2d2881e4e9f136fd34f69573c9a6e4ae6b92b6848a9dc058fa8ec8c16aa849  docs/HERMES_MANUAL_PROFILE_CONTRACT.md
+7805e12b97e2c64f4cab82ef8e41f93fbda3f9faf621fba1ba95ccec3b583714  docs/HERMES_MEMORY_APPROVAL.md
+bb13826246e8a5d5335c868ae190313a9fdcda4a1dbdf840535b59cd0880bde6  docs/plans/2026-09-20-hermes-manual-gate2-lab-plan.md
+7d8db39d5a20fec82a5b1bc6ae2d1024740c79716d0dbcd1f5e224b35205540c  docs/plans/2026-09-20-hermes-manual-profile-improvement.md
+76b461a8b4c0caa54bd9c4d7130f1dabb007e39b604c34aa3e2e6750ae71c82c  docs/plans/2026-09-20-hermes-manual-review-corrections.md
+69fdad065ac688fda74eb30e95d1d891bc4108aa6b0eaa1d11a7d002396c9f65  docs/plans/evidence/2026-09-07-hermes-api-acceptance.json
+614773dfa017d7299e7aad411d29e1572e4548224236e039c9c56af456ce39b4  docs/plans/evidence/2026-09-07-hermes-api-attempt1.json
+87c9b7b66f724bafad5d822e2fec68313bcae7e635e261147a3cd9fa00341209  docs/plans/evidence/2026-09-07-hermes-candidate-scan.json
+9a23b1116e342532f15a49e027e04bb0ded69fc1604a60d42e8b279d5b5c20f5  docs/plans/evidence/2026-09-07-hermes-image-scan.json
+7301a3d8382ad78c83b542b5c7fa9386a5c43a5a27a89da7a69ea16be37f0de7  docs/plans/evidence/2026-09-07-hermes-lab-broker.json
+96cca555dccff20f03080a1576f66036e50477802f60582deed4308a77c568e6  docs/plans/evidence/2026-09-07-hermes-lab-signer.json
+3e6f4a27c182ad1c4baf46210abc3a32bdab684cb29fcd932c9cead95b66515f  docs/plans/evidence/2026-09-07-hermes-tamper-rejection.png
+9dcae003a58d0819fb55b36366693b72c05cd4f8971b1387cb44c40918fe86af  docs/plans/evidence/2026-09-07-hermes-tpm-handoff.json
+0a4c51cac328638894e68e666be5f0da2aa1f30453413f03fd5e9e6abb639355  docs/plans/evidence/2026-09-07-hermes-ua02-runtime.json
+57101ba2565dec2dbd70ec056d39a81facd2ea9cf69d1a8af137391069f2f3ec  docs/plans/evidence/2026-09-08-hermes-lab-trivy-launcher.py
+2c8ddb9b849cbde1ff657289984038184e8b2ab6c69eeba1fe2ccadc16eec924  docs/plans/evidence/2026-09-08-hermes-lab-trivy-launcher-test.py
+0b38a776efcb5de56189747831fcabd049bc383de1cf429c2c0f92443c6ba4ec  docs/plans/evidence/2026-09-08-hermes-lifecycle-live.json
+b6231eb979e570555ef68873456423ecc5272afd29a4d03b50060cea965dc63a  docs/plans/evidence/2026-09-08-hermes-lifecycle-offline.json
+8d95788b8b2636fb4d04a85d5c08480a798df0e09a06519bbadee85b55bd9065  docs/plans/evidence/2026-09-08-hermes-scheduler-live.json
+5b92f57e2e0eb12a929468770c230b1b677f81ec5e020aa14ac7d4903fbcd5f1  docs/plans/evidence/2026-09-08-hermes-scheduler-offline.json
+a54d360f04b3e23c336b48d0968175b14ae42654ec8cad033f86e1f459a9e506  docs/plans/evidence/2026-09-08-hermes-ua03-boot-preparation.json
+389a50c10428736893cc98138e57bc58c45668e0a297f3cfec3b4f803e460246  docs/plans/evidence/2026-09-08-hermes-ua03-certification.json
+6dc8db90b6b796fbac146fc59cdf6a6324294efc4d3c32791a7ea6e175e9e817  docs/plans/evidence/2026-09-08-hermes-ua04-cleanup-signing.json
+48767c1ee4ae903c3e9077ff048c8ff31386ee729375468ea04af57d17695598  docs/plans/evidence/2026-09-09-hermes-selinux-candidate.json
+b9af9f46ae872063e6f7e7331353646867650ec793c761683edfd254c6e74348  docs/plans/evidence/2026-09-09-hermes-selinux-exact-store.json
+253390ce555d4d173ccfedb56660af21c325ca93540bfe11f5a19713d2dde21c  docs/plans/evidence/2026-09-09-hermes-selinux-first-run-failure.json
+d0d4025f761db915ac6d0b39f9ed574ce6dc02f9df065b868b9e02cb24d736a6  docs/plans/evidence/2026-09-09-hermes-selinux-loaded-policy.json
+d50cd490d848b0d67b2d10e3e273ac81dbcf7bf625fcbadea1c75953ec9c8b7e  docs/plans/evidence/2026-09-09-hermes-selinux-recovery.json
+63315dc75f4296ef39696a28539eea9b2786670623e78b6c226a0aa2d7a56100  docs/plans/evidence/2026-09-09-hermes-selinux-revised.json
+567b6a36fd05bda6962436207bf8e5205d3cc0269fa1a647b5095e886e4ddc9a  docs/plans/evidence/2026-09-09-hermes-selinux-rollback.json
+c3af7f0fd8e79c72deb4e35fac8e77f08b0da55d7f4f4f9295d6f83ceb31bfe7  docs/plans/evidence/2026-09-09-hermes-selinux-v2-audit-continuation.json
+b4ee73f2d74713f1af4eae0c7507e2943125c59052b44b2f466f1719b4242325  docs/plans/evidence/2026-09-09-hermes-selinux-v2-continuation-failure.json
+20d38f271941771e6b2c1eb8a5b55bec6431db76a7b626d5897a15f3af726e36  docs/plans/evidence/2026-09-09-hermes-selinux-v2-continuation.json
+c4dc627a554a4d0884f60029907fa11f8bf9bd61a75b45e0e574ee6d9f21aae0  docs/plans/evidence/2026-09-09-hermes-selinux-v2-installed.json
+3af00f3587f8e49d6f10772ee1bf79728fbb257da162d7a45cd6d63c53049399  docs/plans/evidence/2026-09-09-hermes-selinux-v2-preflight-failure.json
+d1a531d220c94dd7d97ad409ce4103753130314b40b564682c2fdf232485e0aa  docs/plans/evidence/2026-09-09-hermes-selinux-v2-service-preparation.json
+cf41f4ad06ffff606dd0ac43af047e90f4cf37eb62defa1a6de77aaf373df324  docs/plans/evidence/2026-09-09-hermes-selinux-v2-service-staging.json
+2e1ca84bc4fd033f03d653d5e3c2a713c9069bbc3d9544eb2ef465783e2704ef  docs/plans/evidence/2026-09-09-hermes-selinux-v2-staging.json
+cd58c6d920f70930fc22456d76ebcb1d55aa29dc2b7ebda442db19c1b8223e5b  docs/plans/evidence/2026-09-10-hermes-selinux-v2-runtime-failure.json
+f622980b8fb381b68eb9799510fe9b6c7b71c53610a4701ae4cddd8e13649eed  docs/plans/evidence/2026-09-10-hermes-selinux-v3-candidate.json
+d5ef096a2544ce71dc99591037f4c37328f34a74e0d3bd10bf28d25d3034e989  docs/plans/evidence/2026-09-10-hermes-standard-tpm2-campaign.json
+84321a13f64f58fc99529be08b3aaacb8bb3a3b623827f55f9f746734266678f  docs/plans/evidence/2026-09-10-hermes-standard-tpm2-live.json
+8322eb1420068661d067124e6f861323ab3ffda71379fc71d4cbde1afb43f26f  docs/plans/evidence/2026-09-10-hermes-standard-tpm2-r2-live.json
+06064b53d079cf13c1442bc3f02c2c585d5f2c1bdc5c10c5929322500309d30a  docs/plans/evidence/2026-09-10-hermes-tpm-consumer-inventory.py
+b4f215a8fcead8be1df36d91f45f4760fa6598e42b3f7a5fb070f821b8351ee1  docs/plans/evidence/2026-09-10-hermes-tpm-dependency-review.json
+c2b968c64f9ed424eb847ae6962e7860362ea48a8488b00852c7e50d3b4751ac  docs/plans/evidence/2026-09-11-hermes-b3-live.json
+449003de80ece3e2e58c37b2a91072ddcbcb33e723a824a8503c474d68c5281c  docs/plans/evidence/2026-09-11-hermes-b4-linux-live.json
+8837b7414f5a2f5d3a08921d0091854fcdf4995c964796b4b727306d47f6726a  docs/plans/evidence/2026-09-11-hermes-b4-linux-r5-live.json
+42687936b7674f19bd3bfa7f1aaa952c163783fcce471c9e09f222543c22d268  docs/plans/evidence/2026-09-11-hermes-remaining-continuation.json
+abb9d8a400285704893bf42be189db6a6354ade52cbc5db084f41a372418e698  docs/plans/evidence/2026-09-11-hermes-remaining-lab-preparation.json
+acaf8420fa81312decafb8e079eceb8c1385112340605c4696b651c8ce87f4e2  docs/plans/evidence/2026-09-11-hermes-standard-tpm2-r3-live.json
+c85922dd0e8149c9e6eb86d665460101e85d507d69da7d304ab1c5353cd6e017  docs/plans/evidence/2026-09-12-hermes-b4-linux-r6-live.json
+f1258a7cac5c4ca485c78863611358ef6935b0fc5c483720a0e0ddac218f6138  docs/plans/evidence/2026-09-12-hermes-b4-linux-r7-live.json
+b0cac9333702aa3e61cb6f22fac22ca2e6c4384486f48bfb29903646587d2b09  docs/plans/evidence/2026-09-12-hermes-b4-linux-r8-denial.png
+f20036f78f8c45363b7b970f3c7118b17777d362a07e334b06a9325bdd8eeb99  docs/plans/evidence/2026-09-12-hermes-b4-linux-r8-live.json
+e7ec5adc720980a9afeb1511b4f1aa75ec4af97bb3ae67f0c58cc9f6885b7e0f  docs/plans/evidence/2026-09-12-hermes-production-review-preparation.json
+63d1847bf01022d6d525acf751ca547dfce0d4446b5679e38a80a1aa97f12fc8  docs/plans/evidence/2026-09-12-hermes-ssh-preflight.py
+d4c133e2cb2269ab5e0a34d1a4d5f8973327f35baf39df8ff96b2534b7c9a65f  docs/plans/evidence/2026-09-12-hermes-ssh-preflight-s11-after-update.json
+b2452971675f9332687f165bd39fd29ca632919ab2d598d962a0f00874db72ee  docs/plans/evidence/2026-09-12-hermes-ssh-preflight-s11.json
+9050a0950de279137dd22e7dfe35a986f7e57331c98e93b3d6c92082687c45e1  docs/plans/evidence/2026-09-12-hermes-ssh-preflight-s7.json
+a4675c7ecf974ad20c40b8220b26381e9f259aa8d486fc5553cb82572c01c1be  docs/plans/evidence/2026-09-12-hermes-ssh-preflight-s7.py
+757a8bd9fca323221f22a9f468bdb3ba72d62f5bc8c8b993e2ef1fb5940cdf75  docs/plans/evidence/2026-09-12-hermes-ssh-preflight-s9.json
+704e044209a3be78929ff1426c708cdef48d6f7deb4b8aeeadb2e41e702045df  docs/plans/evidence/2026-09-12-hermes-ssh-preflight-s9.py
+7917ee487f329081347c6520dc47ea3a0ee5975eafa38da0311ed802f1fa57a7  docs/plans/evidence/2026-09-12-hermes-ssh-preflight-test.py
+615e1a1d83773b19b5732ddba9c76dbfdcb0a32abcd661e211a9a4760eb07621  docs/plans/evidence/2026-09-12-hermes-throughput-preparation.json
+d356dff1c4b5e8e6bd1c4fce696d4f8c092faa512b7da2aa051aca550134762d  docs/plans/evidence/2026-09-13-hermes-boot-b1-b5.json
+1e85521c3d8356e2d7caaddcc9d98bd5f32f75372a8126b7450f8954e3437183  docs/plans/evidence/2026-09-13-hermes-m01-baseline.json
+cc56b94b5be640980b174264ca323860e6f4e09af93da91d85629584fa81c692  docs/plans/evidence/2026-09-13-hermes-m01-fedora-readiness.json
+e9c80b5e30ce8f95e2fe7476ff774627d16617346507cb01c66622849388c680  docs/plans/evidence/2026-09-13-hermes-m02-worker-transport.json
+3412aeae8f3e8de2f0a8a20aa69fe158bac8a29b100bb2261cbf0ef80deff63c  docs/plans/evidence/2026-09-13-hermes-m03-credentials-cli.json
+232ca3e2ee7ff1cc9c73bf724dbb0a27b4ae3e7617fd8d5cef0e09995b76db25  docs/plans/evidence/2026-09-13-hermes-m04-hardening-recovery.json
+33760c31747f0e598477aaba60e862219696487c5ef7391ba5dc851c545a750c  docs/plans/evidence/2026-09-13-hermes-m05-telegram.json
+f36ad704d31c35161d5cb8f356f803caece3ae0f6053ea4b9dd22abec4e375ab  docs/plans/evidence/2026-09-13-hermes-worker-key-ownership-validation.json
+e3ac8dbe4627f34dd79a42ae1fe71b72a989a543dd51a6b8d07b42ff7f1f591b  docs/plans/evidence/2026-09-14-hermes-b6-baseline.json
+a79bb19cf2b52b2f177dfb32cd9dc3765245808b40b2428d1f8bcd0466c75a36  docs/plans/evidence/2026-09-14-hermes-b6-change-ledger.md
+0e7bffb88aa6a93ed672c691f88b83c9ddb606ad50f52a63476cd137aab4c62e  docs/plans/evidence/2026-09-18-hermes-memory-approval.json
+743e52c4d7b60e5902a4223ee4f6807940eae9439a346b681365a6243b51f175  docs/plans/evidence/2026-09-20-hermes-manual-gate2-phase0-media.json
+871b196059a8154faf35a4721e1ea4f75b8f20a62485d8b32348943ded64a62f  docs/reviews/HERMES_FEDORA44_REVIEW_PROMPT.md
+47b8e05eb7553fb73e8d2f6e8660af335e6d4741db9af091089e1004b6e31f96  docs/reviews/HERMES_MANUAL_CORRECTION_REPRO.py
+3c3c0ea0ddb56689e6f2d3090bd20c76dbfdacc47e94f81c9d2d64a35d95293d  docs/reviews/HERMES_MANUAL_CORRECTION_REVIEW.md
+3f6f17803ab2419737a47e45f5fc27d9da7d70efb43efb5f110a5495fcc1a01a  docs/reviews/HERMES_MANUAL_OFFLINE_REVIEW.md
+7720c0bc7b735b8efee0796d7a81f4e8be1417cef9e30f17de505010660e8776  scripts/hermes/deploy-lib.sh
+0b92b6e64d716811d37942ae43dc40560dfad485aa6444090af847fabf27413b  scripts/hermes/manual/boot/b4-verify.sh
+89e2ddde71a15d87004b175f3c308b561695ae1c4abd108f1ce32b41c5bf2cd6  scripts/hermes/manual/boot/fallback-wipe.sh
+0bcaca9bc66a52e72b7b47be241766423aed63187e43b9dcdbce74f5e171aae6  scripts/hermes/manual/boot/lib-luks-identity.sh
+37796e62fc2865977dbd969d4ff4951090c454e6ca529aacb3d5611fdd70e9b8  scripts/hermes/manual/boot/rehearse-clean-install.sh
+7e29f6c5bdad8cf78812fd78d5a307f6dfe4c3dfcd908c15e50b3558f129b3fd  scripts/hermes/manual/boot/tpm-enroll.sh
+80e7d5e9a10d3f2ced73cbb091310576cf31691de78cfc56d3ef80ce18347e63  scripts/hermes/manual/config/harden-config.py
+aae9327b88bd9c1be2bac87f1f4728263a3a0a6cca6f2c72ab4fa5dd8da0a148  scripts/hermes/manual/config/profile-contract.yaml
+924d08b37f33b74c40597bfe1d38f536cd5d2609440e9f39775a85bd72e7ee66  scripts/hermes/manual/config/set-model.py
+19113644aeca5237c8b3ffe76a5d9dbc9aca026333c902daf6c6e751b3db60d1  scripts/hermes/manual/configure-tpm2-auto-unlock.sh
+97a9d13e6901f44f6325b63ec76da1e3e4ae59586b16efe48aabbdb4ee7274d6  scripts/hermes/manual/config/verify-contract.py
+2ab8c1e6ca5f67f3146b14310b7697e9e427bb6b6e433ca22a2e866cf6aa4040  scripts/hermes/manual/gateway/m03-probe.py
+ad9d3e53fb51d5af20f592f39882d468c87a12b5306fb13813e23c17ff362148  scripts/hermes/manual/gateway/memory-approval-probe.py
+4bd6ba24c7c242ae7908824b15693a83f10845c7e14175735ec015d72bb64809  scripts/hermes/manual/gateway/scp
+818d9b9fb678edbdc0f0b0a1f34c62d85c9e8b0cb155d02f9063658fab44e244  scripts/hermes/manual/gateway/sftp
+5af22f3697a6dd0efa14aefa976642ca593347af27da5c9caafecd58a8c054a6  scripts/hermes/manual/gateway/ssh
+5d525a02f21811d2b808f1ccb6c26812adabddfe6d03de9b6584201cb37055ea  scripts/hermes/manual/gateway/unix-bridge.py
+f4e7762463f145fd3dd86c0461ec2c84e5dd2ed99e91c06b8ec95cdf2ee63c52  scripts/hermes/manual/lab/gate2-boot-kickstart.sh
+066c5b64f2fe90367f6c72104342c668084b0852316f4b26e9044a33936100b0  scripts/hermes/manual/lab/gate2-create-fixture.sh
+5cf7c0a661d26c9cb3f37a1263fbe2b208dc0c702abb368b2514d2fd5db3774d  scripts/hermes/manual/lab/gate2-install-grants.sh
+0247add3604c15b87112b856ed7f0c07383c71bb572b2c05cde47ce0c623dd04  scripts/hermes/manual/lab/gate2-kickstart.ks.in
+15593712094b442bee7c5773d282813ac378f581ea2715f82dbd3fb978af5edd  scripts/hermes/manual/lab/gate2-make-kickstart.sh
+87003836017b06a6bea37e04009b6ae49470d52ebb9bf06bde677978714f5422  scripts/hermes/manual/lab/gate2-observe.sh
+95d35436bd298051e2b96390362e3d9a1f667fc527eff8213ad41d3fc725ff65  scripts/hermes/manual/lab/gate2-rebuild-kickstart-iso.sh
+14d78ce4230590c84f0dae64935ce27eb8f3359cfdef6c7ee42e7022ad655d4f  scripts/hermes/manual/lib-manual-common.sh
+7b949146e7ccae5e42f8206456be21ff104052e6242dcb52b05881a8dded1bc3  scripts/hermes/manual/m00-pin-host-identity.sh
+28a2ab9fea093bad5fa4770e0e0fa6c28c961da8cf18b597a215f73ee5469101  scripts/hermes/manual/m01-baseline.sh
+9e87e4c442bb93362ed24129d9e0a1104de99985812a574e985d169b546bf299  scripts/hermes/manual/m01-host-prepare.sh
+2dc6859aa6f4b1dc425e3c838560a5402c19896c8e5d18d07b0bc6f826729717  scripts/hermes/manual/m02-deploy-and-validate.sh
+6e906154a158643e60eaba8703287d65cf66cf60062ca793368b8bc165ea1e6b  scripts/hermes/manual/m03-accept.sh
+1cc2a3e12d6038267959e7fbc9f5b8797dfb2f15e2ee1f8f6489adb6e3794e04  scripts/hermes/manual/m03-activate.sh
+36488fb9e1457aa7dde4ff097241238c9ae6ae4d761cb0c36a34d41b3ae6a855  scripts/hermes/manual/m03-configure-and-probe.sh
+ba983bbd477bc64c452071644c1e9686b22fff616be0a12585d67dc4da62ce16  scripts/hermes/manual/m03-contract.sh
+83d805cbedbeb13593db5d1574fab5fac7b199c7026c010c756825ccd212d2f4  scripts/hermes/manual/m04-backup.sh
+da2fc4dccdccbf7d3174425f14e4be17c5b68a050c6a87753a78001753b670f5  scripts/hermes/manual/m04-postboot-probe.sh
+d611dd2bf72e34c8bf340cbe969c07e3899e5608b3a6f451a6f5353fb6448fd8  scripts/hermes/manual/m04-postboot.sh
+f1c4f0d5a861701299f1121786f96e68dd4ae6d2feb3e94ae4db1c3d99d09a95  scripts/hermes/manual/m04-posture.sh
+86de4b0fb4657d165e4da6478dd39163635ee0139ad196aed543e89d98263a39  scripts/hermes/manual/m04-readonly-gateway.sh
+7ab16ccde5dc3d660f8a9ac87757f7a296ae39fa82fb7619f00c3777aef30a06  scripts/hermes/manual/m04-reboot.sh
+39459d9c38d3226191f946a7714eea770e688c9b06fc932d01f47d5ba0c6d5d8  scripts/hermes/manual/m05-fix-and-activate.sh
+1e98abaf67aef6bcd3d1d38c9561c8776e47f1dad6f3e4abb1ac6e61959eed42  scripts/hermes/manual/m05-gateway-diag2.sh
+5537d6b1ae383c2dd1efecb87cf11179af4030b1defc7237ef70df662256ffa3  scripts/hermes/manual/m05-gateway-diag.sh
+c1bf8d04fad5122150c23e68fdf531990df07df5c39a8bb574a52e21ef67dfd4  scripts/hermes/manual/m05-telegram.sh
+fa002b43e6d23e5cff4315755abff8afab8e003c758bda7db6b83a49095da433  scripts/hermes/manual/m05-tests.sh
+4d33045fdf6722a5f46d92c272a30a07a58b1eb086bee5c51089027b1e71bfb5  scripts/hermes/manual/manifest.yaml
+ef4cf490f278cf66c2f175e3c2e7df3dadf67bc236daf0ed1458042d6a2ab4e8  scripts/hermes/manual/provision-openai-key.sh
+b794d7f742f4b832eb3308214c93a576b6590f81ad26b31aff8880b5bba83a89  scripts/hermes/manual/provision-telegram.sh
+89d7a5ea3770ef0ef2e1dd94b42359e7f3b1e606c0361f8780995ef5e03c3181  scripts/hermes/manual/provision-worker-client-key.sh
+f3aa44612b694d50b8c9fc404de597b14be9954199c16dc2773a17d49104f421  scripts/hermes/manual/quadlets/hermes-gateway.container
+bd56843801433f646eeaa7e65b32341d636bca259a15c68a8c960c175ce58501  scripts/hermes/manual/quadlets/hermes-worker.container
+5ba9dc1e777291948c35ae0a5119cf2e88e031926153121b171277b5a543142a  scripts/hermes/manual/README.md
+27a6b9386b446a4f988fbb5319dbf6c62091be63a2628b02ceb745d638b6a22b  scripts/hermes/manual/redact-stream.py
+32ac4ba34bbff15ecef8869cb32b2e426bd6a9e8ee68b0768bb38e13215ad5dd  scripts/hermes/manual/setup-ssh-key-only.sh
+aac4fcdce6573c0897550c5ba0ab2c3bb7a5b0850c1568ba6bec6b36f46e5ee2  scripts/hermes/manual/worker/Containerfile
+b493df535c26749130a7206c1e3e4f3eb59bb1e56c66ef7df7c9a904e7f60ece  scripts/hermes/manual/worker/sshd_worker_config
+cf3ea6ac3350a1cfad3322ced3c50a1ae28c26b493a20206e239225e57a274da  scripts/hermes/manual/worker/worker-entrypoint
+43e222b055258e5bd1dc1d17051936199a91f973bd3a4c8fe3fac046e5cf3865  scripts/hermes/manual/worker/worker-socket-adapter
+3d2ee084b31ddacebc5273baf2ad6f4feb3904fc804f48d3c6bf72477958056f  scripts/hermes/manual/worker/worker-sshd-inetd
+b6639ee697b3ed963c91d71be9db8587f83fb9c2fab85e9e4455a967b6c7e87d  tests/lib-test-helpers.sh
+479ae696bb74ca08de763d4706bf19d2acbd42837b0e1910a1831216909e435d  tests/test-hermes-guide.sh
+4db2722839ea757663ffd031f7f324c87386b53e1f57a50c5fc962456e401dad  tests/test-hermes-manual-backup.sh
+56ccc5582f67706205c226da8fe29b473500031241a1a0d65ee1048a07dafde2  tests/test-hermes-manual-configure.sh
+a95dee375766efa5d0a98a0b21acf8637cfee049c7cc94dd3943083ba7b80980  tests/test-hermes-manual-contract.sh
+55bdff8366843fc25b4bf09714756065b5097b4faf42a5872d428b3aa8f7cd9b  tests/test_hermes_manual_hardening.py
+5c465da10905c9fff1105124523f6e1a1480c56e6de473b2293b7573da678986  tests/test-hermes-manual-m01-tempdir.sh
+c90eb028fbd43874de1bd6aa5b21abc5e23ddf87bae68ddc8a7747897cd8248b  tests/test-hermes-manual-profile.sh
+641b9e096ccb5d1b36d3c9711083bda01361f52c3b9cede426e8e464a57c70c9  tests/test-hermes-manual-review.sh

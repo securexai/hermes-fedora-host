@@ -1,0 +1,111 @@
+{
+  "certification": "pending",
+  "domain_uuid": "4db6369a-2b8b-427f-a47a-a5d83bb40cff",
+  "observations": {
+    "final_fixture_health": {
+      "boot_id": "13b8c141-ebe5-4517-a6d6-519cad6fe1d4",
+      "channel_settings_preserved": true,
+      "credential_matches": true,
+      "credential_service": "active",
+      "no_canary_in_container_metadata": true,
+      "no_canary_in_last_200_runtime_log_lines": true,
+      "no_ports": true,
+      "overlay_read_only": true,
+      "root_read_only": true,
+      "runtime_healthy": true,
+      "selinux": "Enforcing",
+      "user_manager": "active"
+    },
+    "ua03-phases-boot-services": {
+      "boot_id": "1ef6d4cf-7ea4-4e26-a29d-a16cb5a6b7cb",
+      "kernel": "7.1.13-200.fc44.x86_64",
+      "systemd-pcrproduct.service": "active",
+      "systemd-tpm2-setup-early.service": "active",
+      "systemd-tpm2-setup.service": "active"
+    },
+    "ua03-phases-cold-boot": {
+      "boot_id": "e1f0ee8d-5286-45a9-b52a-dc90cf95f60b",
+      "certification": "pending",
+      "completed_at": 1788833214,
+      "kernel": "7.1.13-200.fc44.x86_64",
+      "preflight": true,
+      "stage": "corrected-cold-boot",
+      "tpm_services": {
+        "systemd-pcrproduct.service": "active",
+        "systemd-tpm2-setup-early.service": "active",
+        "systemd-tpm2-setup.service": "active"
+      }
+    },
+    "ua03-phases-runtime": {
+      "boot_id": "1ef6d4cf-7ea4-4e26-a29d-a16cb5a6b7cb",
+      "channel_settings_preserved": true,
+      "credential_matches": true,
+      "credential_service": "active",
+      "no_canary_in_container_metadata": true,
+      "no_canary_in_last_200_runtime_log_lines": true,
+      "no_ports": true,
+      "overlay_read_only": true,
+      "root_read_only": true,
+      "runtime_healthy": true,
+      "selinux": "Enforcing",
+      "user_manager": "active"
+    },
+    "ua03-previous-image-recovery": {
+      "boot_id": "92d2e8ff-b2f5-4334-a390-193bb20a3147",
+      "certification": "pending",
+      "completed_at": 1788833296,
+      "corrected_image_still_default": true,
+      "kernel": "6.19.10-300.fc44.x86_64",
+      "secure_boot": true,
+      "stage": "previous-signed-image-recovery"
+    },
+    "ua03-uki-phases-build": {
+      "boot_verified": false,
+      "inputs": {
+        "cmdline": "7dc059cd4d7e527c8ede2b079de14d1b3be7408909b0339cad99392ee8fad18b",
+        "initrd": "f5d7f750fc5bd9aba5e10c8800452b21450af4aec3df04f8e255436542034c9b",
+        "linux": "c9f420c763aaf195b464715ad80da772ecf1be7061c77a430e41c58d76ebf980",
+        "osrel": "2890125749be45d481dc554b3f777a91e1a7a335e1d456049af353fde625bda6",
+        "stub": "49d7dd6eccaa01ca23627f43bbd0e63aa2e1dd72e88ae5bd02cb6952bb4915d7"
+      },
+      "ok": true,
+      "pcr_bank": "sha256",
+      "pcr_public_key_sha256": "48dd2ca34a7713ec681c4e1b6147f75806f9f3fc71466493934536cb1f9e5bd2",
+      "phases": [
+        "enter-initrd",
+        "enter-initrd:leave-initrd",
+        "enter-initrd:leave-initrd:sysinit",
+        "enter-initrd:leave-initrd:sysinit:ready"
+      ],
+      "purpose": "installed",
+      "secureboot_certificate_sha256": "9c6a93329208cbe8c9e8869b82b1f5c7b8342c437eb3d080ad8a55b2ddc2f6fd",
+      "signed_pcr": 11,
+      "stage": "uki-built",
+      "uki_sha256": "1d602560d4ebc2a55987a0d7b7a8d17d816715c4be5f937a74d35f13d804361e"
+    }
+  },
+  "observed_at": "2026-09-08T02:11:12.041395+00:00",
+  "remaining": [
+    "clean candidate/certifier integration",
+    "exact-candidate package replay from preserved baseline",
+    "full no-input install/upgrade/rerun and negative matrix",
+    "exact-candidate inference, restore and scan",
+    "UA-04 remains gated; no promotion or production deployment"
+  ],
+  "schema": "hermes-ua03-boot-preparation-v1",
+  "scope": "retained disposable preparation fixture; not clean candidate certification",
+  "source_sha256": {
+    "scripts/hermes/unattended/boot_build.py": "c63b0fff03213749d43568b1d8ab8ecad61aa80e3e66174e4b613ecfa3e0ebae",
+    "scripts/hermes/unattended/host.py": "58a1fefe823e6e4db5eb0c181c85c63a01c81efdc5760158b5cf4ab81fefb744",
+    "tests/test_hermes_unattended.py": "2594687f1efe7d550d449175561327ddb9598526a9edd2ab41761b09a2bd9d9d"
+  },
+  "validation": {
+    "boot_build_integration": "PASS: 6 tests; missing-phase regression failed before repair",
+    "documentation": "PASS: six Markdown files, 70 local links; nonfix lint",
+    "hermes_guide": "PASS: 217 checks",
+    "python_discovery": "PASS: 150 tests in 145.325s before subsequent host-capacity change",
+    "shellspec": "PASS: 138 examples, 0 failures in 35.41s",
+    "unattended_final": "PASS: 126 tests in 12.975s after capacity change",
+    "whitespace": "PASS: git diff --check"
+  }
+}

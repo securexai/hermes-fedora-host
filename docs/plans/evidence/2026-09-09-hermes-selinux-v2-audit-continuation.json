@@ -1,0 +1,572 @@
+{
+  "recorded_at": "2026-09-10T02:30:33.824241+00:00",
+  "scope": "Audit-specific continuation of existing approved one real late-service invocation; both prior attempts failed before request",
+  "sources": [
+    {
+      "url": "https://github.com/linux-audit/audit-userspace/blob/v4.2.1/src/ausearch.c",
+      "finding": "Raw no-match marker suppression; pipe versus forced log input selection"
+    },
+    {
+      "url": "https://github.com/linux-audit/audit-userspace/blob/v4.2.1/docs/ausearch.8",
+      "finding": "Exit 1 is ambiguous; --input-logs selects configured audit logs"
+    }
+  ],
+  "audit_packages": [
+    "audit-4.2.1-1.fc44.x86_64",
+    "audit-libs-4.2.1-1.fc44.x86_64"
+  ],
+  "installed_binary_fixture": {
+    "timestamp": "2026-09-10T02:30:33.820540+00:00",
+    "input": "Synthetic one-event pipe; no live audit-log input",
+    "results": {
+      "no_match_raw": {
+        "args": [
+          "-m",
+          "USER_AVC",
+          "--raw"
+        ],
+        "returncode": 1,
+        "stdout_bytes": 0,
+        "stderr": "Error opening config file (Permission denied)\nNOTE - using built-in end_of_event_timeout: 2\nNOTE - using built-in logs: /var/log/audit/audit.log\n",
+        "marker_in_stderr": false,
+        "fixture_match": false
+      },
+      "no_match_default": {
+        "args": [
+          "-m",
+          "USER_AVC",
+          "--format",
+          "default"
+        ],
+        "returncode": 1,
+        "stdout_bytes": 0,
+        "stderr": "Error opening config file (Permission denied)\nNOTE - using built-in end_of_event_timeout: 2\nNOTE - using built-in logs: /var/log/audit/audit.log\n<no matches>\n",
+        "marker_in_stderr": true,
+        "fixture_match": false
+      },
+      "match_raw": {
+        "args": [
+          "-m",
+          "AVC",
+          "--raw"
+        ],
+        "returncode": 0,
+        "stdout_bytes": 241,
+        "stderr": "Error opening config file (Permission denied)\nNOTE - using built-in end_of_event_timeout: 2\nNOTE - using built-in logs: /var/log/audit/audit.log\n",
+        "marker_in_stderr": false,
+        "fixture_match": true
+      },
+      "bad_date": {
+        "args": [
+          "-m",
+          "AVC",
+          "-ts",
+          "bad-date",
+          "--raw"
+        ],
+        "returncode": 1,
+        "stdout_bytes": 0,
+        "stderr": "Invalid start date (bad-date). Month, Day, and Year are required.\n",
+        "marker_in_stderr": false,
+        "fixture_match": false
+      }
+    }
+  },
+  "fixture_checks": {
+    "raw_no_match": true,
+    "default_no_match": true,
+    "raw_matching_event": true,
+    "bad_date_rejected": true
+  },
+  "fixture_method": {
+    "ssh": "BatchMode StrictHostKeyChecking existing pin aicowork@10.0.30.10",
+    "remote_program": "\nimport datetime,json,os,subprocess,time\nos.environ['LC_ALL']='C'\nepoch=int(time.time())-10\nfixture=(f'type=AVC msg=audit({epoch}.123:999999): avc:  denied  {{ read }} for  pid=123 comm=\"synthetic-audit-fixture\" name=\"fixture\" dev=\"tmpfs\" ino=1 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:tmp_t:s0 tclass=file permissive=0\\n').encode()\nresults={}\nfor name,args in [('no_match_raw',['-m','USER_AVC','--raw']),('no_match_default',['-m','USER_AVC','--format','default']),('match_raw',['-m','AVC','--raw']),('bad_date',['-m','AVC','-ts','bad-date','--raw'])]:\n r=subprocess.run(['/usr/sbin/ausearch',*args],input=fixture,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=20)\n results[name]={'args':args,'returncode':r.returncode,'stdout_bytes':len(r.stdout),'stderr':r.stderr.decode(),'marker_in_stderr':b'<no matches>' in r.stderr,'fixture_match':b'synthetic-audit-fixture' in r.stdout}\nprint(json.dumps({'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'input':'Synthetic one-event pipe; no live audit-log input','results':results}))\n"
+  },
+  "SE20": {
+    "progress": "PASS: complete",
+    "validation": "PASS: 74 offline tests and recorded installed-binary format probes; live logs pending"
+  },
+  "SE21": {
+    "progress": "PASS: complete",
+    "validation": "PASS: unchanged reviewed source/test identities, fresh pinned baseline, exclusive private staging, independent hash/owner/mode readback and current documentation checks",
+    "completed_at": "2026-09-10T13:15:19.338657+00:00"
+  },
+  "production_mutations": [
+    "Exclusively created only /home/aicowork/hermes-selinux-trial-20260909-v2/continue-reviewed-service-v2-audit.py mode 0600; no helper execution, service request or reboot"
+  ],
+  "private_log_directory": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation",
+  "validation": [
+    {
+      "timestamp": "2026-09-10T02:40:28.036158+00:00",
+      "method": "devbox run -- python3 -m unittest discover -s tests -p \"test_hermes_selinux_*v2.py\"",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/offline-validation.log"
+    },
+    {
+      "timestamp": "2026-09-10T02:50:26.201167+00:00",
+      "method": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_selinux_*v2.py",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "tests": 74
+    }
+  ],
+  "artifact_sha256": {
+    "scripts/hermes/selinux/continue-reviewed-service-v2-audit.py": "0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3",
+    "tests/test_hermes_selinux_service_v2.py": "e8a59ac6c040f450ca66cec54c3b52f2265f3ed5c034c4b55f0766bafc8dc161",
+    "tests/test_hermes_selinux_continuation_v2.py": "6403710cbb1fe2077401e3d9d01bdf63658fc8c113ca81caad3fbac6ff01f81a",
+    "tests/test_hermes_selinux_audit_v2.py": "545b1bd00dc0d7045ce360bdd06a7d25e44a7f89bf9252db209d9e45f5fc5cfd"
+  },
+  "live_preflight": {
+    "timestamp": "2026-09-10T02:49:31.969635+00:00",
+    "hostname": "hermes",
+    "enforcing": "Enforcing",
+    "disk_policy": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+    "label": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+    "mapping": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+    "packages": [
+      "selinux-policy-44.8-1.fc44.noarch",
+      "selinux-policy-targeted-44.8-1.fc44.noarch",
+      "systemd-259.8-1.fc44.x86_64"
+    ],
+    "units": {
+      "systemd-tpm2-setup.service": {
+        "LoadState": "loaded",
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "InvocationID": "4cce6a53c01c4dff8c480b530fd16661",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Wed 2026-09-09 09:43:14 -05",
+        "ExecMainStatus": "1"
+      },
+      "systemd-tpm2-setup-early.service": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "exited",
+        "InvocationID": "856199b7545e421e84cec252c2106124",
+        "MainPID": "0",
+        "ControlPID": "0",
+        "ExecMainStartTimestamp": "Tue 2026-09-08 22:19:12 -05",
+        "ExecMainStatus": "0"
+      }
+    },
+    "original_staged_hash": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+    "new_staging_absent": {
+      "continue-reviewed-service-v2-audit.py": true
+    },
+    "directory_mode": "0700",
+    "root_mount_active": "active",
+    "sudo_noninteractive_available": false
+  },
+  "live_preflight_checks": {
+    "hostname": true,
+    "enforcing": true,
+    "disk_policy": true,
+    "label": true,
+    "mapping": true,
+    "packages": true,
+    "units": true,
+    "original_staged_hash": true,
+    "directory_mode": true,
+    "root_mount_active": true,
+    "new_path_absent": true
+  },
+  "live_method": {
+    "ssh": "BatchMode=yes StrictHostKeyChecking=yes ConnectTimeout=10 aicowork@10.0.30.10; existing identity/pin unchanged",
+    "remote_program": "\nimport datetime,hashlib,json,os,stat,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C'\ndef run(*args):\n r=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)\n if r.returncode:raise RuntimeError('Read-only probe failed: '+args[0])\n return r.stdout.decode().strip()\np=Path('/home/aicowork/hermes-selinux-trial-20260909-v2');assert not any(x.is_symlink() for x in (p,*p.parents));info=p.stat();assert stat.S_ISDIR(info.st_mode) and stat.S_IMODE(info.st_mode)==0o700 and info.st_uid==os.getuid()\nr={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'hostname':run('hostname','-s'),'enforcing':run('getenforce'),'disk_policy':hashlib.sha256(Path('/etc/selinux/targeted/policy/policy.35').read_bytes()).hexdigest(),'label':run('stat','-c','%C','/usr/lib/systemd/systemd-tpm2-setup'),'mapping':run('matchpathcon','-n','/usr/lib/systemd/systemd-tpm2-setup'),'packages':run('rpm','-q','selinux-policy','selinux-policy-targeted','systemd').splitlines(),'units':{},'original_staged_hash':hashlib.sha256((p/'run-reviewed-service-v2.py').read_bytes()).hexdigest(),'new_staging_absent':{name:not os.path.lexists(p/name) for name in ('continue-reviewed-service-v2-audit.py',)},'directory_mode':'0700'}\nfor unit in ('systemd-tpm2-setup.service','systemd-tpm2-setup-early.service'):\n args=['systemctl','show','--all',unit]\n for key in ('LoadState','ActiveState','SubState','MainPID','ControlPID','InvocationID','ExecMainStartTimestamp','ExecMainStatus'):args+=['-p',key]\n r['units'][unit]=dict(x.split('=',1) for x in run(*args).splitlines())\nr['root_mount_active']=run('systemctl','show','-p','ActiveState','--value','--','-.mount')\nr['sudo_noninteractive_available']=subprocess.run(['sudo','-n','true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15).returncode==0\nprint(json.dumps(r))\n"
+  },
+  "operator_handoff": {
+    "command": "sudo sh -eu -c '\n  umask 077\n  src=/home/aicowork/hermes-selinux-trial-20260909-v2/continue-reviewed-service-v2-audit.py\n  dst=/var/lib/hermes-selinux-trial-20260909-v2/continue-reviewed-service-v2-audit.py\n  if [ -e \"$dst\" ] || [ -L \"$dst\" ]; then\n    printf \"%s\\n\" \"STOP: destination exists; preserve evidence\" >&2\n    exit 1\n  fi\n  set -C\n  cat \"$src\" > \"$dst\"\n  printf \"%s  %s\\n\" 0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3 \"$dst\" | sha256sum -c -\n  exec /usr/bin/python3 -I -B \"$dst\" --approved-v2-audit-continuation\n'",
+    "staging": "PASS: independently verified 2026-09-10T13:11Z; console-supervised operator invocation pending"
+  },
+  "documentation_validation": [
+    {
+      "timestamp": "2026-09-10T02:51:02.905033+00:00",
+      "method": [
+        "sh",
+        "-n",
+        "/tmp/hermes-audit-validation-dogfww01/handoff.sh"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/handoff-syntax.log"
+    },
+    {
+      "timestamp": "2026-09-10T02:51:03.011033+00:00",
+      "method": [
+        "shellcheck",
+        "/tmp/hermes-audit-validation-dogfww01/handoff.sh"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/handoff-shellcheck.log"
+    },
+    {
+      "timestamp": "2026-09-10T02:51:04.568671+00:00",
+      "method": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/hermes-guide.log"
+    },
+    {
+      "timestamp": "2026-09-10T02:51:05.318892+00:00",
+      "method": [
+        "markdownlint-cli2",
+        "--config",
+        "/tmp/hermes-audit-validation-dogfww01/lint.json"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 2,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/markdown.log"
+    },
+    {
+      "timestamp": "2026-09-10T02:57:48.515572+00:00",
+      "method": [
+        "markdownlint-cli2",
+        "--config",
+        "/tmp/hermes-audit-validation-gb0pydav/check.markdownlint-cli2.jsonc"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/markdown-correct-config.log"
+    },
+    {
+      "timestamp": "2026-09-10T02:57:48.530344+00:00",
+      "method": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/whitespace.log"
+    }
+  ],
+  "local_extra_validation": {
+    "timestamp": "2026-09-10T02:58:10.455107+00:00",
+    "result": "PASS",
+    "checks": [
+      "Python syntax",
+      "four disposable copy/hash fixtures",
+      "published command matches evidence"
+    ],
+    "local_file_links": 150,
+    "harness_corrections": [
+      "Initial Markdown configuration filename rejected; supported filename passes",
+      "Initial link regex matched Python inside code fences; exclude fenced code, then all file links pass"
+    ]
+  },
+  "staging_continuation": {
+    "timestamp": "2026-09-10T13:10:19.521581+00:00",
+    "environment": {
+      "repository": "/var/home/cloudops/code/repos/mikrotik",
+      "branch": "codex/hermes-unattended",
+      "base_revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9"
+    },
+    "preflight_method": {
+      "ssh": [
+        "ssh",
+        "-T",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "ServerAliveInterval=10",
+        "-o",
+        "ServerAliveCountMax=2",
+        "aicowork@10.0.30.10"
+      ],
+      "remote_program": "\nimport datetime,hashlib,json,os,stat,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C'\ndef run(*args):\n r=subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=30)\n if r.returncode:raise RuntimeError('Read-only probe failed: '+args[0])\n return r.stdout.decode().strip()\np=Path('/home/aicowork/hermes-selinux-trial-20260909-v2');assert not any(x.is_symlink() for x in (p,*p.parents));info=p.stat();assert stat.S_ISDIR(info.st_mode) and stat.S_IMODE(info.st_mode)==0o700 and info.st_uid==os.getuid()\nr={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'hostname':run('hostname','-s'),'enforcing':run('getenforce'),'disk_policy':hashlib.sha256(Path('/etc/selinux/targeted/policy/policy.35').read_bytes()).hexdigest(),'label':run('stat','-c','%C','/usr/lib/systemd/systemd-tpm2-setup'),'mapping':run('matchpathcon','-n','/usr/lib/systemd/systemd-tpm2-setup'),'packages':run('rpm','-q','selinux-policy','selinux-policy-targeted','systemd').splitlines(),'units':{},'original_staged_hash':hashlib.sha256((p/'run-reviewed-service-v2.py').read_bytes()).hexdigest(),'new_staging_absent':{name:not os.path.lexists(p/name) for name in ('continue-reviewed-service-v2-audit.py',)},'directory_mode':'0700'}\nfor unit in ('systemd-tpm2-setup.service','systemd-tpm2-setup-early.service'):\n args=['systemctl','show','--all',unit]\n for key in ('LoadState','ActiveState','SubState','MainPID','ControlPID','InvocationID','ExecMainStartTimestamp','ExecMainStatus'):args+=['-p',key]\n r['units'][unit]=dict(x.split('=',1) for x in run(*args).splitlines())\nr['root_mount_active']=run('systemctl','show','-p','ActiveState','--value','--','-.mount')\nr['sudo_noninteractive_available']=subprocess.run(['sudo','-n','true'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15).returncode==0\nr['audit_packages']=run('rpm','-q','audit','audit-libs').splitlines()\nr['preserved_staged_hashes']={name:hashlib.sha256((p/name).read_bytes()).hexdigest() for name in ('run-reviewed-service-v2-corrected.py','continue-reviewed-service-v2.py')}\nprint(json.dumps(r))\n"
+    },
+    "preflight": {
+      "timestamp": "2026-09-10T13:10:20.324416+00:00",
+      "hostname": "hermes",
+      "enforcing": "Enforcing",
+      "disk_policy": "84e62bca8dbd0439593c7fbf44f795a9f1a3d5b461f5a174baf35c9346678360",
+      "label": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+      "mapping": "system_u:object_r:hermes_tpm2_setup_exec_t:s0",
+      "packages": [
+        "selinux-policy-44.8-1.fc44.noarch",
+        "selinux-policy-targeted-44.8-1.fc44.noarch",
+        "systemd-259.8-1.fc44.x86_64"
+      ],
+      "units": {
+        "systemd-tpm2-setup.service": {
+          "LoadState": "loaded",
+          "ActiveState": "failed",
+          "SubState": "failed",
+          "InvocationID": "4cce6a53c01c4dff8c480b530fd16661",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "ExecMainStartTimestamp": "Wed 2026-09-09 09:43:14 -05",
+          "ExecMainStatus": "1"
+        },
+        "systemd-tpm2-setup-early.service": {
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "exited",
+          "InvocationID": "856199b7545e421e84cec252c2106124",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "ExecMainStartTimestamp": "Tue 2026-09-08 22:19:12 -05",
+          "ExecMainStatus": "0"
+        }
+      },
+      "original_staged_hash": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+      "new_staging_absent": {
+        "continue-reviewed-service-v2-audit.py": true
+      },
+      "directory_mode": "0700",
+      "root_mount_active": "active",
+      "sudo_noninteractive_available": false,
+      "audit_packages": [
+        "audit-4.2.1-1.fc44.x86_64",
+        "audit-libs-4.2.1-1.fc44.x86_64"
+      ],
+      "preserved_staged_hashes": {
+        "run-reviewed-service-v2-corrected.py": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+        "continue-reviewed-service-v2.py": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1"
+      }
+    },
+    "preflight_checks": {
+      "hostname": true,
+      "enforcing": true,
+      "disk_policy": true,
+      "label": true,
+      "mapping": true,
+      "packages": true,
+      "units": true,
+      "original_staged_hash": true,
+      "directory_mode": true,
+      "root_mount_active": true,
+      "new_path_absent": true,
+      "audit_packages": true,
+      "preserved_core": true,
+      "preserved_wrapper": true
+    },
+    "staging_attempt": {
+      "timestamp": "2026-09-10T13:11:15.118538+00:00",
+      "method": "Hash-verified stdin payload; private directory fd; existing helper hash checks; exclusive O_NOFOLLOW mode-0600 creation; fsync file and directory",
+      "remote_program": "\nimport datetime,hashlib,json,os,stat,sys\nfrom pathlib import Path\nexpected='0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3'\ndata=sys.stdin.buffer.read(131073)\nassert 0<len(data)<=131072 and hashlib.sha256(data).hexdigest()==expected\nos.umask(0o077)\ndirectory=Path('/home/aicowork/hermes-selinux-trial-20260909-v2')\nassert not any(p.is_symlink() for p in (directory,*directory.parents))\nfd=os.open(directory,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)\ntry:\n info=os.fstat(fd)\n assert info.st_uid==os.getuid() and stat.S_IMODE(info.st_mode)==0o700\n for name,pin in {\n  'run-reviewed-service-v2.py':'3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500',\n  'run-reviewed-service-v2-corrected.py':'6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07',\n  'continue-reviewed-service-v2.py':'fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1'\n }.items():\n  with os.fdopen(os.open(name,os.O_RDONLY|os.O_NOFOLLOW,dir_fd=fd),'rb') as stream:\n   old=os.fstat(stream.fileno())\n   assert stat.S_ISREG(old.st_mode) and old.st_uid==os.getuid() and stat.S_IMODE(old.st_mode)==0o600 and old.st_nlink==1 and old.st_size<=131072\n   assert hashlib.sha256(stream.read()).hexdigest()==pin\n name='continue-reviewed-service-v2-audit.py'\n out=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=fd)\n with os.fdopen(out,'wb') as stream:\n  stream.write(data);stream.flush();os.fsync(stream.fileno())\n os.fsync(fd)\n print(json.dumps({'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'path':str(directory/name),'sha256':expected,'mode':'0600','owner_uid':os.getuid(),'size':len(data),'exclusive_create':True,'prior_helpers_unchanged':True}))\nfinally:\n os.close(fd)\n",
+      "result": "PASS: created; separate readback pending",
+      "exit_code": 0
+    },
+    "staging": {
+      "timestamp": "2026-09-10T13:11:15.632296+00:00",
+      "path": "/home/aicowork/hermes-selinux-trial-20260909-v2/continue-reviewed-service-v2-audit.py",
+      "sha256": "0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3",
+      "mode": "0600",
+      "owner_uid": 1000,
+      "size": 8402,
+      "exclusive_create": true,
+      "prior_helpers_unchanged": true
+    },
+    "verification_method": {
+      "remote_program": "\nimport datetime,hashlib,json,os,stat,subprocess\nfrom pathlib import Path\nos.environ['LC_ALL']='C'\ndirectory=Path('/home/aicowork/hermes-selinux-trial-20260909-v2')\nassert not any(p.is_symlink() for p in (directory,*directory.parents))\nfd=os.open(directory,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)\nresult={'timestamp':datetime.datetime.now(datetime.timezone.utc).isoformat(),'directory':str(directory),'files':{},'units':{}}\ntry:\n ds=os.fstat(fd)\n assert ds.st_uid==os.getuid() and stat.S_IMODE(ds.st_mode)==0o700\n result['directory_mode']='0700'\n for name in ('run-reviewed-service-v2.py','run-reviewed-service-v2-corrected.py','continue-reviewed-service-v2.py','continue-reviewed-service-v2-audit.py'):\n  with os.fdopen(os.open(name,os.O_RDONLY|os.O_NOFOLLOW,dir_fd=fd),'rb') as stream:\n   s=os.fstat(stream.fileno())\n   assert stat.S_ISREG(s.st_mode) and s.st_uid==ds.st_uid and stat.S_IMODE(s.st_mode)==0o600 and s.st_nlink==1 and s.st_size<=131072\n   result['files'][name]={'sha256':hashlib.sha256(stream.read()).hexdigest(),'size':s.st_size,'mode':'0600','owner_uid':s.st_uid,'hardlinks':s.st_nlink,'regular_file':True}\nfinally:\n os.close(fd)\nfor unit in ('systemd-tpm2-setup.service','systemd-tpm2-setup-early.service'):\n argv=['systemctl','show','--all',unit]\n for key in ('LoadState','ActiveState','SubState','MainPID','ControlPID','InvocationID','ExecMainStartTimestamp','ExecMainStatus'):argv+=['-p',key]\n r=subprocess.run(argv,capture_output=True,text=True,check=True,timeout=30)\n result['units'][unit]=dict(line.split('=',1) for line in r.stdout.splitlines())\nprint(json.dumps(result))\n",
+      "exit_code": 0,
+      "method": "Independent pinned SSH readback with no-follow directory/file descriptors, private modes/owner/type/link checks and unchanged unit identities"
+    },
+    "verification": {
+      "timestamp": "2026-09-10T13:11:56.371606+00:00",
+      "directory": "/home/aicowork/hermes-selinux-trial-20260909-v2",
+      "files": {
+        "run-reviewed-service-v2.py": {
+          "sha256": "3ed9e2e9d8c751b1cb6281648cef4f1691b81fb480442da247b301578af51500",
+          "size": 20929,
+          "mode": "0600",
+          "owner_uid": 1000,
+          "hardlinks": 1,
+          "regular_file": true
+        },
+        "run-reviewed-service-v2-corrected.py": {
+          "sha256": "6fd1a7c96efc3729173d321398ce0b111f2d5f0cea46df6b0c2d9c2605f3ec07",
+          "size": 20935,
+          "mode": "0600",
+          "owner_uid": 1000,
+          "hardlinks": 1,
+          "regular_file": true
+        },
+        "continue-reviewed-service-v2.py": {
+          "sha256": "fd2546742abdba2d7d568a4af31d481a96084dbcea5829cfbc832430bb5e7ab1",
+          "size": 6631,
+          "mode": "0600",
+          "owner_uid": 1000,
+          "hardlinks": 1,
+          "regular_file": true
+        },
+        "continue-reviewed-service-v2-audit.py": {
+          "sha256": "0733fc3d33b04da645ab71e204479e3de3361bc7b72675d82fb72c095b8453f3",
+          "size": 8402,
+          "mode": "0600",
+          "owner_uid": 1000,
+          "hardlinks": 1,
+          "regular_file": true
+        }
+      },
+      "units": {
+        "systemd-tpm2-setup.service": {
+          "LoadState": "loaded",
+          "ActiveState": "failed",
+          "SubState": "failed",
+          "InvocationID": "4cce6a53c01c4dff8c480b530fd16661",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "ExecMainStartTimestamp": "Wed 2026-09-09 09:43:14 -05",
+          "ExecMainStatus": "1"
+        },
+        "systemd-tpm2-setup-early.service": {
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "exited",
+          "InvocationID": "856199b7545e421e84cec252c2106124",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "ExecMainStartTimestamp": "Tue 2026-09-08 22:19:12 -05",
+          "ExecMainStatus": "0"
+        }
+      },
+      "directory_mode": "0700"
+    },
+    "verification_checks": {
+      "run-reviewed-service-v2.py": true,
+      "run-reviewed-service-v2-corrected.py": true,
+      "continue-reviewed-service-v2.py": true,
+      "continue-reviewed-service-v2-audit.py": true,
+      "units_unchanged": true
+    },
+    "documentation_before_directory": "/tmp/hermes-se21-docs-before-2sic6qen",
+    "documentation_log_directory": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/se21-staging-20260910T131418Z",
+    "documentation_validation": [
+      {
+        "name": "hermes-guide",
+        "timestamp": "2026-09-10T13:14:18.396469+00:00",
+        "method": [
+          "./tests/test-hermes-guide.sh"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "single Devbox runtime; Markdown in nonfix isolated copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/se21-staging-20260910T131418Z/hermes-guide.log",
+        "output_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691",
+        "tail": [
+          "",
+          "========================================",
+          "Results: \u001b[0;32m217\u001b[0m passed, \u001b[0;31m0\u001b[0m failed, \u001b[0;33m0\u001b[0m skipped (217 total)",
+          "========================================"
+        ]
+      },
+      {
+        "name": "markdown",
+        "timestamp": "2026-09-10T13:14:18.396834+00:00",
+        "method": [
+          "markdownlint-cli2",
+          "--config",
+          "/tmp/hermes-se21-lint-n9doy6ew/check.markdownlint-cli2.jsonc"
+        ],
+        "cwd": "/tmp/hermes-se21-lint-n9doy6ew",
+        "environment": "single Devbox runtime; Markdown in nonfix isolated copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/se21-staging-20260910T131418Z/markdown.log",
+        "output_sha256": "73e7d952cf561dfd694deb544df77b78ced2539485d33bf0a6fe76433de41f65",
+        "tail": [
+          "markdownlint-cli2 v0.21.0 (markdownlint v0.40.0)",
+          "Finding: 2026-09-07-hermes-unattended.md HERMES_SELINUX_TPM_REPAIR.md HERMES_INSTALLATION_VERIFICATION.md DEPLOYMENT_TASKS.md",
+          "Linting: 4 file(s)",
+          "Summary: 0 error(s)"
+        ]
+      },
+      {
+        "name": "whitespace",
+        "timestamp": "2026-09-10T13:14:18.397068+00:00",
+        "method": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "/var/home/cloudops/code/repos/mikrotik",
+        "environment": "single Devbox runtime; Markdown in nonfix isolated copies",
+        "expected_exit": 0,
+        "actual_exit": 0,
+        "log": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/se21-staging-20260910T131418Z/whitespace.log",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tail": []
+      }
+    ],
+    "documentation_checks": {
+      "timestamp": "2026-09-10T13:14:20.694138+00:00",
+      "local_file_links": 153,
+      "changed_handoff_anchors": 2,
+      "published_command_unchanged": true,
+      "source_and_test_hashes_unchanged": true,
+      "document_sha256": {
+        "docs/plans/2026-09-07-hermes-unattended.md": "3d58f5fe42d6893420e1312a887d09dbfe38a00e3b15e4b8c1b49a474298d2ad",
+        "docs/HERMES_SELINUX_TPM_REPAIR.md": "fe24b67b58b138f2121c1b9affc1cc394e6670a0be2c03ac3839cd699bc5260c",
+        "docs/HERMES_INSTALLATION_VERIFICATION.md": "690fb3b1823123e53cada0958aa008a62ca6f991b8be63317c70906a8248758d",
+        "vm/DEPLOYMENT_TASKS.md": "439ac059003f97e52dccc05c0bd81955f8f6bef7c9321b9cb9fb0a6edd6ec989"
+      },
+      "markdown_configuration": {
+        "globs": [
+          "2026-09-07-hermes-unattended.md",
+          "HERMES_SELINUX_TPM_REPAIR.md",
+          "HERMES_INSTALLATION_VERIFICATION.md",
+          "DEPLOYMENT_TASKS.md"
+        ],
+        "ignores": [],
+        "config": {
+          "MD024": {
+            "allow_different_nesting": true,
+            "siblings_only": true
+          },
+          "MD013": {
+            "line_length": 120,
+            "code_blocks": false,
+            "tables": false,
+            "headings": false
+          },
+          "MD033": true,
+          "MD036": true,
+          "MD040": true,
+          "MD045": true,
+          "MD047": true,
+          "MD051": true,
+          "MD053": true,
+          "MD059": true,
+          "MD060": false
+        },
+        "fix": false
+      }
+    },
+    "closure_validation": {
+      "timestamp": "2026-09-10T13:15:21.669195+00:00",
+      "reason": "Recheck lint and whitespace after execution-record status/closure prose updates; commands and source unchanged",
+      "markdown_exit": 0,
+      "whitespace_exit": 0,
+      "log_directory": "/var/home/cloudops/.local/state/hermes-selinux-candidate/20260909/v2-audit-continuation/se21-staging-20260910T131418Z",
+      "document_sha256": {
+        "docs/plans/2026-09-07-hermes-unattended.md": "72e8448c3815451e2b491cffcff4cd65a4ebfe03e2467b36640d48b01b5dfd86",
+        "docs/HERMES_SELINUX_TPM_REPAIR.md": "fe24b67b58b138f2121c1b9affc1cc394e6670a0be2c03ac3839cd699bc5260c",
+        "docs/HERMES_INSTALLATION_VERIFICATION.md": "690fb3b1823123e53cada0958aa008a62ca6f991b8be63317c70906a8248758d",
+        "vm/DEPLOYMENT_TASKS.md": "439ac059003f97e52dccc05c0bd81955f8f6bef7c9321b9cb9fb0a6edd6ec989"
+      }
+    }
+  },
+  "limitations": [
+    "No helper executed or service requested by this staging step; privileged live-log, prior-attempt, loaded-policy/anchor and runtime acceptance remain pending",
+    "Interactive operator sudo with physical console and manual recovery is required for the already approved single service invocation",
+    "Repeat/idempotency and cold-boot acceptance remain open; no reboot or expanded trial scope"
+  ],
+  "SE22": {
+    "progress": "BLOCKED: interactive operator sudo and physical-console execution required",
+    "validation": "TODO: approved single invocation and read-only result review"
+  }
+}

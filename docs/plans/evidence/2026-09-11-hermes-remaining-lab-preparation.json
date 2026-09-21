@@ -1,0 +1,448 @@
+{
+  "schema": "hermes-remaining-lab-preparation-v1",
+  "prepared_at": "2026-09-11T14:22:30.942956+00:00",
+  "status": "PREPARED_NOT_APPROVED",
+  "authorization": {
+    "local_preparation": "APPROVED by user request 2026-09-11",
+    "lab_execution": "NOT_APPROVED",
+    "r3_approval": "CONSUMED",
+    "grant_issued": false
+  },
+  "package": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4",
+  "lab_executed": false,
+  "production_changed": false,
+  "provider_calls": false,
+  "notifications_sent": false,
+  "commits_or_pushes": false,
+  "validation": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_remaining_lab.py"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:18:42.929991+00:00",
+      "completed_at": "2026-09-11T14:18:43.851351+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-00.log",
+      "log_sha256": "9fb185f358917737995785a434d0e2d49abcdcd8c71310e7f29b063ef818d2de",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-00.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_certify.py"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:18:43.851529+00:00",
+      "completed_at": "2026-09-11T14:18:44.186335+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-01.log",
+      "log_sha256": "6972c0cf61761401b1edf45bb74993776587ceeb8b4205fdfc1519492f4f583d",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-01.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_lifecycle.py"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:18:44.186509+00:00",
+      "completed_at": "2026-09-11T14:18:48.278426+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-02.log",
+      "log_sha256": "b69ca761b9930c563446724d6730a5bb054d9f1ebfbf6559764001ce59f7d835",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-02.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_schedule.py"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:18:48.278542+00:00",
+      "completed_at": "2026-09-11T14:18:48.778470+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-03.log",
+      "log_sha256": "3af0134ed8a941f27af70de1d1fde43d072988abedb38f76d276b6d226167f0a",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-03.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_hermes_offline.py"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:18:48.778615+00:00",
+      "completed_at": "2026-09-11T14:18:49.110123+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-04.log",
+      "log_sha256": "5cd53a53d04023de114b2eeda7623449bed3d63b39f9d54d792ddacfe315b8e9",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-04.log"
+    },
+    {
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:18:49.110290+00:00",
+      "completed_at": "2026-09-11T14:18:50.764288+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-05.log",
+      "log_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-05.log"
+    },
+    {
+      "command": [
+        "shellspec",
+        "spec/hermes/",
+        "spec/vm/"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:18:50.764414+00:00",
+      "completed_at": "2026-09-11T14:19:11.513879+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-06.log",
+      "log_sha256": "b2d386df52df078f26553abf4c6e46c9e05bd644c4b18d559f87104886715d97",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-06.log"
+    },
+    {
+      "command": [
+        "shellcheck",
+        "scripts/hermes/unattended/lab-probes/b4-credential-probe.sh"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:19:11.514023+00:00",
+      "completed_at": "2026-09-11T14:19:11.556155+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-07.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-07.log"
+    },
+    {
+      "command": [
+        "shfmt",
+        "-d",
+        "-l",
+        "-i",
+        "2",
+        "-ci",
+        "-bn",
+        "scripts/hermes/unattended/lab-probes/b4-credential-probe.sh"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:19:11.556316+00:00",
+      "completed_at": "2026-09-11T14:19:11.564535+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-08.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-08.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "started_at": "2026-09-11T14:19:11.564659+00:00",
+      "completed_at": "2026-09-11T14:19:11.585079+00:00",
+      "log": "/tmp/hermes-remaining-lab-preparation-20260911/final-09.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "durable_log": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/validation/final-09.log"
+    }
+  ],
+  "validation_totals": {
+    "python_tests": 138,
+    "shellspec_examples": 138,
+    "hermes_guide_checks": 217
+  },
+  "retained_failures": [
+    {
+      "check": "initial Markdown invocation",
+      "result": "FAIL",
+      "reason": "unsupported temporary config filename; no Markdown validation ran"
+    },
+    {
+      "check": "isolated nonfix Markdown",
+      "result": "FAIL",
+      "reason": "one newly added overlong line and three extra blank lines; corrected"
+    },
+    {
+      "check": "final Markdown recheck",
+      "result": "FAIL",
+      "reason": "one extra blank remained in vm/DEPLOYMENT_TASKS.md; inspected and removed exact line"
+    }
+  ],
+  "limits": [
+    "No live lab/TPM/boot/notification proof is claimed.",
+    "Actual root enrollment, tool discovery and cleanup remain execution gates.",
+    "Supplemental experiments are operator-run with paired control evidence.",
+    "Each separately approved case has one dispatch and a four-hour total bound."
+  ],
+  "next_action": "Obtain fresh explicit approval for b3 only: one L0/L1/L2 block, four-hour total bound including cleanup.",
+  "package_validation": {
+    "result": "PASS",
+    "timestamp": "2026-09-11T14:23:58.837339+00:00",
+    "source_files": 79,
+    "cases": 14,
+    "control_approval_refusals": 56,
+    "archive_members_verified": 79,
+    "source_archive_sha256": "88ce89ee5c11c420c6d73185bab47e2b9e46fe318ec5a0c2e46ef2a2f83d1867",
+    "package_manifest_sha256": "16b38ee626915b5c2f14c8a3d51e036fbacac55e1c239e4d813918240c48fc63",
+    "method": "AST parse; exact archive/file/UID/policy/control/budget checks; 56 simulated-UID invocations reject missing approval before operations; immutable source matches workspace",
+    "root_or_lab_operations_performed": false
+  },
+  "cases": [
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b3",
+      "case": "b3",
+      "dependencies": [],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "767426aea1a8b76b3cd3edd0fd307841f26fff32dc7451c88889fa527967383c",
+      "root": "/var/lib/hermes-remaining-20260911-b3-c618944c",
+      "run_id": "c618944cdf9ab726cd663548b1f47c835892c09627c1a78ef98279384262c5f0",
+      "unit": "hermes-remaining-20260911-b3-c618944c.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-linux",
+      "case": "b4-linux",
+      "dependencies": [
+        "b3"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "249f735ddfebc81c4a6b837989b5241452dd09eb03820fa06620806f1b77de02",
+      "root": "/var/lib/hermes-remaining-20260911-b4-linux-dbf08d0f",
+      "run_id": "dbf08d0fde674cb29e0a059d6565768d18eca96f4873004a172343227411ef44",
+      "unit": "hermes-remaining-20260911-b4-linux-dbf08d0f.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-initrd",
+      "case": "b4-initrd",
+      "dependencies": [
+        "b4-linux"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "6e9c7f23145600ee72a3cd394edcc11366a291664a4ab30252fc1050a289031f",
+      "root": "/var/lib/hermes-remaining-20260911-b4-initrd-95041fe4",
+      "run_id": "95041fe49fd28bd66821e28d5ec3240364b980272dace31491d3419ca94473bf",
+      "unit": "hermes-remaining-20260911-b4-initrd-95041fe4.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-cmdline",
+      "case": "b4-cmdline",
+      "dependencies": [
+        "b4-initrd"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "3b03c5dec392edbfdd01a1abb39a52a5b67620da111f6652d930b06e4977fbe5",
+      "root": "/var/lib/hermes-remaining-20260911-b4-cmdline-bbe555bc",
+      "run_id": "bbe555bce9c7a1a4b4760f092a9eec65766b451be73ecc2ef5206b92694feb2c",
+      "unit": "hermes-remaining-20260911-b4-cmdline-bbe555bc.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-pcr11",
+      "case": "b4-pcr11",
+      "dependencies": [
+        "b4-cmdline"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "0b110189b3185572687f9ff6b4c57ae449d00acacc195415a8b6537377d9d499",
+      "root": "/var/lib/hermes-remaining-20260911-b4-pcr11-f51f454f",
+      "run_id": "f51f454fafe2a48a9dbd8cb13b690a126cf9defe57e3076e00ae0792fbc0997e",
+      "unit": "hermes-remaining-20260911-b4-pcr11-f51f454f.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-external",
+      "case": "b4-external",
+      "dependencies": [
+        "b4-pcr11"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "9471712b95c2e72b16bf08acf8173c22c58788d6f96a3b5f2be77473b300c338",
+      "root": "/var/lib/hermes-remaining-20260911-b4-external-4d0e0b29",
+      "run_id": "4d0e0b293e4420af0fd50f84b933b46fc2a5ad5ee8bec54f6e8036dda6a6f4b9",
+      "unit": "hermes-remaining-20260911-b4-external-4d0e0b29.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b4-credential",
+      "case": "b4-credential",
+      "dependencies": [
+        "b4-external"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "892c4e4ccb2a60e5e069782d6a614c885e3f4bdc3a287151e6881bf565708151",
+      "root": "/var/lib/hermes-remaining-20260911-b4-credential-29fd3deb",
+      "run_id": "29fd3deb2a60560dafdcca8fc3db38e3a32d8aef48e394796a4c5b402e798744",
+      "unit": "hermes-remaining-20260911-b4-credential-29fd3deb.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-before-copy",
+      "case": "b7-before-copy",
+      "dependencies": [
+        "b4-credential"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "44c1f27cbc0e571192d8d3ff242da169f63940748de33676a6d2041c444e09a9",
+      "root": "/var/lib/hermes-remaining-20260911-b7-before-copy-227f5c8e",
+      "run_id": "227f5c8eba553f1182e4c9d1e857ecbbfd9f285a7d3c5747afdfb2bdeb588d0e",
+      "unit": "hermes-remaining-20260911-b7-before-copy-227f5c8e.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-during-copy",
+      "case": "b7-during-copy",
+      "dependencies": [
+        "b7-before-copy"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "8310edf2bbf135c8921e8d82c84ad89cbe5720cedaf071fc0efe2a97c6f20464",
+      "root": "/var/lib/hermes-remaining-20260911-b7-during-copy-cce74a51",
+      "run_id": "cce74a5177c5aca92ea25e9b9a07154255aab4ca7e9e1f8e1acd7007f5f2f835",
+      "unit": "hermes-remaining-20260911-b7-during-copy-cce74a51.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-before-publish",
+      "case": "b7-before-publish",
+      "dependencies": [
+        "b7-during-copy"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "1fc58cb44272c98f8690c3d00be0906ec5e60ddceeced77890caf6e250664401",
+      "root": "/var/lib/hermes-remaining-20260911-b7-before-publish-0de1f3c5",
+      "run_id": "0de1f3c5c08d95a5e96753cf1382d45e7e58399deeb98208510d1d9d16ccf044",
+      "unit": "hermes-remaining-20260911-b7-before-publish-0de1f3c5.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-during-replay",
+      "case": "b7-during-replay",
+      "dependencies": [
+        "b7-before-publish"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "09980a27bcf3263d4981c5a04012b1d81371efee39c6c630f32480b114349073",
+      "root": "/var/lib/hermes-remaining-20260911-b7-during-replay-17d29ef9",
+      "run_id": "17d29ef9a7954853474a519b273ed5a9fe1719b9cea11145a9bbfb7626d3d9d0",
+      "unit": "hermes-remaining-20260911-b7-during-replay-17d29ef9.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-before-select",
+      "case": "b7-before-select",
+      "dependencies": [
+        "b7-during-replay"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "658715c2ceedb990a3e527e090dfcf7c89ceafab428f7c6c791f7e4e79edc90e",
+      "root": "/var/lib/hermes-remaining-20260911-b7-before-select-aab3fb40",
+      "run_id": "aab3fb40dbf6418412ccf9ce3b825e5e8715e98d5c32423bb3d364fd0366834a",
+      "unit": "hermes-remaining-20260911-b7-before-select-aab3fb40.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-after-select",
+      "case": "b7-after-select",
+      "dependencies": [
+        "b7-before-select"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "d539aed60e74c20efa835e5838fe20a4233cb7582d5af357c7a3e463fa9e2f2b",
+      "root": "/var/lib/hermes-remaining-20260911-b7-after-select-df51c5b5",
+      "run_id": "df51c5b533d2d9fb5acaeff19714e33028888db7d6dbaaa7a0584335226a06ed",
+      "unit": "hermes-remaining-20260911-b7-after-select-df51c5b5.service"
+    },
+    {
+      "approval": "NOT_APPROVED",
+      "block_directory": "/var/home/cloudops/.local/state/hermes-remaining-lab/20260911-review-r4/blocks/b7-notifications",
+      "case": "b7-notifications",
+      "dependencies": [
+        "b7-after-select"
+      ],
+      "maximum_total_seconds": 14400,
+      "policy_binding": "4aaf59836f8bd8a34a06203c45cdcf571ce265fdcb3c853959599dbeba86775b",
+      "root": "/var/lib/hermes-remaining-20260911-b7-notifications-a722feb2",
+      "run_id": "a722feb2e04116debffd4d83b1c0e59198f719f20c4479e615dde93cf8f04b16",
+      "unit": "hermes-remaining-20260911-b7-notifications-a722feb2.service"
+    }
+  ],
+  "source_archive_sha256": "88ce89ee5c11c420c6d73185bab47e2b9e46fe318ec5a0c2e46ef2a2f83d1867",
+  "package_manifest_sha256": "16b38ee626915b5c2f14c8a3d51e036fbacac55e1c239e4d813918240c48fc63",
+  "documentation_and_preservation": {
+    "timestamp": "2026-09-11T14:28:04.883704+00:00",
+    "markdown": "PASS: 7 isolated nonfix documents",
+    "local_links": 202,
+    "preservation": "PASS",
+    "existing_files_changed": [
+      "docs/CONTRIBUTING.md",
+      "docs/HERMES_INSTALLATION_VERIFICATION.md",
+      "docs/HERMES_TPM_DEPENDENCY_REVIEW.md",
+      "docs/VM_TESTING_GUIDE.md",
+      "docs/plans/2026-09-07-hermes-unattended.md",
+      "scripts/hermes/unattended/certify.py",
+      "scripts/hermes/unattended/certify_guest.py",
+      "scripts/hermes/unattended/certify_observe.py",
+      "scripts/hermes/unattended/lifecycle_fixture.py",
+      "vm/DEPLOYMENT_TASKS.md"
+    ],
+    "unrelated_existing_files_preserved": 249,
+    "branch": "codex/hermes-unattended",
+    "head": "4a19d3f5c04f7ec927c85b586511a969933b96a9",
+    "whitespace": "PASS"
+  },
+  "final_readback": {
+    "timestamp": "2026-09-11T14:30:18.812018+00:00",
+    "result": "PASS",
+    "canonical_plan_markdown": "PASS",
+    "package_manifest_sha256": "16b38ee626915b5c2f14c8a3d51e036fbacac55e1c239e4d813918240c48fc63",
+    "frozen_runbook_matches_repository": true,
+    "whitespace": "PASS"
+  },
+  "source_changes": {
+    "existing": [
+      "scripts/hermes/unattended/certify.py",
+      "scripts/hermes/unattended/certify_guest.py",
+      "scripts/hermes/unattended/certify_observe.py",
+      "scripts/hermes/unattended/lifecycle_fixture.py"
+    ],
+    "new": [
+      "scripts/hermes/unattended/lab_previous.py",
+      "scripts/hermes/unattended/lab_faults.py",
+      "scripts/hermes/unattended/lab_stage.py",
+      "scripts/hermes/unattended/lab_session.py",
+      "scripts/hermes/unattended/lab-probes/b4-credential-probe.sh",
+      "scripts/hermes/unattended/lab-probes/hermes-b4-credential-probe.service",
+      "tests/test_hermes_remaining_lab.py"
+    ]
+  }
+}

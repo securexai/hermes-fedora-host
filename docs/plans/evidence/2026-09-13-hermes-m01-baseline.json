@@ -1,0 +1,83 @@
+{
+  "record": "hermes-m01-baseline",
+  "kind": "live-read-only-inventory",
+  "utc": "2026-09-13T02:26:44Z",
+  "profile": "manual-guide (docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md)",
+  "branch": "codex/hermes-manual-guide-plan",
+  "gate": "M01 - Access and baseline",
+  "status": "PARTIAL PASS - read-only baseline completed; Fedora preparation not started",
+  "method": {
+    "transport": "pinned SSH, aicowork@10.0.30.10, identity id_ed25519_cloudops, StrictHostKeyChecking=yes",
+    "local_note": "workstation system ssh config unreadable to the agent (Bad owner or permissions on /etc/ssh/ssh_config.d/20-systemd-ssh-proxy.conf); pinned -F /dev/null plus explicit UserKnownHostsFile used instead",
+    "privileged_step": "one operator-entered sudo run of staged read-only script",
+    "script_sha256": "6d1930fa47cefe76f61904653d9888831a531ba47ed40e70b4f544173d0b84b6",
+    "raw_output": "withheld on host at /home/aicowork/hermes-m01-baseline.out (mode 0600)"
+  },
+  "host": {
+    "hostname_static": "UNSET",
+    "hostname_transient": "hermes.ai.lab.local",
+    "os": "Fedora Linux 44 (Server Edition)",
+    "kernel": "7.2.4-200.fc44.x86_64",
+    "cpu": "AMD Ryzen 3 3200U, 4 CPUs",
+    "memory_total_kib_approx": 13631488,
+    "memory_note": "13 GiB total; below the guide's >=16 GiB example row; use conservative limits",
+    "secure_boot": "enabled",
+    "cgroup": "cgroup2fs",
+    "selinux": "enforcing (targeted)",
+    "time": "chrony synchronized, America/Bogota, RTC not in local TZ",
+    "hardware": "AZW SER3, firmware PCS.HF5U.V025.P5C4.06.BL"
+  },
+  "network": {
+    "primary_interface": "eno1",
+    "address": "10.0.30.10/24",
+    "address_source": "DHCP",
+    "default_gateway": "10.0.30.254",
+    "management_zone": "FedoraServer (default, active on eno1)"
+  },
+  "storage": {
+    "boot_efi": "/dev/nvme0n1p1 1G vfat FAT32",
+    "boot": "/dev/nvme0n1p2 2G ext4",
+    "luks": "/dev/nvme0n1p3 473.9G crypto_LUKS2, UUID 88846948-bb3c-4f04-98b8-0d72b3d6f9b6, Flags allow-discards",
+    "luks_keyslots": "0 only",
+    "luks_tokens": "none (no TPM enrollment)",
+    "crypttab": "single record, keyfile none, options discard,x-initrd.attach",
+    "vg": "fedora_hermes 473.92g, VFree 115.92g",
+    "lvs": ["lv_root 60.00g linear /", "lv_var 40.00g linear /var", "lv_hermes 250.00g linear /home/hermes", "lv_swap 8.00g linear [SWAP]"],
+    "filesystems": "all XFS, regular linear LVs, no thin provisioning",
+    "home_hermes_used": "4.9G reported by df but 3 inodes and empty directory; XFS internal metadata, not prior data",
+    "swap": "lv_swap 8G plus zram0 8G lzo-rle"
+  },
+  "security": {
+    "sudo": "aicowork may run (ALL) ALL; password required, no NOPASSWD entry",
+    "listeners": ["sshd tcp/22", "cockpit tcp/9090 on all interfaces", "systemd-resolved udp+tcp/53,5355", "chronyd udp/323 loopback"],
+    "firewalld_fedora_server_services": ["cockpit", "dhcpv6-client", "ssh"],
+    "cockpit_socket": "enabled and listening; exposure decision required",
+    "auditd": "active, backlog 0, lost 0",
+    "journald_override_dir": "absent",
+    "journal_usage": "24M",
+    "dnf_automatic": "package dnf5-plugin-automatic not installed; /etc/dnf/automatic.conf absent; timer not found",
+    "failed_units": "none"
+  },
+  "runtime_account": {
+    "hermes_user": "ABSENT",
+    "hermes_subuid_subgid": "ABSENT",
+    "existing_subid": "aicowork 524288:65536"
+  },
+  "not_yet_done": [
+    "OS update and host tool installation",
+    "LUKS header and LVM metadata recovery backup",
+    "key-only SSH hardening",
+    "firewall review (Cockpit)",
+    "bounded journal and download-only update policy",
+    "hermes account, directory layout, subordinate IDs",
+    "lingering rootless user manager and Podman validation"
+  ],
+  "deviations_and_risks": [
+    "M01 formal dependency MP04 is unstarted; operator authorized direct manual-guide execution",
+    "13 GiB RAM is below the guide's >=16 GiB example; resource budgets must be chosen conservatively",
+    "Static hostname is unset (transient hermes.ai.lab.local only)",
+    "Cockpit port 9090 is listening on the management interface",
+    "Exposed aicowork sudo password rotation stated as an M01 prerequisite; not independently verified in this session"
+  ],
+  "authorization": "operator explicitly requested deployment and selected the manual-guide profile; privileged actions are operator-entered"
+}

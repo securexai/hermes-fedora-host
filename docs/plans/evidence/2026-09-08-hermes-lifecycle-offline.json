@@ -1,0 +1,95 @@
+{
+  "schema": "hermes-lifecycle-offline-observation-v1",
+  "observed_at": "2026-09-08T16:29:17.217024+00:00",
+  "environment": "Fedora workstation; Devbox commands; host /usr/bin/systemd-analyze for unit verification",
+  "base_revision": "4a19d3f5c04f7ec927c85b586511a969933b96a9",
+  "branch": "codex/hermes-unattended",
+  "uncommitted": true,
+  "source_sha256": {
+    "scripts/hermes/unattended/examples/lifecycle.json": "2e1756d227fdf608f289c1677b682b73a266e0d354112b3cd4a2fe137c4da20e",
+    "scripts/hermes/unattended/lifecycle.py": "c1c52b3a1459729f68d4972ed856c7bd032f93304556c4ebdc258235cbe01aae",
+    "scripts/hermes/unattended/lifecycle_fixture.py": "c3b1c6b402f682cf91f8d0b95937c2851126145d43b324db9eae0f5d08a8ebbd",
+    "scripts/hermes/unattended/lifecycle_guest.py": "8726d7d5977a3c2e755cdb71399800b178933777b5ade41b18e2749190894de1",
+    "scripts/hermes/unattended/systemd/hermes-lifecycle-failed.service": "0998156a0074104e7b429a712bf239f2f30d61a4e02d886a9deed2a7bd44e02f",
+    "scripts/hermes/unattended/systemd/hermes-lifecycle.service": "d6ae0aa694c11872b3b5ed021b2fdd57a1f11bad58ec8f64fab2cc707dc0af74",
+    "scripts/hermes/unattended/systemd/hermes-lifecycle.timer": "783d5e1cda4af390e196f359f30d0ee339cc1aeaf95fc3c505fc4916f6202fc9",
+    "tests/test_hermes_lifecycle.py": "24258f7879685c484683e54874705f1ca1927b0577769d0338014f55e156b453"
+  },
+  "checks": [
+    {
+      "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_lifecycle.py",
+      "result": "PASS",
+      "tests": 54,
+      "seconds": 0.18
+    },
+    {
+      "method": "Devbox unittest discovery: lifecycle, schedule, certify, unattended, offline, transaction, lab_enroll_boot",
+      "result": "PASS",
+      "tests": 242,
+      "seconds": 17.58,
+      "qualification": "Earlier 44-test lifecycle revision; latest 54-test lifecycle check above supersedes only those 44. Other 198 tests unchanged."
+    },
+    {
+      "command": "devbox run -- shellspec spec/hermes/ spec/vm/",
+      "result": "PASS",
+      "examples": 138,
+      "seconds": 28.45
+    },
+    {
+      "command": "devbox run -- ./tests/test-hermes-guide.sh",
+      "result": "PASS",
+      "checks": 217
+    },
+    {
+      "command": "devbox run -- /usr/bin/systemd-analyze verify scripts/hermes/unattended/systemd/hermes-lifecycle.service scripts/hermes/unattended/systemd/hermes-lifecycle.timer scripts/hermes/unattended/systemd/hermes-lifecycle-failed.service",
+      "result": "PASS"
+    },
+    {
+      "method": "Six modified Markdown files copied to an isolated temporary directory with repository lint config, fix=false and explicit globs",
+      "result": "PASS",
+      "documents": 6
+    },
+    {
+      "method": "Resolve local Markdown file links relative to each original document",
+      "result": "PASS",
+      "links": 86
+    },
+    {
+      "method": "git diff --check; syntax/whitespace and SHA-256 equality for all eight new source/test/unit/policy files",
+      "result": "PASS"
+    },
+    {
+      "method": "Final plan status-only nonfix lint and git diff --check after correction",
+      "result": "PASS"
+    }
+  ],
+  "retained_failures": [
+    {
+      "check": "first 34-test lifecycle run",
+      "result": "FAIL",
+      "failure": "archive receiver followed an existing parent symlink; explicit parent/target link rejection added; latest suite passes"
+    },
+    {
+      "check": "Devbox systemd-analyze verify",
+      "result": "FAIL",
+      "failure": "tool could not resolve timezone and sysinit.target; host binary verification passed"
+    },
+    {
+      "check": "final status-only Markdown lint",
+      "result": "FAIL",
+      "failure": "Updated next-action paragraph exceeded 120 columns; wrapped and rechecked successfully."
+    }
+  ],
+  "live_gate": "NOT_RUN",
+  "production_accessed": false,
+  "provider_credentials_issued": false,
+  "vm_provisioned": false,
+  "units_installed": false,
+  "release_signed": false,
+  "committed": false,
+  "limitations": [
+    "Synthetic lifecycle/guest/cleanup tests do not establish real TPM, provider, service or repeating lifecycle behavior.",
+    "F4 requires reviewed root enrollment, isolated broker readiness and authorized maintenance timing.",
+    "The optional disk integration suite was not repeated; no new real disk or VM check is claimed."
+  ]
+}
