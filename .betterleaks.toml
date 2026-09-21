@@ -1,0 +1,99 @@
+# .betterleaks.toml - dev-toolbox enforcement baseline
+#
+# Extends the default betterleaks ruleset with cloud + IaC patterns and a
+# sensible allowlist for test fixtures. Same TOML schema as the gitleaks
+# fork; per-line bypass marker is `# betterleaks:allow`.
+
+title = "Repo betterleaks config"
+
+[extend]
+useDefault = true
+
+# -----------------------------------------------------------------------------
+# Additional rules - Azure, Terraform state, MikroTik, kubeconfig
+# -----------------------------------------------------------------------------
+
+[[rules]]
+id = "azure-storage-connection-string"
+description = "Azure Storage connection string"
+regex = '''DefaultEndpointsProtocol=https?;AccountName=[A-Za-z0-9]+;AccountKey=[A-Za-z0-9+/=]{88}'''
+tags = ["azure", "storage", "connection-string"]
+
+[[rules]]
+id = "azure-sas-token"
+description = "Azure Shared Access Signature token"
+regex = '''sv=20[0-9]{2}-[0-9]{2}-[0-9]{2}&s[rs]=[a-z]+&s[ip]=[^&\s]+&se=[^&\s]+&sp=[a-z]+&sig=[A-Za-z0-9%]+'''
+tags = ["azure", "sas"]
+
+[[rules]]
+id = "azure-ad-client-secret"
+description = "Azure AD application client secret (value form, assignment context required)"
+# Anchored to an assignment context (`=`, `:`, `"`, or `'`) so the rule does
+# not match arbitrary 34-40 char tokens inside scoped files. The Azure AD
+# client-secret value charset is [A-Za-z0-9~._-] per Microsoft Entra ID docs.
+regex = '''(?i)(?:client[_-]?secret|azure[_-]?client[_-]?secret)\s*[=:]\s*['"]?([A-Za-z0-9~._\-]{34,40})\b'''
+tags = ["azure", "aad"]
+
+[[rules]]
+id = "terraform-state-secret"
+description = "Secrets leaking from terraform.tfstate"
+regex = '''"(value|secret|password|api_key|access_key)"\s*:\s*"[^"]{12,}"'''
+path = '''\.tfstate(\.backup)?$'''
+tags = ["terraform", "state"]
+
+[[rules]]
+id = "mikrotik-routeros-password"
+description = "Exported MikroTik RouterOS config password"
+regex = '''password=("[^"]+"|[^\s]+)'''
+path = '''\.rsc$'''
+tags = ["mikrotik", "routeros"]
+
+[[rules]]
+id = "kubeconfig-client-key-data"
+description = "kubeconfig embedded client key"
+regex = '''client-key-data:\s*[A-Za-z0-9+/=]{100,}'''
+tags = ["kubernetes", "kubeconfig"]
+
+# -----------------------------------------------------------------------------
+# Allowlists - known non-secrets
+#
+# betterleaks uses the `[[allowlists]]` array form; the older singular
+# `[allowlist]` table is deprecated and cannot be combined with it.
+# -----------------------------------------------------------------------------
+
+[[allowlists]]
+description = "Common non-secrets and test fixtures"
+paths = [
+    '''(^|/)node_modules/''',
+    '''(^|/)dist/''',
+    '''(^|/)build/''',
+    '''(^|/)\.terraform/''',
+    '''(^|/)tests?/fixtures/''',
+    '''(^|/)__fixtures__/''',
+    '''\.lock$''',
+]
+regexes = [
+    '''AKIAIOSFODNN7EXAMPLE''',
+    '''wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY''',
+    '''00000000-0000-0000-0000-000000000000''',
+    '''11111111-1111-1111-1111-111111111111''',
+    '''-----BEGIN PUBLIC KEY-----''',
+    '''-----BEGIN CERTIFICATE-----''',
+    '''-----BEGIN OPENSSH PUBLIC KEY-----''',
+]
+
+# The lifecycle/boot evidence JSON under docs/plans/evidence/ records SHA-256
+# checksums as `"<name>": "<64 lowercase hex>"` (for example
+# `"credentials.py": "<digest>"`). The default `generic-api-key` heuristic flags
+# those digest values.
+#
+# The exception is deliberately SHAPE-based, not path-based: a `paths` entry
+# would suppress every finding in the directory (betterleaks ORs an allowlist
+# entry's conditions), which would hide a real credential stored there. This
+# regex matches only the exact `"key": "<64 lowercase hex>"` digest shape, so
+# other credential shapes in the same files are still reported. Verified with a
+# probe: a synthetic `ghp_` token in docs/plans/evidence/ is still detected.
+[[allowlists]]
+description = "Evidence ledgers record SHA-256 digest values, not credentials"
+regexTarget = "line"
+regexes = ['''"[^"]{1,160}"\s*:\s*"[0-9a-f]{64}"''']
