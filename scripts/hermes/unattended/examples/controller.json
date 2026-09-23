@@ -1,0 +1,23 @@
+{
+  "schema": "hermes-controller-v1",
+  "target": "hermes-deploy@10.0.30.10",
+  "identity_file": "/var/lib/hermes-deployment/ssh/id_ed25519",
+  "known_hosts": "/etc/hermes-unattended/known_hosts",
+  "allowed_signers": "/etc/hermes-unattended/allowed_signers",
+  "host": {
+    "machine_id_sha256": "REPLACE_WITH_VERIFIED_MACHINE_ID_HASH",
+    "ssh_fingerprint": "REPLACE_WITH_VERIFIED_HOST_FINGERPRINT"
+  },
+  "state_dir": "/var/lib/hermes-deployment/state",
+  "provider": "openai-api",
+  "model": "gpt-5.6-luna",
+  "maintenance": {
+    "timezone": "America/Bogota",
+    "weekday": 6,
+    "start_hour": 2,
+    "end_hour": 4
+  },
+  "backup_repository": "/var/lib/hermes-deployment/backups",
+  "backup_password_file": "/run/credentials/hermes-maintenance.service/restic-password",
+  "credential_socket": "/run/hermes-credentials/broker.sock"
+}

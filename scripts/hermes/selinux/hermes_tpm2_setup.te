@@ -1,0 +1,55 @@
+policy_module(hermes_tpm2_setup, 1.1.0)
+
+# Candidate for Fedora 44 policy 44.8; hardware acceptance remains required.
+type hermes_tpm2_setup_t;
+type hermes_tpm2_setup_exec_t;
+init_daemon_domain(hermes_tpm2_setup_t, hermes_tpm2_setup_exec_t)
+
+gen_require(`
+    type init_var_run_t, init_var_lib_t, syslogd_var_run_t;
+    type dosfs_t, var_run_t, udev_var_run_t;
+    type nsfs_t, cert_t, fixed_disk_device_t;
+')
+
+# Dynamic loader, configuration, machine identity and TPM discovery.
+libs_use_ld_so(hermes_tpm2_setup_t)
+libs_use_shared_libs(hermes_tpm2_setup_t)
+miscfiles_read_localization(hermes_tpm2_setup_t)
+files_read_etc_files(hermes_tpm2_setup_t)
+files_read_usr_files(hermes_tpm2_setup_t)
+files_read_boot_files(hermes_tpm2_setup_t)
+files_read_boot_symlinks(hermes_tpm2_setup_t)
+files_search_var_lib(hermes_tpm2_setup_t)
+init_read_machineid(hermes_tpm2_setup_t)
+kernel_read_system_state(hermes_tpm2_setup_t)
+kernel_read_kernel_sysctls(hermes_tpm2_setup_t)
+dev_read_sysfs(hermes_tpm2_setup_t)
+dev_read_urand(hermes_tpm2_setup_t)
+dev_rw_tpm(hermes_tpm2_setup_t)
+fs_read_efivarfs_files(hermes_tpm2_setup_t)
+logging_send_syslog_msg(hermes_tpm2_setup_t)
+kernel_dgram_send(hermes_tpm2_setup_t)
+
+# Existing labels are preserved. These are type-wide grants, not path ACLs.
+# SRK public files and encrypted NvPCR anchors use atomic temporary-file rename.
+allow hermes_tpm2_setup_t { init_var_run_t init_var_lib_t }:dir { search getattr open read write add_name remove_name create };
+allow hermes_tpm2_setup_t { init_var_run_t init_var_lib_t }:file { create open read write getattr setattr rename unlink lock };
+allow hermes_tpm2_setup_t { init_var_run_t init_var_lib_t }:lnk_file { read getattr };
+# Passed encrypted credentials and udev metadata are read-only.
+allow hermes_tpm2_setup_t { var_run_t udev_var_run_t }:dir { search getattr open read };
+allow hermes_tpm2_setup_t { var_run_t udev_var_run_t }:file { open read getattr };
+allow hermes_tpm2_setup_t udev_var_run_t:lnk_file { read getattr };
+# Measurement log is pre-existing; no log creation/removal permission.
+allow hermes_tpm2_setup_t syslogd_var_run_t:dir { search getattr };
+allow hermes_tpm2_setup_t syslogd_var_run_t:file { open read write append getattr lock };
+# VFAT has one label: this necessarily covers all dosfs_t files/directories.
+allow hermes_tpm2_setup_t dosfs_t:dir { search getattr open read write add_name remove_name create };
+allow hermes_tpm2_setup_t dosfs_t:file { create open read write getattr setattr rename unlink };
+allow hermes_tpm2_setup_t dosfs_t:filesystem getattr;
+
+# Failed first-trial AVCs: namespace metadata and certificate path traversal only.
+allow hermes_tpm2_setup_t nsfs_t:file getattr;
+allow hermes_tpm2_setup_t cert_t:dir search;
+# find-esp.c uses libblkid to read partition signatures. These grants cover all
+# fixed_disk_device_t block nodes, not just nvme0n1p2; no write/ioctl grant.
+allow hermes_tpm2_setup_t fixed_disk_device_t:blk_file { getattr open read };

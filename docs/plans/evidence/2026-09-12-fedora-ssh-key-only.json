@@ -1,0 +1,103 @@
+{
+  "started_utc": "2026-09-12T20:31:07.943159+00:00",
+  "environment": "Linux-7.2.4-200.fc44.x86_64-x86_64-with-glibc2.42",
+  "scope": "Local preparation; mock behavior and real sshd configuration parsing, no live Fedora acceptance",
+  "sha256": {
+    "setup-ssh-key-only.sh": "eacc931a4f40b508226e7f542afc90c4c1d48d57243fa3a8b064f4f468f02f83",
+    "setup-ssh-key-only.md": "5f9e2cff8e8165f10739cd178e0f2c719ab1eb36f2687955b15bedad715a3ffd",
+    "tests/test_ssh_key_only.py": "08265c98a19ec7f60a63367b7cbf8828379c37a80758511c31cfd6480f48a034"
+  },
+  "checks": [
+    {
+      "command_within_devbox": [
+        "bash",
+        "-n",
+        "setup-ssh-key-only.sh"
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-09-12T20:31:07.959255+00:00",
+      "output": ""
+    },
+    {
+      "command_within_devbox": [
+        "shellcheck",
+        "setup-ssh-key-only.sh"
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-09-12T20:31:09.092133+00:00",
+      "output": ""
+    },
+    {
+      "command_within_devbox": [
+        "shfmt",
+        "-d",
+        "-l",
+        "-i",
+        "2",
+        "-ci",
+        "-bn",
+        "setup-ssh-key-only.sh"
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-09-12T20:31:09.097757+00:00",
+      "output": ""
+    },
+    {
+      "command_within_devbox": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_ssh_key_only.py"
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-09-12T20:33:23.772612+00:00",
+      "output": ".................\n----------------------------------------------------------------------\nRan 17 tests in 134.481s\n\nOK\n"
+    },
+    {
+      "command_within_devbox": [
+        "python3",
+        "/tmp/check-ssh-key-only-docs.py"
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-09-12T20:33:24.789630+00:00",
+      "output": "markdownlint-cli2 v0.21.0 (markdownlint v0.40.0)\nFinding: setup-ssh-key-only.md docs/plans/2026-09-12-fedora-ssh-key-only.md !docs/archive/**\nLinting: 2 file(s)\nSummary: 0 error(s)\n"
+    },
+    {
+      "command_within_devbox": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-09-12T20:33:24.817099+00:00",
+      "output": ""
+    }
+  ],
+  "finished_utc": "2026-09-12T20:33:24.817415+00:00",
+  "delivery": {
+    "/home/cloudops/code/scripts/setup-ssh-key-only.sh": {
+      "sha256": "eacc931a4f40b508226e7f542afc90c4c1d48d57243fa3a8b064f4f468f02f83",
+      "mode": "0o755"
+    },
+    "/home/cloudops/code/scripts/setup-ssh-key-only.md": {
+      "sha256": "5f9e2cff8e8165f10739cd178e0f2c719ab1eb36f2687955b15bedad715a3ffd",
+      "mode": "0o644"
+    }
+  },
+  "final_documentation": {
+    "recorded_utc": "2026-09-12T20:35:03.956099+00:00",
+    "command": "devbox run -- python3 tests/check_ssh_key_only_docs.py",
+    "observed_result": "exit 0; 2 files, 0 lint errors; relative links exist",
+    "execution_record_sha256": "a29dc12e67f2e02d55218ca19f3836bb62e51ebf5740b1f13373421427a59ddb",
+    "checker_sha256": "1d2ae941506987246ae35dd27be05e0f308cfb40b6b12b4dfd3b9c948b9d7d35",
+    "diff_check": "devbox run -- git diff --check: exit 0"
+  },
+  "remaining_gates": {
+    "S3": "BLOCKED: needs provisioned disposable Fedora Server and console access",
+    "S4": "BLOCKED: requires S3 and explicitly scheduled reboot authorization"
+  }
+}

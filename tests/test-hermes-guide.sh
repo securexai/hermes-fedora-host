@@ -47,14 +47,19 @@ readonly VERIFICATION="$REPO_ROOT/docs/HERMES_INSTALLATION_VERIFICATION.md"
 readonly SECURITY_PLAN="$REPO_ROOT/secure-hermes-installation-plan.html"
 readonly VM_GUIDE="$REPO_ROOT/docs/VM_TESTING_GUIDE.md"
 readonly AGENTS_MD="$REPO_ROOT/AGENTS.md"
-readonly LEFTHOOK="$REPO_ROOT/lefthook.yml"
+# The source repository wired its guide checks into Lefthook. Lefthook is retired
+# here; the successors are the pre-push hook and the single offline entrypoint it
+# runs. These two bindings keep the original intent of the assertion below.
+readonly PRECOMMIT="$REPO_ROOT/.pre-commit-config.yaml"
+readonly OFFLINE_CHECKS="$REPO_ROOT/toolbox/run-offline-checks.sh"
+readonly HOOK_WIRING="$REPO_ROOT/tests/check_hook_wiring.py"
 
 for required in "$GUIDE" "$DEPLOY" "$DEPLOY_LIB" "$CERTIFIER" "$REMOTE_STATE" \
   "$REMOTE_PREFLIGHT" "$HOST_MODULE" "$AUTH_MODULE" "$CERT_EVIDENCE" "$PROMOTION_MODULE" "$ACCEPTANCE" \
   "$ROOT_ACCEPTANCE" "$STATUS_WRAPPER" "$VM_CREATOR" "$LUKS_CONSOLE" "$LUKS_CONSOLE_HELPER" \
   "$KICKSTART" "$VM_COMMON" \
   "$E2E_VM" "$LINKS" "$PLAN" "$HANDOFF" "$VERIFICATION" "$SECURITY_PLAN" "$VM_GUIDE" \
-  "$AGENTS_MD" "$LEFTHOOK"; do
+  "$AGENTS_MD" "$PRECOMMIT" "$OFFLINE_CHECKS" "$HOOK_WIRING"; do
   if [[ -f "$required" ]]; then
     _pass "required artifact exists: $(basename "$required")"
   else
@@ -253,7 +258,22 @@ assert_no_grep 're-arms after meaningful console progress' "$VM_GUIDE" \
   'VM guide does not document the unsafe progress-based re-arm rule'
 assert_no_grep 'trivy|kinoite|rpm-ostree|risk' "$VM_GUIDE" 'VM guide has no retired promotion machinery'
 assert_grep 'hermes-fedora-server-install-guide.html' "$AGENTS_MD" 'Repository guidance names Server guide'
-assert_grep 'test-hermes-guide' "$LEFTHOOK" 'Lefthook retains guide checks'
+
+# Structural wiring, not string presence: a comment cannot satisfy these, and
+# removed or wrong hook wiring is rejected. The --self-test run additionally
+# proves the checker rejects each known mutation (removed hook, wrong entry,
+# wrong stage, wrong always_run/pass_filenames, duplicate id, commented-out guide
+# invocation, unittest discovery instead of the reviewed allowlist).
+if python3 "$HOOK_WIRING" --quiet; then
+  _pass 'pre-push hook structurally runs the offline entrypoint and the guide gate'
+else
+  _fail 'pre-push hook structurally runs the offline entrypoint and the guide gate'
+fi
+if python3 "$HOOK_WIRING" --self-test --quiet; then
+  _pass 'hook-wiring negative controls reject removed or wrong wiring'
+else
+  _fail 'hook-wiring negative controls reject removed or wrong wiring'
+fi
 assert_grep 'test-hermes-e2e-vm' "$E2E_VM" 'VM E2E names its own runner'
 for file in "$GUIDE" "$DEPLOY" "$DEPLOY_LIB" "$CERTIFIER" "$REMOTE_STATE" "$REMOTE_PREFLIGHT" \
   "$HOST_MODULE" "$AUTH_MODULE" "$CERT_EVIDENCE" "$PROMOTION_MODULE" "$ACCEPTANCE" "$ROOT_ACCEPTANCE" \

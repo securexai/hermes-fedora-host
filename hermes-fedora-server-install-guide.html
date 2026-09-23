@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hermes Agent on Fedora Server 44</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; line-height: 1.5; }
+    body { max-width: 72rem; margin: 2rem auto; padding: 0 1rem; }
+    code, pre { font-family: ui-monospace, monospace; }
+    pre { overflow-x: auto; padding: 1rem; border: 1px solid #888; border-radius: .4rem; }
+    .gate { border-left: .35rem solid #b05; padding-left: 1rem; }
+  </style>
+</head>
+<body>
+<h1>Hermes Agent on Fedora Server 44</h1>
+<p>This guide is the operator reference for the dedicated Hermes appliance at
+<code>10.0.30.10</code>. The active implementation targets Fedora Server 44 x86_64,
+rootless Podman, LUKS-backed storage, UEFI Secure Boot, enforcing SELinux,
+firewalld, and an SSH-only host boundary.</p>
+
+<h2>Promotion is mandatory</h2>
+<p>A disposable Fedora Server VM must pass the complete controller, provider,
+authenticated inference, credential cleanup, purge, and destruction flow before
+production can be changed. The certifier verifies local installation media and
+does not download it. It prints a promotion record only after the VM is gone.</p>
+<p>Operator inputs (export these first). The guide never assumes a checkout path
+or a private-key filename; <code>HERMES_SSH_IDENTITY</code> must be the SSH
+private key you have independently verified for the target.</p>
+<pre><code>HERMES_REPO=${HERMES_REPO:-$HOME/code/repos/DS-Workspace/hermes-fedora-host}
+HERMES_MEDIA_DIR=${HERMES_MEDIA_DIR:-$HOME/Downloads/fedora-server-44-1.7}
+HERMES_SSH_IDENTITY=${HERMES_SSH_IDENTITY:?export the verified SSH private key path}
+cd "$HERMES_REPO"</code></pre>
+<p>Certification runs from the repository root with the locally downloaded,
+signature-verified Server media:</p>
+<pre><code>./hermes-certify-vm.sh \
+  --iso "$HERMES_MEDIA_DIR/Fedora-Server-dvd-x86_64-44-1.7.iso" \
+  --checksum "$HERMES_MEDIA_DIR/Fedora-Server-44-1.7-x86_64-CHECKSUM" \
+  --fedora-keyring "$HERMES_MEDIA_DIR/fedora.gpg" \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --provider openai-codex \
+  --model gpt-5.6-luna</code></pre>
+<p>Fedora publishes the Server DVD and its signed-checksum workflow at
+<a href="https://fedoraproject.org/server/download/">the official Server download page</a>.
+The expected x86_64 Server 44 1.7 DVD SHA-256 is
+<code>85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f</code>.</p>
+<p class="gate">After the automated reboot and credential-free acceptance gates,
+the certifier requires <code>ENCRYPTED_REBOOT_EVIDENCE_OK watched_boots=3</code>,
+then prints <code>AUTHENTICATION_READY provider=&lt;id&gt;</code> and waits. The
+persistent watcher re-arms only after Fedora emits an explicit reboot marker,
+starts the encrypted-root <code>systemd-cryptsetup@luks...</code> unit, and then
+displays the exact prompt. In-place terminal repaint bytes may precede that
+exact start marker. If systemd middle-ellipsizes the escaped unit as
+<code>luks\x…&lt;UUID-tail&gt;</code>, the retained tail must begin with
+hexadecimal data. Generic path-units progress is ignored because Fedora emits
+it both before and after unlock. A same-boot cryptsetup redraw without a fresh
+reboot marker cannot arm the watcher. Missing, duplicate, cross-boot, or
+out-of-order prompt evidence fails closed
+before OAuth and is checked again before promotion. <code>START-AUTH</code> is a
+readiness response consumed by that running certifier, not a shell command. Enter
+it in the same certification terminal. Provider authentication—and the 15-minute
+<code>openai-codex</code> device-login window—starts only after this confirmation.</p>
+
+<h2>Reinstalled production host</h2>
+<p>At the physical console, verify the new SSH ED25519 host fingerprint before
+updating the workstation's known-hosts entry. Then archive the previous local
+state and bind the new installation to its SSH fingerprint and machine-id:</p>
+<pre><code>cd "$HERMES_REPO"
+
+./hermes-deploy.sh adopt-host \
+  --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 \
+  --interface eno1</code></pre>
+<p>Type <code>ADOPT-HERMES-HOST</code> when prompted. The command moves legacy
+<code>$HOME/hermes-deploy</code> state to a timestamped archive; it does not delete it.</p>
+
+<h2>Read-only production preflight</h2>
+<pre><code>cd "$HERMES_REPO"
+
+./hermes-deploy.sh check \
+  --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 \
+  --interface eno1</code></pre>
+<p><code>check</code> verifies the Server platform, SSH/sudo inspection, Podman,
+storage, Secure Boot, SELinux, firewalld, networking, listeners, and host state.
+It does not create deployment state or mutate the host.</p>
+
+<h2>Production deployment</h2>
+<p>Use the exact provider and model that the promotion record names. The
+controller asks for one typed production confirmation before package mutation
+and planned reboots. It uses DNF5 offline update preparation, then configures
+download-only automatic updates (<code>apply_updates=False</code>,
+<code>reboot=never</code>).</p>
+<pre><code>cd "$HERMES_REPO"
+
+./hermes-deploy.sh deploy \
+  --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 \
+  --interface eno1 \
+  --provider openai-codex \
+  --model gpt-5.6-luna \
+  --promotion-record /absolute/path/to/promotion-*.record</code></pre>
+
+<h2>Provider choices and billing</h2>
+<p>All credential prompts run in the terminal. No API-key option is accepted by
+the shell command, and credentials are not written to controller state, logs,
+process arguments, or the promotion record.</p>
+<ul>
+  <li><code>openai-codex</code>: ChatGPT/Codex subscription device-code OAuth.
+  Subscription access and API usage billing are separate products.</li>
+  <li><code>openai-api</code>: OpenAI API-key prompt with usage-based API billing.</li>
+  <li><code>nous</code>: Nous Portal OAuth and Portal billing.</li>
+</ul>
+<p>Each provider/model combination needs a new VM certification record.</p>
+<pre><code>./hermes-deploy.sh configure-provider \
+  --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 \
+  --interface eno1 \
+  --provider openai-codex --model gpt-5.6-luna \
+  --promotion-record /absolute/path/to/promotion-*.record
+
+./hermes-deploy.sh configure-provider \
+  --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 \
+  --interface eno1 \
+  --provider openai-api --model gpt-5.6-luna \
+  --promotion-record /absolute/path/to/promotion-*.record
+
+./hermes-deploy.sh configure-provider \
+  --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 \
+  --interface eno1 \
+  --provider nous --model anthropic/claude-sonnet-4.6 \
+  --promotion-record /absolute/path/to/promotion-*.record</code></pre>
+
+<h2>Acceptance and maintenance</h2>
+<p>Provider authentication and the exact authenticated response
+<code>HERMES_OK</code> remain manual account gates. The controller verifies the
+configured provider/model after restart and revokes credentials for the other
+supported providers after a successful switch.</p>
+<pre><code>./hermes-deploy.sh status --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 --interface eno1
+
+./hermes-deploy.sh revoke-auth --provider openai-api \
+  --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 --interface eno1
+
+./hermes-deploy.sh rollback --target aicowork@10.0.30.10 \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --management-cidr 192.168.99.0/24 --interface eno1</code></pre>
+<p>Rollback restores Hermes and manifest-tracked host configuration. It never
+claims to reverse Fedora RPM or kernel updates. Keep SSH console recovery
+available for boot and storage recovery.</p>
+
+<h2>Source documentation</h2>
+<ul>
+  <li><a href="docs/HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md">operator handoff</a></li>
+  <li><a href="docs/HERMES_DEPLOYMENT_PLAN.md">deployment tracker</a></li>
+  <li><a href="https://dnf5.readthedocs.io/en/stable/commands/offline.8.html">DNF5 offline transactions</a></li>
+  <li><a href="https://dnf5.readthedocs.io/en/stable/dnf5_plugins/automatic.8.html">DNF5 automatic updates</a></li>
+  <li><a href="https://hermes-agent.nousresearch.com/docs/integrations/providers/">Hermes provider integrations</a></li>
+</ul>
+</body>
+</html>

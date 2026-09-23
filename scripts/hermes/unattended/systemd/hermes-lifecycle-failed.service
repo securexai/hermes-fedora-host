@@ -1,0 +1,17 @@
+[Unit]
+Description=Record a disposable Hermes lifecycle failure
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -B -E -s /var/lib/hermes-lifecycle-source/repository/scripts/hermes/unattended/maintenance.py --events /var/lib/hermes-lifecycle-events --service-failed
+StateDirectory=hermes-lifecycle-events
+StateDirectoryMode=0711
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateNetwork=true
+LimitCORE=0

@@ -1,0 +1,24 @@
+[Unit]
+Description=Provision and certify a fresh disposable Hermes fixture
+After=network-online.target libvirtd.service
+Wants=network-online.target
+OnFailure=hermes-lifecycle-failed.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -B -E -s /var/lib/hermes-lifecycle-source/repository/scripts/hermes/unattended/lifecycle.py --config /etc/hermes-unattended/lifecycle.json
+ExecStopPost=/usr/bin/python3 -B -E -s /var/lib/hermes-lifecycle-source/repository/scripts/hermes/unattended/lifecycle.py --config /etc/hermes-unattended/lifecycle.json --cleanup-only
+StateDirectory=hermes-lifecycle hermes-lifecycle-events
+StateDirectoryMode=0711
+UMask=0077
+Environment=PATH=/var/lib/hermes-lifecycle-source/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=LIBGUESTFS_BACKEND=direct
+LimitCORE=0
+TimeoutStartSec=5h
+TimeoutStopSec=50min
+KillMode=control-group
+# Root owns fixture lifecycle only. schedule.py and certify.py run via runuser.
+# This service requires libvirt, guestfs, boot signing and fixed-fixture deletion.
+# Its installed code/policy must be root-owned and reviewed.

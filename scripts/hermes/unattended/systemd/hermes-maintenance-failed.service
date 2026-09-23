@@ -1,0 +1,19 @@
+[Unit]
+Description=Record required Hermes maintenance recovery after service failure
+
+[Service]
+Type=oneshot
+User=hermes-deployment
+Group=hermes-deployment
+ExecStart=/usr/bin/python3 -E -s /usr/local/libexec/hermes-unattended/maintenance.py --events /var/lib/hermes-notifications --service-failed
+StateDirectory=hermes-notifications
+StateDirectoryMode=0711
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateNetwork=true
+CapabilityBoundingSet=
+LimitCORE=0
+TimeoutStartSec=30s

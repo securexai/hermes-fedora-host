@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
-  "name": "dev-toolbox",
-  "image": "localhost/dev-base:fedora-44",
+  "name": "dev-infra-hermes",
+  "image": "localhost/dev-infra:fedora-44",
   "containerEnv": {
     "PRE_COMMIT_HOME": "/opt/pre-commit-cache",
     "UV_TOOL_DIR": "/opt/uv-tools",
@@ -9,6 +9,7 @@
     "UV_CACHE_DIR": "/opt/uv-cache",
     "UV_PYTHON_INSTALL_DIR": "/opt/uv-python"
   },
+  "postCreateCommand": "bash toolbox/provision-environment.sh",
   "customizations": {
     "vscode": {
       "extensions": [

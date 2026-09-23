@@ -2,9 +2,12 @@
 # Validate the project-declared tool extensions and re-assert the parts of the
 # shared profile contract this project depends on.
 #
-# This check modifies no tracked file and never installs or downloads anything.
-# `uv run --locked` may materialise the gitignored .venv on first use.
-# Run it inside the dev-toolbox `infra` container after install-extensions.sh.
+# This check modifies no tracked file and never installs, downloads or
+# synchronises anything: it runs the uv-locked tools with UV_NO_SYNC=1, so a
+# missing environment fails clearly instead of being materialised as a side
+# effect of verification. Provision first with
+# `toolbox/provision-environment.sh` (ShellSpec install + `uv sync --locked`).
+# Run it inside the dev-toolbox `infra` container.
 #
 # Usage:
 #   toolbox/verify-extensions.sh
@@ -68,7 +71,7 @@ fi
 if [[ -f "${REPO_ROOT}/pyproject.toml" && -f "${REPO_ROOT}/uv.lock" ]]; then
   for cmd in "ruff --version" "ty --version" "yamllint --version"; do
     # shellcheck disable=SC2086 # deliberate word splitting into command + args
-    if out="$(cd "$REPO_ROOT" && uv run --quiet --locked $cmd 2>&1)"; then
+    if out="$(cd "$REPO_ROOT" && UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never uv run --quiet --locked $cmd 2>&1)"; then
       pass "uv-locked ${cmd%% *}: ${out%%$'\n'*}"
     else
       fail "uv-locked '${cmd}' failed: ${out}"

@@ -1,0 +1,4 @@
+#!/usr/bin/bash -p
+set -euo pipefail
+[[ $# == 0 ]] || exit 64
+exec /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin LANG=C.UTF-8 HOME=/root /usr/bin/python3 -I /usr/local/libexec/hermes-lab-power/certify_power.py

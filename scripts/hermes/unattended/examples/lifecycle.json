@@ -1,0 +1,15 @@
+{
+  "schema": "hermes-lifecycle-v1",
+  "repository": "/var/lib/hermes-lifecycle-source/repository",
+  "state_dir": "/var/lib/hermes-lifecycle",
+  "events_dir": "/var/lib/hermes-lifecycle-events",
+  "certifier_user": "hermes-certification",
+  "model": "REPLACE_WITH_ENROLLED_MODEL",
+  "iso": "/var/lib/hermes-lifecycle-media/Fedora-Server-dvd-x86_64-44-1.7.iso",
+  "iso_sha256": "REPLACE_WITH_VERIFIED_SHA256",
+  "checksum": "/var/lib/hermes-lifecycle-media/Fedora-Server-44-1.7-x86_64-CHECKSUM",
+  "keyring": "/var/lib/hermes-lifecycle-media/fedora.gpg",
+  "fedora_fingerprint": "REPLACE_WITH_VERIFIED_FEDORA_FINGERPRINT",
+  "firmware_code": "/usr/share/edk2/ovmf/OVMF_CODE_4M.secboot.qcow2",
+  "firmware_vars": "/usr/share/edk2/ovmf/OVMF_VARS_4M.qcow2"
+}

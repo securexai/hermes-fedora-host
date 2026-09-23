@@ -1,0 +1,133 @@
+{
+  "schema": "hermes-offline-observation-v1",
+  "recorded_at": "2026-09-07T04:08:03.337908+00:00",
+  "branch": "codex/hermes-unattended",
+  "head": "bb35bd23f087dc6a5ffcb4d853978ce0fe923e9d",
+  "uncommitted_changes": true,
+  "source_fingerprint": "fe40ba4efe1ad0c5761d60bde6625e4c0bb043bacf4f61a291334b0b74a7a62b",
+  "source_files": {
+    "scripts/hermes/unattended/build_release.py": "2fa5a8a1506ec3624686500ec4a286975a4e1b418db8f13973af9d5d58205ab6",
+    "scripts/hermes/unattended/common.py": "5dd9b679bdfe129f2f1b4651018cf9a1a70af6712688aa1f5fe93799574e7685",
+    "scripts/hermes/unattended/controller.py": "4dccef39d66f364eb3495b6cea08cb349b1ac7055d2f59a41f6f861856c3f6be",
+    "scripts/hermes/unattended/credentials.py": "0584f46cf2b630853fdf76126be4325705080df74c09b4736e9c7e426d8e6eae",
+    "scripts/hermes/unattended/dispatch": "84eb64547b4672609efab205a05f53a1ca495b56e4243737493367cddfadaadd",
+    "scripts/hermes/unattended/dispatcher.py": "1b7a6346c28ac01ee02179c7f3a5eb22df988197bf5393c1b2aa7ed4e249e804",
+    "scripts/hermes/unattended/examples/broker.json": "b3323db6ca56a8eb1f46d50e755b80ec95d05f53c4656eb9562b54118d3e968f",
+    "scripts/hermes/unattended/examples/controller.json": "4252357aecc9c26aadab5969873d822ef194aae4f485c8d56fb9ea27cab8119d",
+    "scripts/hermes/unattended/examples/host.json": "3bb83f85c27f328988d05a9cc1fd6d9646648ea74905125ecd7937153af04f03",
+    "scripts/hermes/unattended/examples/signer.json": "6429a48b2e530f85239361643d54708b4b18bbf33d0768dc48071dc843d67680",
+    "scripts/hermes/unattended/finalize.py": "a57cdc257b73e04086d49c4ad43750febc35169595b25d1b1af2c0faeaf2c8a9",
+    "scripts/hermes/unattended/gates.py": "dda871825d3bf7175bab6e2337391a5eadc1c6c579ef67f1dd132401bf923187",
+    "scripts/hermes/unattended/host.py": "406b59e24b7e0fd60e067c4fae53dee1ac456cc49a6410f67ee766c7f15da66e",
+    "scripts/hermes/unattended/maintenance.py": "e223813ba053b36b6575a2aa6b3bfc4563ea83f1a62b0ad20b7b26fb24e1fa99",
+    "scripts/hermes/unattended/materialize.py": "04d8e77f3c9e166152a7653fc571cb3e0aeda4845625b9cb2ed67ae3746f2fd9",
+    "scripts/hermes/unattended/notify.py": "7ca9c98c31fd6ca8153f265efe30e1f169ff6fca78158beec6bbdc17349fbf4c",
+    "scripts/hermes/unattended/policy.py": "52da2f8b4f8fbad5b6d0c88022c9a4f2d325027755324955aa42480929d94bab",
+    "scripts/hermes/unattended/prepare.py": "6e42b9803adbda7a1f8e2fa00986431df9ef8966bea6548623d790b8f49670a3",
+    "scripts/hermes/unattended/release.py": "e0b088bdeff8402fb0d702299d0002f8ddd5a7b62ca109f664c2237cb04f8231",
+    "scripts/hermes/unattended/signer.py": "c0755e389ef4d4c4c5fb93a4c277fc797e7bffba3df697078844d97490ed3c4a",
+    "scripts/hermes/unattended/systemd/hermes-credentials.service": "c8c72e4f47694173852268cd3b56ca3c9382d27d4d11cdc0ee3554bd0a38c394",
+    "scripts/hermes/unattended/systemd/hermes-credentials.socket": "3e592d9121eae79d49b10d930a71c4c035cfc071ced1756a3dd48dff42f00ab4",
+    "scripts/hermes/unattended/systemd/hermes-maintenance-failed.service": "81e2f1e2d3aa44e34f7c982a7b731441b54e8dac306195c3bec58b98824b4373",
+    "scripts/hermes/unattended/systemd/hermes-maintenance.service": "a1fa35d9dc88dfabff6a732f75d7fffbaacc14e9681c492d7b9cec385c2be53e",
+    "scripts/hermes/unattended/systemd/hermes-maintenance.timer": "7b21a073aed2d4dffb84fdc7353ab8ecfcf4d46122538876ab6cd0ee5f45421c",
+    "scripts/hermes/unattended/systemd/hermes-notify.service": "083494756810ea6d6a9db507c5c0d779526514aff595dc88722d7d1f3f5b9a10",
+    "scripts/hermes/unattended/systemd/hermes-notify.timer": "b8d6683a2e8eb12ff3663ef2865f4b9b038faa8d3ff8c3e5bbd883972e7ef177",
+    "scripts/hermes/unattended/systemd/hermes-runtime-credentials.service": "1b382f20c7af4bc5d264236c908dcff94b386a421e1c41c9027d630dac363b94",
+    "scripts/hermes/unattended/systemd/hermes-sign.service": "afb18fa3795b1c575877b58ec031ec815bcdfeb3efb1e5313ed459ad2226cb75",
+    "tests/test_hermes_unattended.py": "74e55e15d4fbb917b0f6c0f1d464ce7d39208a0783416c6f280dde4a00390278",
+    "devbox.json": "e13a977abb1b329659dbed0fc8d7be2301bda73d55e9ae5b75dbaf649709758b",
+    "devbox.lock": "1de6f1be12d1d200786f5789034c23431832fba7ce63d8d5b8b84031140588f4",
+    "hermes-deploy.sh": "6125127cc51e0ac18684a0c151be236df9b90097b11605dba73c5f8cc48d740c",
+    "scripts/hermes/60-hermes-runtime.conf": "b1643018f528844a64f64c54e74c59313dd2d821d21cce8e8585a61650f81d56",
+    "scripts/hermes/70-hermes-volume-label.conf": "6b1c89c80f5e557a95995a0775de54e7a638230b33b2098c51eff1f52f63666e",
+    "scripts/hermes/acceptance.sh": "9495714fb740c7a7aed40abb98d108b41eadf3cf2f1d2d12f66e99272c2cb3a1",
+    "scripts/hermes/certification-evidence.sh": "ed3739b5b68ab43ed6930b263950e8090671ffe37c615ba3192226163d7b8b16",
+    "scripts/hermes/deploy-lib.sh": "7720c0bc7b735b8efee0796d7a81f4e8be1417cef9e30f17de505010660e8776",
+    "scripts/hermes/fedora-server-host.sh": "275df6c27395a718c6a8cc3205b96ce0c9572586cbc462907f01d54a4ec0a81b",
+    "scripts/hermes/harden-config.py": "10f23680a17e601c185ab1a4105b303b528d6461aec8123c7cd0839dcf3a9e85",
+    "scripts/hermes/hermes.container": "180a0e3d8a8b94d786dcd6f55f5de0ae4e359d4bec72dd7dff2e3a15a3ece105",
+    "scripts/hermes/promotion-record.sh": "9f27190649faa70714977770365aeca7a37e1458ea6fa2532afa126833129609",
+    "scripts/hermes/provider-auth-status.sh": "0f33c2bf6257d06f8ba98eb95cba9d50d56dbbcebe3ff28e181649af9696dcc0",
+    "scripts/hermes/remote-preflight.sh": "c276f59338bb64f2baa91fc20b0bad638e5275e5adf0bf8593945731e3e0e6b7",
+    "scripts/hermes/remote-state.sh": "4c6546b2c32b634b4ace26c742c780596c7f8e3d6420335a3cc08ef49885516c",
+    "scripts/hermes/root-acceptance.sh": "978806e5c4bd65626561c3c94f7ed455ceb46c25c8c6bf3e73d3f4cce7d2e8f7",
+    "scripts/hermes/set-model.py": "924d08b37f33b74c40597bfe1d38f536cd5d2609440e9f39775a85bd72e7ee66",
+    "scripts/hermes/wrappers/hermes-chat": "b294a7a1de159befa0b933fdac8bbd0f3250e9f188d8b71db22713c215c95c67",
+    "scripts/hermes/wrappers/hermes-logs": "1f0bf239db4718016587caff18a9812643158431ec218066f1528d674652c290",
+    "scripts/hermes/wrappers/hermes-status": "b399a1fb87bc1847972b7866f230cb1797c06546b1b0b54a0577a8275b7bc861"
+  },
+  "checks": [
+    {
+      "command": [
+        "shellspec",
+        "spec/hermes/",
+        "spec/vm/"
+      ],
+      "exit_code": 0,
+      "output_sha256": "081d741e3bcb25614c40b7e052e670a6b24e2afa36eb6f5dd1800d02a63bf5b8"
+    },
+    {
+      "command": [
+        "./tests/test-hermes-guide.sh"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e36a05e0e5f091ca7934844d575f474d81ee0c2433abe35425123302e70d8691"
+    },
+    {
+      "command": [
+        "shellcheck",
+        "hermes-deploy.sh",
+        "scripts/hermes/deploy-lib.sh",
+        "scripts/hermes/promotion-record.sh",
+        "scripts/hermes/unattended/dispatch"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "shfmt",
+        "-d",
+        "-l",
+        "-i",
+        "2",
+        "-ci",
+        "-bn",
+        "hermes-deploy.sh",
+        "scripts/hermes/deploy-lib.sh",
+        "scripts/hermes/promotion-record.sh",
+        "scripts/hermes/unattended/dispatch"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "python_suite": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_hermes_unattended.py"
+    ],
+    "tests": 81,
+    "result": "PASS",
+    "note": "Observed immediately before this final regression run; source unchanged."
+  },
+  "shellspec_examples": 138,
+  "guide_checks": 217,
+  "scope": "Offline verification only; no VM certification, service activation, API mutation or production access."
+}

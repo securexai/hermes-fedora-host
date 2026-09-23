@@ -1,0 +1,19 @@
+[Unit]
+Description=Record a fixed local notification after Hermes certification service failure
+
+[Service]
+Type=oneshot
+User=hermes-certification
+Group=hermes-certification
+ExecStart=/usr/bin/python3 -B -E -s /usr/local/libexec/hermes-unattended/maintenance.py --events /var/lib/hermes-certification-events --service-failed
+StateDirectory=hermes-certification-events
+StateDirectoryMode=0711
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateNetwork=true
+CapabilityBoundingSet=
+LimitCORE=0
+TimeoutStartSec=30s

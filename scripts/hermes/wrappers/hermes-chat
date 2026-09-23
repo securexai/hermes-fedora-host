@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o errtrace
+shopt -s inherit_errexit
+shopt -s nullglob
+
+[[ $# -eq 0 ]] || {
+  printf 'Usage: hermes-chat\n' >&2
+  exit 64
+}
+
+cd /tmp
+
+uid=$(id -u hermes)
+exec runuser -u hermes -- env HOME=/home/hermes XDG_RUNTIME_DIR="/run/user/$uid" \
+  podman exec -it --user 10000:10000 hermes hermes chat

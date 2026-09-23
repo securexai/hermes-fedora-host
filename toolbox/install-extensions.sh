@@ -7,6 +7,10 @@
 # never needs elevated privileges, so removing the Toolbox container loses
 # nothing: rerun this script.
 #
+# Scope: this script installs the repository-local ShellSpec extension only. The
+# uv-locked Python tooling is materialised by `uv sync --locked`. Run
+# `toolbox/provision-environment.sh` to do both and verify the result.
+#
 # Usage:
 #   toolbox/install-extensions.sh            # install everything missing
 #   toolbox/install-extensions.sh --force    # reinstall even if present

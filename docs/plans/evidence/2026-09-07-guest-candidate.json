@@ -1,0 +1,33 @@
+{
+  "observed_at": "2026-09-07T16:29:45.844271+00:00",
+  "environment": "local workstation, devbox; uncommitted codex/hermes-unattended",
+  "certification": false,
+  "checks": {
+    "python": "109 tests PASS; python3 -m unittest discover -s tests -p test_hermes_unattended.py",
+    "shellspec": "138 examples PASS; shellspec spec/hermes/ spec/vm/",
+    "guide": "217 checks PASS; ./tests/test-hermes-guide.sh",
+    "kickstart": "both post bodies: bash -n and shellcheck -s bash PASS",
+    "docs": "5 files nonfix markdownlint-cli2, relative local file links, git diff --check PASS",
+    "inventory": "virsh -c qemu:///system list --all --name: empty; approved read-only retry",
+    "policies": "signer.json and broker.json absent under /etc/hermes-unattended"
+  },
+  "failures_retained": [
+    "Initial sandbox inventory denied libvirt socket",
+    "Initial Markdown gate: VM guide line 193 overlong; wrapped and passed"
+  ],
+  "sha256": {
+    "docs/plans/2026-09-07-hermes-unattended.md": "b5a00ac77766f2744778c4b4640e9b572dcf3c6045b58c58b80c5c305e5d1cdb",
+    "docs/VM_TESTING_GUIDE.md": "19990dbc1c9cdafebe174e9e18528b64a1802291723d64aa0ff1d696ee9def4c",
+    "docs/HERMES_UNATTENDED_DEPLOYMENT.md": "0fda688b424f7b81e9136566d2d31d58c2a31d4f422507103fe7dc1bb523cc53",
+    "docs/HERMES_INSTALLATION_VERIFICATION.md": "6e623c3308f08bf8d856fe237ad54172490ea2a016bcb21e1efdcde901354011",
+    "vm/DEPLOYMENT_TASKS.md": "b245f521d64fb23058a9d43aea918ffc2c46e936ceb112955107d3252f86d6f8",
+    "scripts/hermes/unattended/lab_candidate.py": "44c933035c1dd4c7d5a890c28007bb2a289925284e8c0a704e65bf3074c8090a",
+    "vm/kickstart/hermes-tpm-enroll.ks": "79d297ae83765cd4307253b690bd379732a07ed8365e34b2c734c7fd5d034311",
+    "tests/test_hermes_unattended.py": "c4744ac5382654468b0ed9e631c6785167f19d90923e6fccae707e13f9d1f096"
+  },
+  "limitations": [
+    "No live enrolled boot or recovery",
+    "No provider, production, commit or push operations",
+    "Full privileged-boundary review outstanding"
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "artifacts": {
+    "scripts/hermes/unattended/boot_build.py": "eb8c2bb78b2d7662284b3baaa649e6adcd1db394f9d20cf6ed53038d63b574b4",
+    "scripts/hermes/unattended/build_release.py": "ba8fb758444d6612c099b6046790c4a9928a69da4c2c65b5c5486c4097551a89",
+    "scripts/hermes/unattended/common.py": "5dd9b679bdfe129f2f1b4651018cf9a1a70af6712688aa1f5fe93799574e7685",
+    "scripts/hermes/unattended/controller.py": "4dccef39d66f364eb3495b6cea08cb349b1ac7055d2f59a41f6f861856c3f6be",
+    "scripts/hermes/unattended/credentials.py": "0584f46cf2b630853fdf76126be4325705080df74c09b4736e9c7e426d8e6eae",
+    "scripts/hermes/unattended/dispatch": "d21a39add94147904f98ab8a91863c214d8f1ea913dfa28fdbc2278980f73605",
+    "scripts/hermes/unattended/dispatcher.py": "1b7a6346c28ac01ee02179c7f3a5eb22df988197bf5393c1b2aa7ed4e249e804",
+    "scripts/hermes/unattended/efi_media.py": "b6951ec711b375af9383bd3df750b568ae0642dd09c53ca7c2f0aa0d0d1c1344",
+    "scripts/hermes/unattended/finalize.py": "a57cdc257b73e04086d49c4ad43750febc35169595b25d1b1af2c0faeaf2c8a9",
+    "scripts/hermes/unattended/firmware.py": "0a656cf54dab22ac1325fc44a13a0151b85a166b6123b43332c43ebb08357c35",
+    "scripts/hermes/unattended/gates.py": "c9179b63e4b323250cca64497af90843fd3e998b04a709320078c19c2351080d",
+    "scripts/hermes/unattended/host.py": "989a74332a446a35ec4a3f101b71ba09a895caf9359a9e6d012648f7cf3ea2f2",
+    "scripts/hermes/unattended/lab_boot.py": "2b65eb31ee4f6d98ed9d3b0e19251c8630f4fb012c0fe5124f4660eed8a5a00a",
+    "scripts/hermes/unattended/lab_candidate.py": "e3adb3d89ff7efc7a1d41883f45c7ee8a5f0807317c43a4dca04549102dc8f62",
+    "scripts/hermes/unattended/maintenance.py": "e223813ba053b36b6575a2aa6b3bfc4563ea83f1a62b0ad20b7b26fb24e1fa99",
+    "scripts/hermes/unattended/materialize.py": "04d8e77f3c9e166152a7653fc571cb3e0aeda4845625b9cb2ed67ae3746f2fd9",
+    "scripts/hermes/unattended/notify.py": "7ca9c98c31fd6ca8153f265efe30e1f169ff6fca78158beec6bbdc17349fbf4c",
+    "scripts/hermes/unattended/policy.py": "52da2f8b4f8fbad5b6d0c88022c9a4f2d325027755324955aa42480929d94bab",
+    "scripts/hermes/unattended/prepare.py": "19ad1af4fdf4ad0a5580039c015fc8801c487d9e6f6494d4169cae65c4f9b472",
+    "scripts/hermes/unattended/release.py": "60fbd0d3f63190450353fdb4a17b7813b67eab3e5489b8a09634248200dfc2bf",
+    "scripts/hermes/unattended/scan_candidate.py": "9d8bd8cd89f898b7e8310542ccd3cd0a7d33eea34487808091e97074c76ffd1e",
+    "scripts/hermes/unattended/signer.py": "a003b0ad521b7e539c3265a40efefb54770ca0bb08024b819651a004f0710d9a",
+    "tests/test_hermes_unattended.py": "b5b0c62734292b64553f938d9b00764efef6a9da6ca23375a0767ed5044f8dd2",
+    "vm/create-hermes-server-vm.sh": "399581fef29b8bd4a5767bd68bd9af4720c9d6ff2fdfd37fe157fa1b051d8301",
+    "vm/kickstart/hermes-tpm-enroll.ks": "561b13bf35c261c845a08be821ccec75494feb5dc58206650552f22e942fcee0"
+  },
+  "checks": {
+    "dedicated_storage_path_regression": {
+      "result": "PASS",
+      "shellcheck_shfmt": "PASS",
+      "shellspec": 138,
+      "unattended": 113
+    },
+    "documentation_audit": {
+      "reason": "Documented diff_docs.py absent; focused alternate search found no replacement",
+      "result": "BLOCKED"
+    },
+    "final_documentation": {
+      "checked_at": "2026-09-07T18:04:48.633767+00:00",
+      "git_diff_check": "PASS",
+      "local_links": "PASS",
+      "markdown_files": 5,
+      "method": "Isolated nonfix markdownlint-cli2 using repository config; local-link existence; git diff --check",
+      "result": "PASS"
+    },
+    "guide": {
+      "count": 217,
+      "result": "PASS"
+    },
+    "live_handoff_and_recovery": {
+      "evidence": "2026-09-07-hermes-tpm-handoff.json",
+      "result": "PASS"
+    },
+    "private_material_permissions": {
+      "paths_checked": 11,
+      "result": "PASS"
+    },
+    "real_disk_io": {
+      "count": 1,
+      "result": "PASS",
+      "scope": "Historical isolated disk test; exact-length cat reader subsequently passed live handoff",
+      "seconds": 220.797
+    },
+    "shellcheck_shfmt": "PASS",
+    "shellspec": {
+      "command": "devbox run -- shellspec spec/hermes spec/vm",
+      "count": 138,
+      "result": "PASS",
+      "seconds": 20.79
+    },
+    "tpm_pre_post_syntax_shellcheck": {
+      "count": 3,
+      "result": "PASS"
+    },
+    "unattended_tests": {
+      "count": 116,
+      "result": "PASS"
+    }
+  },
+  "failures_preserved": [
+    "Signer descriptor tests initially failed twice on sandbox root UID remapping; test fixture corrected after inspecting ancestor metadata.",
+    "Initial libvirt socket read denied by sandbox; escalated read passed with empty inventory.",
+    "Initial VM creator stopped before disk creation: general storage pool not writable.",
+    "Live 2 MiB firmware run: PCR read autodetection failed; explicit SHA256 then failed unseal. PCR11 was zero; no zero-PCR policy signed.",
+    "Corrected 4 MiB firmware reveals Anaconda sysinit:ready phase path; installer policy repaired from initrd-prefixed paths.",
+    "TPM enrollment succeeded, then dracut failed for missing tpm2-tools; DVD package lookup failed; signed Fedora release installation and export-tail retry passed.",
+    "Offline SSH pin initially failed because first-boot host keys were absent; dedicated key provisioned offline and read back.",
+    "Public manifest rejected due guestfish printer newline; exact-length reader repaired and 116 tests plus live extraction/injection passed.",
+    "Direct Python sudo probe was denied; existing fixture-authorized Bash path succeeded without policy changes.",
+    "Final replacement QCOW2 mode was 0644; stopped disk changed to 0600 and creator now sets mode explicitly. All eleven private material paths passed recheck.",
+    "shfmt invocation without repository flags failed; documented -i 2 -ci -bn invocation passed without source reformatting.",
+    "Documented diff_docs.py path missing; no replacement located in available skill/plugin roots."
+  ],
+  "kind": "privileged-boundary-review-and-lab-preflight",
+  "lab": {
+    "automatic_installed_boot": "PASS",
+    "boot_recovery": "PASS",
+    "boot_verified": false,
+    "corrected_public_policy_hash_verified": true,
+    "current_disk_recovery_access": "PASS",
+    "disk": "/var/lib/libvirt/images/hermes-tpm-lab/lab-hermes-server.qcow2",
+    "domain": "lab-hermes-server",
+    "failed_disk_preserved": true,
+    "firmware": "4 MiB raw OVMF pair",
+    "offline_failed_disk_recovery_access": "PASS",
+    "pcr11_sha256": "e82c9d7b2e1b17c40a9e2bf6fcd42ba88c9c579a62487c7dd7ba86387fce32ef",
+    "predicted_phase": "sysinit:ready",
+    "prediction_matches": true,
+    "state": "shut-off-after-verified-recovery-boot",
+    "tamper_firmware_rejection": "PASS"
+  },
+  "next_action": "Obtain OpenAI test project ID and encrypted admin-credential file path; enroll isolated broker, then ordered UA-02/03/04 gates. Production excluded.",
+  "observed_at": "2026-09-07T16:43:47.562913+00:00",
+  "production_changed": false,
+  "revision": "bb35bd23f087dc6a5ffcb4d853978ce0fe923e9d",
+  "updated_at": "2026-09-07T18:04:25.781355+00:00",
+  "worktree": "uncommitted codex/hermes-unattended"
+}

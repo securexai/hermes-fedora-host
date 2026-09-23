@@ -1,0 +1,38 @@
+{
+  "schema": "hermes-policy-reevaluation-v1",
+  "evaluated_at": "2026-09-07T04:31:02.771702+00:00",
+  "policy_sha256": "a5c084a0b4879376ba307c85ea8c76a05857c217b09417cce19a72f472d2340d",
+  "results": [
+    {
+      "image": "docker.io/nousresearch/hermes-agent@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79",
+      "source_report_sha256": "2fe792fb5027b1ef739058d2f437a76d8b66054cbc3659e880ae0f0bc7b773da",
+      "result": "PASS",
+      "gate": "vulnerability_scan",
+      "policy": "advisory-denylist-v1",
+      "findings": {
+        "UNKNOWN": 191,
+        "LOW": 978,
+        "MEDIUM": 1364,
+        "HIGH": 463,
+        "CRITICAL": 20
+      },
+      "advisory": true
+    },
+    {
+      "image": "docker.io/nousresearch/hermes-agent@sha256:efb82540aeb8ac21c58ecb4482bd3eb103ea617da2af2c61f12526ed68f6c2d9",
+      "source_report_sha256": "b6e651cf653718366e8fca61f2f8763a558e5364ca059198a30de2212aa6c5ea",
+      "result": "PASS",
+      "gate": "vulnerability_scan",
+      "policy": "advisory-denylist-v1",
+      "findings": {
+        "UNKNOWN": 159,
+        "LOW": 863,
+        "MEDIUM": 858,
+        "HIGH": 379,
+        "CRITICAL": 19
+      },
+      "advisory": true
+    }
+  ],
+  "scope": "Reevaluation of existing scan reports under the newly approved policy; not a new scan or completed VM certification."
+}

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Security-first Hermes Agent deployment plan for Fedora Server 44.">
+  <title>Secure Hermes Installation Plan</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; line-height: 1.5; }
+    body { margin: 0 auto; max-width: 70rem; padding: 2rem; color: #17202a; }
+    code, pre { font-family: ui-monospace, monospace; }
+    pre { overflow-x: auto; padding: 1rem; background: #f3f5f7; border: 1px solid #d8dde2; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; }
+    th, td { border: 1px solid #b8c0c8; padding: .6rem; text-align: left; vertical-align: top; }
+    th { background: #eef1f4; }
+    .gate { border-left: .35rem solid #1769aa; padding: .4rem 1rem; background: #eef7ff; }
+    .warning { border-left-color: #a15c00; background: #fff8ed; }
+  </style>
+</head>
+<body>
+  <header>
+    <p>Hermes Agent · security and operations reference</p>
+    <h1>Secure Hermes Installation</h1>
+    <p>
+      This plan defines the dedicated Fedora Server 44 appliance boundary for Hermes Agent.
+      The executable contract lives in <a href="hermes-fedora-server-install-guide.html">the Fedora Server guide</a>
+      and <a href="docs/HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md">the deployment handoff</a>.
+    </p>
+  </header>
+
+  <main>
+    <section aria-labelledby="boundary">
+      <h2 id="boundary">Security boundary</h2>
+      <p>
+        Hermes runs as a locked, dedicated <code>hermes</code> account inside a rootless Podman container.
+        A root-owned Quadlet and systemd drop-ins own the service definition; the only persistent mount is
+        <code>/home/hermes/data</code> to <code>/opt/data</code> with a shared SELinux label.
+      </p>
+      <ul>
+        <li>Fedora Server 44 x86_64 with LUKS-backed storage, UEFI Secure Boot, enforcing SELinux, and firewalld.</li>
+        <li>SSH is the only permitted non-loopback host service; Cockpit, discovery, printing, and sleep paths are disabled.</li>
+        <li>The image is pinned to the checked-in digest and the Quadlet uses <code>Pull=never</code>.</li>
+        <li>The container has no host home, device, Podman socket, published port, or injected credential mount.</li>
+        <li>Hermes approvals remain manual and its write boundary is limited to the persistent data directory.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="promotion">
+      <h2 id="promotion">Promotion before production</h2>
+      <ol>
+        <li>Verify the locally supplied Fedora Server DVD against Fedora's signed checksum and expected SHA-256.</li>
+        <li>Create <code>lab-hermes-server</code> with 8 GiB RAM, 2 vCPUs, a 40 GiB encrypted disk, Secure Boot, and 172.16.99.12.</li>
+        <li>Run the offline test suite and the complete Fedora Server deployment in the disposable VM.</li>
+        <li>Complete exactly one selected provider flow, configure its model, and require the exact <code>HERMES_OK</code> response.</li>
+        <li>Revoke all supported provider credentials, purge fresh Hermes data, remove fixture privilege, and destroy the VM.</li>
+        <li>Only after destruction verification, issue the secret-free promotion record.</li>
+      </ol>
+      <div class="gate warning">
+        <strong>Production gate:</strong> production <code>deploy</code> and <code>configure-provider</code> require a
+        matching promotion record. A record is bound to the first production host's machine-id hash and SSH ED25519
+        fingerprint. A failed deployment may resume on that host with unchanged inputs; another host is rejected.
+      </div>
+    </section>
+
+    <section aria-labelledby="providers">
+      <h2 id="providers">Provider and billing boundaries</h2>
+      <table>
+        <thead>
+          <tr><th>Provider</th><th>Authentication</th><th>Billing boundary</th><th>Default model</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>openai-codex</code></td><td>ChatGPT/Codex device OAuth</td><td>ChatGPT subscription access</td><td><code>gpt-5.6-luna</code></td></tr>
+          <tr><td><code>openai-api</code></td><td>Hermes masked API-key prompt</td><td>Separate usage-based API billing</td><td><code>gpt-5.6-luna</code></td></tr>
+          <tr><td><code>nous</code></td><td>Nous Portal OAuth</td><td>Nous Portal account</td><td><code>anthropic/claude-sonnet-4.6</code></td></tr>
+        </tbody>
+      </table>
+      <p>
+        API keys are entered only through Hermes' interactive prompt. They are never command-line arguments, shell
+        input supplied by the controller, logs, local deployment state, or promotion records. Switching provider or
+        model requires a new VM certification record; failed switching restores the previously accepted configuration.
+      </p>
+    </section>
+
+    <section aria-labelledby="updates">
+      <h2 id="updates">Host updates and rollback</h2>
+      <p>
+        The host module owns the Fedora Server package contract and uses DNF5 offline transactions. Automatic updates
+        download packages only with <code>apply_updates=False</code> and <code>reboot=never</code>. The controller stages
+        an offline upgrade, records the boot ID, performs the planned reboot, and verifies the new boot ID and offline
+        transaction log before continuing.
+      </p>
+      <p>
+        Rollback restores Hermes data and manifest-tracked host configuration. It does not claim to reverse RPM or
+        kernel updates; a host replacement is handled through console-verified <code>adopt-host</code> and a fresh
+        promotion binding.
+      </p>
+    </section>
+
+    <section aria-labelledby="operations">
+      <h2 id="operations">Operator sequence</h2>
+      <pre><code>HERMES_REPO=${HERMES_REPO:-$HOME/code/repos/DS-Workspace/hermes-fedora-host}
+HERMES_MEDIA_DIR=${HERMES_MEDIA_DIR:-$HOME/Downloads/fedora-server-44-1.7}
+HERMES_SSH_IDENTITY=${HERMES_SSH_IDENTITY:?export the verified SSH private key path}
+cd "$HERMES_REPO"
+
+./hermes-certify-vm.sh \
+  --iso "$HERMES_MEDIA_DIR/Fedora-Server-dvd-x86_64-44-1.7.iso" \
+  --checksum "$HERMES_MEDIA_DIR/Fedora-Server-44-1.7-x86_64-CHECKSUM" \
+  --fedora-keyring "$HERMES_MEDIA_DIR/fedora.gpg" \
+  --identity-file "$HERMES_SSH_IDENTITY" \
+  --provider openai-codex \
+  --model gpt-5.6-luna</code></pre>
+      <p>
+        Then verify the reinstalled host fingerprint at the local console, run <code>adopt-host</code>, run the
+        read-only <code>check</code>, and execute <code>deploy</code> with the printed absolute
+        <code>--promotion-record</code>. OAuth/API-key entry and the final authenticated response are deliberate
+        operator gates.
+      </p>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h2 id="sources">Primary references</h2>
+      <ul>
+        <li><a href="https://fedoraproject.org/server/download/">Fedora Server download and signed checksum workflow</a></li>
+        <li><a href="https://dnf5.readthedocs.io/en/stable/commands/offline.8.html">DNF5 offline transactions</a></li>
+        <li><a href="https://dnf5.readthedocs.io/en/stable/dnf5_plugins/automatic.8.html">DNF5 automatic update plugin</a></li>
+        <li><a href="https://hermes-agent.nousresearch.com/docs/integrations/providers/">Hermes provider integrations</a></li>
+        <li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/security">Hermes security guidance</a></li>
+        <li><a href="https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html">Podman Quadlet reference</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

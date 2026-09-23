@@ -1,0 +1,28 @@
+[Unit]
+Description=Prepare and certify the enrolled disposable Hermes candidate
+After=network-online.target
+Wants=network-online.target
+OnFailure=hermes-certification-failed.service
+
+[Service]
+Type=oneshot
+User=hermes-certification
+Group=hermes-certification
+ExecStart=/usr/bin/python3 -B -E -s /usr/local/libexec/hermes-unattended/schedule.py --config /etc/hermes-unattended/schedule.json --events /var/lib/hermes-certification-events
+ExecStopPost=/usr/bin/python3 -B -E -s /usr/local/libexec/hermes-unattended/schedule.py --config /etc/hermes-unattended/schedule.json --events /var/lib/hermes-certification-events --cleanup-only
+StateDirectory=hermes-certification hermes-certification-events
+StateDirectoryMode=0711
+UMask=0077
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+LimitCORE=0
+TimeoutStartSec=115min
+TimeoutStopSec=6min
+KillMode=control-group
+# The enrolled fixed-domain lab-power sudo helper requires privilege elevation.
+# Do not add NoNewPrivileges or remove its capabilities without live validation.

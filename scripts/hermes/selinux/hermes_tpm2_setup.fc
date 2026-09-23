@@ -1,0 +1,1 @@
+/usr/lib/systemd/systemd-tpm2-setup -- gen_context(system_u:object_r:hermes_tpm2_setup_exec_t,s0)

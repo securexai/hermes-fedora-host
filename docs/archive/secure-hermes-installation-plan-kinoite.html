@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Security-first deployment plan for Hermes Agent on Fedora Kinoite 44 with rootless Podman and Quadlet.">
+  <title>Secure Hermes Installation Plan</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #53616f;
+      --paper: #ffffff;
+      --canvas: #edf1f4;
+      --line: #d6dde3;
+      --accent: #0b5d57;
+      --accent-soft: #e5f3f0;
+      --warning: #7a4e00;
+      --warning-soft: #fff4d8;
+      --unknown: #674188;
+      --unknown-soft: #f2eafa;
+      --danger: #8c2f39;
+      --danger-soft: #fae9eb;
+      --code: #eef2f5;
+      --shadow: 0 18px 44px rgb(24 39 55 / 12%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.15em;
+    }
+
+    a:hover {
+      text-decoration-thickness: 0.14em;
+    }
+
+    .toolbar {
+      align-items: center;
+      background: rgb(23 32 42 / 94%);
+      color: #fff;
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      left: 0;
+      padding: 0.75rem max(1rem, calc((100vw - 980px) / 2));
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .toolbar p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .toolbar button {
+      background: #fff;
+      border: 0;
+      border-radius: 0.45rem;
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.55rem 0.85rem;
+    }
+
+    .toolbar button:hover {
+      background: var(--accent-soft);
+    }
+
+    main {
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      margin: 2rem auto 4rem;
+      max-width: 980px;
+      padding: clamp(1.5rem, 5vw, 4.5rem);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      margin: 0 0 0.8rem;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: var(--ink);
+      line-height: 1.18;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: clamp(2.15rem, 6vw, 4.2rem);
+      letter-spacing: -0.045em;
+      margin: 0;
+      max-width: 14ch;
+    }
+
+    h2 {
+      border-bottom: 2px solid var(--line);
+      font-size: 1.65rem;
+      letter-spacing: -0.02em;
+      margin: 3.5rem 0 1.25rem;
+      padding-bottom: 0.45rem;
+    }
+
+    h3 {
+      font-size: 1.18rem;
+      margin: 2rem 0 0.75rem;
+    }
+
+    p,
+    li {
+      orphans: 3;
+      widows: 3;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.35rem;
+    }
+
+    li + li {
+      margin-top: 0.35rem;
+    }
+
+    code {
+      background: var(--code);
+      border-radius: 0.25rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.88em;
+      padding: 0.08rem 0.28rem;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.18rem;
+      margin: 1.25rem 0 0;
+      max-width: 64ch;
+    }
+
+    .meta {
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      gap: 0.5rem 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 2.5rem 0;
+    }
+
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      page-break-inside: avoid;
+    }
+
+    .summary-card strong {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+    }
+
+    .summary-card p {
+      color: var(--muted);
+      font-size: 0.93rem;
+      margin: 0;
+    }
+
+    .architecture {
+      background: #16242c;
+      border-radius: 0.8rem;
+      color: #e8f4f2;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.91rem;
+      line-height: 1.75;
+      margin: 2rem 0;
+      overflow-x: auto;
+      padding: 1.35rem;
+      white-space: pre;
+    }
+
+    .callout {
+      border-left: 0.35rem solid var(--accent);
+      border-radius: 0.45rem;
+      margin: 1.5rem 0;
+      padding: 0.9rem 1rem;
+      page-break-inside: avoid;
+    }
+
+    .callout p {
+      margin: 0;
+    }
+
+    .callout + .callout {
+      margin-top: 1rem;
+    }
+
+    .callout.info {
+      background: var(--accent-soft);
+    }
+
+    .callout.warning {
+      background: var(--warning-soft);
+      border-color: var(--warning);
+    }
+
+    .callout.danger {
+      background: var(--danger-soft);
+      border-color: var(--danger);
+    }
+
+    .phase {
+      border-left: 1px solid var(--line);
+      margin-left: 0.65rem;
+      padding-left: 1.35rem;
+      position: relative;
+    }
+
+    .phase::before {
+      background: var(--paper);
+      border: 3px solid var(--accent);
+      border-radius: 50%;
+      content: "";
+      height: 0.85rem;
+      left: -0.49rem;
+      position: absolute;
+      top: 0.35rem;
+      width: 0.85rem;
+    }
+
+    .phase h3 {
+      margin-top: 2.35rem;
+    }
+
+    .phase-label {
+      color: var(--accent);
+      display: block;
+      font-size: 0.73rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      margin-bottom: 0.28rem;
+      text-transform: uppercase;
+    }
+
+    .gate {
+      background: #f7f9fa;
+      border: 1px solid var(--line);
+      border-radius: 0.55rem;
+      margin: 1rem 0 1.25rem;
+      padding: 0.75rem 0.9rem;
+      page-break-inside: avoid;
+    }
+
+    .gate strong {
+      color: var(--accent);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .gate p {
+      font-size: 0.92rem;
+      margin: 0.2rem 0 0;
+    }
+
+    .matrix {
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 1.25rem 0;
+      width: 100%;
+    }
+
+    .matrix th,
+    .matrix td {
+      border: 1px solid var(--line);
+      padding: 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .matrix th {
+      background: #f1f5f6;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status {
+      border-radius: 99rem;
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 0.17rem 0.5rem;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status.verified {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .status.unknown {
+      background: var(--unknown-soft);
+      color: var(--unknown);
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li {
+      padding-left: 1.65rem;
+      position: relative;
+    }
+
+    .checklist li::before {
+      border: 1.5px solid var(--muted);
+      border-radius: 0.18rem;
+      content: "";
+      height: 0.82rem;
+      left: 0.05rem;
+      position: absolute;
+      top: 0.32rem;
+      width: 0.82rem;
+    }
+
+    .sources li {
+      overflow-wrap: anywhere;
+    }
+
+    .footer-note {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin-top: 3.5rem;
+      padding-top: 1rem;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        margin: 0;
+        padding: 1.4rem;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        position: static;
+      }
+
+      .matrix {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @page {
+      margin: 16mm;
+      size: A4;
+    }
+
+    @media print {
+      html,
+      body {
+        background: #fff;
+        font-size: 10.5pt;
+      }
+
+      .toolbar {
+        display: none;
+      }
+
+      main {
+        box-shadow: none;
+        margin: 0;
+        max-width: none;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 34pt;
+      }
+
+      h2 {
+        break-before: page;
+        margin-top: 0;
+      }
+
+      .no-page-break,
+      .summary-card,
+      .callout,
+      .gate,
+      table,
+      tr {
+        break-inside: avoid;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .sources a::after {
+        color: var(--muted);
+        content: " (" attr(href) ")";
+        font-size: 0.85em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar" role="region" aria-label="Export controls">
+    <p>Secure Hermes Installation Plan · Print-ready A4 document</p>
+    <button type="button" onclick="window.print()">Export / Print to PDF</button>
+  </div>
+
+  <main>
+    <header>
+      <p class="eyebrow">Security-first deployment plan</p>
+      <h1>Secure Hermes Installation</h1>
+      <p class="lead">
+        A staged plan for running Hermes Agent on Fedora Kinoite 44 using a
+        dedicated unprivileged account, rootless Podman, and a hardened systemd
+        Quadlet.
+      </p>
+      <div class="meta">
+        <span><strong>Prepared:</strong> 21 August 2026</span>
+        <span><strong>Target:</strong> Fedora Kinoite 44</span>
+        <span><strong>Status:</strong> Executed 21–22 August; live-audited 23 August 2026</span>
+      </div>
+    </header>
+
+    <section aria-labelledby="executive-summary">
+      <h2 id="executive-summary">Executive summary</h2>
+
+      <p>
+        The recommended deployment wraps the entire Hermes process inside a
+        rootless container owned by a separate <code>hermes</code> operating-system
+        user. It begins with no host project mounts, no container-engine socket,
+        no public ports, no third-party extensions, and only revocable,
+        low-privilege credentials.
+      </p>
+
+      <div class="callout danger">
+        <p>
+          <strong>Post-install audit result.</strong> The initial 23 August audit found the hardened
+          Quadlet inactive while a manual setup/CLI container was running without the planned
+          controls. The host was subsequently updated and cut over to the digest-pinned production
+          service; the container boundary and fail-closed Hermes policy passed live acceptance.
+          See <a href="hermes-kinoite-install-guide.html">the tested installation guide</a> for the
+          as-built evidence and remaining host exceptions.
+        </p>
+      </div>
+
+      <div class="summary-grid">
+        <article class="summary-card">
+          <strong>Boundary</strong>
+          <p>Whole-process OS isolation, not terminal-command filtering alone.</p>
+        </article>
+        <article class="summary-card">
+          <strong>Supply chain</strong>
+          <p>Named release, tested and scanned, then pinned by complete digest.</p>
+        </article>
+        <article class="summary-card">
+          <strong>Exposure</strong>
+          <p>No inbound ports by default; loopback-only if a local API is required.</p>
+        </article>
+      </div>
+
+      <div class="architecture" role="img" aria-label="Target security architecture">Fedora Kinoite 44
+├── Normal user
+│   └── Personal files and credentials — never mounted into Hermes
+└── Dedicated hermes user
+    ├── No sudo, SSH login, or privileged groups
+    └── Rootless Podman + user systemd
+        └── Hermes whole-process container
+            ├── One private /opt/data mount
+            ├── No Podman/Docker socket
+            ├── No host namespaces or devices
+            └── No published ports by default</div>
+
+      <div class="callout warning">
+        <p>
+          <strong>Version clarification.</strong> No official “Hermes Agent 2.0”
+          release was found. As of this plan’s date, the official latest release
+          is <code>v0.20.5</code>, tagged <code>v2026.8.19</code>. The release will
+          be checked again immediately before installation.
+        </p>
+      </div>
+
+      <div class="callout danger">
+        <p>
+          <strong>VM escalation rule.</strong> Use a dedicated KVM/libvirt virtual
+          machine when Hermes will ingest highly untrusted content while holding
+          powerful cloud, production GitHub, Kubernetes, email, or infrastructure
+          credentials. Rootless containers still share the host kernel.
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="objectives">
+      <h2 id="objectives">Objectives and non-goals</h2>
+
+      <h3>Security objectives</h3>
+      <ul>
+        <li>Prevent Hermes from reaching the normal user’s files and credentials.</li>
+        <li>Confine terminal, file, code-execution, MCP, plugin, hook, and skill paths.</li>
+        <li>Minimize host privileges, mounts, devices, network exposure, and persistence.</li>
+        <li>Make image selection, configuration changes, updates, and rollback auditable.</li>
+        <li>Use credentials that are narrow, capped, monitored, and easy to revoke.</li>
+      </ul>
+
+      <h3>Initial non-goals</h3>
+      <ul>
+        <li>Public API or dashboard hosting.</li>
+        <li>Desktop automation or access to Wayland, X11, D-Bus, audio, or cameras.</li>
+        <li>Access to the normal user’s repositories, SSH agent, browser, or home directory.</li>
+        <li>Unreviewed community skills, plugins, hooks, MCP servers, or autonomous cron jobs.</li>
+        <li>Production-grade cloud or infrastructure administration.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="implementation-plan">
+      <h2 id="implementation-plan">Implementation plan</h2>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 0</span>Fix the security profile</h3>
+        <p>Record the intended use before any installation:</p>
+        <ul>
+          <li>One operator only.</li>
+          <li>Interactive CLI or a private messaging gateway.</li>
+          <li>No arbitrary public callers.</li>
+          <li>No high-value cloud, infrastructure, personal email, or password-manager credentials.</li>
+          <li>Web, browser, cron, MCP, plugins, and community skills disabled initially.</li>
+          <li>No API or dashboard port unless there is a specific requirement.</li>
+        </ul>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>The required features and credential classes are documented, and the container-versus-VM decision is explicit.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 1</span>Verify and harden the Kinoite host</h3>
+        <p>Run a read-only preflight, then apply normal host updates separately:</p>
+        <ul>
+          <li>Confirm Fedora/Kinoite release, CPU architecture, and pending deployments.</li>
+          <li>Confirm Secure Boot status where applicable.</li>
+          <li>Verify SELinux is enforcing and firewalld is active.</li>
+          <li>Verify Podman, Quadlet, cgroup v2, rootless networking, and local container storage.</li>
+          <li>Verify the normal home directory and sensitive subdirectories deny unrelated users.</li>
+          <li>Capture a concise pre-install inventory for later comparison.</li>
+        </ul>
+        <div class="callout info">
+          <p>The Hermes host installer script will not be executed. The supported container image is the deployment artifact.</p>
+        </div>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>The host is current, SELinux remains enforcing, and rootless Podman passes a minimal smoke test.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 2</span>Create the dedicated OS identity</h3>
+        <p>Create an unprivileged <code>hermes</code> user with:</p>
+        <ul>
+          <li>A private home directory with mode <code>0700</code>.</li>
+          <li>A locked password and no SSH authorized keys.</li>
+          <li>No membership in <code>wheel</code>, <code>docker</code>, <code>libvirt</code>, or other privileged groups.</li>
+          <li>Dedicated subordinate UID and GID ranges for rootless Podman.</li>
+          <li>User-systemd lingering so the rootless service can start at boot.</li>
+        </ul>
+        <p>
+          Install the Quadlet definition as a root-owned file beneath
+          <code>/etc/containers/systemd/users/&lt;uid&gt;/</code>. This keeps the
+          service declaration outside Hermes’ writable state while preserving a
+          rootless runtime.
+        </p>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>The account cannot use sudo or read the normal user’s synthetic canary files, and rootless Podman works under that identity.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 3</span>Establish the supply-chain gate</h3>
+        <ol>
+          <li>Select a named release tag; do not use <code>latest</code> or <code>main</code>.</li>
+          <li>Cross-check it between the official GitHub releases and <code>docker.io/nousresearch/hermes-agent</code>.</li>
+          <li>Pull the fully qualified image as the <code>hermes</code> user.</li>
+          <li>Record the complete platform digest.</li>
+          <li>Inspect architecture, entrypoint, configured user, labels, layers, and creation time.</li>
+          <li>Run a vulnerability scan using an ephemeral scanner container.</li>
+          <li>Smoke-test the image without credentials.</li>
+          <li>Pin the production Quadlet to <code>docker.io/nousresearch/hermes-agent@sha256:…</code>.</li>
+          <li>Set <code>Pull=never</code> so production updates remain explicit.</li>
+        </ol>
+        <div class="callout warning">
+          <p>
+            Digest pinning guarantees that the selected bytes do not drift; it
+            does not independently prove publisher identity. If registry
+            signatures or attestations remain unavailable, record that residual
+            risk or build locally from a verified release tag.
+          </p>
+        </div>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>A specific digest has passed inspection, scanning, and a credential-free smoke test.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 4</span>Prepare persistence and secrets</h3>
+        <ul>
+          <li>Create one host data directory, owned by <code>hermes</code> and mode <code>0700</code>.</li>
+          <li>Mount it as <code>/opt/data</code> with a private SELinux label such as <code>:Z</code>.</li>
+          <li>Set the generated <code>.env</code> file to mode <code>0600</code>.</li>
+          <li>Put no secret values in Quadlet, deployment scripts, shell history, Git, or process arguments.</li>
+          <li>Use separate provider and messaging credentials created for Hermes.</li>
+          <li>Apply provider spending limits, narrow scopes, alerts, and revocation procedures.</li>
+          <li>Back up the data directory only into encrypted storage.</li>
+          <li>Never attach two Hermes gateway containers to the same data directory.</li>
+        </ul>
+        <p>
+          Do not mount the normal home directory, SSH material, cloud config,
+          browser state, D-Bus, display sockets, host devices, or the Podman/Docker socket.
+        </p>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>The mount list contains exactly the intended private data directory, and the backup destination is encrypted.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 5</span>Run controlled first-time setup</h3>
+        <p>
+          Run setup interactively in a temporary container using the pinned image,
+          dedicated account, and private data mount. Publish no ports and pass no
+          extra host paths or sockets.
+        </p>
+        <p>Review the generated configuration before starting a gateway:</p>
+        <ul>
+          <li>Use the local terminal backend inside the outer container; it is local to the container, not the Kinoite host.</li>
+          <li>Keep dangerous-command approvals enabled.</li>
+          <li>Set cron and unattended one-shot approvals to deny.</li>
+          <li>Enable tool-loop hard stops and fail-closed security scanning where supported.</li>
+          <li>Disable unneeded package installers, web tools, browser automation, MCP, plugins, hooks, cron, and messaging adapters.</li>
+          <li>Review executable code—not only metadata—before installing any third-party extension.</li>
+          <li>Configure explicit caller allowlists before enabling a messaging adapter.</li>
+          <li>Never enable a global “allow all users” setting.</li>
+        </ul>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>The configuration has been manually reviewed, unused surfaces are disabled, and only low-privilege credentials are present.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 6</span>Build the hardened Quadlet</h3>
+        <p>The root-owned production definition will include:</p>
+        <ul>
+          <li>Pinned image digest with <code>Pull=never</code>.</li>
+          <li>The single private <code>/opt/data</code> mount.</li>
+          <li>Default Podman seccomp and SELinux confinement.</li>
+          <li><code>NoNewPrivileges=true</code>.</li>
+          <li>All capabilities dropped, then only the image’s tested s6 startup requirements added back.</li>
+          <li>No privileged mode, devices, host networking, or shared host namespaces.</li>
+          <li>No container-engine socket.</li>
+          <li>A read-only root filesystem if compatibility tests pass.</li>
+          <li>Explicit, size-limited tmpfs mounts for runtime temporary paths.</li>
+          <li>A restrictive umask.</li>
+          <li>Initial limits of approximately 4 GiB memory, two CPUs, and a bounded PID count.</li>
+          <li>Controlled restart-on-failure behavior and a non-network health check.</li>
+          <li>Journald logging plus bounded persistent Hermes logs.</li>
+        </ul>
+        <div class="callout info">
+          <p>
+            Do not blindly force the internal container user. The supported image
+            initializes through s6 as container root, performs limited setup, and
+            then drops supervised services to its internal <code>hermes</code> user.
+            Rootless Podman maps that container root into the dedicated host user namespace.
+          </p>
+        </div>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>The service starts with the minimal tested capability set, passes health checks, and retains SELinux confinement.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 7</span>Control inbound and outbound networking</h3>
+        <h4>Inbound</h4>
+        <ul>
+          <li>Publish no ports when an outbound messaging adapter is sufficient.</li>
+          <li>If a local API or dashboard is required, bind explicitly to <code>127.0.0.1</code>.</li>
+          <li>Require a strong API key and exact CORS origins; never use <code>*</code>.</li>
+          <li>Use an SSH tunnel or authenticated VPN for remote access.</li>
+          <li>Never use host networking for convenience.</li>
+        </ul>
+        <h4>Outbound</h4>
+        <ul>
+          <li>Initially permit only setup and the selected provider’s required traffic.</li>
+          <li>Block loopback, private, link-local, cloud-metadata, and LAN destinations at a network boundary where practical.</li>
+          <li>For stricter control, place Hermes on an internal Podman network and route required traffic through an independently controlled allowlisting proxy.</li>
+          <li>If arbitrary web access is required, use a separate low-trust instance without valuable credentials or move it into a VM.</li>
+        </ul>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>Only intended endpoints are reachable, and no service is exposed beyond its approved interface.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 8</span>Validate the security boundary</h3>
+        <ul class="checklist">
+          <li>The container cannot enumerate or read the normal user’s home.</li>
+          <li>Container inspection shows only the approved data mount.</li>
+          <li>No Podman or Docker socket exists inside the container.</li>
+          <li>No unexpected device or host namespace is shared.</li>
+          <li>The effective capability set matches the approved minimum.</li>
+          <li>SELinux remains enforcing without broad exemptions.</li>
+          <li>No externally reachable listening port exists.</li>
+          <li>Loopback-only services reject non-loopback access.</li>
+          <li>Unauthenticated API calls and unauthorized messaging identities are denied.</li>
+          <li>Provider access works using only the intended low-privilege credential.</li>
+          <li>Private-network and metadata destinations are blocked under the chosen egress policy.</li>
+          <li>Memory and PID limits behave as expected.</li>
+          <li>The rootless service starts correctly after a reboot.</li>
+          <li>An encrypted backup-and-restore drill succeeds.</li>
+        </ul>
+        <div class="callout warning">
+          <p>Use synthetic canary files for isolation testing. Do not test by attempting to expose real credentials.</p>
+        </div>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>Every checklist item has recorded evidence or an explicitly accepted exception.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 9</span>Establish update and rollback</h3>
+        <p>Automatic image updates remain disabled. For each upgrade:</p>
+        <ol>
+          <li>Review the official release notes.</li>
+          <li>Pull the new named tag separately.</li>
+          <li>Record and scan its digest.</li>
+          <li>Run a credential-free smoke test.</li>
+          <li>Stop Hermes.</li>
+          <li>Create an encrypted point-in-time backup of <code>/opt/data</code>.</li>
+          <li>Change the root-owned Quadlet to the new digest.</li>
+          <li>Reload, start, and run functional and isolation checks.</li>
+          <li>Retain the prior digest and backup until the release is proven stable.</li>
+        </ol>
+        <p>
+          Back up before first boot because a new image can migrate persisted
+          configuration. Rollback restores both the prior image digest and the
+          pre-migration data snapshot.
+        </p>
+        <div class="gate">
+          <strong>Exit gate</strong>
+          <p>The rollback procedure has been tested, not merely documented.</p>
+        </div>
+      </article>
+
+      <article class="phase">
+        <h3><span class="phase-label">Phase 10</span>Operate and review</h3>
+        <ul>
+          <li>Review releases and security advisories weekly; update manually.</li>
+          <li>Review gateway authorization and runtime logs.</li>
+          <li>Audit skills, MCP servers, plugins, hooks, and cron jobs monthly.</li>
+          <li>Rotate provider and bot credentials regularly and immediately after suspicion.</li>
+          <li>Monitor provider spending and alerts.</li>
+          <li>Test backup restoration quarterly.</li>
+          <li>Keep the dedicated account free of unrelated files and services.</li>
+          <li>Maintain a secret-free deployment record containing tag, digest, configuration checksum, enabled surfaces, verification date, and rollback digest.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="decision-matrix">
+      <h2 id="decision-matrix">Deployment decision matrix</h2>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Use case</th>
+            <th>Recommended boundary</th>
+            <th>Credential posture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Interactive personal use with low-value provider key</td>
+            <td>Kinoite + dedicated user + rootless Podman</td>
+            <td>Separate key, spend cap, no production scopes</td>
+          </tr>
+          <tr>
+            <td>Private messaging gateway with explicit allowlist</td>
+            <td>Same container boundary, no inbound host port</td>
+            <td>Separate bot token and provider key</td>
+          </tr>
+          <tr>
+            <td>Broad web research or untrusted attachments</td>
+            <td>Restricted egress or separate low-trust instance</td>
+            <td>No infrastructure credentials</td>
+          </tr>
+          <tr>
+            <td>Cloud, Kubernetes, production GitHub, or personal email</td>
+            <td>Dedicated KVM/libvirt VM plus rootless Podman</td>
+            <td>Short-lived, narrowly scoped credentials</td>
+          </tr>
+          <tr>
+            <td>Public multi-user service</td>
+            <td>Outside this baseline plan; requires a separate service design</td>
+            <td>Per-tenant isolation and independent authorization</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section aria-labelledby="findings">
+      <h2 id="findings">Verified findings</h2>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Finding</th>
+            <th>Confidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hermes identifies OS-level isolation—not approval prompts or pattern scanners—as its security boundary and distinguishes terminal-only from whole-process isolation.</td>
+            <td><span class="status verified">Verified</span></td>
+          </tr>
+          <tr>
+            <td>The official container is a supported deployment method, persists mutable state under <code>/opt/data</code>, and updates by replacing the image.</td>
+            <td><span class="status verified">Verified</span></td>
+          </tr>
+          <tr>
+            <td>Rootless Podman uses subordinate UID/GID mappings and separates container management by host user.</td>
+            <td><span class="status verified">Verified</span></td>
+          </tr>
+          <tr>
+            <td>Quadlet supports rootless per-user units, capability controls, no-new-privileges, read-only roots, resource limits, health checks, networks, and explicit port bindings.</td>
+            <td><span class="status verified">Verified</span></td>
+          </tr>
+          <tr>
+            <td>The latest official release observed on 21 August 2026 is <code>v0.20.5</code>, tagged <code>v2026.8.19</code>.</td>
+            <td><span class="status verified">Verified</span></td>
+          </tr>
+          <tr>
+            <td>The selected image starts with a read-only root and writable, size-limited <code>/tmp</code> and <code>/run</code> when CHOWN, DAC_OVERRIDE, FOWNER, SETGID, and SETUID are added back after dropping all capabilities.</td>
+            <td><span class="status verified">Verified on selected digest</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section aria-labelledby="unresolved">
+      <h2 id="unresolved">Unresolved items and execution-time gates</h2>
+      <ul>
+        <li><span class="status verified">Resolved</span> Podman was upgraded from 5.8.1 to Fedora's 5.8.4 build. The administrator-owned Quadlet is placed directly; the affected pre-5.8.6 <code>podman quadlet install --replace</code> path is prohibited until Fedora supplies 5.8.6 or later.</li>
+        <li><span class="status unknown">Unknown</span> The intended meaning of “Hermes Agent 2.0”; no matching official release was located.</li>
+        <li><span class="status unknown">Recheck</span> Whether the selected container tag has registry signatures, attestations, or an SBOM at installation time.</li>
+        <li><span class="status verified">Resolved</span> The manual container was removed; only <code>hermes.service</code> now runs the digest-pinned gateway with a root-owned Quadlet and root-owned systemd user-unit drop-in.</li>
+        <li><span class="status unknown">Manual control</span> Secure Boot remains disabled and must be enabled in firmware or accepted as a documented residual host risk.</li>
+        <li><span class="status unknown">Decision</span> The 23 August scan found 18 unfixed CRITICAL and 275 unfixed HIGH findings; prefer a remediated image or record a narrow, time-bounded risk acceptance.</li>
+        <li><span class="status unknown">Decision</span> Whether arbitrary web access, messaging adapters, local inference, or a local dashboard is actually required.</li>
+        <li><span class="status unknown">Decision</span> Whether restricted egress justifies an independently managed allowlisting proxy.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h2 id="sources">Primary sources</h2>
+      <ol class="sources">
+        <li><a href="https://github.com/NousResearch/hermes-agent/blob/main/SECURITY.md">Hermes Agent Security Policy</a> — trust model and whole-process isolation.</li>
+        <li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/docker">Hermes Agent Docker documentation</a> — official image, storage, entrypoint, privilege model, and updates.</li>
+        <li><a href="https://hermes-agent.nousresearch.com/docs/user-guide/security">Hermes Agent security guide</a> — authorization, approvals, sandboxing, and deployment practices.</li>
+        <li><a href="https://github.com/NousResearch/hermes-agent/releases">Hermes Agent releases</a> — current official release history.</li>
+        <li><a href="https://hub.docker.com/r/nousresearch/hermes-agent/tags">Official Hermes Agent container tags</a> — release tags and platform images.</li>
+        <li><a href="https://github.com/NousResearch/hermes-agent/blob/main/.github/workflows/docker.yml">Official Docker publishing workflow</a> — image build and publication path.</li>
+        <li><a href="https://docs.podman.io/en/latest/markdown/podman.1.html">Podman documentation</a> — rootless user namespaces and subordinate IDs.</li>
+        <li><a href="https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html">Podman Quadlet reference</a> — rootless unit paths and hardening controls.</li>
+        <li><a href="https://docs.podman.io/en/stable/markdown/podman-run.1.html">Podman run reference</a> — capabilities, read-only filesystems, resource limits, and SELinux volume labels.</li>
+      </ol>
+    </section>
+
+    <p class="footer-note">
+      This document defines the intended implementation. See the linked installation guide for
+      the 23 August 2026 audit evidence, completed remediation, prerequisites, production
+      acceptance results, and remaining exceptions, and
+      <a href="docs/research/HERMES_AGENT_HARDENING.md">the official-source hardening review</a>
+      for the evidence behind the controls.
+    </p>
+  </main>
+</body>
+</html>

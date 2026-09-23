@@ -1,0 +1,27 @@
+[Unit]
+Description=Deploy the selected certified Hermes release
+After=network-online.target
+Wants=network-online.target
+OnFailure=hermes-maintenance-failed.service
+
+[Service]
+Type=oneshot
+User=hermes-deployment
+Group=hermes-deployment
+ExecStart=/usr/bin/python3 -E -s /usr/local/libexec/hermes-unattended/maintenance.py --config /etc/hermes-unattended/controller.json --release /var/lib/hermes-releases/selected.tar --events /var/lib/hermes-notifications
+StateDirectory=hermes-deployment hermes-notifications
+StateDirectoryMode=0711
+LoadCredentialEncrypted=restic-password:/etc/credstore.encrypted/hermes-restic-password
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+LimitCORE=0
+TimeoutStartSec=110min

@@ -1,0 +1,11 @@
+[Unit]
+Description=Hermes certified maintenance window
+
+[Timer]
+OnCalendar=Sun *-*-* 02:00:00 America/Bogota
+Persistent=false
+RandomizedDelaySec=0
+Unit=hermes-maintenance.service
+
+[Install]
+WantedBy=timers.target

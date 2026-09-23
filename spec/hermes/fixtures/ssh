@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# ShellSpec fixture: a stand-in `ssh` for examples that assert no remote contact.
+#
+# The source repository referenced this fixture directory but never committed it,
+# so its "without contacting a host" examples could not fail: there was no `ssh`
+# to record an attempt. This fixture makes the assertion real.
+#
+# Isolation contract (see spec/hermes/deploy_spec.sh):
+#   * HERMES_SPEC_SSH_FIXTURE=1 must be set, so the fixture refuses to act as an
+#     accidental general-purpose `ssh` replacement and cannot be mistaken for a
+#     sandbox. PATH mocking is a fixture mechanism, not isolation.
+#   * HERMES_SPEC_SSH_MARKER must name a file inside HERMES_SPEC_SSH_SCRATCH, a
+#     per-example `mktemp -d` directory the spec creates and removes. The marker
+#     is therefore unique per example and cannot contaminate later or concurrent
+#     runs.
+#
+# On an intercepted call it records the argv and exits 255, the same code a real
+# failed SSH connection returns.
+set -u
+
+refuse() {
+  printf 'FIXTURE_SSH_REFUSED: %s\n' "$1" >&2
+  exit 90
+}
+
+[[ "${HERMES_SPEC_SSH_FIXTURE:-}" == "1" ]] \
+  || refuse 'not invoked through the reviewed spec fixture harness (HERMES_SPEC_SSH_FIXTURE != 1)'
+
+marker="${HERMES_SPEC_SSH_MARKER:-}"
+[[ -n "$marker" ]] || refuse 'HERMES_SPEC_SSH_MARKER is unset'
+
+scratch="${HERMES_SPEC_SSH_SCRATCH:-}"
+[[ -n "$scratch" && -d "$scratch" ]] || refuse 'HERMES_SPEC_SSH_SCRATCH is unset or not a directory'
+
+case "$marker" in
+  "$scratch"/*) ;;
+  *) refuse 'HERMES_SPEC_SSH_MARKER is outside HERMES_SPEC_SSH_SCRATCH' ;;
+esac
+
+printf 'FIXTURE_SSH_CALLED: %s\n' "$*" >&2
+printf 'FIXTURE_SSH_CALLED: %s\n' "$*" >"$marker"
+exit 255

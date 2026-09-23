@@ -11,7 +11,7 @@ not silently drop a Hermes check. Source of truth for the old gates:
 | --- | --- | --- | --- |
 | `shellcheck` | `shellcheck {staged_files}` | `shellcheck-py` hook, rev `v0.11.0.1` (**0.11.0**, matching the image RPM) | Ported, version-aligned |
 | `shfmt-check` | `shfmt -d -l -i 2 -ci -bn {staged_files}` | local `shfmt` hook, same flags, check-only, `spec/` excluded | Ported (was missing upstream) |
-| `markdownlint` | `markdownlint-cli2 --no-globs {staged_files}` | `markdownlint-cli2` hook, rev `v0.23.3` | Ported, version upgraded from 0.18.1 |
+| `markdownlint` | `markdownlint-cli2 --no-globs {staged_files}` | `markdownlint-cli2` hook, rev `v0.23.3`, check-only (`fix: false`) | Ported, version upgraded from 0.18.1; maintained guides are linted, only exact preserved records are excluded |
 | `no-secrets` | `git diff --cached` grep for password/secret/token/key patterns | `betterleaks` hook (`v1.1.2`) with `.betterleaks.toml` | Replaced by a purpose-built scanner |
 | `branch-check` | block direct commits to `main` | `no-commit-to-branch` hook (`main`, `master`, `develop`, `release/*`) | Ported |
 
@@ -33,8 +33,8 @@ project extension rather than silently dropped.
 
 | Source gate | Source command | Decision |
 | --- | --- | --- |
-| `test-hermes-guide` | `./tests/test-hermes-guide.sh` | Ported as a project `pre-push` hook |
-| `test-hermes-deploy-spec` | `shellspec spec/hermes/` | **N/A** — the only upstream spec exercises the deployment entrypoints (`hermes-deploy.sh`, `hermes-certify-vm.sh`, provider auth, VM lifecycle) that are out of scope. ShellSpec stays installed as a declared extension for future in-scope unit specs |
+| `test-hermes-guide` | `./tests/test-hermes-guide.sh` | Ported — runs from `toolbox/run-offline-checks.sh`, which the pre-push hook invokes. The suite's two source-repository assertions (`lefthook.yml`, source `AGENTS.md`) are re-pointed at this repository's pre-push entrypoint and local `AGENTS.md`. The wiring is verified structurally by `tests/check_hook_wiring.py` (hook id, entry, stage, `always_run`, `pass_filenames`), with negative controls; a comment can no longer satisfy it |
+| `test-hermes-deploy-spec` | `shellspec spec/hermes/` | Ported — ShellSpec 0.28.1 is a declared extension and runs `spec/` (deployment and VM specs) from the offline entrypoint |
 | `test-routeros` | `./tests/test-routeros.sh` | Out of scope — stays in the source repository |
 | `test-vlan30-firewall` | `./tests/test-vlan30-firewall-deploy.sh` | Out of scope — stays in the source repository |
 | `test-nix-guide` | `./tests/test-nix-guide.sh` | Out of scope — stays in the source repository |

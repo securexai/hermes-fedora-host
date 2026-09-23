@@ -25,3 +25,7 @@ toolbox/.tools/
 # Editor and OS noise
 .DS_Store
 *.swp
+
+# ShellSpec fixture scratch: the "no remote contact" marker is written at run
+# time by spec/hermes/fixtures/ssh and must never be committed.
+spec/hermes/fixtures/*.called

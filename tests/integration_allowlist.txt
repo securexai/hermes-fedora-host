@@ -1,0 +1,14 @@
+# Reviewed integration allowlist (opt-in; NOT part of the pre-push gate).
+#
+# Run with `bash toolbox/run-integration-checks.sh`, which exports
+# HERMES_RUN_INTEGRATION_TESTS=1 and invokes
+# tests/run-reviewed-suites.py --set integration.
+#
+# These targets exercise real host tooling. They are deliberately absent from
+# tests/offline_allowlist.txt, and each one also refuses to run without the
+# explicit opt-in, so tool availability alone cannot activate them.
+test_hermes_lab_disk.LabDiskIntegrationTests
+test_hermes_unattended.BootBuildIntegrationTests
+test_hermes_unattended.InstalledGuestfishParserTests
+test_hermes_tpm_profile.PackagedDracutIntegrationTests
+test_ssh_key_only.KeyOnlyTests.test_real_sshd_candidate_and_first_value_conflict

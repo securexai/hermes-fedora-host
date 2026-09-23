@@ -1,0 +1,5 @@
+#!/usr/bin/bash -p
+# Dedicated test-only endpoint. Never granted by production enrollment.
+set -euo pipefail
+[[ $# == 0 ]] || exit 64
+exec /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin LANG=C.UTF-8 HOME=/root /usr/bin/timeout --signal=TERM --kill-after=10s 30m /usr/bin/python3 -I /usr/local/libexec/hermes-lab-certifier/certify_guest.py

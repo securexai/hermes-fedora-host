@@ -1,0 +1,10 @@
+{
+  "schema": "hermes-signer-v1",
+  "signer_uid": "REPLACE_WITH_ENROLLED_SIGNER_UID",
+  "certifier_uid": "REPLACE_WITH_DISTINCT_CERTIFIER_UID",
+  "candidate": "/var/lib/hermes-certification/handoff/candidate",
+  "evidence": "/var/lib/hermes-certification/handoff/evidence",
+  "output_dir": "/var/lib/hermes-releases",
+  "signing_key": "/var/lib/hermes-signing/release-ed25519",
+  "allowed_signers": "/etc/hermes-unattended/allowed_signers"
+}

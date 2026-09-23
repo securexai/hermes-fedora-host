@@ -1,0 +1,30 @@
+#cloud-config
+#
+# Cloud-init user-data for Fedora test VM
+#
+# Creates a lab user with sudo access, installs prerequisites,
+# and mounts the workspace share for testing setup.sh
+#
+# Used by: create-fedora-vm.sh
+
+users:
+  - name: lab
+    gecos: Lab Test User
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    # Password: lab (for console login; SSH keys preferred)
+    plain_text_passwd: lab
+
+packages:
+  - curl
+  - git
+  - openssl
+  - sudo
+
+# Ensure SSH key auth works
+ssh_pwauth: true
+
+# Write a marker file so scripts can detect cloud-init completed
+runcmd:
+  - echo "cloud-init complete" > /var/tmp/cloud-init-done

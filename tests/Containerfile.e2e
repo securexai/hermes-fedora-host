@@ -1,0 +1,25 @@
+# Fedora 43 container for E2E testing of the workstation setup.sh
+#
+# SCOPE NOTE: `setup.sh` belongs to the unrelated workstation stack that stays in
+# the source repository and was deliberately NOT migrated here. This Containerfile
+# is retained for reference only; no build in this repository mounts or runs
+# `setup.sh`. See docs/ENVIRONMENT.md for the scope boundary.
+#
+# Runs systemd as PID 1 so the Determinate Nix installer can manage
+# nix-daemon.service normally. The repo is bind-mounted at runtime —
+# nothing project-specific is baked into the image.
+#
+# Build:  podman build -t mikrotik-e2e-test -f tests/Containerfile.e2e tests/
+# Run:    podman run -d --systemd=true --name e2e -v .:/workspace:Z mikrotik-e2e-test
+
+FROM registry.fedoraproject.org/fedora:43
+
+# Prerequisites that setup.sh expects pre-installed
+RUN dnf install -y --setopt=install_weak_deps=False \
+      curl xz git openssl sudo systemd \
+    && dnf clean all
+
+RUN mkdir -p /workspace
+WORKDIR /workspace
+
+CMD ["/sbin/init"]

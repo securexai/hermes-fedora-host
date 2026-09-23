@@ -1,0 +1,11 @@
+[Unit]
+Description=Schedule the enrolled disposable Hermes candidate in its maintenance window
+
+[Timer]
+OnCalendar=Sun *-*-* 02:00:00 America/Bogota
+Persistent=false
+RandomizedDelaySec=0
+Unit=hermes-certification.service
+
+[Install]
+WantedBy=timers.target

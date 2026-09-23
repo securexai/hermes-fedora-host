@@ -1,0 +1,10 @@
+[Unit]
+Description=Deliver changed Hermes maintenance notifications to the desktop
+
+[Timer]
+OnStartupSec=30s
+OnUnitActiveSec=60s
+Unit=hermes-notify.service
+
+[Install]
+WantedBy=timers.target

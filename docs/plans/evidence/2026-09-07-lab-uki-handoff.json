@@ -1,0 +1,99 @@
+{
+  "schema": "hermes-offline-observation-v1",
+  "recorded_at": "2026-09-07T13:48:16.888369+00:00",
+  "branch": "codex/hermes-unattended",
+  "head": "bb35bd23f087dc6a5ffcb4d853978ce0fe923e9d",
+  "uncommitted_changes": true,
+  "source_files": {
+    "devbox.json": "1d312094c0b0423ab581713417710715732c1c8185a06188b5e0d19f901a4954",
+    "devbox.lock": "690dff1cbfbda62e3b046d3e10aab36d29115a28ad628869328eab4339a8e02f",
+    "scripts/hermes/promotion-record.sh": "b97abb0cdd78951d305dc0c910eca920537afd8ca9012a26398a6b743a62b78b",
+    "scripts/hermes/unattended/boot_build.py": "25dbb4c15ca1ff3541ec5c84fff24c9305c443a3724be7d2fdfeddb66cba7dd0",
+    "scripts/hermes/unattended/build_release.py": "2fa5a8a1506ec3624686500ec4a286975a4e1b418db8f13973af9d5d58205ab6",
+    "scripts/hermes/unattended/common.py": "5dd9b679bdfe129f2f1b4651018cf9a1a70af6712688aa1f5fe93799574e7685",
+    "scripts/hermes/unattended/controller.py": "4dccef39d66f364eb3495b6cea08cb349b1ac7055d2f59a41f6f861856c3f6be",
+    "scripts/hermes/unattended/credentials.py": "0584f46cf2b630853fdf76126be4325705080df74c09b4736e9c7e426d8e6eae",
+    "scripts/hermes/unattended/dispatcher.py": "1b7a6346c28ac01ee02179c7f3a5eb22df988197bf5393c1b2aa7ed4e249e804",
+    "scripts/hermes/unattended/efi_media.py": "b6951ec711b375af9383bd3df750b568ae0642dd09c53ca7c2f0aa0d0d1c1344",
+    "scripts/hermes/unattended/finalize.py": "a57cdc257b73e04086d49c4ad43750febc35169595b25d1b1af2c0faeaf2c8a9",
+    "scripts/hermes/unattended/firmware.py": "0a656cf54dab22ac1325fc44a13a0151b85a166b6123b43332c43ebb08357c35",
+    "scripts/hermes/unattended/gates.py": "c9179b63e4b323250cca64497af90843fd3e998b04a709320078c19c2351080d",
+    "scripts/hermes/unattended/host.py": "406b59e24b7e0fd60e067c4fae53dee1ac456cc49a6410f67ee766c7f15da66e",
+    "scripts/hermes/unattended/lab_boot.py": "7986b54e7bd6de672de9f33c35ea7ca170c24eeb3dd99c8ffd2790168a2df9bc",
+    "scripts/hermes/unattended/maintenance.py": "e223813ba053b36b6575a2aa6b3bfc4563ea83f1a62b0ad20b7b26fb24e1fa99",
+    "scripts/hermes/unattended/materialize.py": "04d8e77f3c9e166152a7653fc571cb3e0aeda4845625b9cb2ed67ae3746f2fd9",
+    "scripts/hermes/unattended/notify.py": "7ca9c98c31fd6ca8153f265efe30e1f169ff6fca78158beec6bbdc17349fbf4c",
+    "scripts/hermes/unattended/policy.py": "52da2f8b4f8fbad5b6d0c88022c9a4f2d325027755324955aa42480929d94bab",
+    "scripts/hermes/unattended/prepare.py": "19ad1af4fdf4ad0a5580039c015fc8801c487d9e6f6494d4169cae65c4f9b472",
+    "scripts/hermes/unattended/release.py": "60fbd0d3f63190450353fdb4a17b7813b67eab3e5489b8a09634248200dfc2bf",
+    "scripts/hermes/unattended/scan_candidate.py": "9d8bd8cd89f898b7e8310542ccd3cd0a7d33eea34487808091e97074c76ffd1e",
+    "scripts/hermes/unattended/signer.py": "c0755e389ef4d4c4c5fb93a4c277fc797e7bffba3df697078844d97490ed3c4a",
+    "scripts/hermes/unattended/systemd/hermes-credentials.service": "c8c72e4f47694173852268cd3b56ca3c9382d27d4d11cdc0ee3554bd0a38c394",
+    "scripts/hermes/unattended/systemd/hermes-credentials.socket": "3e592d9121eae79d49b10d930a71c4c035cfc071ced1756a3dd48dff42f00ab4",
+    "scripts/hermes/unattended/systemd/hermes-maintenance-failed.service": "81e2f1e2d3aa44e34f7c982a7b731441b54e8dac306195c3bec58b98824b4373",
+    "scripts/hermes/unattended/systemd/hermes-maintenance.service": "a1fa35d9dc88dfabff6a732f75d7fffbaacc14e9681c492d7b9cec385c2be53e",
+    "scripts/hermes/unattended/systemd/hermes-maintenance.timer": "7b21a073aed2d4dffb84fdc7353ab8ecfcf4d46122538876ab6cd0ee5f45421c",
+    "scripts/hermes/unattended/systemd/hermes-notify.service": "083494756810ea6d6a9db507c5c0d779526514aff595dc88722d7d1f3f5b9a10",
+    "scripts/hermes/unattended/systemd/hermes-notify.timer": "b8d6683a2e8eb12ff3663ef2865f4b9b038faa8d3ff8c3e5bbd883972e7ef177",
+    "scripts/hermes/unattended/systemd/hermes-runtime-credentials.service": "1b382f20c7af4bc5d264236c908dcff94b386a421e1c41c9027d630dac363b94",
+    "scripts/hermes/unattended/systemd/hermes-sign.service": "afb18fa3795b1c575877b58ec031ec815bcdfeb3efb1e5313ed459ad2226cb75",
+    "tests/test_hermes_lab_disk.py": "ffe052dd966922f8bd716e79fdbfb6742b521dae8ae10a4ccd781f7b9c4aaa7a",
+    "tests/test_hermes_unattended.py": "37ff4e12b6b5866e9598859f2b11bb45f9142296439071f490c6698937a05412",
+    "vm/create-hermes-server-vm.sh": "5589f7ef6013122052cc8db4fc32b47df2815978e4c84fa6f73e791b69caaa4a",
+    "vm/kickstart/hermes-tpm-enroll.ks": "77f8458bec9e2e19863499c1a550be2d4be157ac7c6d6076bc106a10b323a64e"
+  },
+  "source_fingerprint": "2b142c66d75ec83322019fd380454a3ccf10b053d15d9aa2089e90864118a455",
+  "fingerprint_method": "SHA256 of canonical sorted compact JSON source_files map; subset identity, not promotion fingerprint",
+  "environment": "Fedora workstation, Devbox; real guestfish 1.60.1 appliance test uses disposable temporary FAT/QCOW2 files and direct backend outside sandbox",
+  "checks": {
+    "python": {
+      "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_unattended.py",
+      "expected": "exit 0",
+      "actual": "104 tests passed; no skips"
+    },
+    "disk": {
+      "command": "devbox run -- python3 -m unittest discover -s tests -p test_hermes_lab_disk.py",
+      "expected": "exit 0",
+      "actual": "1 test passed in 57.506s; real initial injection and rerun, original EFI bytes retained; domain/signature gates mocked only in this disk fixture"
+    },
+    "shellspec": {
+      "command": "devbox run -- shellspec spec/hermes/ spec/vm/",
+      "expected": "exit 0",
+      "actual": "138 examples, 0 failures"
+    },
+    "shell": {
+      "method": "Extract each %post body from vm/kickstart/hermes-tpm-enroll.ks; run bash -n and shellcheck -s bash. Run shellcheck and shfmt -d -l -i 2 -ci -bn scripts/hermes/promotion-record.sh",
+      "expected": "exit 0",
+      "actual": "passed"
+    },
+    "guide": {
+      "command": "devbox run -- ./tests/test-hermes-guide.sh",
+      "expected": "exit 0",
+      "actual": "217 passed, 0 failed, 0 skipped"
+    },
+    "documentation": {
+      "method": "Copy six affected Markdown documents into a temporary directory; retain repository lint rules with fix:false and explicit *.md glob; run markdownlint-cli2; resolve relative file links against original paths",
+      "expected": "no lint errors or missing local targets",
+      "actual": "passed"
+    },
+    "whitespace": {
+      "command": "devbox run -- git diff --check",
+      "expected": "exit 0",
+      "actual": "passed"
+    }
+  },
+  "failed_attempts": [
+    "guestfish -f - rejected stdin path; replaced with plain stdin and covered installed parser in regression",
+    "Sandbox appliance failed on read-only /var/tmp, then runtime directory; temporary directory environment overrides resolved both",
+    "Sandbox appliance socket bind was denied; temporary disk test succeeded outside sandbox after automatic approval",
+    "Sandbox read-only libvirt inventory was denied; approved retry returned an empty domain inventory",
+    "Concurrent final Devbox checks raced on generated .cmd.sh, causing guide invocation exit 127; serialized guide rerun passed 217 checks"
+  ],
+  "live_status": {
+    "lab_domain_inventory": "empty",
+    "tpm_boot": "not run",
+    "provider": "not run",
+    "production": "not accessed"
+  },
+  "scope": "Disk I/O and offline checks only. No boot PASS, certification, promotion, provider mutation, production mutation, commit or push."
+}

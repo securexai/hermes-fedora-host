@@ -1,0 +1,29 @@
+# Fedora 44 container for E2E testing of the workstation enable-sshd.sh
+#
+# SCOPE NOTE: `enable-sshd.sh` belongs to the unrelated workstation stack that
+# stays in the source repository and was deliberately NOT migrated here. This
+# Containerfile is retained for reference only; no build in this repository
+# mounts or runs `enable-sshd.sh`. See docs/ENVIRONMENT.md for the scope boundary.
+#
+# Runs systemd as PID 1 so sshd.service can be managed normally.
+# The repo is bind-mounted at runtime — nothing project-specific
+# is baked into the image.
+#
+# Build:  podman build -t sshd-e2e-test -f tests/Containerfile.sshd tests/
+# Run:    podman run -d --systemd=true --name sshd-e2e -v .:/workspace:Z sshd-e2e-test
+
+FROM registry.fedoraproject.org/fedora:44
+
+# Prerequisites for SSH E2E testing
+RUN dnf install -y --setopt=install_weak_deps=False \
+      openssh-server openssh-clients passwd sshpass sudo systemd \
+    && dnf clean all
+
+# Disable sshd so the enable-sshd.sh script can test the full enable flow
+# (Fedora's preset auto-enables sshd on package install)
+RUN systemctl disable sshd.service 2>/dev/null || true
+
+RUN mkdir -p /workspace
+WORKDIR /workspace
+
+CMD ["/sbin/init"]

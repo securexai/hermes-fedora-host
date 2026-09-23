@@ -1,0 +1,42 @@
+# Adaptation reasons for docs/migration-manifest.txt
+#
+# One line per file that differs from its origin: `path<TAB>reason`.
+# Required by toolbox/generate-migration-manifest.py for every SOURCE/ADAPTED and
+# FOUNDATION/MODIFIED row; generation fails if a differing file is missing here.
+
+# --- SOURCE/ADAPTED: source counterpart exists, bytes deliberately changed ---
+docs/reviews/HERMES_MANUAL_CORRECTION_REPRO.py	Executable bit (100755) retained from the original extraction so the counterexample replay script can be run directly; the companion source file is mode 100644, bytes identical.
+AGENTS.md	Repository-authored guidance; replaces the source repository's AGENTS.md rather than copying it.
+docs/HERMES_UNATTENDED_DEPLOYMENT.md	Replaced retired `devbox run --` prefixes with the dev-toolbox Toolbox equivalents.
+docs/VM_TESTING_GUIDE.md	Devbox to Toolbox translation; checkout, media and identity examples replaced with operator-supplied variables; excluded workstation assets marked external; all substantive watcher and certification prose preserved.
+hermes-certify-vm.sh	run_offline_tests now invokes the explicit Toolbox check-only gate (run-offline-checks.sh plus run-check-only-lint.sh) instead of bare bash/python3/pre-commit on the host.
+hermes-fedora-server-install-guide.html	Hard-coded checkout replaced with HERMES_REPO; ISO, checksum, keyring and SSH identity inputs made operator-supplied variables.
+secure-hermes-installation-plan.html	Hard-coded checkout replaced with HERMES_REPO; ISO, checksum, keyring and SSH identity inputs made operator-supplied variables.
+setup-ssh-key-only.md	Replaced retired `devbox run --` prefixes with the dev-toolbox Toolbox equivalents.
+spec/hermes/deploy_spec.sh	SSH fixture examples use a per-example isolated marker directory and add positive and negative fixture controls.
+tests/Containerfile.e2e	Scope note added: the workstation setup.sh it targets stays in the source repository and was not migrated; reference-only file.
+tests/Containerfile.sshd	Scope note added: the workstation enable-sshd.sh it targets stays in the source repository and was not migrated; reference-only file.
+tests/test_hermes_lab_disk.py	Real libguestfs disk test moved to the opt-in integration allowlist and gated on an explicit opt-in; the mocked unit coverage is unaffected.
+tests/test_hermes_tpm_profile.py	Real packaged-dracut archive readback split into PackagedDracutIntegrationTests with an explicit opt-in gate.
+tests/test_hermes_unattended.py	Boot-build class gated to opt-in integration; the guestfish mocked command-construction assertion split from the optional installed-parser probe.
+tests/test_ssh_key_only.py	Real /usr/sbin/sshd candidate test gated to opt-in integration; the other 29 tests remain in the reviewed offline allowlist.
+vm/DEPLOYMENT_TASKS.md	Bare shellspec/markdownlint-cli2 commands replaced with the repository-local and container tool locations; operator-local progress and run directories parameterized.
+vm/create-fedora-vm.sh	Scope note and output text mark the workstation setup.sh as not migrated.
+vm/setup-hypervisor.sh	Nix diagnostic message no longer points at the absent workstation setup.sh.
+
+# --- FOUNDATION/MODIFIED: tracked at the migration base, changed in this tree ---
+.devcontainer/devcontainer.json	postCreateCommand added so a fresh editor container provisions repository-local ShellSpec and the uv-locked Python tooling.
+.gitignore	Ignore entries updated for the migrated tree and generated tool outputs.
+.markdownlint-cli2.yaml	Blanket `docs/HERMES_*.md` and VM-guide ignores replaced by exact preserved-record paths; fix disabled (check-only); one narrow MD038 override documented for a meaningful trailing space.
+.pre-commit-config.yaml	Preserved-evidence exclude list made exact; shellcheck and pre-push comments corrected; maintained guides no longer blanket-excluded.
+PROVENANCE.md	Migration record updated: staleness of the old extraction manifest corrected and the new manifest identified as authoritative.
+README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step documented.
+docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented.
+docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged.
+docs/hook-parity.md	Ported-gate rows updated for the structural hook-wiring check and check-only Markdown linting.
+docs/plans/2026-09-20-hermes-manual-review-corrections.md	Canonical correction record restored byte-for-byte to its recorded SHA-256 f838188c..., which differs from the base-commit copy.
+tests/test-hermes-guide.sh	Source-repository assertions re-pointed; structural hook-wiring checks with negative controls added in place of string greps.
+toolbox/extensions.yaml	Stale ShellSpec purpose corrected: the migrated specs now run from the offline and certification gates.
+toolbox/install-extensions.sh	Scope clarified: installs the ShellSpec extension only and points at provision-environment.sh for the uv-locked tooling.
+toolbox/run-offline-checks.sh	Python discovery replaced with the explicit reviewed allowlist runner; full-working-tree secret scan added.
+toolbox/verify-extensions.sh	Verification is now genuinely non-syncing (UV_NO_SYNC=1, no Python download) and the comment states that accurately.

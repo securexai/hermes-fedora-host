@@ -1,0 +1,111 @@
+# Reviewed offline unit allowlist.
+#
+# Every entry is an explicit `module.Class` or `module.Class.method` target under
+# tests/. The pre-push gate (toolbox/run-offline-checks.sh) runs exactly this set
+# through tests/run-reviewed-suites.py; it never discovers tests.
+#
+# The boundary is class-level, not method-level: a `module.Class` entry approves
+# the whole class, so it also runs every `test*` method added to that class
+# later. `module.Class.method` entries (used for the mixed ssh-key-only class)
+# approve one method only. A NEW module or class is not run until it is reviewed
+# and added here, so installing a new tool cannot silently widen the offline gate
+# into real VM, disk, firmware or host-service work. To keep a class-level entry
+# from widening implicitly, review the class's added methods when they change.
+#
+# Excluded on purpose (see tests/integration_allowlist.txt):
+#   test_hermes_lab_disk.LabDiskIntegrationTests
+#       real guestfish appliance + qemu-img disk creation/conversion
+#   test_hermes_unattended.BootBuildIntegrationTests
+#       real ukify/sbverify/dracut UKI build against a host kernel
+#   test_hermes_unattended.InstalledGuestfishParserTests
+#       installed guestfish stdin parser probe
+#   test_hermes_tpm_profile.PackagedDracutIntegrationTests
+#       packaged dracut-install + cpio + lsinitrd archive readback
+#   test_ssh_key_only.KeyOnlyTests.test_real_sshd_candidate_and_first_value_conflict
+#       real /usr/sbin/sshd candidate validation (rest of KeyOnlyTests is unit-only)
+#
+# test_hermes_unattended.ResticIntegrationTests stays here: it runs the real
+# `restic` binary but only against a disposable local repository and synthetic
+# data, with --no-cache, no network and no privileged or host-mutating calls.
+test_hermes_certify.CandidateBoundaryTests
+test_hermes_certify.PolicyBoundaryTests
+test_hermes_certify.RevocationReconciliationTests
+test_hermes_lab_enroll_boot.IsolatedEntrypointTests
+test_hermes_lab_enroll_boot.LabBootEnrollmentTests
+test_hermes_lifecycle.LifecycleTests
+test_hermes_lifecycle.ArchiveTests
+test_hermes_lifecycle.DomainTests
+test_hermes_lifecycle.GuestBoundaryTests
+test_hermes_lifecycle.FixtureCleanupTests
+test_hermes_lifecycle.StorageRecoveryTests
+test_hermes_lifecycle.PolicyTests
+test_hermes_lifecycle.BackupInitializationTests
+test_hermes_lifecycle.CopiedMediaTests
+test_hermes_lifecycle.CandidateWindowTests
+test_hermes_lifecycle.CandidateApprovalTests
+test_hermes_manual_hardening.HardenConfigTests
+test_hermes_manual_hardening.VerifyContractTests
+test_hermes_offline.OfflineReplayTests
+test_hermes_remaining_lab.PreviousTests
+test_hermes_remaining_lab.TamperTests
+test_hermes_remaining_lab.FaultTests
+test_hermes_schedule.ScheduleTests
+test_hermes_schedule.ChildTests
+test_hermes_selinux_audit_v2.AuditContinuationTests
+test_hermes_selinux_continuation_v2.ContinuationTests
+test_hermes_selinux_export.ExportTests
+test_hermes_selinux_service_v2.TrialTests
+test_hermes_tpm_profile.ProfileTests
+test_hermes_tpm_profile.InitrdProfileTests
+test_hermes_transaction.StoredTransactionTests
+test_hermes_unattended.BootPreflightTests
+test_hermes_unattended.BootCapacityTests
+test_hermes_unattended.PrivilegedBoundaryReviewTests
+test_hermes_unattended.FreshRuntimeIdentityTests
+test_hermes_unattended.TpmStagingBoundaryTests
+test_hermes_unattended.MaterializerBoundaryTests
+test_hermes_unattended.SignerEvidenceTests
+test_hermes_unattended.MaintenanceTests
+test_hermes_unattended.ReleaseTests
+test_hermes_unattended.BrokerTests
+test_hermes_unattended.PolicyTests
+test_hermes_unattended.HostStageTests
+test_hermes_unattended.RollbackPrivilegeTests
+test_hermes_unattended.VulnerabilityTests
+test_hermes_unattended.ControllerFlowTests
+test_hermes_unattended.ResticIntegrationTests
+test_hermes_unattended.LabBootTests
+test_hermes_unattended.LabCandidateTests
+test_migration_provenance.MigrationProvenanceTests
+test_remaining_preflight.PreparationTests
+test_reviewed_runner.ReviewedRunnerTests
+test_secret_scan.SecretScanTests
+test_ssh_key_only.KeyOnlyTests.test_apply_preserves_entries_and_is_idempotent
+test_ssh_key_only.KeyOnlyTests.test_restricted_duplicate_is_not_broadened
+test_ssh_key_only.KeyOnlyTests.test_reviewed_timeout_override_dry_run
+test_ssh_key_only.KeyOnlyTests.test_changed_timeout_override_rejected
+test_ssh_key_only.KeyOnlyTests.test_missing_extra_and_unknown_overrides_rejected
+test_ssh_key_only.KeyOnlyTests.test_override_query_failure_rejected
+test_ssh_key_only.KeyOnlyTests.test_invalid_private_and_multiple_keys
+test_ssh_key_only.KeyOnlyTests.test_empty_service_options_dry_run
+test_ssh_key_only.KeyOnlyTests.test_active_service_environment_rejected_without_evaluation
+test_ssh_key_only.KeyOnlyTests.test_nonregular_service_environment_rejected
+test_ssh_key_only.KeyOnlyTests.test_wrong_runtime_and_permanent_zone
+test_ssh_key_only.KeyOnlyTests.test_conditional_and_unknown_include
+test_ssh_key_only.KeyOnlyTests.test_effective_conflict_rolls_back
+test_ssh_key_only.KeyOnlyTests.test_dry_run_conflict_is_read_only
+test_ssh_key_only.KeyOnlyTests.test_networkmanager_persistent_zone
+test_ssh_key_only.KeyOnlyTests.test_zone_query_errors_do_not_trigger_fallback
+test_ssh_key_only.KeyOnlyTests.test_fedora_crypto_include_paths
+test_ssh_key_only.KeyOnlyTests.test_gateway_policy_set_must_be_disabled_in_both_scopes
+test_ssh_key_only.KeyOnlyTests.test_reviewed_crypto_symlink_is_preserved
+test_ssh_key_only.KeyOnlyTests.test_crypto_symlink_rejects_unknown_missing_and_writable_targets
+test_ssh_key_only.KeyOnlyTests.test_crypto_symlink_requires_expected_owner
+test_ssh_key_only.KeyOnlyTests.test_standard_ipv6_policy_and_modified_policy
+test_ssh_key_only.KeyOnlyTests.test_symlink_and_hardlink_refused
+test_ssh_key_only.KeyOnlyTests.test_dry_run_does_not_mutate
+test_ssh_key_only.KeyOnlyTests.test_firewall_customization_refused
+test_ssh_key_only.KeyOnlyTests.test_failures_restore_files_modes_services_and_firewall
+test_ssh_key_only.KeyOnlyTests.test_failed_restoration_is_reported
+test_ssh_key_only.KeyOnlyTests.test_preserves_preexisting_allowance_on_failure
+test_ssh_key_only.KeyOnlyTests.test_initially_inactive_services_restored

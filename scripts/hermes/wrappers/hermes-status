@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC1091
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o errtrace
+shopt -s inherit_errexit
+shopt -s nullglob
+
+[[ $# -eq 0 ]] || {
+  printf 'Usage: hermes-status\n' >&2
+  exit 64
+}
+
+cd /tmp
+
+readonly EXPECTED_IMAGE='docker.io/nousresearch/hermes-agent@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79'
+
+if [[ -r /usr/local/libexec/hermes-provider-auth-status ]]; then
+  # shellcheck source=/usr/local/libexec/hermes-provider-auth-status
+  source /usr/local/libexec/hermes-provider-auth-status
+elif [[ -r "${BASH_SOURCE[0]%/*}/../provider-auth-status.sh" ]]; then
+  # shellcheck source=../provider-auth-status.sh
+  source "${BASH_SOURCE[0]%/*}/../provider-auth-status.sh"
+fi
+if [[ -r /usr/local/libexec/hermes-fedora-server-host ]]; then
+  # shellcheck source=/usr/local/libexec/hermes-fedora-server-host
+  source /usr/local/libexec/hermes-fedora-server-host
+elif [[ -r "${BASH_SOURCE[0]%/*}/../fedora-server-host.sh" ]]; then
+  # shellcheck source=../fedora-server-host.sh
+  source "${BASH_SOURCE[0]%/*}/../fedora-server-host.sh"
+fi
+
+uid=$(id -u hermes 2>/dev/null || true)
+inspect_output=$(runuser -u hermes -- env HOME=/home/hermes XDG_RUNTIME_DIR="/run/user/$uid" podman inspect hermes --format '{{.ImageName}}|{{.State.Health.Status}}|{{.HostConfig.ReadonlyRootfs}}|{{json .NetworkSettings.Ports}}' 2>/dev/null || true)
+IFS='|' read -r image health readonly_root ports <<<"$inspect_output"
+provider_model=$(
+  runuser -u hermes -- env HOME=/home/hermes XDG_RUNTIME_DIR="/run/user/$uid" \
+    podman exec -i --user 10000:10000 hermes python3 - <<'PY' 2>/dev/null || true
+import pathlib
+import yaml
+
+data = yaml.safe_load(pathlib.Path('/opt/data/config.yaml').read_text(encoding='utf-8')) or {}
+section = data.get('model') if isinstance(data.get('model'), dict) else {}
+provider = section.get('provider') or data.get('provider') or ''
+model = section.get('default') or section.get('model') or data.get('default_model') or data.get('model_name') or ''
+print(f'{provider}|{model}')
+PY
+)
+IFS='|' read -r provider model <<<"$provider_model"
+[[ -n "$image" ]] || image=absent
+[[ -n "$health" ]] || health=inactive
+[[ -n "$readonly_root" ]] || readonly_root=false
+[[ -n "$ports" ]] || ports=unknown
+[[ -n "$provider" ]] || provider=unconfigured
+[[ -n "$model" ]] || model=unconfigured
+service_state=$(runuser -u hermes -- env HOME=/home/hermes XDG_RUNTIME_DIR="/run/user/$uid" \
+  systemctl --user is-active hermes.service 2>/dev/null || true)
+provider_auth=missing
+if [[ "$provider" == openai-codex || "$provider" == openai-api || "$provider" == nous ]]; then
+  auth_output=$(runuser -u hermes -- env HOME=/home/hermes XDG_RUNTIME_DIR="/run/user/$uid" \
+    podman exec --user 10000:10000 hermes hermes auth status "$provider" 2>&1 || true)
+  provider_auth_status_logged_in "$provider" "$auth_output" && provider_auth=ready || true
+fi
+dnf_timer_state=$(systemctl is-enabled dnf5-automatic.timer 2>/dev/null || true)
+cockpit_state=$(systemctl is-active cockpit.socket 2>/dev/null || true)
+platform_supported=$(fedora_server_is_supported && printf true || printf false)
+drift_reasons=()
+[[ "$image" == "$EXPECTED_IMAGE" ]] || drift_reasons+=(image)
+[[ "$health" == healthy ]] || drift_reasons+=(health)
+[[ "$readonly_root" == true ]] || drift_reasons+=(readonly-root)
+[[ "$service_state" == active ]] || drift_reasons+=(service)
+[[ "$ports" == null || "$ports" == '{}' ]] || drift_reasons+=(ports)
+[[ "$provider_auth" == ready ]] || drift_reasons+=(provider-auth)
+[[ "$dnf_timer_state" == enabled ]] || drift_reasons+=(dnf-timer)
+[[ "$cockpit_state" != active ]] || drift_reasons+=(cockpit)
+[[ "$platform_supported" == true ]] || drift_reasons+=(platform)
+if ((${#drift_reasons[@]} == 0)); then
+  drift=none
+  drift_reason_list=none
+else
+  drift=detected
+  drift_reason_list=$(
+    IFS=,
+    printf '%s' "${drift_reasons[*]}"
+  )
+fi
+platform=${HERMES_SERVER_PLATFORM:-fedora-server-44}
+machine_id=$(sed -n 's/^host-machine-id-sha256=//p' \
+  /var/lib/hermes-deploy/host-machine-id-sha256 2>/dev/null | tail -n 1 || true)
+ssh_fingerprint=$(sed -n 's/^host-ssh-fingerprint=//p' \
+  /var/lib/hermes-deploy/host-ssh-fingerprint 2>/dev/null | tail -n 1 || true)
+promotion_id=$(sed -n 's/^promotion-id=//p' \
+  /var/lib/hermes-deploy/promotion-id 2>/dev/null | tail -n 1 || true)
+[[ -n "$machine_id" ]] || machine_id=unbound
+[[ -n "$ssh_fingerprint" ]] || ssh_fingerprint=unbound
+[[ -n "$promotion_id" ]] || promotion_id=unconfigured
+printf 'platform=%s host_machine_id_sha256=%s host_ssh_ed25519_fingerprint=%s update_policy=download-only promotion_id=%s service=hermes provider=%s model=%s provider_auth=%s image=%s health=%s readonly=%s ports=%s drift=%s drift_reasons=%s\n' \
+  "$platform" "$machine_id" "$ssh_fingerprint" "$promotion_id" "$provider" "$model" "$provider_auth" \
+  "$image" "$health" "$readonly_root" "$ports" "$drift" "$drift_reason_list"
+[[ "$drift" == none ]]

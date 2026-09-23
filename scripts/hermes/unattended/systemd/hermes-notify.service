@@ -1,0 +1,11 @@
+[Unit]
+Description=Show meaningful Hermes maintenance events on the workstation desktop
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -E -s /usr/local/libexec/hermes-unattended/notify.py --event /var/lib/hermes-notifications/latest.json --state %S/hermes-notify
+UMask=0077
+NoNewPrivileges=true
+LimitCORE=0
+TimeoutStartSec=30s

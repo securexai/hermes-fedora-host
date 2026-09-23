@@ -1,0 +1,33 @@
+[Unit]
+Description=Hermes Agent gateway (rootless, digest-pinned, no published ports)
+
+[Quadlet]
+DefaultDependencies=false
+
+[Container]
+Image=docker.io/nousresearch/hermes-agent@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79
+Pull=never
+ContainerName=hermes
+Exec=gateway run
+Volume=%h/data:/opt/data:z
+DropCapability=all
+AddCapability=CHOWN SETUID SETGID DAC_OVERRIDE FOWNER
+NoNewPrivileges=true
+ReadOnly=true
+Tmpfs=/tmp:rw,size=256m
+Tmpfs=/run:rw,exec,size=64m
+HealthCmd=/command/s6-svstat /run/service/gateway-default
+HealthInterval=1m
+PidsLimit=512
+LogDriver=journald
+
+[Service]
+Restart=on-failure
+RestartSec=5
+UMask=0077
+MemoryMax=4G
+CPUQuota=200%
+TasksMax=512
+
+[Install]
+WantedBy=default.target

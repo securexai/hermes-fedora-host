@@ -1,0 +1,32 @@
+<!--
+  libvirt network definition for lab VLAN testing
+
+  Creates a NAT virtual network that mirrors the home lab management
+  VLAN defined in docs/NETWORK_DESIGN.md. VMs attached to this network can
+  communicate on the same subnet as the physical lab without affecting
+  production traffic.
+
+  Usage:
+    virsh net-define vm/networks/lab-vlans.xml
+    virsh net-start lab-vlans
+    virsh net-autostart lab-vlans
+
+  Subnet:
+    VLAN 99  - Management:   172.16.99.0/24
+-->
+<network>
+  <name>lab-vlans</name>
+  <bridge name="virbr-lab" stp="on" delay="0"/>
+
+  <!-- NAT — VMs can reach the internet via the host -->
+  <forward mode="nat"/>
+
+  <!-- Management VLAN 99 — primary subnet for VM access -->
+  <ip address="172.16.99.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="172.16.99.100" end="172.16.99.199"/>
+      <host mac="52:54:00:ab:10:02" ip="172.16.99.11" name="lab-fedora"/>
+      <host mac="52:54:00:ab:10:03" ip="172.16.99.12" name="lab-hermes-server"/>
+    </dhcp>
+  </ip>
+</network>

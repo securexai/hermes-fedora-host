@@ -36,14 +36,55 @@ ignores:
   - ".devbox/**"
   - "vendor/**"
   - "docs/archive/**"
-  # Preserved migration artifacts, kept byte-for-byte so their recorded SHA-256
-  # values in PROVENANCE.md and docs/extraction-manifest.txt stay accurate.
-  # Reformatting them would silently rewrite the evidence they exist to record.
-  # They carry a small number of inherited MD013 over-length lines; see the
-  # migration record for the exact list and the follow-up.
-  - "docs/HERMES_*.md"
+  # Byte-preserved migration evidence: kept exactly as migrated so the SHA-256
+  # values recorded in PROVENANCE.md, docs/extraction-manifest.txt and
+  # docs/migration-manifest.txt stay accurate. Previously this section used a
+  # `docs/HERMES_*.md` wildcard, which also exempted maintained guides and any
+  # future active guide. It is now an exact list of preserved records only.
   - "docs/reviews/**"
-  - "docs/plans/2026-09-20-hermes-manual-*.md"
   - "docs/plans/evidence/**"
+  - "docs/plans/2026-09-07-hermes-unattended.md"
+  - "docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md"
+  - "docs/plans/2026-09-12-fedora-ssh-key-only.md"
+  - "docs/plans/2026-09-18-hermes-local-installation.md"
+  - "docs/plans/2026-09-18-hermes-local-vm.md"
+  - "docs/plans/2026-09-20-hermes-manual-gate2-lab-plan.md"
+  - "docs/plans/2026-09-20-hermes-manual-profile-improvement.md"
+  - "docs/plans/2026-09-20-hermes-manual-review-corrections.md"
+  - "docs/HERMES_B6_CLEAN_INSTALL_HANDOFF.md"
+  - "docs/HERMES_BOOT_AUTOMATION.md"
+  - "docs/HERMES_BOOT_CLEAN_INSTALL.md"
+  - "docs/HERMES_DEPLOYMENT_PLAN.md"
+  - "docs/HERMES_INSTALLATION_VERIFICATION.md"
+  - "docs/HERMES_LOCAL_VM.md"
+  - "docs/HERMES_MANUAL_HANDOFF.md"
+  - "docs/HERMES_MEMORY_APPROVAL.md"
+  - "docs/HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md"
+  - "docs/HERMES_REMAINING_LAB_TESTS.md"
+  - "docs/HERMES_SELINUX_TPM_REPAIR.md"
+  - "docs/HERMES_TELEGRAM_BOT_GUIDE.md"
+  - "docs/HERMES_TPM_DEPENDENCY_REVIEW.md"
+  - "scripts/hermes/manual/README.md"
+  # Maintained guides are deliberately NOT ignored and are linted check-only
+  # (fix is disabled below): docs/VM_TESTING_GUIDE.md,
+  # docs/HERMES_UNATTENDED_DEPLOYMENT.md, docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md,
+  # docs/HERMES_MANUAL_PROFILE_CONTRACT.md and the documents authored here.
 
-fix: true
+# Check-only. `fix: true` rewrote migrated documents during an earlier
+# `pre-commit run --all-files` and broke recorded hashes; certification must also
+# never mutate the artifact it is certifying. Findings are reported and must be
+# resolved, not silently rewritten.
+fix: false
+
+# Narrow, documented exceptions for maintained documents. These keep the document
+# linted for every other rule instead of excluding it outright.
+overrides:
+  # docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md documents a shell prefix whose trailing
+  # space is meaningful: `HERMES_EXPECT_MACHINE_ID_SHA256=<reviewed hash> `.
+  # "Fixing" MD038 would strip that space and silently change the documented
+  # command, so the rule is disabled for this exact path only.
+  - filter:
+      - "docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md"
+    combine: "merge"
+    config:
+      MD038: false

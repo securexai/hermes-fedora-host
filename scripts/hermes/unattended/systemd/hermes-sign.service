@@ -1,0 +1,26 @@
+[Unit]
+Description=Sign a completed Hermes certification handoff
+OnSuccess=hermes-maintenance.service
+OnFailure=hermes-maintenance-failed.service
+
+[Service]
+Type=oneshot
+User=hermes-signing
+Group=hermes-signing
+ExecStart=/usr/bin/python3 -E -s /usr/local/libexec/hermes-unattended/signer.py --config /etc/hermes-unattended/signer.json
+StateDirectory=hermes-signing hermes-releases
+StateDirectoryMode=0711
+ReadOnlyPaths=/var/lib/hermes-certification
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateNetwork=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+CapabilityBoundingSet=
+LimitCORE=0
+TimeoutStartSec=10min

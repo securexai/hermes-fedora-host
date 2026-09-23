@@ -1,0 +1,12 @@
+{
+  "schema": "hermes-host-v1",
+  "enabled": false,
+  "boot_certified": false,
+  "recovery_verified": false,
+  "host": {
+    "machine_id_sha256": "REPLACE_WITH_VERIFIED_MACHINE_ID_HASH",
+    "ssh_fingerprint": "REPLACE_WITH_VERIFIED_HOST_FINGERPRINT"
+  },
+  "luks_device": "/dev/disk/by-uuid/REPLACE_WITH_LUKS_UUID",
+  "deployment_user": "hermes-deploy"
+}

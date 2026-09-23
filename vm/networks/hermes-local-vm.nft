@@ -1,0 +1,25 @@
+# Local Hermes fixture only. Apply before starting lab-vlans or its guest.
+# Reapplication atomically replaces only this dedicated table.
+# Runtime rules do not survive a host reboot; reapply before starting the guest.
+add table inet hermes_local_vm
+flush table inet hermes_local_vm
+table inet hermes_local_vm {
+    chain input {
+        type filter hook input priority -10; policy accept;
+        iifname "virbr-lab" ct state established,related accept
+        iifname "virbr-lab" ip daddr 172.16.99.1 udp dport 53 accept
+        iifname "virbr-lab" ip daddr 172.16.99.1 tcp dport 53 accept
+        iifname "virbr-lab" udp dport 67 accept
+        iifname "virbr-lab" counter drop
+    }
+    chain forward {
+        type filter hook forward priority -10; policy accept;
+        iifname "virbr-lab" meta nfproto ipv6 counter drop
+        iifname "virbr-lab" ct state established,related accept
+        iifname "virbr-lab" ip daddr {
+            0.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8,
+            169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16,
+            224.0.0.0/4, 240.0.0.0/4
+        } counter drop
+    }
+}

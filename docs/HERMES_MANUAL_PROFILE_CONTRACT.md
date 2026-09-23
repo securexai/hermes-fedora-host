@@ -78,10 +78,11 @@ procedure cannot substantiate would be a compatibility claim it has not earned. 
 `toolsets` (global) and `platform_toolsets.cli` / `platform_toolsets.telegram` are set to
 `terminal`, `file`, `memory`, `clarify`. These are the pinned release's real keys; an earlier draft of
 the contract used a friendlier `tools:` wrapper, which the merge step would have written verbatim and
-never translated, leaving the broad default allowlist in force. The broad `hermes-cli` composite is **not** used: in the pinned release it is a
-bundle of every core tool, including browser automation, code execution, computer-use, task
-delegation, scheduling and Home Assistant tools. Declaring the narrow list is what makes the
-documented capability scope true rather than aspirational.
+never translated, leaving the broad default allowlist in force. The broad `hermes-cli` composite
+is **not** used: in the pinned release it is a bundle of every core tool, including browser
+automation, code execution, computer-use, task delegation, scheduling and Home Assistant tools.
+Declaring the narrow list is what makes the documented capability scope true rather than
+aspirational.
 
 Setting the list is necessary but may not be sufficient: tools also carry runtime capability gates.
 The resolved registry must be inspected on the running image before acceptance, and that check is
