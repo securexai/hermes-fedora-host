@@ -1,16 +1,13 @@
 # hermes-fedora-host — complete Hermes repository migration
 
-Record state: CORRECTIONS APPLIED — pending independent re-review
+Record state: REPOSITORY GATES PASS — independent re-review of frozen artifact pending
 
-> An independent review of the uncommitted working tree returned
-> **CHANGES REQUIRED** with nine findings (R1–R9). A second independent re-review
-> then returned **CHANGES REQUIRED** again, confirming R6 (R6a/R6b/R6c) and R4 as
-> still blocking and adding integration-accounting and wording follow-ups. The
-> completion claims in the task table below are **superseded** by
-> "Post-review corrections" and "Second independent re-review corrections" at the
-> end of this record. The migration is **not** a completed, reviewed artifact
-> until a fresh payload-identity-bound re-review passes. The next action is that
-> fresh review; this record does not mark the migration accepted or runtime-ready.
+> On 2026-09-22, commit `12e2f77` recorded the broad migration and the
+> post-close-out manifest. The earlier "uncommitted close-out" and "no commits"
+> statements below describe the historical artifact before that commit. They do
+> not describe the current branch. The accepted third-pass review is bound to
+> earlier identities and does not accept the current artifact. The 2026-09-23
+> continuation and handoff at the end of this record own the current state.
 
 ## Approved baseline — preserve after approval
 
@@ -60,11 +57,11 @@ Record state: CORRECTIONS APPLIED — pending independent re-review
 
 | ID | Task and dependencies | Progress | Gate and expected result | Gate status | Evidence / docs / next action |
 | --- | --- | --- | --- | --- | --- |
-| T01 | Capture the migration baseline: source/destination/toolbox identities, dirty-input hashes, mode and image fingerprints; classify the whole candidate set and resolve transitive local dependencies. Deps: none | ✅ DONE | Every candidate classified IDENTICAL / DIFFERENT / MISSING; every difference explained; dependency gaps resolved or recorded | ✅ PASS | 302 candidates: 131 identical, 17 different (16 = exact `shfmt` reformat, 1 = trailing-newline drift), 154 missing; image chain and container IDs re-verified. See "Baseline reconnaissance" |
-| T02 | Import the missing Hermes assets with resolved dependencies, preserving all reviewed corrections and destination-only changes. Deps: T01 | ✅ DONE | Destination contains every in-scope artifact; no source correction lost; no excluded path present | ✅ PASS | 168 files added (163 imported + 5 authored), 10 adapted, manifest at `docs/migration-manifest.txt` (311 entries, 0 hash mismatches) |
-| T03 | Align dev-toolbox integration and authoritative documentation: `infra` Dev Container, relocation-safe instructions, README/guides, hook-parity correction, migration manifest and provenance. Deps: T02 | ✅ DONE | Active docs name real entrypoints and no obsolete checkout path; parity map contains no unsupported claim | ✅ PASS | Dev Container switched to `dev-infra`; `AGENTS.md`, `docs/ENVIRONMENT.md` authored; README/CONTRIBUTING/hook-parity corrected; 10 adapted files recorded with reasons |
-| T04 | Restore and run the safe offline gate set, with an explicit allowlist separating offline from network/privileged suites. Deps: T02, T03 | ✅ DONE | Baseline verify, extensions, hooks, secret scan and every offline suite pass, or the migration stays incomplete | ✅ PASS | Offline entrypoint 10/10 suites PASS; pre-commit 17/17 hooks; 341-file explicit pass; extensions validator PASS; dev-toolbox infra verify PASS |
-| T05 | Final review and close-out: diff audit, evidence preservation check, limitations and exact next action. Deps: T04 | ✅ DONE | No lost correction, leaked secret, live-host operation, or unrecorded evidence change; record finalized | ✅ PASS | Manifest re-verified (311/311); source repos unchanged; no commits; no excluded path or secret literal present |
+| T01 | Reconcile source, destination, tooling and companion identity; classify the candidate set and dependencies. Deps: none | ✅ DONE | Every candidate has a disposition and the current source-aware manifest verifies | ✅ PASS | 2026-09-23: source still has 14 modified tracked files; 360 manifest rows and 13 explicit exclusions; current roots are siblings under `code/repos` |
+| T02 | Preserve every in-scope Hermes asset, source correction, evidence reference and entrypoint. Deps: T01 | ✅ DONE | Destination accounts for the selected source working tree without excluded secrets or unrelated components | ✅ PASS | Source-aware verification passed after correcting 23 shebang modes; 16 source-backed mode adaptations have explicit reasons; local correction logs remain on disk but outside the payload |
+| T03 | Align active documentation, Toolbox paths, provenance and adaptation reasons. Deps: T02 | ✅ DONE | Current instructions use the real checkout and document deliberate adaptations | ✅ PASS | Active checkout examples corrected to `~/code/repos/hermes-fedora-host`; capture-time paths remain historical |
+| T04 | Run the final offline, check-only lint, extension, secret, manifest and inventory gates. Deps: T02, T03 | ✅ DONE | All applicable repository gates pass on the final tree | ✅ PASS | 2026-09-23 corrected tree: 12/12 offline checks, check-only lint, extension validation, secret scan, source-aware manifest and reproducible inventory passed; final record write is followed by regeneration and validation |
+| T05 | Obtain current-identity-bound independent review and close the record. Deps: T04 | 🔄 IN_PROGRESS | Reviewer accepts the current payload, inventory and separate manifest SHA-256; runtime limits remain explicit | 🔁 STALE | 2026-09-23 first current review returned CHANGES REQUIRED for three stale guide defaults; corrected artifact awaits re-review |
 
 ## Evidence history
 
@@ -508,46 +505,123 @@ Effect of this close-out: the record edits and the regenerated
 baseline above. The prior acceptance applies to the earlier baseline only and does
 not automatically cover these edits; a narrow follow-up review is required.
 
-## Handoff / closure
+## Current continuation and handoff (2026-09-23)
 
-- **Current outcome:** the bounded third correction pass is **independently
-  accepted** for the historical baseline identities recorded in "Independent
-  acceptance and close-out" above. This close-out then edited the migration record,
-  the scanner comment and the regenerated manifest, so the working tree is now a
-  **different artifact** from the accepted baseline and awaits a narrow follow-up
-  review of exactly that delta.
-- **Gates:** the task-table gates above are retained as history for the original
-  artifact; the earlier aggregate results remain implementation-agent results, not
-  independently reproduced results. The third-pass and close-out measured results
-  are in "Focused regression controls (third pass)" and "Independent acceptance and
-  close-out".
-- **Remaining gates and blockers:**
-  - Narrow follow-up review of the close-out delta (migration record, scanner
-    comment, regenerated manifest) — **NOT RUN**.
-  - Commit/push authorization — **PENDING**, not granted; nothing is staged.
-  - Full aggregate offline gate against the close-out artifact — **NOT RUN** (the
-    earlier aggregate run is not carried forward as a result for this artifact).
-  - Registry publication and digest-pinned CI — **BLOCKED** on a registry
-    credential with package-write scope.
-  - `vm/DEPLOYMENT_TASKS.md` `DOC-01`'s doc-sync audit slot — **NOT RUN**.
-  - Runtime, lab, SELinux, systemd, reboot and provider acceptance — **NOT RUN**.
-  - Real-tooling integration suite — **NOT RUN** (the opt-in runner reports this
-    explicitly rather than passing by omission).
-  - Runtime/deployment readiness — **NOT ESTABLISHED**.
-- **Material limitations:**
-  - The accepted identities above are historical and do not describe the current
-    close-out artifact.
-  - The environment standard still cannot be pinned by a public commit:
-    `dev-toolbox` has no remote and remains dirty, so it is identified by commit
-    plus the full dirty-input fingerprint recorded in `PROVENANCE.md`.
-  - The reviewed corrections remain an uncommitted working-tree delta in
-    `mikrotik`.
-  - Adapted files are listed with reasons in `docs/migration-adaptations.txt`.
-  - Credential rotation obligations recorded in the source repository remain the
-    operator's responsibility.
-- **Exact next action:** obtain the narrow follow-up review of the close-out delta
-  keyed to the recomputed payload and inventory identities plus the manifest's
-  separate SHA-256 reported in the close-out handoff; only then decide whether to
-  request commit/push authorization for the migration branch.
-- **Final state:** CLOSE-OUT RECORDED — pending narrow follow-up review; commit/push
-  NOT authorized
+### Reconciled baseline
+
+- `mikrotik` remains at `130bf8f2` on `codex/hermes-fedora44-manual-review`
+  with 14 modified tracked files and no untracked files. No source file was
+  edited during this continuation.
+- `hermes-fedora-host` is at `12e2f77` on
+  `hermes/hermes-repository-migration`. That commit was created on 2026-09-22
+  after the historical close-out. This continuation makes only uncommitted
+  destination corrections; the local `.hermes-correction-evidence/` logs remain
+  physically present and are ignored as non-payload review scratch.
+- The sibling `dev-toolbox` and `fedora-virtualization-host` checkouts are
+  present. The manifest generator now records their current roots under
+  `/var/home/aicloudopspecial/code/repos/`, the source working-tree identity,
+  destination filesystem modes, and a separate payload and inventory identity.
+  The manifest's own SHA-256 must be reported separately at handoff.
+
+### Corrections and gate state
+
+- Active commands in `AGENTS.md`, `README.md`, `docs/CONTRIBUTING.md`, and
+  `docs/ENVIRONMENT.md` now use the checkout that exists on this workstation.
+  `PROVENANCE.md` distinguishes its historical tooling capture from the current
+  checkout root.
+- `.gitignore` excludes only the preserved local correction logs from the
+  payload. The six logs remain on disk, and the 360-row manifest again describes
+  the repository files. The source-aware exclusion inventory lists 13
+  out-of-scope candidates.
+- The check-only lint baseline failed on 23 committed shebang files whose Git
+  index mode was 100644. Their bytes were left unchanged; filesystem and index
+  modes are now 100755. Sixteen source-backed mode changes are individually
+  recorded in `docs/migration-adaptations.txt`; seven are destination-authored.
+  The executable-mode correction is staged only as a Git index mode change, with
+  no commit, push or PR modification.
+- **Repository checks:** the aggregate, check-only lint, extension,
+  secret, source-aware manifest and reproducible inventory gates passed again
+  after the guide correction. The earlier result remains STALE; the passing
+  post-correction rerun is itemized below. This record write changes the
+  manifest identity and is followed by a final regeneration and check.
+- **Independent review:** the first current-identity review returned
+  CHANGES REQUIRED for three active guides still defaulting to the retired
+  `DS-Workspace` checkout. All three defaults and two misleading prose claims
+  were corrected. The review was bound to the pre-correction identities and
+  cannot accept this changed artifact; a new review is required.
+- **Separate gates:** real-tooling integration, live VM certification, host
+  deployment, SELinux, systemd, reboot and provider acceptance are NOT RUN.
+  Registry publication and digest-pinned CI remain BLOCKED on credentials and
+  external authority. Runtime readiness is NOT ESTABLISHED.
+
+### First current-identity review and correction
+
+The independent reviewer recomputed the pre-correction payload, inventory and
+manifest SHA-256, passed source-aware verification inside `dev-infra-hermes`,
+checked the 23 staged mode changes and 14 source corrections, and found no
+other blocking defect. Verdict: **CHANGES REQUIRED** because
+`hermes-fedora-server-install-guide.html`,
+`secure-hermes-installation-plan.html` and `docs/VM_TESTING_GUIDE.md` defaulted
+`HERMES_REPO` to a nonexistent `DS-Workspace` checkout. The reviewer did not
+independently rerun the aggregate, lint, extension or secret-scan gates; those
+PASS results were implementation-agent evidence. The three active guides now
+default to the current checkout and retain an override. Their adaptation reasons
+were updated. That correction changes all artifact identities and makes the
+pre-correction gate and review results stale for the final tree.
+
+### Pre-review repository validation (2026-09-23, dev-infra-hermes; now STALE)
+
+| Gate / command from the destination repository root | Measured result |
+| --- | --- |
+| `bash toolbox/run-offline-checks.sh` | PASS: all 12 invocations, including 358 manual-profile, 142 manual-review, 43 backup, 64 configure, 30 contract, 9 M01, 220 guide checks, 140 ShellSpec examples and 486 reviewed Python tests; zero failures or skips; clean-install rehearsal passed |
+| `bash toolbox/run-check-only-lint.sh` | PASS: default-severity certifier ShellCheck, error-only whole-tree ShellCheck, shfmt, Markdown and nine read-only hooks; the shebang-mode hook now passes |
+| `bash toolbox/verify-extensions.sh` | PASS: profile tools and local ShellSpec 0.28.1, Ruff 0.16.8, ty 0.0.82, yamllint 1.38.0 |
+| `bash toolbox/scan-secrets.sh` (inside the shared offline suite) | PASS: synthetic redacted finding was detected; no findings in tracked and nonignored untracked payload files |
+| `python3 -B toolbox/generate-migration-manifest.py --verify` | PASS: source-aware verification of 360 rows, current dirty-input identities, companion provenance and destination modes |
+| `python3 -B toolbox/generate-migration-manifest.py --inventory \| sha256sum` | PASS: reproduced the manifest's 360-row inventory fingerprint; manifest SHA-256 is reported separately at handoff |
+| `git diff --check` and `git diff --cached --check` | PASS: no whitespace defects in current unstaged or staged changes |
+| Local-link audit of six changed current documents | PASS: 32 relative links resolve |
+
+The 14 source working-tree corrections were checked individually: eight are
+byte-identical in the destination; five shell files differ only by the
+repository's `shfmt -i 2 -ci -bn` formatting; `docs/CONTRIBUTING.md` was
+rewritten for the destination and its Hermes test and certification references
+remain in the current contributor guidance. The source remains at the same HEAD
+and 14-file diff; the six pre-existing local correction logs are still present.
+
+`DOC-01`'s historical doc-diff-audit slot has no migrated script and is
+**NOT RUN**; guide, Markdown, diff and current-link checks above passed. The
+real-tooling integration suite is **NOT RUN** because it requires separate
+host/VM authorization. Live VM certification, host deployment, SELinux,
+systemd, reboot and provider acceptance are **NOT RUN**. Registry publication
+and digest-pinned CI remain **BLOCKED** on package-write credentials and
+external authorization. A repository PASS is not a runtime PASS.
+
+### Post-correction repository validation (2026-09-23, dev-infra-hermes)
+
+The same documented commands in the table above were rerun after the three
+guide fixes. The shared offline entrypoint passed **12/12** invocations:
+manual 358/0, review 142/0, backup 43/0, configure 64/0, contract 30/0,
+M01 9/0, guide 220/0, ShellSpec 140 examples/0 failures, reviewed Python
+486 tests/0 failures/0 skips, clean-install rehearsal PASS, positive-control
+secret scan and clean full payload scan, and source-aware manifest verification
+(360 rows). Check-only lint passed ShellCheck, shfmt, Markdown and all nine
+read-only hooks. Extension validation passed the declared profile and versions.
+The reproducible inventory matched the manifest's inventory identity, with
+the manifest SHA-256 computed separately. `git diff --check` and the staged
+diff check found no whitespace defects. No VM, host or provider operation was
+used by these gates.
+
+The repository record freezes the candidate **before** its independent review;
+reviewer verdicts and their exact identity triples belong in a separate
+ignored local review report or final handoff. This avoids changing the payload
+after a successful review merely to write the review result into the payload.
+The T05 gate remains pending in this frozen record until that report accepts
+the current identity triple.
+
+**Exact next action:** obtain the narrow independent review of this frozen
+artifact, keyed to the manifest's current payload and inventory identities
+and its separately reported SHA-256. Record the verdict outside the payload
+so the review result does not invalidate its own identity. If accepted, the
+next repository action would be to request authorization for any further
+commit or push; no such action is authorized here.

@@ -24,10 +24,11 @@ firewalld, and an SSH-only host boundary.</p>
 authenticated inference, credential cleanup, purge, and destruction flow before
 production can be changed. The certifier verifies local installation media and
 does not download it. It prints a promotion record only after the VM is gone.</p>
-<p>Operator inputs (export these first). The guide never assumes a checkout path
-or a private-key filename; <code>HERMES_SSH_IDENTITY</code> must be the SSH
-private key you have independently verified for the target.</p>
-<pre><code>HERMES_REPO=${HERMES_REPO:-$HOME/code/repos/DS-Workspace/hermes-fedora-host}
+<p>Operator inputs (export these first). <code>HERMES_REPO</code> defaults
+to the current checkout location; set it if your checkout is elsewhere.
+<code>HERMES_SSH_IDENTITY</code> must be the SSH private key you have
+independently verified for the target.</p>
+<pre><code>HERMES_REPO=${HERMES_REPO:-$HOME/code/repos/hermes-fedora-host}
 HERMES_MEDIA_DIR=${HERMES_MEDIA_DIR:-$HOME/Downloads/fedora-server-44-1.7}
 HERMES_SSH_IDENTITY=${HERMES_SSH_IDENTITY:?export the verified SSH private key path}
 cd "$HERMES_REPO"</code></pre>

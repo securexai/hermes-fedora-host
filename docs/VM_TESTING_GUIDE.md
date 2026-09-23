@@ -41,12 +41,12 @@ The certifier never downloads installer media.
 ## Hermes Server certification
 
 Run the complete certification from the repository root. Export the operator
-inputs first; the guide never assumes a checkout path or a private-key filename.
-`HERMES_SSH_IDENTITY` must be the SSH private key you have independently verified
-for the target.
+inputs first. `HERMES_REPO` defaults to the current checkout location; set it
+if your checkout is elsewhere. `HERMES_SSH_IDENTITY` must be the SSH private
+key you have independently verified for the target.
 
 ```bash
-HERMES_REPO=${HERMES_REPO:-$HOME/code/repos/DS-Workspace/hermes-fedora-host}
+HERMES_REPO=${HERMES_REPO:-$HOME/code/repos/hermes-fedora-host}
 HERMES_MEDIA_DIR=${HERMES_MEDIA_DIR:-$HOME/Downloads/fedora-server-44-1.7}
 HERMES_SSH_IDENTITY=${HERMES_SSH_IDENTITY:?export the verified SSH private key path}
 cd "$HERMES_REPO"

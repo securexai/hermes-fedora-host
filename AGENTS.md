@@ -39,7 +39,7 @@ pre-push hook uses.
 
 ```bash
 toolbox run --container dev-infra-hermes bash -c \
-  'cd ~/code/repos/DS-Workspace/hermes-fedora-host && bash toolbox/run-offline-checks.sh'
+  'cd ~/code/repos/hermes-fedora-host && bash toolbox/run-offline-checks.sh'
 ```
 
 Offline checks use synthetic fixtures and mocked privileged commands. They do

@@ -71,11 +71,10 @@ the sibling checkout and are extracted here alongside it.
 | HEAD | `151c1b47537f1cbb0f5f478c8b9894040ea985b9` |
 | Working tree | dirty: the profile standard itself is uncommitted (10 modified, 1 tracked deletion, 9 untracked, including two uncommitted config edits made for this project) |
 
-The repository path recorded in that capture-time row is retained as captured; the
-same working tree now lives at
-`/var/home/aicloudopspecial/code/repos/DS-Workspace/dev-toolbox`, which is the
-path the manifest records as `toolbox_root`. Only the current-baseline table below
-was updated in place.
+The capture-time repository row above remains historical. The current
+checkout is `/var/home/aicloudopspecial/code/repos/dev-toolbox`; the manifest
+records that path as `toolbox_root`. Its HEAD and dirty-input fingerprint are
+recomputed during source-aware verification.
 
 The two config edits made for this project were subsequently committed in
 `dev-toolbox` as `c0f0889` on `codex/toolbox-profiles`. That commit is
@@ -232,7 +231,7 @@ identified by content, not only by commit. The current identity uses the
 
 | Item | Value |
 | --- | --- |
-| Repository | `/var/home/aicloudopspecial/code/repos/DS-Workspace/dev-toolbox` |
+| Repository | `/var/home/aicloudopspecial/code/repos/dev-toolbox` |
 | Remote | **none** — local-only |
 | Branch | `codex/toolbox-profiles` |
 | HEAD | `c0f0889d83531b57167a546e461ceac3f14fa572` |

@@ -17,7 +17,7 @@ no development toolchain installed.
 Enter and use it:
 
 ```bash
-toolbox run --container dev-infra-hermes bash -c 'cd ~/code/repos/DS-Workspace/hermes-fedora-host && bash'
+toolbox run --container dev-infra-hermes bash -c 'cd ~/code/repos/hermes-fedora-host && bash'
 ```
 
 The Toolbox shares the host home directory and user session. It is a development
@@ -25,11 +25,10 @@ convenience, **not** a security sandbox.
 
 ## Checkout location
 
-This repository lives at `~/code/repos/DS-Workspace/hermes-fedora-host`. It is no
-longer at the source repository's path, and the source repository's own
-documentation refers to a checkout that does not exist on this workstation. When
-a preserved document prints an absolute checkout path, treat the current location
-above as authoritative.
+This repository lives at `~/code/repos/hermes-fedora-host`; the source
+checkout is `~/code/repos/mikrotik`. Older migration records show a temporary
+`DS-Workspace/` location. Use the current checkout path above for commands;
+preserved records retain their capture-time paths.
 
 ## Devbox is retired
 
@@ -63,7 +62,7 @@ Provision once per clone with `toolbox/provision-environment.sh`; validate with
 `toolbox/verify-extensions.sh`, which runs the tools through `uv run --locked`
 and never synchronises. `.venv/` and `toolbox/.tools/` are generated and
 gitignored, and their console scripts embed an absolute interpreter path. A
-checkout that has been moved (for example relocated under `DS-Workspace/`) can
+checkout that has been moved (as happened when it moved out of `DS-Workspace/`) can
 therefore leave a stale `.venv/bin/<tool>` whose shebang names the old path;
 direct execution then fails with exit 126 while `uv run --locked <tool>` still
 works. Treat `uv run --locked` and the provisioning script as the supported
@@ -86,7 +85,7 @@ reported and resolved rather than silently rewritten or ignored.
 | --- | --- | --- |
 | Current instructions | `README.md`, `AGENTS.md`, `docs/CONTRIBUTING.md`, `docs/ENVIRONMENT.md`, `docs/hook-parity.md`, `toolbox/**`, `tests/**` | Maintained here; Devbox and Lefthook replaced |
 | Current guides | `hermes-fedora-server-install-guide.html`, `secure-hermes-installation-plan.html`, `docs/VM_TESTING_GUIDE.md`, `docs/HERMES_UNATTENDED_DEPLOYMENT.md`, `docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md`, `docs/HERMES_MANUAL_PROFILE_CONTRACT.md`, `vm/DEPLOYMENT_TASKS.md`, `setup-ssh-key-only.md` | Adapted for this environment; linted check-only, not blanket-excluded |
-| Preserved records | the exact paths listed in `.markdownlint-cli2.yaml` and `.pre-commit-config.yaml`: the dated `docs/plans/2026-09-*.md` records, the preserved `docs/HERMES_*.md` handoffs and ledgers, `docs/plans/evidence/**`, `docs/reviews/**`, `docs/archive/**`, `scripts/hermes/manual/README.md` | Byte-preserved; historical environment references intentionally left intact |
+| Preserved records | the exact paths listed in `.markdownlint-cli2.yaml` and `.pre-commit-config.yaml`: selected dated `docs/plans/2026-09-*.md` records and selected `docs/HERMES_*.md` handoffs and ledgers, `docs/plans/evidence/**`, `docs/reviews/**`, `docs/archive/**`, `scripts/hermes/manual/README.md` | Byte-preserved; historical environment references intentionally left intact |
 
 ## Evidence-scope rule
 

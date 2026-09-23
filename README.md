@@ -57,7 +57,7 @@ root. One entrypoint runs the whole offline set:
 
 ```bash
 toolbox run --container dev-infra-hermes bash -c \
-  'cd ~/code/repos/DS-Workspace/hermes-fedora-host && bash toolbox/run-offline-checks.sh'
+  'cd ~/code/repos/hermes-fedora-host && bash toolbox/run-offline-checks.sh'
 ```
 
 The primary parity gate is `bash tests/test-hermes-manual-profile.sh`; the full

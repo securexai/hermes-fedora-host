@@ -15,6 +15,9 @@ venv/
 dist/
 build/
 
+# Local correction review logs; retained on disk outside the migration payload.
+.hermes-correction-evidence/
+
 # Toolbox and container scratch
 .toolbox/
 *.qcow2
