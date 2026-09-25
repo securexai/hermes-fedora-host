@@ -36,7 +36,7 @@ GW_GID=10000
 GW=hermes-gateway
 GW_STATE="$RUNTIME_HOME/gateway-state"
 GWSSH="$RUNTIME_HOME/gateway-ssh"
-GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 
 mp_require_apply 'would install the contract helper, apply the reviewed configuration contract, and verify it'
 mp_require_host_identity

@@ -5,9 +5,9 @@ After=hermes-worker.service
 
 [Container]
 ContainerName=hermes-gateway
-# Official upstream image, pinned by the digest of release v2026.9.11.
+# Official upstream image, pinned by the digest of release v2026.9.24.
 # Never replace this with a floating tag.
-Image=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+Image=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 
 # Network deliberately left at the default: the gateway needs provider and
 # messaging egress, and publishes no ports.

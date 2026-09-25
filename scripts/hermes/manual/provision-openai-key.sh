@@ -29,7 +29,7 @@ ADMIN_HOME=$(mp_admin_home)
 OUT=$(mp_new_log "$ADMIN_HOME/hermes-provision-openai.out")
 STATE=/home/hermes/gateway-state
 GW_UID=10000
-IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 BASE_URL="${OPENAI_BASE_URL:-https://api.openai.com/v1}"
 
 if [ ! -r /dev/tty ]; then

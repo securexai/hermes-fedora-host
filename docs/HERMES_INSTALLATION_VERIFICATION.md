@@ -4,6 +4,12 @@ This is the dated evidence record for the Fedora Server 44 Hermes appliance.
 The executable contract is documented in
 [`HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md`](HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md).
 
+## Fresh DeepSeek VM evidence boundary (2026-09-23)
+
+The [new execution record](plans/2026-09-23-hermes-deepseek-e2e-r1.md) owns the
+v0.21.5 manual-profile VM attempt. Its gates must be read there; earlier bare-metal
+and Gate 2 fixture passes do not certify the repinned image or this new VM.
+
 ## Current conclusion
 
 **Local TPM unlock, 2026-09-18 local time:** additive SHA256 PCR7 enrollment passed

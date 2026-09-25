@@ -39,7 +39,7 @@ GW_UID=10000
 GW=hermes-gateway
 GW_STATE="$RUNTIME_HOME/gateway-state"
 GWSSH="$RUNTIME_HOME/gateway-ssh"
-GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 CLIENT_KEY=/opt/hermes/gateway-ssh/worker_client_ed25519
 EXPECTED=(terminal.backend=ssh terminal.ssh_host=worker terminal.ssh_user=worker terminal.ssh_port=22 "terminal.ssh_key=$CLIENT_KEY")
 PROBE="$GWSSH/m03-probe.py"

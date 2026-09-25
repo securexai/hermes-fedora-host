@@ -1,5 +1,10 @@
 # VM-Based Testing Guide
 
+**Current disposable Hermes DeepSeek lab:** follow
+[HERMES_DISPOSABLE_LAB.md](HERMES_DISPOSABLE_LAB.md). The encrypted Server
+certifier and retained TPM/LUKS fixtures below are separate historical or
+production-candidate procedures; their results do not certify the new lab.
+
 This repository uses disposable libvirt VMs for checks that containers cannot cover: real Fedora boot,
 encrypted storage, Secure Boot, DNF5 reboot transactions, SSH persistence, and the Hermes rootless Podman
 runtime. The Hermes production path is certified on Fedora Server 44 before the physical host is changed.
@@ -99,6 +104,26 @@ Do not use the low-level creator as a production substitute. It is available for
 For the retained workstation fixture used before manual Hermes deployment, follow
 the [local VM lifecycle guide](HERMES_LOCAL_VM.md). Its lab firewall, SSH identity,
 console unlock procedure and cleanup are separate from promotion certification.
+
+## Retained DeepSeek manual-profile VM
+
+The [fresh end-to-end record](plans/2026-09-23-hermes-deepseek-e2e-r1.md) covers
+`lab-hermes-deepseek-e2e-r1`, separate from the disposable controller certifier
+and the retained `lab-hermes-manual-r1` fixture. Use the guarded
+[`deepseek-e2e-create-fixture.sh`](../scripts/hermes/manual/lab/deepseek-e2e-create-fixture.sh)
+for the 2-vCPU, 12-GiB, 120-GiB UEFI Secure Boot/vTPM guest on `fvh-nat`.
+Set `HERMES_MEDIA_DIR` to the verified Fedora media directory and run `--check`
+before `--create`. A relative media path resolves from the repository root; the
+libvirt storage pool supplies the absolute disk path. Repeating `--create`
+verifies a matching VM and returns `UNCHANGED`. An orphaned disk or mismatched
+domain is preserved for inspection. After interactive installation, the helper's
+`--finalize` inspects the running and saved CD-ROM definitions separately and
+ejects the verified installer ISO from either state. A second run returns
+`UNCHANGED`; it never removes the retained guest. If live ejection fails, shut
+the guest down gracefully and rerun `--finalize` before starting it from disk.
+The new VM's LUKS passphrase, administrative password and dedicated provider
+credentials are entered through private prompts. A guest cold-start proof is
+limited to the VM and is not the physical power-loss test in this guide.
 
 ## Production promotion
 

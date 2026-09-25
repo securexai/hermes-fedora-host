@@ -31,7 +31,7 @@ STATE=/home/hermes/gateway-state
 SAVED=/root/hermes-m05-allowlist.saved
 HERMES_UID=$(id -u hermes)
 GW_UID=10000
-IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 
 case "$CMD" in
   status | logs) MUTATING=0 ;;

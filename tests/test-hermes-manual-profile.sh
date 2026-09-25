@@ -73,6 +73,7 @@ readonly IDENTITY_HELPERS=(
   m05-telegram.sh
   m05-tests.sh
   provision-openai-key.sh
+  provision-deepseek-key.sh
   provision-telegram.sh
   provision-worker-client-key.sh
   boot/tpm-enroll.sh
@@ -269,6 +270,42 @@ if printf 'key=%s\n' "$fake_key" | lib_snippet 'mp_redact_stream "$1"' "$env_fix
   _fail 'redaction output contains no raw secret'
 else
   _pass 'redaction output contains no raw secret'
+fi
+
+# Native DeepSeek profile selection and secret redaction are exercised without
+# a provider call or a real key.
+model_config="$TMPDIR_TEST/deepseek-config.yaml"
+printf 'provider: nous\nmodel: {provider: nous, default: old-model}\n' >"$model_config"
+HERMES_CONFIG_PATH="$model_config" HERMES_PROVIDER=deepseek HERMES_MODEL=deepseek-flash \
+  python3 "$MANUAL/config/set-model.py" >/dev/null
+assert_grep '^provider: deepseek$' "$model_config" 'native DeepSeek provider is selected'
+assert_grep 'default: deepseek-flash' "$model_config" 'DeepSeek Flash model is selected'
+model_digest_before=$(sha256sum "$model_config" | awk '{print $1}')
+model_mtime_before=$(stat -c '%Y:%s:%i' "$model_config")
+HERMES_CONFIG_PATH="$model_config" HERMES_PROVIDER=deepseek HERMES_MODEL=deepseek-flash \
+  python3 "$MANUAL/config/set-model.py" >/dev/null
+model_digest_after=$(sha256sum "$model_config" | awk '{print $1}')
+model_mtime_after=$(stat -c '%Y:%s:%i' "$model_config")
+if [ "$model_digest_before" = "$model_digest_after" ] && [ "$model_mtime_before" = "$model_mtime_after" ]; then
+  _pass 'rerun of DeepSeek model selection leaves converged config unchanged'
+else
+  _fail 'rerun of DeepSeek model selection changed converged config'
+fi
+if HERMES_CONFIG_PATH="$model_config" HERMES_PROVIDER=deepseek-unknown \
+  HERMES_MODEL=deepseek-flash python3 "$MANUAL/config/set-model.py" >/dev/null 2>&1; then
+  _fail 'unknown provider is refused'
+else
+  _pass 'unknown provider is refused'
+fi
+fake_deepseek="synthetic-deepseek-$(printf 'b%.0s' $(seq 1 24))"
+printf 'DEEPSEEK_API_KEY=%s\n' "$fake_deepseek" >"$TMPDIR_TEST/deepseek.env"
+redacted_deepseek=$(printf 'key=%s\n' "$fake_deepseek" \
+  | python3 "$REDACT_HELPER" "$TMPDIR_TEST/deepseek.env")
+assert_contains '[REDACTED]' "$redacted_deepseek" 'DeepSeek key is redacted'
+if [[ "$redacted_deepseek" == *"$fake_deepseek"* ]]; then
+  _fail 'DeepSeek redaction leaked the key'
+else
+  _pass 'DeepSeek redaction kept the key hidden'
 fi
 
 # Operation lock: a second writer is refused while the first holds the lock.
@@ -575,7 +612,7 @@ section 'Destructive lab operations are not automated'
 readonly LAB_FIXTURE="$MANUAL/lab/gate2-create-fixture.sh"
 assert_grep 'requires root' "$LAB_FIXTURE" 'the fixture helper states its privilege requirement'
 assert_grep 'PREFLIGHT=PASS' "$LAB_FIXTURE" 'the fixture helper has a non-mutating check mode'
-assert_grep '\-\-dry-run' "$LAB_FIXTURE" 'the fixture check uses --dry-run so it cannot create storage'
+assert_grep '--dry-run' "$LAB_FIXTURE" 'the fixture check uses --dry-run so it cannot create storage'
 assert_grep 'MIN_FREE_GIB' "$LAB_FIXTURE" 'the fixture helper enforces a capacity floor'
 assert_grep 'lab-hermes-server' "$LAB_FIXTURE" 'the fixture helper refuses the retired fixture'
 assert_grep '172.16.99' "$LAB_FIXTURE" 'the fixture helper refuses the retired network'
@@ -587,6 +624,29 @@ if [ -z "$destructive" ]; then
 else
   _fail 'no destructive verb appears in fixture helper executable code' "$destructive"
 fi
+
+# The new retained VM helper must keep a read-only dry run and exact identity.
+readonly DEEPSEEK_FIXTURE="$MANUAL/lab/deepseek-e2e-create-fixture.sh"
+assert_grep 'lab-hermes-deepseek-e2e-r1' "$DEEPSEEK_FIXTURE" 'new fixture has its own name'
+assert_grep 'backend.version=2.0' "$DEEPSEEK_FIXTURE" 'new fixture requests vTPM 2.0'
+assert_grep '--dry-run' "$DEEPSEEK_FIXTURE" 'new fixture preflights without allocation'
+assert_grep 'verify_absent' "$DEEPSEEK_FIXTURE" 'new fixture checks collisions'
+assert_grep 'DEEPSEEK_API_KEY' "$MANUAL/provision-deepseek-key.sh" \
+  'DeepSeek provisioner uses the native credential name'
+assert_grep 'read -r -s KEY' "$MANUAL/provision-deepseek-key.sh" \
+  'DeepSeek provisioner uses a hidden prompt'
+assert_grep 'cmp -s' "$MANUAL/provision-deepseek-key.sh" \
+  'DeepSeek provisioner preserves unchanged env state'
+assert_grep 'native_deepseek_resolution' "$MANUAL/m03-accept.sh" \
+  'provider resolution is checked before live calls'
+assert_grep 'MP_EXTRA_FLAGS=.*--allow-provider-call' "$MANUAL/m03-accept.sh" \
+  'the paid-call flag is accepted by the strict option parser'
+assert_grep 'provider_calls=UNCHANGED' "$MANUAL/m03-accept.sh" \
+  'an unchanged paid probe is not repeated on rerun'
+assert_grep 'ATTEMPTED' "$MANUAL/m03-accept.sh" \
+  'a paid probe records its attempt before external calls'
+assert_grep 'probe_host_sha=\$\(mp_host_identity_sha256\)' "$MANUAL/m03-accept.sh" \
+  'probe replay identity works with either an environment pin or the pinned host file'
 
 # -------------------------------------------------------------- documentation
 section 'Documentation parity'

@@ -10,13 +10,14 @@ config_path = pathlib.Path(config_path_value)
 if not config_path.is_absolute():
     raise SystemExit('HERMES_CONFIG_PATH must be absolute')
 data_dir = config_path.parent
-config = yaml.safe_load(config_path.read_text(encoding='utf-8')) or {}
+original_bytes = config_path.read_bytes()
+config = yaml.safe_load(original_bytes.decode('utf-8')) or {}
 if not isinstance(config, dict):
     raise SystemExit('config.yaml root is not a mapping')
 
 provider = os.environ.get('HERMES_PROVIDER', 'nous').strip()
 model = os.environ.get('HERMES_MODEL', 'anthropic/claude-sonnet-4.6').strip()
-if provider not in {'openai-codex', 'openai-api', 'nous'}:
+if provider not in {'openai-codex', 'openai-api', 'nous', 'deepseek'}:
     raise SystemExit('unsupported Hermes provider')
 if not re.fullmatch(r'[A-Za-z0-9._:/-]+', model):
     raise SystemExit('unsupported Hermes model identifier')
@@ -35,10 +36,15 @@ for key in ('api_key', 'base_url', 'api_mode', 'key_env'):
 config['provider'] = provider
 config['default_model'] = model
 
+rendered = yaml.safe_dump(config, sort_keys=False).encode('utf-8')
+if rendered == original_bytes:
+    print('Hermes provider and model already configured; no write performed.')
+    raise SystemExit(0)
+
 fd, tmp_name = tempfile.mkstemp(prefix='.config.yaml.', dir=data_dir)
 try:
-    with os.fdopen(fd, 'w', encoding='utf-8') as handle:
-        yaml.safe_dump(config, handle, sort_keys=False)
+    with os.fdopen(fd, 'wb') as handle:
+        handle.write(rendered)
         handle.flush()
         os.fsync(handle.fileno())
     os.chmod(tmp_name, 0o600)

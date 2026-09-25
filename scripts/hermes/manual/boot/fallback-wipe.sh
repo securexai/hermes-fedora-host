@@ -110,7 +110,7 @@ rc=0
   if cryptsetup open --test-passphrase "$DEV"; then
     echo "passphrase_slot=OK"
   else
-    die "passphrase slot failed; restore the pre-enrollment header backup"
+    die "passphrase check failed; keep this system running and inspect recovery material before reboot"
   fi
   echo
 
@@ -128,6 +128,14 @@ chmod 600 "$OUT" 2>/dev/null || true
 echo "WROTE=$OUT"
 grep -aE '^(keyslots_after|tpm2_tokens_after|crypttab_unchanged|passphrase_slot|WIPE=)' "$OUT" | head || true
 
+# The pipeline may have printed successful wipe markers before a later
+# passphrase-check failure. Its nonzero status must take precedence over any
+# markers in the log.
+if [ "$rc" -ne 0 ]; then
+  echo "RESULT=FAIL - fallback helper stopped; keep this system running and inspect $OUT"
+  exit "$rc"
+fi
+
 # The enforced verdict (C53). Printing crypttab_unchanged was not enough: the rehearsal
 # passed on the word appearing, so a NO value could ride through as REHEARSAL=PASS on the
 # step the guide calls the difference between a proven and an assumed recovery path.
@@ -136,5 +144,9 @@ if grep -qa '^FALLBACK_PROOF=INVALID' "$OUT"; then
   echo "         the next boot would prompt because nothing requests TPM, not because the token is gone"
   exit 1
 fi
+if ! grep -qa '^WIPE=done$' "$OUT" || ! grep -qa '^passphrase_slot=OK$' "$OUT"; then
+  echo "RESULT=FAIL - fallback completion markers missing; do not reboot"
+  exit 1
+fi
 echo "RESULT=PASS - token wiped, crypttab unchanged, passphrase slot intact (next boot is a real proof)"
-exit "$rc"
+exit 0

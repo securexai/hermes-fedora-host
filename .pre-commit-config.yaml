@@ -134,7 +134,7 @@ repos:
         entry: shfmt -d -l -i 2 -ci -bn
         language: system
         files: \.sh$
-        exclude: ^spec/
+        exclude: ^(spec/|scripts/hermes/manual/lab/gate2-test-)
 
   # ---------------------------------------------------------------------------
   # Ported Hermes gate (pre-push). The source repository used Lefthook; its

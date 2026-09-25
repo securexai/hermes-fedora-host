@@ -104,6 +104,7 @@ rc=0
   echo "-- TPM --"
   find /dev -maxdepth 1 -name 'tpm*' 2>/dev/null | sort | sed 's/^/  /'
   [ -e /dev/tpmrm0 ] || [ -e /dev/tpm0 ] || die "no TPM device node"
+  command -v tpm2 >/dev/null 2>&1 || die "tpm2-tools is required before enrollment so dracut can include TPM unlock support"
 
   echo "-- Secure Boot --"
   mokutil --sb-state 2>&1 | sed 's/^/  /'
@@ -159,7 +160,45 @@ rc=0
     # the reviewed host identity.
     mp_require_apply "would enroll a TPM2 keyslot bound to PCR$PCRS on this host"
     mp_require_host_identity
-    [ "$tokens" -eq 0 ] || die "a systemd-tpm2 token already exists; refusing to add a duplicate (use --revert first)"
+    if [ "$tokens" -eq 1 ]; then
+      echo "===== existing TPM2 enrollment: verify convergence ====="
+      [ "$keyslots" -eq 2 ] || die "existing TPM2 token has unexpected keyslot count"
+      cryptsetup luksDump --dump-json-metadata "$DEV" | python3 -c '
+import json, sys
+metadata = json.load(sys.stdin)
+tokens = [token for token in metadata.get("tokens", {}).values()
+          if token.get("type") == "systemd-tpm2"]
+if len(tokens) != 1:
+    raise SystemExit("expected exactly one TPM2 token")
+token = tokens[0]
+if token.get("tpm2-pcrs") != [7] or token.get("tpm2-pcr-bank") != "sha256":
+    raise SystemExit("existing TPM2 token is not bound to PCR7 from SHA-256")
+if token.get("tpm2-salt"):
+    raise SystemExit("existing TPM2 token requires a PIN")
+print("existing_tpm_policy=PASS")
+' || die "existing TPM2 token policy cannot be verified"
+      awk -v name="$MAPPER" '
+        $1 == name {
+          records++
+          count = split($4, options, ",")
+          for (i = 1; i <= count; i++)
+            if (options[i] == "tpm2-device=auto") matches++
+        }
+        END { exit !(records == 1 && matches == 1) }
+      ' /etc/crypttab || die "existing TPM2 crypttab option is absent or duplicated"
+      INITRD="/boot/initramfs-$(uname -r).img"
+      [ -r "$INITRD" ] || die "current-kernel initramfs is missing"
+      initrd_modules=$(lsinitrd -m "$INITRD") || die "cannot read current-kernel initramfs modules"
+      for module in systemd-cryptsetup tpm2-tss; do
+        printf '%s\n' "$initrd_modules" | tr ' ' '\n' | grep -Fxq "$module" \
+          || die "existing initramfs lacks $module"
+      done
+      echo "existing_initramfs=$INITRD modules=systemd-cryptsetup,tpm2-tss"
+      echo "ENROLL=UNCHANGED (matching token, crypttab and initramfs)"
+      echo "===== done ====="
+      exit 0
+    fi
+    [ "$tokens" -eq 0 ] || die "multiple TPM2 tokens exist; refusing ambiguous enrollment"
 
     echo
     echo "===== recovery material before change ====="
@@ -228,13 +267,19 @@ rc=0
     echo "dracut_rc=$dracut_rc"
     INITRD="/boot/initramfs-$(uname -r).img"
     echo "initramfs=$INITRD"
-    tpm2_lines=$(lsinitrd "$INITRD" 2>/dev/null | grep -cE 'tpm2|systemd-cryptsetup' || true)
-    echo "tpm2_and_cryptsetup_lines=${tpm2_lines:-0}"
+    initrd_modules=$(lsinitrd -m "$INITRD" 2>/dev/null) || initrd_modules=
+    missing_modules=
+    for module in systemd-cryptsetup tpm2-tss; do
+      if ! printf '%s\n' "$initrd_modules" | tr ' ' '\n' | grep -Fxq "$module"; then
+        missing_modules="${missing_modules:+$missing_modules,}$module"
+      fi
+    done
+    echo "initramfs_missing_modules=${missing_modules:-none}"
     # ENFORCED (C53). Both values were printed and then ignored, so the run reported
     # ENROLL=done even when dracut failed or the initramfs carried no TPM unlock support -
     # precisely the state where the next boot demands the passphrase with the token gone.
-    if [ "$dracut_rc" -ne 0 ] || [ "${tpm2_lines:-0}" -eq 0 ]; then
-      echo "ENROLLMENT_VERDICT=FAIL dracut_rc=$dracut_rc tpm2_lines=${tpm2_lines:-0}"
+    if [ "$dracut_rc" -ne 0 ] || [ -n "$missing_modules" ]; then
+      echo "ENROLLMENT_VERDICT=FAIL dracut_rc=$dracut_rc missing_modules=${missing_modules:-none}"
     else
       echo "ENROLLMENT_VERDICT=OK"
     fi
@@ -244,12 +289,12 @@ rc=0
     cryptsetup luksHeaderBackup "$DEV" --header-backup-file "$HEADER"
     echo "post_header=$HEADER"
     sha256sum "$HEADER" "$PRE_HEADER" 2>/dev/null
-    rm -rf "$STAGE"
     install -d -m 0700 "$STAGE"
     cp -a "$HEADER" "$STAGE/"
     cp -a "$CRYPTTAB_BAK" "$STAGE/"
-    chown -R "$ADMIN_ACCOUNT:$ADMIN_ACCOUNT" "$STAGE"
-    chmod 600 "$STAGE"/*
+    chown "$ADMIN_ACCOUNT:$ADMIN_ACCOUNT" "$STAGE" \
+      "$STAGE/$(basename "$HEADER")" "$STAGE/$(basename "$CRYPTTAB_BAK")"
+    chmod 0600 "$STAGE/$(basename "$HEADER")" "$STAGE/$(basename "$CRYPTTAB_BAK")"
     echo "staged=$STAGE (pull this off-host as $ADMIN_ACCOUNT, then delete it)"
     echo
     echo "ENROLL=done"
@@ -264,11 +309,25 @@ chown "$ADMIN_ACCOUNT:$ADMIN_ACCOUNT" "$OUT" 2>/dev/null || true
 chmod 600 "$OUT" 2>/dev/null || true
 echo "WROTE=$OUT"
 
-# Enforced enrollment verdict (C53).
+# Report only what the selected mode actually verified. A preflight must never
+# claim that it regenerated an initramfs or enrolled a token.
+if [ "$rc" -ne 0 ]; then
+  echo "RESULT=FAIL - $MODE did not complete; inspect $OUT"
+  exit "$rc"
+fi
 if grep -qa '^ENROLLMENT_VERDICT=FAIL' "$OUT"; then
   echo "RESULT=FAIL - the initramfs does not carry TPM unlock support; do not reboot expecting it"
   echo "         fix the dracut failure, then re-run; --revert restores the passphrase-only boot"
   exit 1
 fi
-echo "RESULT=PASS - initramfs regenerated with TPM unlock support"
-exit "$rc"
+case "$MODE" in
+  preflight) echo "RESULT=PASS - preflight only; no TPM or initramfs change" ;;
+  revert) echo "RESULT=PASS - revert command completed; boot verification remains" ;;
+  enroll)
+    if grep -qa '^ENROLL=UNCHANGED' "$OUT"; then
+      echo "RESULT=PASS - existing TPM enrollment verified unchanged"
+    else
+      echo "RESULT=PASS - TPM enrolled and initramfs regenerated; boot verification remains"
+    fi
+    ;;
+esac

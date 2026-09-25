@@ -1,5 +1,10 @@
 # Hermes on Fedora Server — end-to-end deployment guide
 
+**New disposable lab:** use [HERMES_DISPOSABLE_LAB.md](HERMES_DISPOSABLE_LAB.md)
+for current DeepSeek testing. This M01–M05 physical-host procedure retains its
+historical encrypted-storage and console assumptions and is not the new lab
+deployment path.
+
 **Audience:** the operator who owns the hardware and will type every privileged command.
 **Outcome:** a Fedora 44 Server that survives a wall-power cycle with **no keyboard input** and answers on
 Telegram through an offline, network-isolated worker.
@@ -68,10 +73,10 @@ this section claim more. It has not been done.
 
 ---
 
-## Reference values from the validated deployment
+## Historical reference values from the validated deployment
 
-Use these as defaults and substitute your own where marked. The application scripts already carry the pinned
-digests; you do not type them by hand.
+These values describe the September 2026 physical-host validation. The current manual-profile scripts pin
+Hermes v0.21.5 for the new DeepSeek VM; the historical result does not certify those changed scripts.
 
 | Item | Reference value | Yours |
 | --- | --- | --- |
@@ -89,6 +94,148 @@ digests; you do not type them by hand.
 this procedure is typed at a hidden prompt.
 
 ---
+
+## Fresh DeepSeek acceptance VM (2026-09-23 candidate)
+
+The new retained fixture is `lab-hermes-deepseek-e2e-r1`. Its [execution record](plans/2026-09-23-hermes-deepseek-e2e-r1.md)
+owns gate order and actual results. The current manual bundle pins the [latest upstream release at preparation time](https://github.com/NousResearch/hermes-agent/releases/tag/v2026.9.24),
+v0.21.5 (`v2026.9.24`), to registry index `sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7`.
+The image's revision label matched the release commit; the upstream tag is unsigned. Confirm that this
+is still the latest release before VM deployment. If a newer release exists, re-pin and repeat the
+compatibility gates rather than silently following a mutable tag.
+
+Use native `HERMES_PROVIDER=deepseek` and `HERMES_MODEL=deepseek-flash`. DeepSeek [identifies that model as
+V4.1 Flash](https://api-docs.deepseek.com/quick_start/pricing/) and [documents tool calls](https://api-docs.deepseek.com/guides/tool_calls/).
+The [release's provider guide](https://github.com/NousResearch/hermes-agent/blob/v2026.9.24/website/docs/integrations/providers.md)
+names `DEEPSEEK_API_KEY` for native DeepSeek. Do not configure an OpenAI endpoint or key for this run.
+A credential-free check of the pinned image must resolve `deepseek` to `https://api.deepseek.com/v1`
+with a synthetic key and network disabled before a real provider call. `m03-accept.sh` enforces that
+check when `--allow-provider-call` is set and stops on failure.
+
+On the hypervisor, use [`lab/deepseek-e2e-create-fixture.sh`](../scripts/hermes/manual/lab/deepseek-e2e-create-fixture.sh)
+with `HERMES_MEDIA_DIR` set to the directory containing the Fedora ISO, signed CHECKSUM and keyring.
+Run `--check`, review its inventory and XML result, then `--create` through the private host
+privilege prompt. Repository-relative media paths resolve from the repository root; the helper
+discovers the absolute storage path from the libvirt pool. It guards the new name, disk, UUID and MAC
+against existing definitions and never removes a VM. `--create` verifies an existing matching VM and
+returns `UNCHANGED` on rerun; an orphaned disk or mismatched domain is retained for diagnosis.
+After the interactive Fedora installation, run `--finalize` to eject install media.
+The domain uses 2 vCPUs, 12 GiB RAM, a 120 GiB sparse disk, `fvh-nat`, Secure Boot and vTPM 2.0.
+The existing `lab-hermes-manual-r1` and production server are outside this run.
+
+Install Fedora with LUKS2 and a dedicated `/home/hermes` filesystem, then follow Phases 2–6 in order.
+Establish and verify a recovery passphrase and operator access before TPM enrollment; enter passwords
+only at the guest's private console. Confirm no-input shutdown and cold start before staging the
+application. For Phase 6 step 4, run `provision-deepseek-key.sh` through its hidden prompt. For step 5,
+pass `HERMES_PROVIDER=deepseek HERMES_MODEL=deepseek-flash` to `m03-accept.sh --apply --allow-provider-call`.
+The paid probe records an attempt before calling DeepSeek. A rerun with matching host, image, model, config and
+credential skips the calls and reports them as deferred. If an attempt stopped partway through, review its
+log before explicitly retrying with `--force-provider-reprobe --allow-provider-call`.
+Keep the test key and bot token dedicated to this VM. Continue the ordered Telegram, allowlist,
+isolation, backup/restore, SELinux, systemd and post-reboot gates only after their prerequisites pass.
+On a full pass, shut down and retain the encrypted VM, revoke the DeepSeek key in the provider console
+and the Telegram token through BotFather, and record independent revocation results without token values.
+A VM cold start does not certify the physical server's firmware, TPM or wall-power behavior.
+
+### Temporary password-free access for this VM
+
+The [DeepSeek execution record](plans/2026-09-23-hermes-deepseek-e2e-r1.md) owns the gate order.
+The temporary [grant installer](../scripts/hermes/manual/lab/deepseek-test-grant.py) targets only
+`lab-hermes-deepseek-e2e-r1` and checks its UUID, MAC, network, guest machine-ID hash and SSH host
+key. It installs separate root-owned host and guest wrappers and exact-command sudoers rules.
+The guest wrapper runs only named manual helpers from a pinned, root-owned bundle. It does not
+authorize a shell, arbitrary script path or `NOPASSWD: ALL`. A dedicated SSH key stays outside
+the repository and is removed at final teardown.
+
+On the current retained VM, the original guest-agent bootstrap failed under its confined
+context. The guest grant was later installed through the separately approved guest sudo path,
+and the host grant was finalized. Both fixed grants and the pinned bundle are active; see the
+[execution record](plans/2026-09-23-hermes-deepseek-e2e-r1.md) for the live checks. Do not rerun
+the original installer on this partial installation. Its source can be checked offline:
+
+```bash
+python3 -I scripts/hermes/manual/lab/deepseek-test-grant.py check
+```
+
+The original `start-install` command verifies the exact VM and attempts a guest-agent
+bootstrap, but that route did not install this Fedora guest's rule. A new fixture needs its
+own reviewed guest installation path before using the host finalizer. The grant installer
+checks both sudoers rules with `visudo`, preserves existing SSH authorization, and stops on
+differing installed files. A partial grant must be inspected before advancing the boot or
+application gates. Keep administrator passwords out of commands, files and chat.
+
+If guest-agent root reports `PermissionError` while creating the guest wrapper directory,
+stop and inspect the exact guest's process context, path modes, labels and read-only mount
+state with [`deepseek-guest-permission-inspect.py`](../scripts/hermes/manual/lab/deepseek-guest-permission-inspect.py).
+Its `check` mode is offline; `inspect` attests and starts only the exact VM, reads guest
+metadata, then requests graceful shutdown. It requires private workstation administrator
+authentication. Review the matching
+guest AVC evidence through an authorized administrator path before changing SELinux policy or
+moving the wrapper. Do not rerun the bootstrap unchanged after this failure.
+
+If the retained test VM's `aicowork` sudo password is unavailable, stop retrying it.
+After explicit approval to reset that account's password, run the fixed-VM
+[`deepseek-guest-password-recovery.py`](../scripts/hermes/manual/lab/deepseek-guest-password-recovery.py)
+from a private workstation terminal:
+
+```bash
+python3 -I scripts/hermes/manual/lab/deepseek-guest-password-recovery.py check
+sudo /usr/bin/python3 -I scripts/hermes/manual/lab/deepseek-guest-password-recovery.py reset-password
+```
+
+The reset verifies the VM UUID, MAC, network, lease, guest machine-ID and SSH host
+key before requesting a new password twice. It sends a local yescrypt hash through
+the QEMU guest agent; it does not put the raw password in arguments, environment
+variables or files. The acceptance marker means only that the guest agent accepted
+the change. Verify a fresh guest `sudo` login with the new password before X01;
+the LUKS recovery passphrase is separate and is not changed by this command.
+If the guest agent rejects the change, preserve the running VM and inspect the
+reported error before selecting another recovery path.
+
+For the retained DeepSeek VM, the approved guest grant was installed through
+the administrator SSH path after the guest-agent write denial. The guest
+bundle was then staged and returned `BUNDLE=UNCHANGED` on rerun. Do not run
+`start-install` against that now-present guest grant. After separate approval
+for a private workstation administrator prompt, use the
+[`deepseek-host-grant-finalize.py`](../scripts/hermes/manual/lab/deepseek-host-grant-finalize.py)
+helper to verify the exact guest grant, bundle and interrupted root-owned host
+copy, then publish only the fixed host sudoers rule:
+
+```bash
+python3 -I scripts/hermes/manual/lab/deepseek-host-grant-finalize.py check
+sudo /usr/bin/python3 -I scripts/hermes/manual/lab/deepseek-host-grant-finalize.py install
+```
+
+The live host finalization, allowed/rejected host commands and final teardown
+must be recorded in the [execution record](plans/2026-09-23-hermes-deepseek-e2e-r1.md).
+
+After `HOST_GRANT_INSTALLED`, stage the pinned bundle and verify both allowed and rejected
+forms before running gate helpers:
+
+```bash
+python3 -I scripts/hermes/manual/lab/deepseek-test-grant.py stage
+sudo -n /usr/bin/python3 -I /var/usrlocal/libexec/hermes-deepseek-test/access.py host status
+python3 -I scripts/hermes/manual/lab/deepseek-test-grant.py run status
+```
+
+The installed host wrapper also allows only `start`, `shutdown`, `inspect-boot` and final
+`teardown`. The guest wrapper accepts fixed operation IDs such as `boot-preflight`,
+`boot-enroll`, `worker-key`, `m01`, `m02`, `m03-contract`, `deepseek-key`, `m03-accept`,
+`m04-backup`, `telegram`, and the `m05-allowlist-*` and `m05-worker-*` test states.
+The source mapping lists every allowed operation.
+On the current VM, the installed `inspect-boot` copy fails because the guest-agent PATH
+does not find its bare `cryptsetup` call. The repository source now uses the absolute
+path, but that corrected copy has not been installed. Use the fixed guest `boot-preflight`
+and existing-token `boot-enroll` checks recorded in the execution record for B01.
+Unknown IDs and extra arguments must be denied by `sudo -n`, not fall through to a password
+prompt. The model and provider are fixed to native DeepSeek for the acceptance helper.
+The DeepSeek key, Telegram token and any LUKS recovery passphrase still use their own
+private prompts; the grant never stores those values or a sudo password.
+
+At the final gate, run the exact host `teardown` action while the VM is running. It removes
+the guest rule and dedicated SSH authorization first, requests a graceful shutdown, verifies
+the VM is off, then removes the host rule, installed wrappers and temporary SSH key. Do not
+use a plain `shutdown` as final cleanup: it retains the temporary grants for a test restart.
 
 ## Before you begin
 
@@ -277,6 +424,16 @@ Phase 3 already did this. Confirm the off-host copy is present and readable befo
 
 ### 4.3 — Enroll the TPM2 keyslot (B3)
 
+Install the signed Fedora TPM tools **before** enrollment. Dracut uses the `tpm2` binary to select its
+`tpm2-tss` module; without it, enrollment may succeed while the initramfs cannot unlock LUKS.
+
+```bash
+sudo dnf install tpm2-tools
+```
+
+Review the transaction before accepting it. The enrollment helper requires this tool and verifies that
+the resulting initramfs contains both `systemd-cryptsetup` and `tpm2-tss` before claiming success.
+
 ```bash
 sudo bash ~/hermes-manual/boot/tpm-enroll.sh --preflight
 ```
@@ -289,7 +446,25 @@ sudo HERMES_EXPECT_MACHINE_ID_SHA256=<hash> bash ~/hermes-manual/boot/tpm-enroll
 ```
 
 It binds **PCR 7 with the SHA-256 bank and no PIN**, verifies the passphrase slot still works, edits *only* the
-matching crypttab record, regenerates the initramfs, and stages post-change recovery material.
+matching crypttab record, regenerates the initramfs, and stages post-change recovery material. An unchanged
+rerun checks the existing token policy, crypttab option and current-kernel initramfs, then reports
+`ENROLL=UNCHANGED`; an incomplete or different state fails closed instead of adding another token.
+
+If enrollment created one TPM token and retained the passphrase but the helper reports a missing
+`systemd-cryptsetup` or `tpm2-tss` initramfs module, **do not reboot yet**. Confirm the off-guest LUKS
+header backup and recovery passphrase first. On the running, unlocked guest, install `tpm2-tools` from
+Fedora's signed repositories after reviewing the transaction. Inspect
+`/etc/dracut.conf.d/98-hermes-manual-tpm.conf` if it already exists; keep a matching file unchanged and
+stop on different contents. Otherwise create that root-owned, mode 0644 file with this exact line:
+
+```text
+add_dracutmodules+=" systemd-cryptsetup tpm2-tss "
+```
+
+Run `sudo dracut -f` for the current kernel, then inspect
+`sudo lsinitrd -m /boot/initramfs-$(uname -r).img`. Both module names must appear as distinct entries.
+Run the identity-pinned `tpm-enroll.sh --enroll --apply` again: it must report `ENROLL=UNCHANGED` without
+adding a token. Only then attempt the private-passphrase fallback proof and a no-input cold start.
 
 Optional hardening: pin the volume so the script refuses any other one, using the UUID from Phase 2:
 
@@ -312,6 +487,12 @@ leaving crypttab still asking for TPM, so the next boot *must* fall back to the 
 ```bash
 sudo HERMES_EXPECT_MACHINE_ID_SHA256=<hash> bash ~/hermes-manual/boot/fallback-wipe.sh --apply
 ```
+
+Before rebooting, require exit status 0, `crypttab_unchanged=yes`,
+`passphrase_slot=OK`, `WIPE=done` and the final `RESULT=PASS`. If the
+passphrase check fails, leave the system running and inspect its recovery
+material; a remaining keyslot count alone does not prove that the entered
+passphrase unlocks it.
 
 Reboot. **The passphrase prompt must appear.** Enter the passphrase; the system must boot. Then re-enroll:
 
@@ -349,7 +530,7 @@ sudo dnf install \
   shadow-utils shadow-utils-subid \
   openssh-server openssh-clients \
   firewalld policycoreutils policycoreutils-python-utils \
-  audit chrony cryptsetup lvm2 xfsprogs tpm2-tools \
+  audit chrony cryptsetup lvm2 xfsprogs \
   git jq skopeo tar rsync \
   dnf5-plugin-automatic dnf5-plugins \
   mokutil smartmontools sysstat
@@ -357,9 +538,7 @@ sudo systemctl enable --now chronyd
 chronyc tracking
 ```
 
-`tpm2-tools` is **not optional**: `boot/b4-verify.sh` reads PCR 7 with `tpm2_pcrread`, and the TPM enrollment
-and fallback helpers use it too. It was missing from the first edition of this list, so a literal follower
-built a host whose final boot gate could not run; added during the clean-install validation.
+`tpm2-tools` was installed in Phase 4 before TPM enrollment; `boot/b4-verify.sh` also uses it to read PCR 7.
 
 Use Fedora's signed repositories. Do not disable signature verification, do not add an unrelated repository,
 and do not install Docker alongside Podman. Do not run the Hermes curl-to-shell installer on the host for this
@@ -715,8 +894,8 @@ The order is not arbitrary — the notes column records the dependencies that ac
 | 2 | `m03-activate.sh --apply` | M03.1 | No credential loaded; proves shim resolution |
 | 3 | `m03-configure-and-probe.sh --apply` | M03.2 | Writes the profile terminal backend |
 | 3a | `m03-contract.sh --apply` | M03.2a | **Credential-free** application and verification of `config/profile-contract.yaml`. Safe to run before any credential exists; provider checks are deferred to Gate 3 |
-| 4 | `provision-openai-key.sh` | M03 | **Hidden prompt**; writes the profile `.env` |
-| 5 | `m03-accept.sh --apply --allow-provider-call` | M03 | **Requires the `.env` from step 4.** The second flag is the explicit opt-in for the paid inference and tool round trip |
+| 4 | `provision-openai-key.sh` or `provision-deepseek-key.sh` | M03 | **Hidden prompt**; writes the selected provider credential to the profile `.env` |
+| 5 | `m03-accept.sh --apply --allow-provider-call` | M03 | **Requires the `.env` from step 4.** Set `HERMES_PROVIDER` and `HERMES_MODEL` for the selected provider. The second flag opts in to the bounded paid inference and tool round trip |
 | 6 | `m04-posture.sh --apply` | M04.1 | Effective posture; parent slice budget |
 | 7 | `m04-backup.sh --apply` | M04.2 | Stopped-state backup + isolated restore. **Stops both containers**; it restarts them at the end |
 | 8 | `provision-telegram.sh`, then `m05-telegram.sh --apply` | M05 | **Must precede the read-only test**, which verifies Telegram returns. The gateway must be **running** — check `podman ps` if step 7 was interrupted |
@@ -733,6 +912,8 @@ The order is not arbitrary — the notes column records the dependencies that ac
   is Debian, a missing trusted key must fail, and a changed host key must fail.
 - **Credentials (steps 4–5):** the model must return exactly `HERMES_OK`, and a harmless tool round trip must
   land in the worker and return `Fedora release 44`.
+- **Telegram provisioning (step 8):** entering the same token and allowlist again preserves the profile
+  `.env` file byte for byte; a changed value replaces it atomically.
 - **Telegram (steps 8–9):** the bot is a **supervised daemon**, connected in **polling mode**, with no public
   webhook. Test the authorized reply, the manual-approval gate, the unauthorized rejection, and the
   worker-failure path. **The approval test must use a command the policy actually gates** — a destructive

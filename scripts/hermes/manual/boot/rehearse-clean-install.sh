@@ -327,6 +327,52 @@ else
   fail "fallback-wipe.sh only PRINTS crypttab_unchanged; it must enforce it (FALLBACK_PROOF=INVALID + RESULT=FAIL)"
 fi
 
+# Exercise the actual final verdict with synthetic logs. A previous live run
+# printed RESULT=PASS after the passphrase check had failed and the script had
+# already wiped its token.
+verdict_tail=$STUB/fallback-verdict.sh
+sed -n '/^# The pipeline may have printed successful wipe markers/,$p' "$WIPE" >"$verdict_tail"
+verdict_log=$STUB/fallback-verdict.log
+if [ -s "$verdict_tail" ]; then
+  printf 'crypttab_unchanged=yes\n' >"$verdict_log"
+  if verdict_output=$(OUT="$verdict_log" rc=1 bash "$verdict_tail" 2>&1); then
+    verdict_status=0
+  else
+    verdict_status=$?
+  fi
+  if [ "$verdict_status" -ne 0 ] && grep -qF 'RESULT=FAIL' <<<"$verdict_output" \
+    && ! grep -qF 'RESULT=PASS' <<<"$verdict_output"; then
+    pass "fallback helper rejects a failed passphrase check after token wipe"
+  else
+    fail "fallback helper claimed success after a failed passphrase check"
+  fi
+
+  if verdict_output=$(OUT="$verdict_log" rc=0 bash "$verdict_tail" 2>&1); then
+    verdict_status=0
+  else
+    verdict_status=$?
+  fi
+  if [ "$verdict_status" -ne 0 ] && grep -qF 'RESULT=FAIL' <<<"$verdict_output"; then
+    pass "fallback helper requires completion markers"
+  else
+    fail "fallback helper accepted a log without completion markers"
+  fi
+
+  printf 'crypttab_unchanged=yes\npassphrase_slot=OK\nWIPE=done\n' >"$verdict_log"
+  if verdict_output=$(OUT="$verdict_log" rc=0 bash "$verdict_tail" 2>&1); then
+    verdict_status=0
+  else
+    verdict_status=$?
+  fi
+  if [ "$verdict_status" -eq 0 ] && grep -qF 'RESULT=PASS' <<<"$verdict_output"; then
+    pass "fallback helper accepts a completed proof"
+  else
+    fail "fallback helper rejected a completed proof"
+  fi
+else
+  fail "fallback helper final verdict was not found for behavior tests"
+fi
+
 if grep -qF 'ENROLLMENT_VERDICT=FAIL' "$ENROLL" && grep -qF 'RESULT=FAIL' "$ENROLL"; then
   pass "tpm-enroll.sh enforces the dracut/initramfs verdict"
 else

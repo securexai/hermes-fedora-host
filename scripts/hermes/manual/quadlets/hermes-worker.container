@@ -24,6 +24,9 @@ Volume=/home/hermes/transport:/run/transport:z
 # Persistent worker home and the pinned worker host identity (worker only).
 Volume=/home/hermes/worker-state/home:/home/worker:Z
 Volume=/home/hermes/worker-state/ssh-host-keys:/etc/ssh/host-keys:ro,Z
+# The per-instance public key is mounted at runtime, so the worker image can be
+# cached and reused without baking any instance identity into it.
+Volume=/home/hermes/worker-state/authorized_keys/worker:/etc/ssh/authorized_keys/worker:ro,Z
 
 Exec=/usr/local/bin/worker-entrypoint
 

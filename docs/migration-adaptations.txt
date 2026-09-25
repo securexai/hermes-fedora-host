@@ -8,7 +8,7 @@
 docs/reviews/HERMES_MANUAL_CORRECTION_REPRO.py	Executable bit (100755) retained from the original extraction so the counterexample replay script can be run directly; the companion source file is mode 100644, bytes identical.
 AGENTS.md	Repository-authored guidance; replaces the source repository's AGENTS.md rather than copying it.
 docs/HERMES_UNATTENDED_DEPLOYMENT.md	Replaced retired `devbox run --` prefixes with the dev-toolbox Toolbox equivalents.
-docs/VM_TESTING_GUIDE.md	Devbox to Toolbox translation; checkout defaults to the current repository path and remains overrideable, while media and identity use operator-supplied variables; excluded workstation assets marked external; substantive watcher and certification prose preserved.
+docs/VM_TESTING_GUIDE.md	Devbox to Toolbox translation; checkout defaults to the current repository path and remains overrideable, while media and identity use operator-supplied variables; excluded workstation assets marked external; substantive watcher and certification prose preserved; later added the retained DeepSeek VM workflow and idempotent helper references.
 hermes-certify-vm.sh	run_offline_tests now invokes the explicit Toolbox check-only gate (run-offline-checks.sh plus run-check-only-lint.sh) instead of bare bash/python3/pre-commit on the host.
 hermes-fedora-server-install-guide.html	Hard-coded checkout replaced with HERMES_REPO using the current repository path as an overrideable default; ISO, checksum, keyring and SSH identity inputs use operator-supplied variables.
 secure-hermes-installation-plan.html	Hard-coded checkout replaced with HERMES_REPO using the current repository path as an overrideable default; ISO, checksum, keyring and SSH identity inputs use operator-supplied variables.
@@ -44,10 +44,10 @@ vm/lib-vm-common.sh	Only executable mode changed from source 100644 to destinati
 # --- FOUNDATION/MODIFIED: tracked at the migration base, changed in this tree ---
 .devcontainer/devcontainer.json	postCreateCommand added so a fresh editor container provisions repository-local ShellSpec and the uv-locked Python tooling.
 .gitignore	Ignore entries updated for the migrated tree and generated tool outputs; preserved local correction logs are excluded from the migration payload.
-.markdownlint-cli2.yaml	Blanket `docs/HERMES_*.md` and VM-guide ignores replaced by exact preserved-record paths; fix disabled (check-only); one narrow MD038 override documented for a meaningful trailing space.
+.markdownlint-cli2.yaml	Blanket `docs/HERMES_*.md` and VM-guide ignores replaced by exact preserved-record paths; fix disabled (check-only); one narrow MD038 override documented for a meaningful trailing space; the byte-bound September 23/24 lab plans are excluded by exact path.
 .pre-commit-config.yaml	Preserved-evidence exclude list made exact; shellcheck and pre-push comments corrected; maintained guides no longer blanket-excluded.
 PROVENANCE.md	Migration record updated: staleness of the old extraction manifest corrected, the new manifest identified as authoritative, and the current toolbox checkout path corrected.
-README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step documented.
+README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step and current disposable lab linked.
 docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented.
 docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged.
 docs/hook-parity.md	Ported-gate rows updated for the structural hook-wiring check and check-only Markdown linting.
@@ -56,4 +56,30 @@ tests/test-hermes-guide.sh	Source-repository assertions re-pointed; structural h
 toolbox/extensions.yaml	Stale ShellSpec purpose corrected: the migrated specs now run from the offline and certification gates.
 toolbox/install-extensions.sh	Scope clarified: installs the ShellSpec extension only and points at provision-environment.sh for the uv-locked tooling.
 toolbox/run-offline-checks.sh	Python discovery replaced with the explicit reviewed allowlist runner; full-working-tree secret scan added.
+toolbox/run-check-only-lint.sh	Retired Gate 2 grant sources are exempted by exact path from format-only shfmt so their historical reviewed byte hashes remain intact; whole-tree ShellCheck and current shell formatting stay enforced.
 toolbox/verify-extensions.sh	Verification is now genuinely non-syncing (UV_NO_SYNC=1, no Python download) and the comment states that accurately.
+
+# --- LATER FEATURE WORK: fresh DeepSeek VM, not a historical migration pass ---
+docs/HERMES_INSTALLATION_VERIFICATION.md	Later added the current DeepSeek VM evidence boundary; historical installation results remain dated.
+docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md	Later documented the latest pinned Hermes DeepSeek VM profile and provider-specific manual steps.
+scripts/hermes/manual/README.md	Later documented the native DeepSeek candidate and its credential-free resolution gate.
+scripts/hermes/manual/boot/fallback-wipe.sh	Later corrected the historical TPM fallback helper to report a failed passphrase check or missing completion markers as failure rather than printing a false success verdict.
+scripts/hermes/manual/boot/rehearse-clean-install.sh	Later added synthetic verdict regression checks for the historical fallback helper's passphrase failure and completion markers.
+scripts/hermes/manual/config/set-model.py	Later allowed native DeepSeek and avoided rewriting an already converged model config.
+scripts/hermes/manual/boot/tpm-enroll.sh	Later corrected preflight and failure verdicts, verified an unchanged TPM enrollment on rerun, and preserved staged recovery files for the DeepSeek VM.
+scripts/hermes/manual/m02-deploy-and-validate.sh	Later repinned the manual gateway to Hermes v2026.9.24; current lab work moved the worker's per-instance public key out of its reusable image build context.
+scripts/hermes/manual/m03-accept.sh	Later repinned the gateway, added native DeepSeek pre-call resolution and redaction, and guarded paid probe replay with a private attempt receipt.
+scripts/hermes/manual/m03-configure-and-probe.sh	Later repinned the manual gateway to Hermes v2026.9.24.
+scripts/hermes/manual/m03-contract.sh	Later repinned the manual gateway to Hermes v2026.9.24.
+scripts/hermes/manual/m05-gateway-diag.sh	Later repinned the manual gateway to Hermes v2026.9.24.
+scripts/hermes/manual/m05-gateway-diag2.sh	Later repinned the manual gateway to Hermes v2026.9.24.
+scripts/hermes/manual/m05-tests.sh	Later repinned the manual gateway to Hermes v2026.9.24.
+scripts/hermes/manual/manifest.yaml	Later recorded the latest release, image index and amd64 child manifest for the DeepSeek VM.
+scripts/hermes/manual/provision-openai-key.sh	Later repinned the manual gateway image while retaining the existing OpenAI provisioner.
+scripts/hermes/manual/provision-telegram.sh	Later repinned the manual gateway image and preserved an unchanged Telegram profile on rerun for the DeepSeek VM test.
+scripts/hermes/manual/quadlets/hermes-gateway.container	Later repinned the manual gateway Quadlet to Hermes v2026.9.24.
+scripts/hermes/manual/quadlets/hermes-worker.container	Current disposable lab binds each instance's public worker authorization key at runtime so its worker image can be cached without an instance identity.
+scripts/hermes/manual/worker/Containerfile	Current disposable lab removed the per-instance authorized key COPY from the reusable, credential-free worker image.
+scripts/hermes/manual/redact-stream.py	Later added DEEPSEEK_API_KEY to the secret-redaction set.
+scripts/hermes/set-model.py	Later kept the shared model setter byte-identical to the manual profile's native DeepSeek and idempotent setter.
+tests/test-hermes-manual-profile.sh	Later added native DeepSeek model, redaction, and retained VM safety checks.

@@ -1,5 +1,9 @@
 # VM deployment testing tasks
 
+For the current unencrypted DeepSeek lab commands and gates, use
+[HERMES_DISPOSABLE_LAB.md](../docs/HERMES_DISPOSABLE_LAB.md). The certification
+checklist below belongs to the older encrypted/production-candidate track.
+
 This is the executable progress checklist for disposable Hermes certification and production promotion. The
 chronological evidence ledger is
 [`HERMES_INSTALLATION_VERIFICATION.md`](../docs/HERMES_INSTALLATION_VERIFICATION.md).

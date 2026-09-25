@@ -6,6 +6,7 @@
 # helper spends money or changes the profile:
 #   --apply                perform the profile changes and checks
 #   --allow-provider-call  run the authenticated inference and tool round trip
+#   --force-provider-reprobe  explicitly retry paid probes with unchanged inputs
 #
 # Requires the profile .env to have been provisioned already.
 #
@@ -22,11 +23,16 @@ HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
   exit 1
 }
 
+MP_EXTRA_FLAGS='--allow-provider-call --force-provider-reprobe'
 mp_parse_mode "$@"
 ALLOW_PROVIDER_CALL=0
+FORCE_PROVIDER_REPROBE=0
 for arg in "$@"; do
   [ "$arg" = "--allow-provider-call" ] && ALLOW_PROVIDER_CALL=1
+  [ "$arg" = "--force-provider-reprobe" ] && FORCE_PROVIDER_REPROBE=1
 done
+[ "$FORCE_PROVIDER_REPROBE" -eq 0 ] || [ "$ALLOW_PROVIDER_CALL" -eq 1 ] \
+  || mp_die '--force-provider-reprobe also requires --allow-provider-call'
 mapfile -t MP_ARGS < <(mp_positionals "$@")
 BUNDLE="${MP_ARGS[0]:-$HERE}"
 ADMIN_ACCOUNT=$(mp_admin_account)
@@ -36,7 +42,7 @@ HERMES_UID=$(id -u hermes)
 GW_UID=10000
 GW_STATE=/home/hermes/gateway-state
 GWSSH=/home/hermes/gateway-ssh
-GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 MODEL="${HERMES_MODEL:-gpt-5.6-luna}"
 PROVIDER="${HERMES_PROVIDER:-openai-api}"
 
@@ -61,9 +67,15 @@ h() {
 # One-shot container in the pinned image as the runtime identity, WITH egress
 # (needed only when a provider call is explicitly authorized).
 gconet() {
+  local -a network=()
+  local entry
+  if [ "${1:-}" = "--offline" ]; then
+    network=(--network none)
+    shift
+  fi
   entry="$1"
   shift
-  h timeout 240 podman run --rm --user "$GW_UID:$GW_UID" --workdir /opt/hermes \
+  h timeout 240 podman run --rm "${network[@]}" --user "$GW_UID:$GW_UID" --workdir /opt/hermes \
     -v "$GW_STATE":/opt/data:z \
     -v /home/hermes/transport:/run/hermes-transport:z \
     -v "$GWSSH":/opt/hermes/gateway-ssh:ro,Z \
@@ -77,7 +89,7 @@ rc=0
 {
   echo "### M03 acceptance"
   echo "### generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-  echo "### allow_provider_call=$ALLOW_PROVIDER_CALL provider=$PROVIDER model=$MODEL"
+  echo "### allow_provider_call=$ALLOW_PROVIDER_CALL force_reprobe=$FORCE_PROVIDER_REPROBE provider=$PROVIDER model=$MODEL"
   echo
 
   echo "===== preconditions ====="
@@ -88,6 +100,7 @@ rc=0
   elif [ "$ALLOW_PROVIDER_CALL" -eq 1 ]; then
     echo "env_present=NO - a provider call was authorized but no credential is provisioned"
     mp_check profile_credentials FAIL "profile .env is missing or empty but --allow-provider-call was given"
+    exit 1
   else
     echo "env_present=NO - deferred: no provider call is authorized in this run"
     # Required only for provider acceptance, which Gate 3 owns. Without
@@ -114,6 +127,7 @@ rc=0
   printf '%s\n' "$model_out"
   echo "set_model_rc=$model_rc"
   mp_check provider_model_set "$([ "$model_rc" -eq 0 ] && echo PASS || echo FAIL)"
+  [ "$model_rc" -eq 0 ] || exit 1
   echo
 
   echo "===== apply the manual-profile configuration contract ====="
@@ -123,6 +137,7 @@ rc=0
   printf '%s\n' "$harden_out"
   echo "harden_rc=$harden_rc"
   mp_check profile_contract_applied "$([ "$harden_rc" -eq 0 ] && echo PASS || echo FAIL)"
+  [ "$harden_rc" -eq 0 ] || exit 1
   echo
 
   echo "===== config readback (no secret values) ====="
@@ -141,24 +156,111 @@ print('cron_scheduling=' + str((c.get('cron') or {}).get('allow_agent_scheduling
 " 2>&1
   echo
 
-  if [ "$ALLOW_PROVIDER_CALL" -eq 1 ]; then
-    echo "===== authenticated inference (expect exactly HERMES_OK) ====="
-    inf_out=$(gconet /opt/hermes/bin/hermes --safe-mode --provider "$PROVIDER" --model "$MODEL" \
-      --toolsets context_engine -z 'Return exactly HERMES_OK and nothing else.' 2>&1)
-    inf_rc=$?
-    printf 'inference_output=%s\n' "$inf_out"
-    echo "inference_rc=$inf_rc"
-    mp_check inference_exact "$([ "$(printf '%s' "$inf_out" | tr -d '\r' | sed -e 's/[[:space:]]*$//')" = "HERMES_OK" ] && echo PASS || echo FAIL)"
-    echo
+  if [ "$PROVIDER" = "deepseek" ] && [ "$ALLOW_PROVIDER_CALL" -eq 1 ]; then
+    key_lines=$(grep -c '^DEEPSEEK_API_KEY=' "$GW_STATE/.env" 2>/dev/null || true)
+    if [ "${key_lines:-0}" -eq 1 ]; then
+      mp_check deepseek_key_present PASS
+    else
+      mp_check deepseek_key_present FAIL 'expected exactly one DEEPSEEK_API_KEY entry'
+      exit 1
+    fi
+    echo "===== native DeepSeek resolution in pinned image (network disabled) ====="
+    resolver_out=$(gconet --offline env DEEPSEEK_API_KEY=synthetic-resolution-only \
+      /opt/hermes/.venv/bin/python3 -c '
+from hermes_cli.runtime_provider import resolve_runtime_provider
+r = resolve_runtime_provider(requested="deepseek", target_model="deepseek-flash")
+assert r.get("provider") == "deepseek"
+assert r.get("base_url") == "https://api.deepseek.com/v1"
+assert r.get("api_key") == "synthetic-resolution-only"
+assert r.get("api_mode") == "chat_completions"
+print("native_deepseek_resolution=PASS")' 2>&1)
+    resolver_rc=$?
+    echo "provider_resolution_rc=$resolver_rc"
+    if [ "$resolver_rc" -eq 0 ] && [ "$resolver_out" = 'native_deepseek_resolution=PASS' ]; then
+      mp_check native_deepseek_resolution PASS
+    else
+      mp_check native_deepseek_resolution FAIL 'pinned image did not resolve native DeepSeek'
+      exit 1
+    fi
+  fi
 
-    echo "===== harmless tool round-trip (must execute in the worker) ====="
-    tool_out=$(gconet /opt/hermes/bin/hermes --provider "$PROVIDER" --model "$MODEL" \
-      --toolsets terminal -z 'Run the shell command: echo HERMES_WORKER_TOOL_OK; head -1 /etc/fedora-release   Then reply only with the command output.' 2>&1)
-    tool_rc=$?
-    printf 'tool_output=%s\n' "$tool_out"
-    echo "tool_rc=$tool_rc"
-    mp_check worker_tool_roundtrip "$([[ "$tool_out" == *HERMES_WORKER_TOOL_OK* ]] && echo PASS || echo FAIL)"
-    echo
+  if [ "$ALLOW_PROVIDER_CALL" -eq 1 ]; then
+    # The paid calls are an explicit acceptance exception to declarative
+    # convergence. An attempt receipt prevents accidental replay after success
+    # or partial failure. A fresh key/config/model gets a distinct fingerprint;
+    # an intentional retry with unchanged inputs needs --force-provider-reprobe.
+    probe_env_sha=$(sha256sum "$GW_STATE/.env" | awk '{print $1}')
+    probe_config_sha=$(sha256sum "$GW_STATE/config.yaml" | awk '{print $1}')
+    probe_host_sha=$(mp_host_identity_sha256)
+    [ -n "$probe_host_sha" ] || {
+      mp_check provider_probe_identity FAIL 'cannot read reviewed host identity'
+      exit 1
+    }
+    probe_id=$(printf '%s\n' "$probe_host_sha" "$GW_IMAGE" "$PROVIDER" "$MODEL" \
+      "$probe_env_sha" "$probe_config_sha" | sha256sum | awk '{print $1}')
+    probe_receipt="$GW_STATE/.m03-provider-probe-receipt"
+    receipt_status= receipt_id=
+    if [ -f "$probe_receipt" ]; then
+      read -r receipt_status receipt_id <"$probe_receipt" || {
+        mp_check provider_probe_receipt FAIL 'cannot read the existing probe receipt'
+        exit 1
+      }
+      case "$receipt_status" in PASS | ATTEMPTED) ;; *)
+        mp_check provider_probe_receipt FAIL 'invalid receipt status'
+        exit 1
+        ;;
+      esac
+    fi
+    if [ "$receipt_id" = "$probe_id" ] && [ "$FORCE_PROVIDER_REPROBE" -eq 0 ]; then
+      if [ "$receipt_status" = PASS ]; then
+        echo 'provider_calls=UNCHANGED (matching successful receipt; no paid replay)'
+        mp_defer inference_exact 'a matching prior probe passed; no new call on this rerun'
+        mp_defer worker_tool_roundtrip 'a matching prior probe passed; no new call on this rerun'
+      else
+        mp_check provider_probe_replay FAIL \
+          'a prior attempt is incomplete; review its log before --force-provider-reprobe'
+        exit 1
+      fi
+    else
+      probe_tmp="$probe_receipt.tmp.$$"
+      (
+        umask 077
+        printf 'ATTEMPTED %s\n' "$probe_id" >"$probe_tmp"
+      ) || exit 1
+      mv -f "$probe_tmp" "$probe_receipt" || exit 1
+      echo "===== authenticated inference (expect exactly HERMES_OK) ====="
+      inf_out=$(gconet /opt/hermes/bin/hermes --safe-mode --provider "$PROVIDER" --model "$MODEL" \
+        --toolsets context_engine -z 'Return exactly HERMES_OK and nothing else.' 2>&1)
+      inf_rc=$?
+      printf 'inference_output=%s\n' "$inf_out" | mp_redact_stream "$GW_STATE/.env"
+      echo "inference_rc=$inf_rc"
+      if [ "$inf_rc" -eq 0 ] && [ "$(printf '%s' "$inf_out" | tr -d '\r' | sed -e 's/[[:space:]]*$//')" = HERMES_OK ]; then
+        mp_check inference_exact PASS
+      else
+        mp_check inference_exact FAIL 'expected an exact HERMES_OK reply'
+        exit 1
+      fi
+      echo
+
+      echo "===== harmless tool round-trip (must execute in the worker) ====="
+      tool_out=$(gconet /opt/hermes/bin/hermes --provider "$PROVIDER" --model "$MODEL" \
+        --toolsets terminal -z 'Run the shell command: echo HERMES_WORKER_TOOL_OK; head -1 /etc/fedora-release   Then reply only with the command output.' 2>&1)
+      tool_rc=$?
+      printf 'tool_output=%s\n' "$tool_out" | mp_redact_stream "$GW_STATE/.env"
+      echo "tool_rc=$tool_rc"
+      if [ "$tool_rc" -eq 0 ] && [[ "$tool_out" == *HERMES_WORKER_TOOL_OK* ]]; then
+        mp_check worker_tool_roundtrip PASS
+      else
+        mp_check worker_tool_roundtrip FAIL 'expected the worker tool marker in a successful reply'
+        exit 1
+      fi
+      (
+        umask 077
+        printf 'PASS %s\n' "$probe_id" >"$probe_tmp"
+      ) || exit 1
+      mv -f "$probe_tmp" "$probe_receipt" || exit 1
+      echo
+    fi
   else
     echo "===== provider calls skipped (--allow-provider-call not given) ====="
     # Gate 3 owns provider and messaging acceptance. These are deferred, not

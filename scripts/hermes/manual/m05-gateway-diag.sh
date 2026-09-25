@@ -26,7 +26,7 @@ OUT=$(mp_new_log "$ADMIN_HOME/hermes-m05-gateway-diag.out")
 HERMES_UID=$(id -u hermes)
 STATE=/home/hermes/gateway-state
 GWSSH=/home/hermes/gateway-ssh
-GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 
 redact() {
   mp_redact_stream "$STATE/.env"

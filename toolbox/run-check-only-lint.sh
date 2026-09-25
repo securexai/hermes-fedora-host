@@ -94,6 +94,10 @@ shfmt_files=()
 for path in "${shell_files[@]}"; do
   case "$path" in
     spec/*) ;;
+    # These retired, untracked Gate 2 grant sources are byte-bound to the
+    # historical 2026-09-24 record. Keep ShellCheck coverage, but do not make
+    # a formatting gate demand rewriting the reviewed installed wrapper hash.
+    scripts/hermes/manual/lab/gate2-test-grants.sh | scripts/hermes/manual/lab/gate2-test-guest.sh | scripts/hermes/manual/lab/gate2-test-host.sh) ;;
     *) shfmt_files+=("$path") ;;
   esac
 done

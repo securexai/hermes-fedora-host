@@ -29,7 +29,6 @@ RUN useradd --create-home --home-dir /home/worker --shell /bin/bash --uid 1000 w
 # change the worker identity the gateway has pinned.
 
 COPY sshd_worker_config /etc/ssh/sshd_worker_config
-COPY authorized_keys /etc/ssh/authorized_keys/worker
 COPY worker-entrypoint /usr/local/bin/worker-entrypoint
 COPY worker-socket-adapter /usr/local/bin/worker-socket-adapter
 COPY worker-sshd-inetd /usr/local/bin/worker-sshd-inetd
@@ -37,6 +36,6 @@ COPY worker-sshd-inetd /usr/local/bin/worker-sshd-inetd
 RUN chmod 0755 /usr/local/bin/worker-entrypoint \
                 /usr/local/bin/worker-socket-adapter \
                 /usr/local/bin/worker-sshd-inetd \
- && chmod 0644 /etc/ssh/sshd_worker_config /etc/ssh/authorized_keys/worker
+ && chmod 0644 /etc/ssh/sshd_worker_config
 
 CMD ["/usr/local/bin/worker-entrypoint"]

@@ -27,7 +27,7 @@ ADMIN_HOME=$(mp_admin_home)
 OUT=$(mp_new_log "$ADMIN_HOME/hermes-provision-telegram.out")
 STATE=/home/hermes/gateway-state
 GW_UID=10000
-IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 HERMES_UID=$(id -u hermes)
 
 if [ ! -r /dev/tty ]; then
@@ -110,7 +110,13 @@ rc=0
           fi
           cat >> "$tmp"
           chmod 0600 "$tmp"
-          mv -f "$tmp" /opt/data/.env
+          if [ -f /opt/data/.env ] && cmp -s "$tmp" /opt/data/.env; then
+            rm -f "$tmp"
+            echo "env_update=UNCHANGED"
+          else
+            mv -f "$tmp" /opt/data/.env
+            echo "env_update=CHANGED"
+          fi
           echo "env_lines=$(wc -l < /opt/data/.env)"
         '
 

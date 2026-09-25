@@ -35,7 +35,7 @@ ADMIN_ACCOUNT=$(mp_admin_account)
 ADMIN_HOME=$(mp_admin_home)
 OUT=$(mp_new_log "$ADMIN_HOME/hermes-m02-deploy.out")
 HERMES_UID=$(id -u hermes)
-GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:9469b3e78b9545b6d576eb8887a95352e9a0ea83730eaf31431cf862ca1010e1
+GW_IMAGE=docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
 BUILD=/home/hermes/.cache/hermes-m02-build
 BUILD_STAMP=/home/hermes/.cache/hermes-m02-build.sha256
 CLIENT_DIR=/home/hermes/.cache/hermes-m02-client
@@ -105,7 +105,7 @@ mp_on_cleanup restore_gateway_state
 
 # sha256 of all worker build inputs, so an unchanged re-run can skip the build.
 build_inputs_hash() {
-  sha256sum "$BUNDLE"/worker/* "$GWSSH/worker_client_ed25519.pub" 2>/dev/null \
+  sha256sum "$BUNDLE"/worker/* 2>/dev/null \
     | sha256sum | cut -d' ' -f1
 }
 
@@ -139,7 +139,7 @@ rc=0
 
   echo "===== directories ====="
   install -d -o hermes -g hermes -m 0711 "$GWSSH" "$TRANSPORT" \
-    "$WSTATE" "$WSTATE/home" "$WSTATE/ssh-host-keys"
+    "$WSTATE" "$WSTATE/home" "$WSTATE/ssh-host-keys" "$WSTATE/authorized_keys"
   dir_rc=$?
   mp_check runtime_directories "$([ "$dir_rc" -eq 0 ] && echo PASS || echo FAIL)" \
     "install -d rc=$dir_rc"
@@ -162,6 +162,7 @@ rc=0
   fi
   chown hermes:hermes "$GWSSH/worker_client_ed25519.pub"
   chmod 0644 "$GWSSH/worker_client_ed25519.pub"
+  install -o hermes -g hermes -m 0644 "$GWSSH/worker_client_ed25519.pub" "$WSTATE/authorized_keys/worker"
   ssh-keygen -lf "$GWSSH/worker_client_ed25519.pub"
   mp_check worker_client_key PASS
   echo
@@ -238,7 +239,6 @@ rc=0
   rm -rf "$BUILD"
   install -d -o hermes -g hermes -m 0700 "$BUILD"
   cp "$BUNDLE"/worker/* "$BUILD"/
-  cp "$GWSSH/worker_client_ed25519.pub" "$BUILD/authorized_keys"
   chown -R hermes:hermes "$BUILD"
   want_build_hash=$(build_inputs_hash)
   if h podman image inspect localhost/hermes-worker:1 >/dev/null 2>&1; then

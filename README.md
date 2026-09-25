@@ -12,11 +12,12 @@ in the source repository and are not part of this tree.
 
 | I want to… | Read |
 | --- | --- |
+| Run the current disposable Hermes lab | [`docs/HERMES_DISPOSABLE_LAB.md`](docs/HERMES_DISPOSABLE_LAB.md) |
 | Install Hermes on a Fedora host | [`hermes-fedora-server-install-guide.html`](hermes-fedora-server-install-guide.html) |
 | Understand the environment and retired Devbox commands | [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md) |
 | Run the reviewed manual profile (M01–M05) | [`scripts/hermes/manual/README.md`](scripts/hermes/manual/README.md), [`docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md`](docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md) |
 | Use the unattended controller | [`docs/HERMES_UNATTENDED_DEPLOYMENT.md`](docs/HERMES_UNATTENDED_DEPLOYMENT.md) |
-| Create or test a VM | [`docs/VM_TESTING_GUIDE.md`](docs/VM_TESTING_GUIDE.md), [`vm/DEPLOYMENT_TASKS.md`](vm/DEPLOYMENT_TASKS.md) |
+| Review older VM certification | [`docs/VM_TESTING_GUIDE.md`](docs/VM_TESTING_GUIDE.md), [`vm/DEPLOYMENT_TASKS.md`](vm/DEPLOYMENT_TASKS.md) |
 | See what was actually verified, and when | [`docs/HERMES_INSTALLATION_VERIFICATION.md`](docs/HERMES_INSTALLATION_VERIFICATION.md) |
 | Check where this tree came from | [`PROVENANCE.md`](PROVENANCE.md), [`docs/migration-manifest.txt`](docs/migration-manifest.txt) |
 | Contribute | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md) |

@@ -1,5 +1,11 @@
 # Hermes manual profile: offline worker transport
 
+**Current lab entrypoint:** [the disposable lab guide](../../../docs/HERMES_DISPOSABLE_LAB.md).
+It reuses this directory's pinned gateway, profile contract, gateway transport,
+worker image and Quadlets through `scripts/hermes/profile-deploy.py`. M01–M05
+and their TPM/LUKS/separate-mount assumptions are retained for historical and
+separate candidate work, not for the new unencrypted lab.
+
 This directory holds the two-container artifacts for the approved manual profile:
 a digest-pinned upstream gateway and an offline Fedora worker reached only over a
 shared Unix socket.
@@ -17,7 +23,9 @@ Those results belong to that host and that text; see
 
 ## Running the helpers
 
-Every helper sources `lib-manual-common.sh` and is **inspect-only by default**. Host-mutating helpers
+M01–M05 deployment helpers source `lib-manual-common.sh` and are **inspect-only by default**.
+Credential provisioners use private prompts, and the hypervisor-side VM helper has its own `--check`
+mode. Host-mutating deployment helpers
 additionally require a reviewed host identity:
 
 ```bash
@@ -77,6 +85,22 @@ sudo HERMES_EXPECT_MACHINE_ID_SHA256=<hash> \
 
 The boot helpers live in `boot/` and source the shared library one level up, so **stage the whole
 `scripts/hermes/manual/` tree**, not just `boot/`.
+
+## DeepSeek VM candidate
+
+The [fresh VM record](../../../docs/plans/2026-09-23-hermes-deepseek-e2e-r1.md) tracks
+v0.21.5 (`v2026.9.24`) with the immutable gateway image in `manifest.yaml`. The
+new VM uses `deepseek` / `deepseek-flash` and a dedicated `DEEPSEEK_API_KEY`.
+After the credential-free contract gate, provision it with
+`provision-deepseek-key.sh` at its hidden prompt, then set
+`HERMES_PROVIDER=deepseek HERMES_MODEL=deepseek-flash` for `m03-accept.sh`.
+That helper checks native provider resolution in the exact pinned image with a
+synthetic key and network disabled before making either paid acceptance call.
+The paid probe writes a private attempt receipt before calling the provider. A
+rerun with the same host, image, model, config and credential returns a partial result
+without another paid call. Review an incomplete attempt before explicitly
+retrying with `--force-provider-reprobe --allow-provider-call`.
+The historical M01–M06 results do not certify this repinned bundle.
 
 ## Why the transport looks like this
 
