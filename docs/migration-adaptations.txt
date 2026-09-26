@@ -18,8 +18,8 @@ tests/Containerfile.e2e	Scope note added: the workstation setup.sh it targets st
 tests/Containerfile.sshd	Scope note added: the workstation enable-sshd.sh it targets stays in the source repository and was not migrated; reference-only file.
 tests/test_hermes_lab_disk.py	Real libguestfs disk test moved to the opt-in integration allowlist and gated on an explicit opt-in; the mocked unit coverage is unaffected.
 tests/test_hermes_tpm_profile.py	Real packaged-dracut archive readback split into PackagedDracutIntegrationTests with an explicit opt-in gate.
-tests/test_hermes_unattended.py	Boot-build class gated to opt-in integration; the guestfish mocked command-construction assertion split from the optional installed-parser probe.
-tests/test_ssh_key_only.py	Real /usr/sbin/sshd candidate test gated to opt-in integration; the other 29 tests remain in the reviewed offline allowlist.
+tests/test_hermes_unattended.py	Boot-build class gated to opt-in integration; the guestfish mocked command-construction assertion split from the optional installed-parser probe. Later sorted imports, made fixture types and mock bindings explicit, and covered missing-lease rejection without provider or secret access.
+tests/test_ssh_key_only.py	Real /usr/sbin/sshd candidate test gated to opt-in integration; the other 29 tests remain in the reviewed offline allowlist. Later sorted imports and narrowed the disposable fixture's keygen path and state value types.
 vm/DEPLOYMENT_TASKS.md	Bare shellspec/markdownlint-cli2 commands replaced with the repository-local and container tool locations; operator-local progress and run directories parameterized.
 vm/create-fedora-vm.sh	Scope note and output text mark the workstation setup.sh as not migrated.
 vm/setup-hypervisor.sh	Nix diagnostic message no longer points at the absent workstation setup.sh.
@@ -48,7 +48,7 @@ vm/lib-vm-common.sh	Only executable mode changed from source 100644 to destinati
 .pre-commit-config.yaml	Preserved-evidence exclude list made exact; shellcheck and pre-push comments corrected; maintained guides no longer blanket-excluded.
 PROVENANCE.md	Migration record updated: staleness of the old extraction manifest corrected, the new manifest identified as authoritative, and the current toolbox checkout path corrected.
 README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step and current disposable lab linked.
-docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented.
+docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented. Later documented optional ty scope and first-party import context without changing required gates.
 docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged.
 docs/hook-parity.md	Ported-gate rows updated for the structural hook-wiring check and check-only Markdown linting.
 docs/plans/2026-09-20-hermes-manual-review-corrections.md	Canonical correction record restored byte-for-byte to its recorded SHA-256 f838188c..., which differs from the base-commit copy.
@@ -83,3 +83,5 @@ scripts/hermes/manual/worker/Containerfile	Current disposable lab removed the pe
 scripts/hermes/manual/redact-stream.py	Later added DEEPSEEK_API_KEY to the secret-redaction set.
 scripts/hermes/set-model.py	Later kept the shared model setter byte-identical to the manual profile's native DeepSeek and idempotent setter.
 tests/test-hermes-manual-profile.sh	Later added native DeepSeek model, redaction, and retained VM safety checks.
+scripts/hermes/unattended/credentials.py	Made the existing missing-lease Failure(66) guard explicit for static narrowing without changing the rejection behavior.
+pyproject.toml	Configured optional ty diagnostics for maintained Python and the existing test/unattended import layout; retained Python constraints, dependencies, lockfile and required gates.

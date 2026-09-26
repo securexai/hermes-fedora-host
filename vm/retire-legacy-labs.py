@@ -16,10 +16,21 @@ import stat
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
+from typing import NotRequired, TypedDict
+
+
+class LegacyTarget(TypedDict):
+    uuid: str
+    mac: str
+    disk: pathlib.Path
+    media: dict[pathlib.Path, int]
+    auxiliary: NotRequired[dict[pathlib.Path, int]]
+    nvram: pathlib.Path
+
 
 MANUAL_BOOT = pathlib.Path("/var/lib/libvirt/boot/lab-hermes-manual-r1")
 
-TARGETS = {
+TARGETS: dict[str, LegacyTarget] = {
     "lab-hermes-deepseek-e2e-r1": {
         "uuid": "4349a2bc-67b6-42b7-a6ef-5aeee5ee4009",
         "mac": "52:54:00:83:bf:4b",

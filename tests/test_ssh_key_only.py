@@ -2,17 +2,15 @@
 
 import json
 import os
-from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
-
-import sys
+from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from integration_gate import integration_only  # noqa: E402
-
 
 REPO = Path(__file__).resolve().parents[1]
 REAL_KEYGEN = shutil.which("ssh-keygen")
@@ -139,6 +137,9 @@ sys.exit(code)
 
 class KeyOnlyTests(unittest.TestCase):
     def setUp(self):
+        keygen = REAL_KEYGEN
+        if keygen is None:
+            self.fail("ssh-keygen is required for the disposable key fixture")
         self.temp = tempfile.TemporaryDirectory(prefix="key-only-test-")
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -151,9 +152,11 @@ class KeyOnlyTests(unittest.TestCase):
         self.dropin = self.root / "etc/ssh/sshd_config.d/00-local-key-only.conf"
         self.config = self.root / "etc/ssh/sshd_config"
         self.config.write_text(f"Include {self.dropin.parent}/*.conf\nX11Forwarding yes\n")
-        self.state = {"runtime": False, "permanent": False,
-                      "sshd_active": "active", "sshd_enabled": "disabled",
-                      "firewalld_active": "active", "firewalld_enabled": "enabled"}
+        self.state: dict[str, bool | str | int] = {
+            "runtime": False, "permanent": False,
+            "sshd_active": "active", "sshd_enabled": "disabled",
+            "firewalld_active": "active", "firewalld_enabled": "enabled",
+        }
         self.write_state()
         mock = self.root / "bin/mock"
         mock.write_text(MOCK)
@@ -173,12 +176,12 @@ class KeyOnlyTests(unittest.TestCase):
         source = source.replace('[[ $current != / ]]', f'[[ $current != {self.root} ]]')
         self.script = self.root / "setup.sh"
         self.script.write_text(source)
-        self.env = dict(os.environ, FIXTURE=str(self.root), REAL_KEYGEN=REAL_KEYGEN,
+        self.env = dict(os.environ, FIXTURE=str(self.root), REAL_KEYGEN=keygen,
                         PATH=str(self.root / "bin") + ":" + os.environ["PATH"])
         self.env.pop("SSH_CONNECTION", None)
         self.env.pop("SSH_TTY", None)
         self.key = self.root / "fixture-key"
-        subprocess.run([REAL_KEYGEN, "-q", "-t", "ed25519", "-N", "", "-f", str(self.key)], check=True)
+        subprocess.run([keygen, "-q", "-t", "ed25519", "-N", "", "-f", str(self.key)], check=True)
         self.pub = Path(str(self.key) + ".pub")
 
     def write_state(self):

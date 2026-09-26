@@ -101,7 +101,8 @@ class Broker:
                 record["state"] = "ready"
                 atomic(path, canonical(record))
                 return {"ok": True, "lease": lease, "key": value}
-            require(record is not None, "unknown-lease", 66)
+            if record is None:
+                raise Failure(66, "unknown-lease")
             if operation == "read":
                 require(record["state"] == "ready", "lease-not-ready", 75)
                 return {"ok": True, "lease": lease, "key": self.secret(lease)}

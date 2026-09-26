@@ -76,6 +76,32 @@ Declared tool extensions are provisioned with `toolbox/provision-environment.sh`
 (repository-local ShellSpec plus `uv sync --locked`) and validated with
 `toolbox/verify-extensions.sh`; see [ENVIRONMENT.md](ENVIRONMENT.md).
 
+### Optional Python diagnostics
+
+Ruff and ty are installed through the existing uv development group. They remain
+additional diagnostics; the required offline and check-only lint gates above are unchanged.
+From the repository root inside `dev-infra-hermes`, use the existing environment without syncing:
+
+```bash
+export UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never UV_OFFLINE=1
+uv run --locked ruff check --no-fix --no-cache tests/test_hermes_unattended.py tests/test_ssh_key_only.py
+uv run --locked ty check --output-format full --color never
+```
+
+The ty scope includes maintained Python under `scripts/`, `tests/`, `vm/` and `toolbox/`.
+Byte-preserved Python under `docs/plans/evidence/` and `docs/reviews/` remains historical evidence.
+This scope deliberately retains tests, host scripts and VM utilities even when they have findings.
+ty parses these sources; running them is a separate operation with its own authorization boundaries.
+
+The configured first-party search paths are `tests/` and `scripts/hermes/unattended/`, matching
+the reviewed runner and unattended tests' runtime path setup. Other flat script directories
+are not added globally: their duplicate module names could resolve to the wrong implementation.
+Imports provided only on a deployment target, such as libvirt and Hermes application modules,
+need a separate environment assessment; an unresolved import does not authorize installing packages.
+The Python type target remains the declared minimum, 3.13; the current Toolbox interpreter is 3.14.
+Preserve full diagnostic messages and record the selected paths, versions and effective settings
+when comparing results. Import configuration can expose additional findings as well as resolve them.
+
 ### Secret scanning
 
 The pre-commit `betterleaks` hook is a **staged** scan: its upstream entry is

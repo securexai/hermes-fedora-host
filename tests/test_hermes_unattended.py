@@ -7,7 +7,6 @@ import json
 import os
 import shutil
 import socket
-from pathlib import Path
 import subprocess
 import sys
 import tarfile
@@ -15,30 +14,32 @@ import tempfile
 import time
 import unittest
 from datetime import datetime
-from unittest.mock import patch
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
 from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/hermes/unattended"))
-from common import Failure, canonical, decode, lock  # noqa: E402
-from release import GATES, NAMESPACE, SCHEMA, candidate_fingerprint, unpack, validate  # noqa: E402
-from credentials import Broker  # noqa: E402
-import credentials as credentials_module  # noqa: E402
-from policy import maintenance_open, ssh_options  # noqa: E402
-from gates import backup_snapshot, check_vulnerabilities, retain_backups, scan_image  # noqa: E402
-import host as host_module  # noqa: E402
-import controller as controller_module  # noqa: E402
-from build_release import build  # noqa: E402
-import maintenance  # noqa: E402
-import notify  # noqa: E402
-import materialize  # noqa: E402
 import boot_build  # noqa: E402
-import firmware  # noqa: E402
+import controller as controller_module  # noqa: E402
+import credentials as credentials_module  # noqa: E402
 import efi_media  # noqa: E402
+import firmware  # noqa: E402
+import host as host_module  # noqa: E402
 import lab_boot  # noqa: E402
 import lab_candidate  # noqa: E402
-from types import SimpleNamespace
+import maintenance  # noqa: E402
+import materialize  # noqa: E402
+import notify  # noqa: E402
 import signer  # noqa: E402
+from build_release import build  # noqa: E402
+from common import Failure, canonical, decode, lock  # noqa: E402
+from credentials import Broker  # noqa: E402
 from finalize import finalize, validate_candidate  # noqa: E402
+from gates import backup_snapshot, check_vulnerabilities, retain_backups, scan_image  # noqa: E402
+from policy import maintenance_open, ssh_options  # noqa: E402
+from release import GATES, NAMESPACE, SCHEMA, candidate_fingerprint, unpack  # noqa: E402
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # noqa: E402
 from integration_gate import integration_only  # noqa: E402
 
@@ -145,7 +146,7 @@ class PrivilegedBoundaryReviewTests(unittest.TestCase):
             info = real_fstat(fd)
             if Path("/proc/self/fd/" + str(fd)).resolve() in ancestors:
                 values = list(info)
-                values[0] &= ~0o022
+                values[0] = info.st_mode & ~0o022
                 values[4] = os.getuid()
                 return os.stat_result(values)
             return info
@@ -562,7 +563,9 @@ class ReleaseTests(unittest.TestCase):
 
     def test_candidate_cannot_relabel_evidence_paths(self):
         candidate = copy.deepcopy(self.manifest)
-        candidate["evidence"]["boot"] = "payload/host.py"
+        evidence = candidate["evidence"]
+        assert isinstance(evidence, dict)
+        evidence["boot"] = "payload/host.py"
         with self.assertRaisesRegex(Failure, "invalid-candidate-evidence"):
             validate_candidate(candidate)
 
@@ -830,11 +833,13 @@ class BrokerTests(unittest.TestCase):
         self.calls = []
         self.reject_revoked = True
         self.fail_create = False
-        self.policy = {"test_project": "proj_test", "production_project": "proj_prod",
-                       "test_uid": 1001, "production_uid": 1002}
+        self.policy: dict[str, str | int | None] = {
+            "test_project": "proj_test", "production_project": "proj_prod",
+            "test_uid": 1001, "production_uid": 1002,
+        }
         self.broker = Broker(self.policy, self, self.temp.name)
         self.keys = {}
-        self.broker.secret = self.secret
+        self.enterContext(patch.object(self.broker, "secret", side_effect=self.secret))
         self.lease = "a" * 32
 
     def secret(self, lease, value=None):
@@ -860,10 +865,20 @@ class BrokerTests(unittest.TestCase):
             self.request("issue", uid=1002)
         self.assertEqual(self.calls, [])
 
+    def test_unknown_lease_rejected_before_api_or_secret_access(self):
+        with patch.object(self.broker, "secret") as secret:
+            for operation in ("read", "revoke"):
+                with self.subTest(operation=operation):
+                    with self.assertRaisesRegex(Failure, "unknown-lease") as failure:
+                        self.request(operation)
+                    self.assertEqual(failure.exception.code, 66)
+            secret.assert_not_called()
+        self.assertEqual(self.calls, [])
+
     def test_disabled_production_rejected_before_api_for_every_peer(self):
         self.policy.update(production_project=None, production_uid=None)
         self.broker = Broker(self.policy, self, self.temp.name)
-        self.broker.secret = self.secret
+        self.enterContext(patch.object(self.broker, "secret", side_effect=self.secret))
         for uid in (0, 1001, 1002):
             with self.subTest(uid=uid), self.assertRaisesRegex(Failure, "broker-role-disabled"):
                 self.request("issue", uid=uid, role="production")
@@ -964,6 +979,20 @@ class PolicyTests(unittest.TestCase):
 
 
 class HostStageTests(unittest.TestCase):
+    # setUp creates these mocks through the two patcher loops below.
+    preflight: MagicMock
+    run: MagicMock
+    healthy: MagicMock
+    boot_id: MagicMock
+    package_baseline: MagicMock
+    replay_packages: MagicMock
+    require_complete: MagicMock
+    wait_health: MagicMock
+    install_boot: MagicMock
+    install_runtime: MagicMock
+    acceptance: MagicMock
+    rollback: MagicMock
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -1174,6 +1203,13 @@ class VulnerabilityTests(unittest.TestCase):
 
 
 class ControllerFlowTests(unittest.TestCase):
+    # setUp creates these mocks through the patcher loop below.
+    request: MagicMock
+    fetch_backup: MagicMock
+    backup_snapshot: MagicMock
+    credential_request: MagicMock
+    retain_backups: MagicMock
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -1379,11 +1415,10 @@ class LabBootTests(unittest.TestCase):
                 if command[0] == "upload":
                     self.files[command[2]] = b"truncated"
             return result
-        self.fish = corrupt
-        with self.assertRaisesRegex(Failure, "efi-upload-copy-mismatch"):
-            self.inject()
+        with patch.object(self, "fish", side_effect=corrupt):
+            with self.assertRaisesRegex(Failure, "efi-upload-copy-mismatch"):
+                self.inject()
         self.assertEqual(self.files[lab_boot.EFI_PATHS[0]], b"original-efi")
-        self.fish = normal
         self.inject()
         self.assertEqual(self.files[lab_boot.EFI_PATHS[0] + ".hermes-original"], b"original-efi")
 
