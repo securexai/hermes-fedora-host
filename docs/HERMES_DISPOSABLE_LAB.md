@@ -60,8 +60,10 @@ deploys; a new VM pulls/builds its own layers. Do not mistake the base-image
 cache for a prebuilt application image cache. `clean` retains the verified base
 but removes the exact session domain, overlay, seed, and disposable SSH keys.
 It refuses changed domain UUIDs, unexpected attached disks, symlinks and
-unrecognized instance files. A failed `run` may leave an instance to inspect;
-run `status`, correct the issue, then `deploy`, or `clean` and start fresh.
+unrecognized instance files. If libvirt cannot be reached, `status` and
+`clean` stop with an error; neither reports the VM absent. A failed `run` may
+leave an instance to inspect; run `status`, correct the issue, then `deploy`,
+or `clean` and start fresh.
 
 The routine test loads the same pinned gateway image with `--network none` and
 exercises its actual DeepSeek provider resolver and Telegram callback allowlist.
@@ -89,8 +91,14 @@ python3 scripts/hermes/live-smoke.py revoke-local
 
 `setup` privately asks for a dedicated DeepSeek key, dedicated Telegram bot
 token, authorized test user ID, private chat ID, and whether a **$1 provider-side
-cap** was independently verified or is unavailable. The program does not set
-or verify an account cap. Check that setting in the provider account before
+cap** was independently verified or is unavailable. To discover the two numeric
+IDs without copying them through a third-party bot, send `/start` to the
+dedicated bot from the authorized account, then press Enter at the user-ID
+prompt. Setup reads that pending private Telegram update, requires its sender
+and chat IDs to match, and acknowledges it before the Hermes gateway starts.
+It refuses ambiguous pending senders; enter known IDs manually in that case.
+The live VM runner separately refuses an active webhook. The program does not
+set or verify an account cap. Check that setting in the provider account before
 marking it `verified`; current public DeepSeek API documentation establishes
 usage accounting and rates, but no account-cap API was verified for this run.
 `smoke` makes **at most one** DeepSeek chat-completion POST with 16 output tokens
@@ -98,16 +106,71 @@ and **one** outbound Telegram `sendMessage` POST, with no retry. It requires the
 private chat ID to equal the authorized user ID. The script runs on the host,
 not inside the Hermes gateway; it is an API connectivity smoke, **not** Hermes
 end-to-end or authenticated Telegram inbound acceptance. A bot token cannot
-manufacture an inbound message from an authorized user. This live test remains
-NOT RUN until dedicated credentials are privately provisioned. On any failure,
+manufacture an inbound message from an authorized user. On any failure,
 inspect the status code and account settings in a private session; do not print
 request URLs or response bodies, since Telegram URLs contain the bot token.
+
+If DeepSeek rejects the key, stop the live VM profile before correcting it:
+
+```bash
+python3 vm/hermes-disposable.py live-stop
+python3 scripts/hermes/live-smoke.py replace-deepseek
+```
+
+`replace-deepseek` privately prompts for a replacement key. It preserves the
+dedicated bot and private chat files only when the operator confirms that the
+recorded provider-side cap status still applies to the replacement key. If the
+key belongs to another account, use `revoke-local` and a fresh `setup` instead.
+`KEY=UNCHANGED` means the entered key matched the existing file; create a new
+key in the [DeepSeek API platform](https://www.deepseek.com/platform/) before
+retrying a provider-authentication failure.
+The replacement command does not authenticate the key; run a new bounded
+service smoke before another gateway round trip.
 
 `revoke-local` deletes the restricted host files only. Revoke or replace the
 DeepSeek key and Telegram bot token at their providers separately; local
 deletion is not proof of provider-side revocation. A setup interrupted after
 some files are written requires `revoke-local` before a fresh setup. These
 host files are never transferred to a reusable VM base or image cache.
+
+### Hermes live gateway round trip
+
+The direct `smoke` above verifies the two APIs separately. To verify Hermes
+itself, use a new, otherwise unused test bot and an authorized private chat.
+After `setup` and a fresh synthetic VM `run`, use:
+
+```bash
+python3 vm/hermes-disposable.py live-start
+python3 vm/hermes-disposable.py live-status
+# Send one simple message from the authorized Telegram account; observe one reply.
+python3 vm/hermes-disposable.py live-stop
+python3 vm/hermes-disposable.py clean
+```
+
+`live-start` refuses a webhook or pending bot updates, then reads the restricted
+host files without placing their values in arguments or output. It stops the
+synthetic gateway, disables only the guest's observed `/dev/zram0` swap, mounts
+the per-instance gateway state on tmpfs, sends the live profile over pinned
+SSH stdin, and starts the same pinned Hermes image with the offline worker.
+The guest profile allows only the selected numeric private user ID and sets
+the all-users switch to false. Do not send the test message until `LIVE=READY` and a fresh
+Telegram connection are confirmed. `live-stop` stops the gateway, unmounts the
+guest tmpfs and restores the synthetic profile; `clean` destroys the disposable
+VM. The host-only private source remains until `revoke-local`, and provider-side
+key/bot revocation must be done separately.
+
+Use only one authorized inbound message in this bounded run. The harness
+limits operator-triggered messages but cannot independently enforce or count
+the number of internal DeepSeek requests or a gateway retry; the operator's
+provider-side $1 cap status is recorded, not set or verified by the script.
+Inspect account usage after the run. This test is not a production deployment.
+The [2026-09-25 execution record](plans/2026-09-25-hermes-disposable-lab.md)
+records a passing direct DeepSeek/Telegram API smoke and an authorized Hermes
+gateway round trip: the bot returned the requested marker plus onboarding text.
+The user accepted the core round trip; exact-response fidelity was not proven.
+The live guest profile and disposable VM were then removed. Gateway-internal
+request counts and the operator-reported provider cap were not independently
+verified by the harness.
 
 ## Retiring the older system VMs
 
@@ -116,10 +179,13 @@ The approved obsolete targets are exactly `lab-hermes-deepseek-e2e-r1` and
 teardown cannot remove a guest sudoers file under enforcing SELinux. The
 replacement checks their UUIDs, MACs, `fvh-nat`, shut-off state, attachments,
 NVRAM, TPM, snapshots, other-domain storage references, file ownership and the
-temporary DeepSeek host grant hash before deleting anything. It removes only
-their owned disks, named manual ISO files, per-VM firmware/TPM state and the
-temporary DeepSeek host grant. The disposable session VM and shared image
-caches are outside its target set.
+temporary DeepSeek host grant hash before deleting anything. The manual VM's
+private boot directory must contain exactly its two attached ISOs, the Fedora
+checksum and public keyring, `ks.cfg`, and `guest-password.hash`, each with the
+reviewed owner and mode. The script never prints or reads the password hash.
+It removes only those six files, the two owned disks, per-VM firmware/TPM state
+and the temporary DeepSeek host grant. The disposable session VM and shared
+image caches are outside its target set.
 
 Run once in a **private host terminal**; enter the sudo password there only:
 
@@ -135,8 +201,8 @@ target or retry with weaker checks; inspect the exact remaining domains and
 files and record a bounded recovery. The script cannot roll back a libvirt
 `undefine` that succeeded before a later file deletion failed. The current
 execution record distinguishes the earlier PolicyKit denial from actual
-cleanup and retains this gate open until the private result and independent
-absence checks are observed.
+cleanup. It records the private result, independent absence checks and any
+remaining rerun check.
 
 ## Evidence and boundaries
 

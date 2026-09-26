@@ -17,22 +17,30 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
+MANUAL_BOOT = pathlib.Path("/var/lib/libvirt/boot/lab-hermes-manual-r1")
+
 TARGETS = {
     "lab-hermes-deepseek-e2e-r1": {
         "uuid": "4349a2bc-67b6-42b7-a6ef-5aeee5ee4009",
         "mac": "52:54:00:83:bf:4b",
         "disk": pathlib.Path("/var/lib/libvirt/images/lab-hermes-deepseek-e2e-r1/disk.qcow2"),
-        "media": (),
+        "media": {},
         "nvram": pathlib.Path("/var/lib/libvirt/qemu/nvram/lab-hermes-deepseek-e2e-r1_VARS.qcow2"),
     },
     "lab-hermes-manual-r1": {
         "uuid": "d39e5ca7-aded-457c-b01d-a1817a4725a8",
         "mac": "52:54:00:94:58:36",
         "disk": pathlib.Path("/var/lib/libvirt/images/lab-hermes-manual-r1/disk.qcow2"),
-        "media": (
-            pathlib.Path("/var/lib/libvirt/boot/lab-hermes-manual-r1/Fedora-Server-dvd-x86_64-44-1.7.iso"),
-            pathlib.Path("/var/lib/libvirt/boot/lab-hermes-manual-r1/ks.iso"),
-        ),
+        "media": {
+            MANUAL_BOOT / "Fedora-Server-dvd-x86_64-44-1.7.iso": 0o644,
+            MANUAL_BOOT / "ks.iso": 0o640,
+        },
+        "auxiliary": {
+            MANUAL_BOOT / "Fedora-Server-44-1.7-x86_64-CHECKSUM": 0o644,
+            MANUAL_BOOT / "fedora.gpg": 0o644,
+            MANUAL_BOOT / "ks.cfg": 0o600,
+            MANUAL_BOOT / "guest-password.hash": 0o600,
+        },
         "nvram": pathlib.Path("/var/lib/libvirt/qemu/nvram/lab-hermes-manual-r1_VARS.qcow2"),
     },
 }
@@ -65,8 +73,11 @@ def exact_file(path: pathlib.Path, owner: int, mode: int | None = None) -> None:
         raise Refusal(f"unexpected owner or mode: {path}")
 
 
-def exact_directory(path: pathlib.Path, owner: int, children: set[str]) -> None:
-    if path.is_symlink() or not path.is_dir() or path.stat().st_uid != owner:
+def exact_directory(path: pathlib.Path, owner: int, mode: int, children: set[str]) -> None:
+    if path.is_symlink() or not path.is_dir():
+        raise Refusal(f"missing or unsafe exact directory: {path}")
+    info = path.stat()
+    if info.st_uid != owner or stat.S_IMODE(info.st_mode) != mode:
         raise Refusal(f"missing or unsafe exact directory: {path}")
     if {item.name for item in path.iterdir()} != children:
         raise Refusal(f"unexpected exact directory contents: {path}")
@@ -74,12 +85,28 @@ def exact_directory(path: pathlib.Path, owner: int, children: set[str]) -> None:
         raise Refusal(f"symlink in exact directory: {path}")
 
 
+def exact_boot_files(
+    media: dict[pathlib.Path, int], auxiliary: dict[pathlib.Path, int], root: int, qemu: int
+) -> None:
+    if not media:
+        raise Refusal("manual VM has no expected boot media")
+    boot = next(iter(media)).parent
+    files = {**media, **auxiliary}
+    if any(path.parent != boot for path in files):
+        raise Refusal("manual VM boot files span multiple directories")
+    exact_directory(boot, root, 0o711, {path.name for path in files})
+    for path, mode in media.items():
+        exact_file(path, qemu, mode)
+    for path, mode in auxiliary.items():
+        exact_file(path, root, mode)
+
+
 def domains() -> dict[str, ET.Element]:
     found: dict[str, ET.Element] = {}
     target_paths = {
         str(path)
         for expected in TARGETS.values()
-        for path in (expected["disk"], *expected["media"])
+        for path in (expected["disk"], *expected["media"], *expected.get("auxiliary", {}))
     }
     for other in virsh("list", "--all", "--name").stdout.splitlines():
         if not other or other in TARGETS:
@@ -125,24 +152,22 @@ def preflight() -> None:
     domains()
     for name, expected in TARGETS.items():
         disk = expected["disk"]
-        exact_directory(disk.parent, 0, {disk.name})
+        exact_directory(disk.parent, 0, 0o711, {disk.name})
         exact_file(disk, 0)
         if expected["media"]:
-            exact_directory(expected["media"][0].parent, 0, {p.name for p in expected["media"]})
-            for media in expected["media"]:
-                exact_file(media, qemu.pw_uid)
+            exact_boot_files(expected["media"], expected.get("auxiliary", {}), 0, qemu.pw_uid)
         exact_file(expected["nvram"], qemu.pw_uid, 0o600)
     exact_file(HOST_RULE, 0, 0o440)
     if hashlib.sha256(HOST_RULE.read_bytes()).hexdigest() != HOST_RULE_SHA256:
         raise Refusal("DeepSeek host sudoers rule differs from the reviewed grant")
     command("/usr/sbin/visudo", "-cf", str(HOST_RULE))
-    exact_directory(HOST_BASE, 0, {"access.py", "boot-inspect.py", "bundle.tar"})
+    exact_directory(HOST_BASE, 0, 0o755, {"access.py", "boot-inspect.py", "bundle.tar"})
     for item in HOST_BASE.iterdir():
         exact_file(item, 0, 0o644)
-    exact_directory(STATE, account.pw_uid, {"id_ed25519", "id_ed25519.pub", "known_hosts"})
+    exact_directory(STATE, account.pw_uid, 0o700, {"id_ed25519", "id_ed25519.pub", "known_hosts"})
     exact_file(STATE / "id_ed25519", account.pw_uid, 0o600)
     exact_file(STATE / "known_hosts", account.pw_uid, 0o600)
-    print("PREFLIGHT=PASS two shut-off UUID-pinned domains, exact disks/media/NVRAM/TPM and DeepSeek grant")
+    print("PREFLIGHT=PASS two shut-off UUID-pinned domains, six exact manual boot files, disks/NVRAM/TPM and DeepSeek grant")
 
 
 def already_absent() -> bool:
@@ -153,8 +178,9 @@ def already_absent() -> bool:
     for expected in TARGETS.values():
         paths.extend((expected["disk"], expected["disk"].parent, expected["nvram"]))
         paths.extend(expected["media"])
+        paths.extend(expected.get("auxiliary", {}))
         if expected["media"]:
-            paths.append(expected["media"][0].parent)
+            paths.append(next(iter(expected["media"])).parent)
     return not (listed & TARGETS.keys()) and all(not path.exists() and not path.is_symlink() for path in paths)
 
 
@@ -172,8 +198,10 @@ def apply() -> None:
         disk.parent.rmdir()
         for media in expected["media"]:
             media.unlink()
+        for auxiliary in expected.get("auxiliary", {}):
+            auxiliary.unlink()
         if expected["media"]:
-            expected["media"][0].parent.rmdir()
+            next(iter(expected["media"])).parent.rmdir()
     HOST_RULE.unlink()
     for item in HOST_BASE.iterdir():
         item.unlink()
@@ -181,13 +209,8 @@ def apply() -> None:
     for item in STATE.iterdir():
         item.unlink()
     STATE.rmdir()
-    for name in TARGETS:
-        if virsh("domuuid", name, check=False).returncode == 0:
-            raise Refusal(f"domain still defined after cleanup: {name}")
-    if any(expected["nvram"].exists() for expected in TARGETS.values()):
-        raise Refusal("an obsolete VM NVRAM file remains after cleanup")
-    if HOST_RULE.exists() or HOST_BASE.exists() or STATE.exists():
-        raise Refusal("temporary DeepSeek host grant remains after cleanup")
+    if not already_absent():
+        raise Refusal("an exact obsolete VM domain or owned path remains after cleanup")
     print("RETIRE=PASS both exact obsolete domains, owned files, and temporary host grant absent")
 
 

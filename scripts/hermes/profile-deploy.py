@@ -343,9 +343,12 @@ def ensure_instance(uid: int, gid: int, mode: str) -> bool:
 def model_check() -> bool:
     code = (
         "import pathlib,yaml; c=yaml.safe_load(pathlib.Path('/opt/data/config.yaml').read_text()); "
-        "m=c.get('model') or {}; assert c.get('provider')=='deepseek' and "
+        "m=c.get('model') or {}; assert c.get('provider') in (None,'deepseek') and "
         "c.get('default_model')=='deepseek-flash' and m.get('provider')=='deepseek' "
-        "and m.get('default')=='deepseek-flash' and 'base_url' not in m"
+        "and m.get('default')=='deepseek-flash' and 'base_url' not in m; "
+        "from hermes_cli.runtime_provider import resolve_runtime_provider; "
+        "r=resolve_runtime_provider(target_model='deepseek-flash'); "
+        "assert r.get('provider')=='deepseek' and r.get('base_url')=='https://api.deepseek.com/v1'"
     )
     result = podman(
         "exec",

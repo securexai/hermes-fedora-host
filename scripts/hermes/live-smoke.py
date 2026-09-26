@@ -75,6 +75,46 @@ def atomic_private(name: str, value: str) -> None:
             os.unlink(temp)
 
 
+def discover_private_chat(bot: str) -> tuple[str, str]:
+    """Find one pending private /start and acknowledge it before gateway startup."""
+    url = f"https://api.telegram.org/bot{bot}/getUpdates"
+    response = post_json(url, {"limit": 100, "timeout": 0, "allowed_updates": ["message"]})
+    updates = response.get("result")
+    if response.get("ok") is not True or not isinstance(updates, list):
+        raise Refusal("Telegram did not return an update list")
+    if len(updates) == 100:
+        raise Refusal("too many pending Telegram updates for safe private discovery")
+    candidates: list[tuple[int, int]] = []
+    for item in updates:
+        if not isinstance(item, dict) or type(item.get("update_id")) is not int:
+            raise Refusal("unexpected pending Telegram update; enter IDs manually")
+        message = item.get("message")
+        if not isinstance(message, dict) or message.get("text") != "/start":
+            raise Refusal("unexpected pending Telegram message; enter IDs manually")
+        sender = message.get("from")
+        chat = message.get("chat")
+        if not isinstance(sender, dict) or not isinstance(chat, dict):
+            raise Refusal("unexpected pending Telegram sender; enter IDs manually")
+        user_id, chat_id = sender.get("id"), chat.get("id")
+        if not (
+            chat.get("type") == "private"
+            and type(user_id) is int
+            and type(chat_id) is int
+            and user_id == chat_id
+        ):
+            raise Refusal("pending Telegram update is not one private account")
+        candidates.append((item["update_id"], user_id))
+    if not candidates:
+        raise Refusal("send /start from the authorized account to the dedicated bot, then retry")
+    if len({user_id for _, user_id in candidates}) != 1:
+        raise Refusal("multiple private /start senders are pending; enter IDs manually")
+    update_id, user_id = max(candidates)
+    acknowledged = post_json(url, {"offset": update_id + 1, "limit": 1, "timeout": 0})
+    if acknowledged.get("ok") is not True or acknowledged.get("result") != []:
+        raise Refusal("Telegram discovery saw new pending updates; retry with a quiet dedicated bot")
+    return str(user_id), str(user_id)
+
+
 def setup() -> None:
     if not sys.stdin.isatty():
         raise Refusal("run setup in a private interactive host terminal")
@@ -84,9 +124,16 @@ def setup() -> None:
     values = {
         "deepseek": getpass.getpass("Dedicated test DeepSeek API key: "),
         "telegram": getpass.getpass("Dedicated test Telegram bot token: "),
-        "user": getpass.getpass("Authorized Telegram test user ID: "),
-        "chat": getpass.getpass("Dedicated test Telegram chat ID: "),
     }
+    if any(not value or value != value.strip() for value in values.values()):
+        raise Refusal("a private value is empty or malformed")
+    user = getpass.getpass("Authorized private Telegram user ID (Enter to discover /start): ")
+    if user:
+        chat = getpass.getpass("Dedicated private Telegram chat ID: ")
+    else:
+        user, chat = discover_private_chat(values["telegram"])
+        print("CHAT_DISCOVERY=PASS one private /start consumed; numeric ID kept private")
+    values.update(user=user, chat=chat)
     cap = input("$1 DeepSeek provider-side cap status [verified/unavailable]: ").strip()
     if cap not in {"verified", "unavailable"}:
         raise Refusal("cap status must be verified or unavailable")
@@ -102,6 +149,44 @@ def setup() -> None:
     for name, value in (*values.items(), ("cap", cap)):
         atomic_private(name, value)
     print("SETUP=PASS five restricted host-only files; no value displayed")
+
+
+def replace_deepseek() -> None:
+    """Replace only the DeepSeek key after its account cap is reconfirmed."""
+    if not sys.stdin.isatty():
+        raise Refusal("run key replacement in a private interactive host terminal")
+    private_directory()
+    for name in FILES:
+        read_private(name)
+    confirmation = input("Existing provider-side cap status applies to the new key [yes/no]: ").strip()
+    if confirmation != "yes":
+        raise Refusal("use revoke-local and setup if the replacement key uses another account")
+    value = getpass.getpass("Replacement dedicated test DeepSeek API key: ")
+    if (
+        not value
+        or value != value.strip()
+        or not value.isascii()
+        or any(ord(char) < 33 or ord(char) > 126 for char in value)
+        or value == "synthetic-hermes-lab-only"
+    ):
+        raise Refusal("replacement DeepSeek key is empty or malformed")
+    old = read_private("deepseek")
+    if value == old:
+        print("KEY=UNCHANGED restricted host-only DeepSeek key already matches")
+        return
+    path = PRIVATE / FILES["deepseek"]
+    fd, temp = tempfile.mkstemp(prefix=".replace-", dir=PRIVATE)
+    try:
+        with os.fdopen(fd, "w") as stream:
+            stream.write(value + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.chmod(temp, 0o600)
+        os.replace(temp, path)
+    finally:
+        if os.path.exists(temp):
+            os.unlink(temp)
+    print("KEY=REPLACED restricted host-only DeepSeek key; no value displayed")
 
 
 def status() -> None:
@@ -183,12 +268,18 @@ def revoke_local() -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("setup", "status", "smoke", "revoke-local"))
+    parser.add_argument(
+        "action", choices=("setup", "replace-deepseek", "status", "smoke", "revoke-local")
+    )
     args = parser.parse_args()
     try:
-        {"setup": setup, "status": status, "smoke": smoke, "revoke-local": revoke_local}[
-            args.action
-        ]()
+        {
+            "setup": setup,
+            "replace-deepseek": replace_deepseek,
+            "status": status,
+            "smoke": smoke,
+            "revoke-local": revoke_local,
+        }[args.action]()
     except (Refusal, OSError, ValueError) as exc:
         print(f"STOP: {exc}", file=sys.stderr)
         return 1

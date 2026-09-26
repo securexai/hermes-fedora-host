@@ -21,12 +21,12 @@
 # identity	version	3
 # identity	base_commit	de8fb8ba1ef8729e895e340ff6244232d3d2193e
 # identity	payload_algorithm	sha256-lines(path NUL dest_sha256 NUL dest_mode LF, path-sorted)
-# identity	payload_fingerprint	382b970f9e5a738125c6673cf423b93df9c03906dee16b6e62ed68dd178c3283
-# identity	payload_rows	388
+# identity	payload_fingerprint	1c4ff98b834fedae6f3dafc91734dc7ce021dabefa9e8c9b75f1fa0552983002
+# identity	payload_rows	392
 # identity	payload_excludes	docs/migration-manifest.txt
 # identity	inventory_algorithm	sha256(json object path -> {sha256, mode}, path-sorted, sort_keys, indent 2, trailing LF)
-# identity	inventory_fingerprint	c556a8101649abea7410d342dd15157975c227a5e1b21b3069bcf8eef9a587d0
-# identity	inventory_rows	388
+# identity	inventory_fingerprint	585f2a27c0a174462f0b9adf3c4a5ba194b2fd9fbd9097b91d3a61bec148c1a4
+# identity	inventory_rows	392
 # identity	inventory_excludes	docs/migration-manifest.txt
 # identity	source_root	/var/home/aicloudopspecial/code/repos/mikrotik
 # identity	source_head	130bf8f2dbdc95e0db25407d5b3b155b627d1473
@@ -41,30 +41,30 @@
 # identity	source_dirty_historical_algorithm	v1-changed-paths-with-file-bytes
 # identity	source_dirty_historical_fingerprint	868250d6eaa1c5502e9fe2023b63ecfdce3448c85992413e05d212de3beff75d
 # identity	toolbox_root	/var/home/aicloudopspecial/code/repos/dev-toolbox
-# identity	toolbox_head	c0f0889d83531b57167a546e461ceac3f14fa572
+# identity	toolbox_head	667d446d005273b9c3c68103c21761dccc959a2b
 # identity	toolbox_dirty_algorithm	hermes-dirty-input-v3
-# identity	toolbox_dirty_fingerprint	2b8f8cf97ae8c11573c635fa3cb33b8e6c16d38f68cf4ce65c5fa805e84f3315
-# identity	toolbox_dirty_inputs	22
-# identity	toolbox_dirty_files	21
-# identity	toolbox_dirty_deletions	1
+# identity	toolbox_dirty_fingerprint	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+# identity	toolbox_dirty_inputs	0
+# identity	toolbox_dirty_files	0
+# identity	toolbox_dirty_deletions	0
 # identity	toolbox_dirty_mode_or_type_changes	0
 # identity	toolbox_dirty_previous_algorithm	hermes-dirty-input-v2
-# identity	toolbox_dirty_previous_fingerprint	2b8f8cf97ae8c11573c635fa3cb33b8e6c16d38f68cf4ce65c5fa805e84f3315
+# identity	toolbox_dirty_previous_fingerprint	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 # identity	toolbox_dirty_historical_algorithm	v1-changed-paths-with-file-bytes
-# identity	toolbox_dirty_historical_fingerprint	128c314180d3dfcadb8271dc8d203d9591f02abc98a1e8ec6fcb1aadc7dfed03
+# identity	toolbox_dirty_historical_fingerprint	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 # identity	companion_root	/var/home/aicloudopspecial/code/repos/fedora-virtualization-host
 # identity	companion_head	0d34a51d812f1b880c16c4dfec21973c816e540f
 # identity	destination_mode_policy	filesystem (index modes audited separately)
 # identity	destination_index_mode_mismatches	0
 # --- end identity ---
 #
-# Payload identity (manifest-excluding): 382b970f9e5a738125c6673cf423b93df9c03906dee16b6e62ed68dd178c3283
+# Payload identity (manifest-excluding): 1c4ff98b834fedae6f3dafc91734dc7ce021dabefa9e8c9b75f1fa0552983002
 #   SHA-256 over sorted 'path\0dest_sha256\0dest_mode\n' for every row
 #   below. This deliberately EXCLUDES this manifest file, so it identifies
 #   the payload and is not a hash binding this file. The manifest's own
 #   SHA-256 is recorded separately in the handoff, not here.
 #
-# Inventory identity (manifest-excluding): c556a8101649abea7410d342dd15157975c227a5e1b21b3069bcf8eef9a587d0
+# Inventory identity (manifest-excluding): 585f2a27c0a174462f0b9adf3c4a5ba194b2fd9fbd9097b91d3a61bec148c1a4
 #   Reproducible inventory of the whole destination: SHA-256 over a
 #   path-sorted JSON object mapping every path to its sha256 and mode,
 #   serialized with sort_keys, indent 2 and a trailing LF. Reproduce it with
@@ -86,12 +86,12 @@
 #   skipped deletions and collapsed untracked directories) are retained in
 #   the identity block so earlier recorded values are not redefined.
 #
-# Rows: 388; excluded candidates: 13
+# Rows: 392; excluded candidates: 13
 # This manifest does not list a row for itself (a file cannot record its own
 # hash); it is identified by the payload fingerprint above.
 #
 # Counts by origin/state:
-#   AUTHORED/ADDED: 45
+#   AUTHORED/ADDED: 49
 #   FOUNDATION/MODIFIED: 36
 #   FOUNDATION/UNCHANGED: 133
 #   SOURCE/ADAPTED: 36
@@ -131,28 +131,6 @@
 # dirty	source	tests/test-hermes-manual-configure.sh	 M	file	100755	100755	56ccc5582f67706205c226da8fe29b473500031241a1a0d65ee1048a07dafde2
 # dirty	source	tests/test-hermes-manual-contract.sh	 M	file	100644	100644	a95dee375766efa5d0a98a0b21acf8637cfee049c7cc94dd3943083ba7b80980
 # dirty	source	tests/test-hermes-manual-review.sh	 M	file	100755	100755	cc0ab33f504da27c775cb16513399d926094f9d4d5bffde0bf377f076aff1f7d
-# dirty	toolbox	.containerignore	??	file	-	100644	ef7683a2fdd515f1fa02a77131a60f289d8cd15eec54004374f684e8782ae8af
-# dirty	toolbox	CHANGELOG.md	 M	file	100644	100644	fa3f50b731890636d80001e6e30673b8808860236a228ed16e39a0fd1bcdec65
-# dirty	toolbox	CLAUDE.md	 D	missing	100644	-	-
-# dirty	toolbox	CONTRIBUTING.md	 M	file	100644	100644	23b487867c26e05a4cfe59d513342f454513d63814aad374b45bfb66658ac1a5
-# dirty	toolbox	Containerfile	 M	file	100644	100644	2ea03ff62600558e3f8f58e8c8d8fdcffe86dc5e3d5a7c22b7a9806cbc21b540
-# dirty	toolbox	INSTALL.md	 M	file	100644	100644	21cfdc968811b4e8b709345c283c2666395d0aa92e65f77b986564bfda8d17f6
-# dirty	toolbox	PLAN.md	 M	file	100644	100644	0157063a8913a5002d154020f9668b7d5596690a38263a9f572b163d4ada36f4
-# dirty	toolbox	README.md	 M	file	100644	100644	2bd27860fa49fd634cafbc4540dcdaadeea0de54a0fa19742fee5a2a6e8f4bce
-# dirty	toolbox	TOOLING_STANDARDIZATION_REPORT.md	??	file	-	100644	9341f8584db1669c1b9f4b5584eb6d732536070927bcacc84c118e508c0582ca
-# dirty	toolbox	docs/host-pnpm.md	??	file	-	100644	aadd2edfe6ead462ba398172e04934694e79731448b6863620850b482055f61c
-# dirty	toolbox	docs/plans/2026-09-15-host-pnpm.md	??	file	-	100644	0327a441e5c317ffe7a34c6d9d5f3f8e292599caad7ea03fdfd4272e81d115b4
-# dirty	toolbox	docs/plans/2026-09-18-toolbox-profiles.md	??	file	-	100644	73cbfbd54b66b6f9b83bc6f0ab48ae2da23ffe2959a1cfe1a8dd8fb233068143
-# dirty	toolbox	docs/toolbox-profiles.md	??	file	-	100644	a175fcd865a9505c08d0a9de46c12e9b4242c637a59f45a1b265ae9a01847722
-# dirty	toolbox	profiles/Containerfile.infra	??	file	-	100644	45a8516b242a7108475cc7ebbcee259a9a777cc6c71cabb167718474f2973459
-# dirty	toolbox	profiles/Containerfile.python	??	file	-	100644	7a553a30338e08c8de17758f24d75981397d96a39698f1c12bab44aa6b1b85d4
-# dirty	toolbox	scripts/pnpm-host.sh	??	file	-	100755	89b7b65411cb2192629800e2de42df1446fb58c1d7db869d02e271eb422a00d0
-# dirty	toolbox	scripts/test-pnpm-host.sh	??	file	-	100755	986425737343bb4c42e1094eab5268c405a4a33b26051fd2c2cb12fd41cef257
-# dirty	toolbox	scripts/test-setup.sh	??	file	-	100755	100f1465c8fd5f7df5f9fd1966b8626160e861aa76e9f05194d19294cf1fa2d6
-# dirty	toolbox	scripts/verify.sh	??	file	-	100755	419f3ab616238ec8cadb6a869814979fd2d8d8905c394e71de930519c5c85782
-# dirty	toolbox	setup.sh	 M	file	100755	100755	0627fbbf52d7c2fc261692f73051da6af0905aaec33e51bc1a739ca3eb48a308
-# dirty	toolbox	templates/.devcontainer/devcontainer.json	 M	file	100644	100644	750c162c24c07955bf6b8a5b6b7bcc203f4a66df8c96b72d9fcf714426ee9718
-# dirty	toolbox	versions.env	??	file	-	100644	f2ebf6ac28d62048794f4ddadc7d4f86058e8373a411c83c789a21f7380a20cb
 # companion	docs/reviews/HERMES_FEDORA44_REVIEW_PROMPT.md	/var/home/aicloudopspecial/code/repos/fedora-virtualization-host	docs/HERMES_FEDORA44_REVIEW_PROMPT.md
 # companion	docs/reviews/HERMES_MANUAL_CORRECTION_REPRO.py	/var/home/aicloudopspecial/code/repos/fedora-virtualization-host	docs/HERMES_MANUAL_CORRECTION_REPRO.py
 # companion	docs/reviews/HERMES_MANUAL_CORRECTION_REVIEW.md	/var/home/aicloudopspecial/code/repos/fedora-virtualization-host	docs/HERMES_MANUAL_CORRECTION_REVIEW.md
@@ -192,7 +170,7 @@ c4dd919f9f66fe3082d0a29a1741aa91d33bdd85be8036c83645472a70af5f5d 100644 - - FOUN
 5df3b517c24593c0f4d77fe8687bf8a8a1e6c3dd971825c3a24ade26e838704d 100644 - - FOUNDATION UNCHANGED docs/HERMES_BOOT_AUTOMATION.md
 3e29287bbdcd0469e4825893dd7f4d9520b8a1cd600d0580018f74ace0dd9ba2 100644 - - FOUNDATION UNCHANGED docs/HERMES_BOOT_CLEAN_INSTALL.md
 59982a51b0839e2ddf5212b7a2d4474816f47c6c6283bec573300beb4c407a77 100644 59982a51b0839e2ddf5212b7a2d4474816f47c6c6283bec573300beb4c407a77 100644 SOURCE IDENTICAL docs/HERMES_DEPLOYMENT_PLAN.md
-b43a0ca7502817d0773ccd23da5960b960296b7badc781e437dc3c046f18bcc4 100644 - - AUTHORED ADDED docs/HERMES_DISPOSABLE_LAB.md
+07f5f61b839d51986d48fba39dff1150de9934fe59726eb2a680a57cc15e1b19 100644 - - AUTHORED ADDED docs/HERMES_DISPOSABLE_LAB.md
 84a609a9230b99d7743eb98d82f6e77bed2dd6df6ff62a510d7799ce64edcfdd 100644 df8398700225fe6158f798bd52d879959466789ed2aea5985a90c1519aaa2b6d 100644 SOURCE ADAPTED docs/HERMES_INSTALLATION_VERIFICATION.md
 3d9eb7e926bb7743cd0863e758e4e8a1c186fd81fdc00c08fdf1d9e3aa30a712 100644 3d9eb7e926bb7743cd0863e758e4e8a1c186fd81fdc00c08fdf1d9e3aa30a712 100644 SOURCE IDENTICAL docs/HERMES_LOCAL_VM.md
 2cd43c5863c797183b937c17489a1452f4456a52b7e9d901878c8e754ab108dc 100644 - - FOUNDATION MODIFIED docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md
@@ -225,7 +203,7 @@ f838188c228cc7f44db944e6156cc49c3304556f1f265a59967846800a12643f 100644 - - FOUN
 abe140f3e768c585f967ec4e6e54347a59ac49e961e27797135b625e957c9a7d 100644 - - AUTHORED ADDED docs/plans/2026-09-21-hermes-repository-migration.md
 f585e9ed8e61ec969ce895242e8f5facd97300202cbd8129e7b67232c6020384 100644 - - AUTHORED ADDED docs/plans/2026-09-23-hermes-deepseek-e2e-r1.md
 094133518b59432c1c6925437847e7f63ca5ca11f4d2655e16c33c7618915601 100644 - - AUTHORED ADDED docs/plans/2026-09-24-hermes-gate2-unattended-access.md
-703564fe8afadbf3587094a4318600bd572892b61fdd4869b189a70c6127bab9 100644 - - AUTHORED ADDED docs/plans/2026-09-25-hermes-disposable-lab.md
+c59b1d06f75947db07c8365ae401d70246eb9bbcd7107cf67aaf75b1f8065796 100644 - - AUTHORED ADDED docs/plans/2026-09-25-hermes-disposable-lab.md
 2f5d494aee702aae03a3a2ce78bb1a96e8584d78669bdcbacea946f98a4afcdf 100644 2f5d494aee702aae03a3a2ce78bb1a96e8584d78669bdcbacea946f98a4afcdf 100644 SOURCE IDENTICAL docs/plans/evidence/2026-09-07-advisory-policy.json
 8cbb097ecfc7b207b33b255caf1937e0641cf0f17ddbed02ec964e2537183a6e 100644 8cbb097ecfc7b207b33b255caf1937e0641cf0f17ddbed02ec964e2537183a6e 100644 SOURCE IDENTICAL docs/plans/evidence/2026-09-07-guest-candidate.json
 69fdad065ac688fda74eb30e95d1d891bc4108aa6b0eaa1d11a7d002396c9f65 100644 - - FOUNDATION UNCHANGED docs/plans/evidence/2026-09-07-hermes-api-acceptance.json
@@ -326,7 +304,8 @@ ed3739b5b68ab43ed6930b263950e8090671ffe37c615ba3192226163d7b8b16 100755 ed3739b5
 10f23680a17e601c185ab1a4105b303b528d6461aec8123c7cd0839dcf3a9e85 100644 10f23680a17e601c185ab1a4105b303b528d6461aec8123c7cd0839dcf3a9e85 100644 SOURCE IDENTICAL scripts/hermes/harden-config.py
 180a0e3d8a8b94d786dcd6f55f5de0ae4e359d4bec72dd7dff2e3a15a3ece105 100644 180a0e3d8a8b94d786dcd6f55f5de0ae4e359d4bec72dd7dff2e3a15a3ece105 100644 SOURCE IDENTICAL scripts/hermes/hermes.container
 682c118d5667b43de449e970080e1134e79b8675ec42bb71f36b448f36f144f9 100755 - - AUTHORED ADDED scripts/hermes/lab-test.sh
-a20a787b09ef43b7aa9ea17cc879ad2f89e52748891cd20498b8354078c07db3 100755 - - AUTHORED ADDED scripts/hermes/live-smoke.py
+234f1c38c38cb3f686eaa8e7778c62a62b082238c8fcd5b84c6b56df37bc7d6c 100755 - - AUTHORED ADDED scripts/hermes/live-guest.py
+9dcb5729d7ce94f8110ab51211e9dec333bdd638dcb99d152f38c24f4dea23af 100755 - - AUTHORED ADDED scripts/hermes/live-smoke.py
 5fc6a5499777ceae92abc60386470f754c45a662fd691ca8517a081b98791e05 100644 - - FOUNDATION MODIFIED scripts/hermes/manual/README.md
 0b92b6e64d716811d37942ae43dc40560dfad485aa6444090af847fabf27413b 100755 - - FOUNDATION UNCHANGED scripts/hermes/manual/boot/b4-verify.sh
 9d42c95bc5744949fc244f7c6181c94a44e8766b769ba2ed0caafb37a10a6dfa 100755 - - FOUNDATION MODIFIED scripts/hermes/manual/boot/fallback-wipe.sh
@@ -395,7 +374,7 @@ b493df535c26749130a7206c1e3e4f3eb59bb1e56c66ef7df7c9a904e7f60ece 100644 - - FOUN
 cf3ea6ac3350a1cfad3322ced3c50a1ae28c26b493a20206e239225e57a274da 100755 - - FOUNDATION UNCHANGED scripts/hermes/manual/worker/worker-entrypoint
 43e222b055258e5bd1dc1d17051936199a91f973bd3a4c8fe3fac046e5cf3865 100755 - - FOUNDATION UNCHANGED scripts/hermes/manual/worker/worker-socket-adapter
 3d2ee084b31ddacebc5273baf2ad6f4feb3904fc804f48d3c6bf72477958056f 100755 - - FOUNDATION UNCHANGED scripts/hermes/manual/worker/worker-sshd-inetd
-4c7652d863fc0722c3719fa0ba61300ae501da7ff458b2d7121c8e55750ee125 100755 - - AUTHORED ADDED scripts/hermes/profile-deploy.py
+f99f8946fbdfebe270261d9f977fe4b9d2900df01a92cad7b46634bc3d8233d9 100755 - - AUTHORED ADDED scripts/hermes/profile-deploy.py
 b97abb0cdd78951d305dc0c910eca920537afd8ca9012a26398a6b743a62b78b 100755 b97abb0cdd78951d305dc0c910eca920537afd8ca9012a26398a6b743a62b78b 100755 SOURCE IDENTICAL scripts/hermes/promotion-record.sh
 0f33c2bf6257d06f8ba98eb95cba9d50d56dbbcebe3ff28e181649af9696dcc0 100755 0f33c2bf6257d06f8ba98eb95cba9d50d56dbbcebe3ff28e181649af9696dcc0 100755 SOURCE IDENTICAL scripts/hermes/provider-auth-status.sh
 c276f59338bb64f2baa91fc20b0bad638e5275e5adf0bf8593945731e3e0e6b7 100755 c276f59338bb64f2baa91fc20b0bad638e5275e5adf0bf8593945731e3e0e6b7 100755 SOURCE IDENTICAL scripts/hermes/remote-preflight.sh
@@ -501,7 +480,7 @@ fb795d14c0b1fed8f9c1ebc03b695a6f221f3d8a960b7c2e9878c12fc0513dee 100644 c619aa7d
 ed8f69ab08bc6dec11e461ea59888374b165ae502d8d108025a008385e867b2e 100644 - - AUTHORED ADDED tests/integration_allowlist.txt
 409ae3d41bb76d16ba84f216d11dfe9728a74252f6064f7c69ea5afac99395d0 100644 - - AUTHORED ADDED tests/integration_gate.py
 b6639ee697b3ed963c91d71be9db8587f83fb9c2fab85e9e4455a967b6c7e87d 100755 - - FOUNDATION UNCHANGED tests/lib-test-helpers.sh
-0afb991a1022f2406b9624ff8da3ed2af9b2e92821c13fd4171f8c6e8ff7104b 100644 - - AUTHORED ADDED tests/offline_allowlist.txt
+dc1daffdf49c80b00bbc1a5c7ab67375eb85eb2b11a492e0008df0391e087651 100644 - - AUTHORED ADDED tests/offline_allowlist.txt
 42e524367180b53c83d5ba9865450f078c3b8b0bd1269bae21c3029eb1c6f25b 100755 - - AUTHORED ADDED tests/run-reviewed-suites.py
 21c879e5daed734a19ec57be7e0ee6d71935b11e4e40c74c01b59258ea17a8c7 100755 21c879e5daed734a19ec57be7e0ee6d71935b11e4e40c74c01b59258ea17a8c7 100755 SOURCE IDENTICAL tests/test-hermes-e2e-vm.sh
 45cb9f7823388ab39a4c938cf5f16dfe5055b201f032c90bc80ee2a9d4da03a4 100755 - - FOUNDATION MODIFIED tests/test-hermes-guide.sh
@@ -518,10 +497,12 @@ a95dee375766efa5d0a98a0b21acf8637cfee049c7cc94dd3943083ba7b80980 100755 - - FOUN
 a3359da6a52837298cb4ab31c366a0418544489beaa29a75408ec907715480b5 100644 - - AUTHORED ADDED tests/test_deepseek_host_grant_finalize.py
 c40a9caae909ed53725877ff93aa42b60af3aeb6adcc138c0cf7b0a5dbbee150 100644 - - AUTHORED ADDED tests/test_deepseek_test_grant.py
 34a0fdfad06e7469596343b5730f2c0b6a72f44b92615d5e275d0efa16aa6c17 100644 34a0fdfad06e7469596343b5730f2c0b6a72f44b92615d5e275d0efa16aa6c17 100644 SOURCE IDENTICAL tests/test_hermes_certify.py
+abb486fe45a7ba5cdc9b412bae3020a6ac5ba79984d7704304f507e5fc8583ee 100644 - - AUTHORED ADDED tests/test_hermes_disposable.py
 3357c8b31262cedd11f42a949cc413a49e1d1c5b7513e936c5d269f4c6154a04 100644 ffe052dd966922f8bd716e79fdbfb6742b521dae8ae10a4ccd781f7b9c4aaa7a 100644 SOURCE ADAPTED tests/test_hermes_lab_disk.py
 79a13deea898a9dc8f3a0ccd477acdd6a1188e58fb1a5550483c46767b8ea66a 100644 79a13deea898a9dc8f3a0ccd477acdd6a1188e58fb1a5550483c46767b8ea66a 100644 SOURCE IDENTICAL tests/test_hermes_lab_enroll_boot.py
 d7c5c1023635d32867561d9c1792ef7ea4e90b51493b033b95b3a4faee63ac16 100644 d7c5c1023635d32867561d9c1792ef7ea4e90b51493b033b95b3a4faee63ac16 100644 SOURCE IDENTICAL tests/test_hermes_lifecycle.py
-c44d13146ef8b2946b144735c2e13d4db2e2a8c8ff4a5d8a854de6c2ac28c5a2 100644 - - AUTHORED ADDED tests/test_hermes_live_smoke.py
+5f1e4290f4bdfbac1d38aac91044c5d071a368c6301b8e70e1590f25793244cd 100644 - - AUTHORED ADDED tests/test_hermes_live_guest.py
+fea6eae295a6d71fc43178b463371bf60eb0f597ce11efc3141647bcb6a79d43 100644 - - AUTHORED ADDED tests/test_hermes_live_smoke.py
 55bdff8366843fc25b4bf09714756065b5097b4faf42a5872d428b3aa8f7cd9b 100644 - - FOUNDATION UNCHANGED tests/test_hermes_manual_hardening.py
 5b55fa79679f83108f4d83772667b4a7dcaf6332eb1d83123418ee1a635f6163 100644 5b55fa79679f83108f4d83772667b4a7dcaf6332eb1d83123418ee1a635f6163 100644 SOURCE IDENTICAL tests/test_hermes_offline.py
 a2304f5e0bb880c2e2f75a6af4ee5bed683f1ffab7bb8fc036f0251f2b7e0902 100644 a2304f5e0bb880c2e2f75a6af4ee5bed683f1ffab7bb8fc036f0251f2b7e0902 100644 SOURCE IDENTICAL tests/test_hermes_remaining_lab.py
@@ -535,6 +516,7 @@ f4d38f65df2f4245e366c2b089ffaa035d7d285eac60c47c63c4fb8fdf48c28a 100644 f4d38f65
 d45a3805630b4be65d31507a7d487f5cf1739a277593ea036991d091451fae2d 100644 3129afd265fb62a739439d93d9e44b83fc8f0a6218021a37824a9dde6b605469 100644 SOURCE ADAPTED tests/test_hermes_unattended.py
 a6a9d4b780fe5e7301abf38da6fe09e7a1ad6c6a3f03992771fcf4ea4a159318 100644 - - AUTHORED ADDED tests/test_migration_provenance.py
 659a031df17ae9b828c7adec31c9dfd05414358661bec36db4785dca90d9932b 100644 659a031df17ae9b828c7adec31c9dfd05414358661bec36db4785dca90d9932b 100644 SOURCE IDENTICAL tests/test_remaining_preflight.py
+50f721bb4dc1603f6e2ced6e9dadd3945137045ef6d775b911f8f9edea43d5d4 100644 - - AUTHORED ADDED tests/test_retire_legacy_labs.py
 31b7ef68913f36ecc6281d12400ceeafd976bb8704134341b6ac50b021bd7a09 100644 - - AUTHORED ADDED tests/test_reviewed_runner.py
 6597fd8fede9468de3f85e423ff9f125acd5ece39def001ec2b41f0e4d6e6bca 100644 - - AUTHORED ADDED tests/test_secret_scan.py
 14d091e2ba5ff1ba705497f8b577bf515bfa6e2fbe38e5acd6ff0cdbbfc94b8e 100644 e3299f7d109f7c469506b48a49197b6d2f49a3d59a39304a222865c7dce2684a 100644 SOURCE ADAPTED tests/test_ssh_key_only.py
@@ -552,7 +534,7 @@ e409b0f6bdd06cd5ce6f8f6afb84b5a19fadf24feda3fd88eabc6566e17d9113 100755 - - FOUN
 149c131a97eb3234a55a1cb4c1071c3549fea91faf3e4985b9369059d2a560f4 100644 149c131a97eb3234a55a1cb4c1071c3549fea91faf3e4985b9369059d2a560f4 100644 SOURCE IDENTICAL vm/cloud-init/fedora-user-data.yaml
 8ab812e762ffd72bd0f397b9de29419e0ea7376b772d8ebfc84192114ce9e7e5 100755 7836054a2c173bf3e1db7913c59c97b34cacbf70eb8b37517ce5ceedaff1c51e 100755 SOURCE ADAPTED vm/create-fedora-vm.sh
 54ed7f60cb462d098b70a471d8e5204554bb69d1f983b78801f5554755f0593f 100755 54ed7f60cb462d098b70a471d8e5204554bb69d1f983b78801f5554755f0593f 100755 SOURCE IDENTICAL vm/create-hermes-server-vm.sh
-96cbd3e6ee37dd275b85d8e336c787ae971a0512bb10bde1e4d50a917edac07b 100755 - - AUTHORED ADDED vm/hermes-disposable.py
+ee1f93aeacaaac63472ecbede9aa2701fba0dd6edce81bca6684cf9b47477b76 100755 - - AUTHORED ADDED vm/hermes-disposable.py
 897ded098034b8caab707c99b8eda63366d5d410867b8e7ac473d15beeb3d3f3 100755 897ded098034b8caab707c99b8eda63366d5d410867b8e7ac473d15beeb3d3f3 100644 SOURCE ADAPTED vm/hermes-luks-console.py
 bedec065918d8d1812b76f0d0e2265557efceea92abfb203746c29190c3aee87 100644 bedec065918d8d1812b76f0d0e2265557efceea92abfb203746c29190c3aee87 100644 SOURCE IDENTICAL vm/kickstart/fedora-server.ks
 7b4aaec2cce96d8172d0ed97dd98e4d43a369b8b64e92d6808cc50afad3a8b1e 100644 7b4aaec2cce96d8172d0ed97dd98e4d43a369b8b64e92d6808cc50afad3a8b1e 100644 SOURCE IDENTICAL vm/kickstart/hermes-tpm-enroll.ks
@@ -560,5 +542,5 @@ bedec065918d8d1812b76f0d0e2265557efceea92abfb203746c29190c3aee87 100644 bedec065
 ce44ab4182e3e4039630c242c7cf54ba3307f0d8321c7f638689d7da1c00d282 100755 ce44ab4182e3e4039630c242c7cf54ba3307f0d8321c7f638689d7da1c00d282 100644 SOURCE ADAPTED vm/lib-vm-common.sh
 c79599420d7f8314658ba3aacb7c8f5aba3df1660fefae9749a16da2374bb8cf 100644 c79599420d7f8314658ba3aacb7c8f5aba3df1660fefae9749a16da2374bb8cf 100644 SOURCE IDENTICAL vm/networks/hermes-local-vm.nft
 649bb2ef4c1d86493b8fd99a355dcb0cbffefaa05064a536d3fa2e4e925e0b4b 100644 649bb2ef4c1d86493b8fd99a355dcb0cbffefaa05064a536d3fa2e4e925e0b4b 100644 SOURCE IDENTICAL vm/networks/lab-vlans.xml
-03b38b297e38c0123da6286012993729a130846ac088f162b620ee65d9a980b2 100755 - - AUTHORED ADDED vm/retire-legacy-labs.py
+ec21d5660851b80623c19d381e460bb6d82314a00c39b0a57ea9f57a465943b8 100755 - - AUTHORED ADDED vm/retire-legacy-labs.py
 1e2997fe627eb7079a2cf643582e91b9d83af036a87a2885755a97eba844b58f 100755 0b984ec31e10cc69adb0a7f1011685a7492dbf9fe3eaa3c982a085671fe3b73c 100755 SOURCE ADAPTED vm/setup-hypervisor.sh

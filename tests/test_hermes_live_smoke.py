@@ -7,6 +7,7 @@ import importlib.util
 import io
 import pathlib
 import tempfile
+import types
 import unittest
 from unittest.mock import patch
 
@@ -72,6 +73,85 @@ class LiveSmokeBoundsTests(unittest.TestCase):
             with self.assertRaises(MODULE.Refusal):
                 MODULE.smoke()
         request.assert_not_called()
+
+    def test_discovers_one_private_start_and_acknowledges_it(self) -> None:
+        updates = {
+            "ok": True,
+            "result": [
+                {
+                    "update_id": 17,
+                    "message": {
+                        "text": "/start",
+                        "from": {"id": 12345},
+                        "chat": {"id": 12345, "type": "private"},
+                    },
+                }
+            ],
+        }
+        with patch.object(MODULE, "post_json", side_effect=[updates, {"ok": True, "result": []}]) as request:
+            self.assertEqual(MODULE.discover_private_chat("dedicated-test-bot-token"), ("12345", "12345"))
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(request.call_args_list[1].args[1]["offset"], 18)
+
+    def test_ambiguous_private_senders_do_not_acknowledge_updates(self) -> None:
+        updates = {
+            "ok": True,
+            "result": [
+                {"update_id": i, "message": {"text": "/start", "from": {"id": i}, "chat": {"id": i, "type": "private"}}}
+                for i in (17, 18)
+            ],
+        }
+        with patch.object(MODULE, "post_json", return_value=updates) as request:
+            with self.assertRaises(MODULE.Refusal):
+                MODULE.discover_private_chat("dedicated-test-bot-token")
+        self.assertEqual(request.call_count, 1)
+
+    def test_replaces_only_deepseek_key_without_exposing_values(self) -> None:
+        output = io.StringIO()
+        with (
+            patch.object(MODULE.sys, "stdin", types.SimpleNamespace(isatty=lambda: True)),
+            patch("builtins.input", return_value="yes"),
+            patch.object(MODULE.getpass, "getpass", return_value="replacement-key"),
+            contextlib.redirect_stdout(output),
+        ):
+            MODULE.replace_deepseek()
+            MODULE.replace_deepseek()
+        self.assertEqual(MODULE.read_private("deepseek"), "replacement-key")
+        self.assertEqual((self.private / MODULE.FILES["deepseek"]).stat().st_mode & 0o777, 0o600)
+        self.assertEqual(MODULE.read_private("telegram"), "dedicated-test-bot-token")
+        self.assertEqual(MODULE.read_private("cap"), "unavailable")
+        self.assertIn("KEY=REPLACED", output.getvalue())
+        self.assertIn("KEY=UNCHANGED", output.getvalue())
+        self.assertNotIn("replacement-key", output.getvalue())
+
+    def test_replacement_refuses_changed_account_or_unsafe_key(self) -> None:
+        old = MODULE.read_private("deepseek")
+        with (
+            patch.object(MODULE.sys, "stdin", types.SimpleNamespace(isatty=lambda: True)),
+            patch("builtins.input", return_value="no"),
+            patch.object(MODULE.getpass, "getpass") as prompt,
+        ):
+            with self.assertRaises(MODULE.Refusal):
+                MODULE.replace_deepseek()
+        prompt.assert_not_called()
+        with (
+            patch.object(MODULE.sys, "stdin", types.SimpleNamespace(isatty=lambda: True)),
+            patch("builtins.input", return_value="yes"),
+            patch.object(MODULE.getpass, "getpass", return_value="bad\nkey"),
+        ):
+            with self.assertRaises(MODULE.Refusal):
+                MODULE.replace_deepseek()
+        self.assertEqual(MODULE.read_private("deepseek"), old)
+
+    def test_replacement_refuses_unsafe_existing_file(self) -> None:
+        (self.private / MODULE.FILES["deepseek"]).chmod(0o644)
+        with (
+            patch.object(MODULE.sys, "stdin", types.SimpleNamespace(isatty=lambda: True)),
+            patch("builtins.input") as prompt,
+        ):
+            with self.assertRaises(MODULE.Refusal):
+                MODULE.replace_deepseek()
+        prompt.assert_not_called()
 
 
 if __name__ == "__main__":
