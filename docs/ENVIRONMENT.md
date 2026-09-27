@@ -123,7 +123,7 @@ reported and resolved rather than silently rewritten or ignored.
 | Class | Paths | Status |
 | --- | --- | --- |
 | Current instructions | `README.md`, `AGENTS.md`, `docs/CONTRIBUTING.md`, `docs/ENVIRONMENT.md`, `docs/hook-parity.md`, `toolbox/**`, `tests/**` | Maintained here; Devbox and Lefthook replaced |
-| Current guides | `hermes-fedora-server-install-guide.html`, `secure-hermes-installation-plan.html`, `docs/VM_TESTING_GUIDE.md`, `docs/HERMES_UNATTENDED_DEPLOYMENT.md`, `docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md`, `docs/HERMES_MANUAL_PROFILE_CONTRACT.md`, `vm/DEPLOYMENT_TASKS.md`, `setup-ssh-key-only.md` | Adapted for this environment; linted check-only, not blanket-excluded |
+| Current guides | `docs/hermes-fedora-server-install-guide.html`, `docs/secure-hermes-installation-plan.html`, `docs/VM_TESTING_GUIDE.md`, `docs/HERMES_UNATTENDED_DEPLOYMENT.md`, `docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md`, `docs/HERMES_MANUAL_PROFILE_CONTRACT.md`, `vm/DEPLOYMENT_TASKS.md`, `docs/setup-ssh-key-only.md` | Adapted for this environment; linted check-only, not blanket-excluded |
 | Preserved records | the exact paths listed in `.markdownlint-cli2.yaml` and `.pre-commit-config.yaml`: selected dated `docs/plans/2026-09-*.md` records and selected `docs/HERMES_*.md` handoffs and ledgers, `docs/plans/evidence/**`, `docs/reviews/**`, `docs/archive/**`, `scripts/hermes/manual/README.md` | Byte-preserved; historical environment references intentionally left intact |
 
 ## Evidence-scope rule

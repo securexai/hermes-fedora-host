@@ -10,8 +10,8 @@ Kubernetes and workstation components that stay in the source repository.
 
 | Component | Entry points |
 | --- | --- |
-| Installation guide (canonical, human-facing) | [`hermes-fedora-server-install-guide.html`](hermes-fedora-server-install-guide.html) |
-| One-command controller | `hermes-deploy.sh`, `scripts/hermes/deploy-lib.sh` |
+| Installation guide (canonical, human-facing) | [`docs/hermes-fedora-server-install-guide.html`](docs/hermes-fedora-server-install-guide.html) |
+| One-command controller | `scripts/hermes/deploy.sh`, `scripts/hermes/deploy-lib.sh` (root launcher: `hermes-deploy.sh`) |
 | Manual profile (M01–M05) | `scripts/hermes/manual/README.md`, `docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md` |
 | Manual-profile contract | `docs/HERMES_MANUAL_PROFILE_CONTRACT.md` |
 | Unattended controller | `docs/HERMES_UNATTENDED_DEPLOYMENT.md`, `scripts/hermes/unattended/` |

@@ -42,7 +42,8 @@ exactly once) with:
 * an explicit supersession note for the stale docs/extraction-manifest.txt.
 
 Companion artifacts are mapped to their real repository and source-relative path
-by ``COMPANION_SOURCES``; a missing known companion source is a hard error rather
+by ``COMPANION_SOURCES``. Relocated source paths are mapped by
+``RELOCATED_SOURCES``; a missing declared source is a hard error rather
 than a silent downgrade to "no source counterpart".
 
 ``--verify`` re-checks the destination rows and payload identity, and — when the
@@ -91,6 +92,17 @@ COMPANION_SOURCES = {
     "docs/reviews/HERMES_MANUAL_CORRECTION_REVIEW.md": "docs/HERMES_MANUAL_CORRECTION_REVIEW.md",
     "docs/reviews/HERMES_MANUAL_CORRECTION_REPRO.py": "docs/HERMES_MANUAL_CORRECTION_REPRO.py",
     "docs/reviews/HERMES_FEDORA44_REVIEW_PROMPT.md": "docs/HERMES_FEDORA44_REVIEW_PROMPT.md",
+}
+
+# Destination path -> original path in the source checkout after relocation.
+RELOCATED_SOURCES = {
+    "scripts/hermes/deploy.sh": "hermes-deploy.sh",
+    "scripts/hermes/remediation-wizard.sh": "hermes-remediation-wizard.sh",
+    "scripts/hermes/simple/deploy.sh": "hermes-simple-deploy.sh",
+    "vm/hermes-certify-vm.sh": "hermes-certify-vm.sh",
+    "docs/hermes-fedora-server-install-guide.html": "hermes-fedora-server-install-guide.html",
+    "docs/secure-hermes-installation-plan.html": "secure-hermes-installation-plan.html",
+    "docs/setup-ssh-key-only.md": "setup-ssh-key-only.md"
 }
 
 IDENTITY_KEYS = (
@@ -188,7 +200,7 @@ class ManifestError(Exception):
 
 
 class CompanionSourceMissing(Exception):
-    """Raised when a known companion artifact has no source file."""
+    """Raised when a declared companion or relocated artifact has no source file."""
 
 
 def git(repo, *args, binary=True):
@@ -480,8 +492,13 @@ def companion_counterpart(args, rel):
 
 def source_counterpart(args, rel):
     """(sha256, mode, path) for the mikrotik source of ``rel``, or None."""
-    candidate = pathlib.Path(args.source) / rel
+    src_rel = RELOCATED_SOURCES.get(rel, rel)
+    candidate = pathlib.Path(args.source) / src_rel
     if not candidate.is_file():
+        if rel in RELOCATED_SOURCES:
+            raise CompanionSourceMissing(
+                f"{rel}: declared relocated source {src_rel} not found under {args.source}"
+            )
         return None
     return sha256_file(candidate), filesystem_mode(candidate), candidate
 
@@ -674,7 +691,15 @@ def classify(args):
                 problems.append(str(exc))
 
         counterpart = None
-        if companion:
+        if rel in RELOCATED_SOURCES:
+            try:
+                counterpart = source_counterpart(args, rel)
+            except CompanionSourceMissing as exc:
+                problems.append(str(exc))
+                continue
+            origin = "SOURCE"
+            state = source_state(rel, counterpart, dest_hash, dest_mode, dest_path, reasons, problems)
+        elif companion:
             counterpart = companion
             origin = "SOURCE"
             state = source_state(rel, companion, dest_hash, dest_mode, dest_path, reasons, problems)
@@ -741,6 +766,10 @@ def classify(args):
     identity["inventory_rows"] = str(len(current))
 
     audit_lines = list(audit)
+    audit_lines += [
+        "\t".join(["# relocation", dest_rel, str(args.source), src_rel])
+        for dest_rel, src_rel in sorted(RELOCATED_SOURCES.items())
+    ]
     audit_lines += [
         "\t".join(["# companion", dest_rel, str(args.companion), src_rel])
         for dest_rel, src_rel in sorted(COMPANION_SOURCES.items())
@@ -852,6 +881,7 @@ def render(args, result):
         "#     status is the git porcelain status; ' M' is also used for a tracked",
         "#     mode-only change that git did not report because core.filemode is false",
         "#   # companion <dest_path> <companion_root> <source_relative_path>",
+        "#   # relocation <dest_path> <source_root> <original_source_relative_path>",
         "#   # mode-mismatch <path> <index_mode> <worktree_mode>",
     ]
     lines += result["audit"]
@@ -1007,6 +1037,10 @@ def verify(args):
     recomputed_dirty = {line for line in result["audit"] if line.startswith("# dirty\t")}
     if recorded_dirty != recomputed_dirty:
         failures.append("dirty-input audit lines differ from the recomputed inputs")
+    recorded_relocations = {line for line in text.splitlines() if line.startswith("# relocation\t")}
+    recomputed_relocations = {line for line in result["audit"] if line.startswith("# relocation\t")}
+    if recorded_relocations != recomputed_relocations:
+        failures.append("relocation origin map differs from the recomputed mapping")
     recorded_companion = {line for line in text.splitlines() if line.startswith("# companion\t")}
     recomputed_companion = {line for line in result["audit"] if line.startswith("# companion\t")}
     if recorded_companion != recomputed_companion:

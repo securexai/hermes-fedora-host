@@ -362,7 +362,7 @@ run_certifier_interrupt_cleanup() {
       printf "failure-cleanup-used\n" >>"$TEST_MARKER"
       VM_CREATED=false
     }
-    source <(sed -n "/^cleanup() {/,/^trap .*TERM/p" "$SCRIPT_DIR/hermes-certify-vm.sh")
+    source <(sed -n "/^cleanup() {/,/^trap .*TERM/p" "$SCRIPT_DIR/vm/hermes-certify-vm.sh")
     kill -INT $$
   '
   child_rc=$?
@@ -405,7 +405,7 @@ EOF
         grep -Fqx "vm-creator --destroy" "$TEST_MARKER"
       }
       virsh() { printf "unexpected-virsh %s\n" "$*" >>"$TEST_MARKER"; }
-      source <(sed -n "/^cleanup_after_failure() {/,/^}/p" "$SCRIPT_DIR/hermes-certify-vm.sh")
+      source <(sed -n "/^cleanup_after_failure() {/,/^}/p" "$SCRIPT_DIR/vm/hermes-certify-vm.sh")
       cleanup_after_failure
       printf "vm_created=%s\n" "$VM_CREATED" >>"$TEST_MARKER"
     '
@@ -454,7 +454,7 @@ run_certification_unlock_evidence_contract() {
 run_remove_fixture_sudo_contract() {
   SCRIPT_DIR="$PROJECT_ROOT" bash -c '
     set -o nounset
-    source <(sed -n "/^remove_fixture_sudo() {/,/^}/p" "$SCRIPT_DIR/hermes-certify-vm.sh")
+    source <(sed -n "/^remove_fixture_sudo() {/,/^}/p" "$SCRIPT_DIR/vm/hermes-certify-vm.sh")
     ssh_vm() {
       printf "ssh_vm"
       printf " <%s>" "$@"
@@ -1181,7 +1181,7 @@ run_certifier_status_failure_capture_contract() {
       esac
     }
     source <(sed -n "/^run_certification_controller_deploy() {/,/^}/p" \
-      "$SCRIPT_DIR/hermes-certify-vm.sh")
+      "$SCRIPT_DIR/vm/hermes-certify-vm.sh")
     deploy_rc=0
     run_certification_controller_deploy || deploy_rc=$?
     printf "deploy-rc=%s\n" "$deploy_rc"

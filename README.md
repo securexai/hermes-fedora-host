@@ -13,7 +13,7 @@ in the source repository and are not part of this tree.
 | I want to… | Read |
 | --- | --- |
 | Run the current disposable Hermes lab | [`docs/HERMES_DISPOSABLE_LAB.md`](docs/HERMES_DISPOSABLE_LAB.md) |
-| Install Hermes on a Fedora host | [`hermes-fedora-server-install-guide.html`](hermes-fedora-server-install-guide.html) |
+| Install Hermes on a Fedora host | [`docs/hermes-fedora-server-install-guide.html`](docs/hermes-fedora-server-install-guide.html) |
 | Understand the environment and retired Devbox commands | [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md) |
 | Run the reviewed manual profile (M01–M05) | [`scripts/hermes/manual/README.md`](scripts/hermes/manual/README.md), [`docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md`](docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md) |
 | Use the unattended controller | [`docs/HERMES_UNATTENDED_DEPLOYMENT.md`](docs/HERMES_UNATTENDED_DEPLOYMENT.md) |
@@ -82,6 +82,25 @@ The tree also retains `hermes-simple-deploy.sh` and
 controller. Retained paths are kept for reference and recovery; their evidence
 status is recorded in the ledger and the owning plan record, and none of them is
 deployment acceptance on its own.
+
+## Canonical files and compatibility
+
+Deployment implementations live in `scripts/hermes/deploy.sh`,
+`scripts/hermes/remediation-wizard.sh`, `scripts/hermes/simple/deploy.sh` and
+`vm/hermes-certify-vm.sh`. The original root commands remain location-relative
+compatibility launchers; invoke them with the same arguments from any directory.
+They do not change the caller working directory.
+
+The full [installation guide](docs/hermes-fedora-server-install-guide.html),
+[security plan](docs/secure-hermes-installation-plan.html) and
+[SSH setup guide](docs/setup-ssh-key-only.md) live in `docs/`. Root HTML pages
+redirect locally, preserving URL fragments, with visible links as a fallback.
+The root SSH guide retains its heading anchors and links to canonical sections.
+`setup-ssh-key-only.sh` remains standalone for copying to a server or sourcing.
+
+Relocation changes certification inputs: earlier promotion evidence does not
+certify these files. See the [execution record](docs/plans/2026-09-26-root-entrypoint-organization.md)
+for offline verification and limitations.
 
 ## License
 

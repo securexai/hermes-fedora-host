@@ -184,6 +184,34 @@ class MigrationProvenanceTests(unittest.TestCase):
         self.assertNotEqual(code, 0, f"verification unexpectedly passed ({reason})")
         return code, out, err
 
+    def test_relocated_source_mapping_and_missing_counterpart(self):
+        for destination, original in self.gen.RELOCATED_SOURCES.items():
+            write(self.fixture.source / original, "original source\n")
+            write(self.fixture.dest / destination, "original source\n")
+        manifest = self._generate()
+        for destination, original in self.gen.RELOCATED_SOURCES.items():
+            self.assertIn(f"# relocation\t{destination}\t{self.fixture.source}\t{original}", manifest)
+            self.assertEqual(self.gen.parse_manifest(manifest)[destination][4:], ("SOURCE", "IDENTICAL"))
+        self.assertEqual(self._verify()[0], 0)
+        original = next(iter(self.gen.RELOCATED_SOURCES.values()))
+        (self.fixture.source / original).unlink()
+        _, _, err = self._assert_verify_fails("missing declared relocated source")
+        self.assertIn("declared relocated source", err)
+
+    def test_relocation_map_tampering_and_adaptation_reason(self):
+        destination, original = next(iter(self.gen.RELOCATED_SOURCES.items()))
+        write(self.fixture.source / original, "source\n")
+        write(self.fixture.dest / destination, "adapted\n")
+        code, _, err = self._main(["--destination", str(self.fixture.dest)])
+        self.assertNotEqual(code, 0)
+        self.assertIn("needs a reason", err)
+        write(self.fixture.dest / "docs/migration-adaptations.txt", f"{destination}\tRelocated implementation\ndocs/migration-adaptations.txt\tFixture reasons\n")
+        manifest = self._generate()
+        self.assertEqual(self._verify()[0], 0)
+        self.fixture.manifest.write_text(manifest.replace("# relocation\t", "# tampered\t", 1))
+        _, _, err = self._assert_verify_fails("tampered relocation map")
+        self.assertIn("relocation origin map differs", err)
+
     # -- positive control ----------------------------------------------------
 
     def test_generated_manifest_verifies(self):

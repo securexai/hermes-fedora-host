@@ -9,7 +9,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = ["setup-ssh-key-only.md", "docs/plans/2026-09-12-fedora-ssh-key-only.md"]
+FILES = ["setup-ssh-key-only.md", "docs/setup-ssh-key-only.md", "docs/plans/2026-09-12-fedora-ssh-key-only.md"]
 
 
 def main():

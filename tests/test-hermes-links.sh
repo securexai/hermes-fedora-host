@@ -16,10 +16,10 @@ readonly SCRIPT_DIR
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 readonly REPO_ROOT
 
-readonly GUIDE="$REPO_ROOT/hermes-fedora-server-install-guide.html"
+readonly GUIDE="$REPO_ROOT/docs/hermes-fedora-server-install-guide.html"
 readonly PLAN="$REPO_ROOT/docs/HERMES_DEPLOYMENT_PLAN.md"
 readonly VERIFICATION="$REPO_ROOT/docs/HERMES_INSTALLATION_VERIFICATION.md"
-readonly SECURITY_PLAN="$REPO_ROOT/secure-hermes-installation-plan.html"
+readonly SECURITY_PLAN="$REPO_ROOT/docs/secure-hermes-installation-plan.html"
 readonly FEDORA_SERVER_URL="https://fedoraproject.org/server/download/"
 
 for file in "$GUIDE" "$PLAN" "$VERIFICATION" "$SECURITY_PLAN"; do

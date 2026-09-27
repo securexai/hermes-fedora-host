@@ -12,6 +12,11 @@ readonly HERMES_PROMOTION_WINDOW_SECONDS=86400
 promotion_record_fingerprint() {
   local root=$1 file
   local -a files=(
+    "$root/scripts/hermes/deploy.sh"
+    "$root/scripts/hermes/remediation-wizard.sh"
+    "$root/scripts/hermes/simple/deploy.sh"
+    "$root/vm/hermes-certify-vm.sh"
+    "$root/hermes-simple-deploy.sh"
     "$root/hermes-deploy.sh"
     "$root/hermes-certify-vm.sh"
     "$root/scripts/hermes/deploy-lib.sh"

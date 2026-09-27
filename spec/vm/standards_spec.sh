@@ -98,7 +98,7 @@ Describe "Hermes Server certification resource contract"
   End
 
   It "fails fast before expensive certification checks and rechecks before VM creation"
-    When run grep -E '^(check_hermes_server_host_resources /var/lib/libvirt/images|verify_media|run_offline_tests|VM_CREATED=true)$' "$PROJECT_ROOT/hermes-certify-vm.sh"
+    When run grep -E '^(check_hermes_server_host_resources /var/lib/libvirt/images|verify_media|run_offline_tests|VM_CREATED=true)$' "$PROJECT_ROOT/vm/hermes-certify-vm.sh"
     The status should be success
     The output should equal "check_hermes_server_host_resources /var/lib/libvirt/images
 verify_media
@@ -108,7 +108,7 @@ VM_CREATED=true"
   End
 
   It "confirms the encrypted console attachment before controller-driven reboots"
-    When run grep -E '^start_unlock_monitor$|^wait_ssh \|\| |^run_certification_controller_deploy$' "$PROJECT_ROOT/hermes-certify-vm.sh"
+    When run grep -E '^start_unlock_monitor$|^wait_ssh \|\| |^run_certification_controller_deploy$' "$PROJECT_ROOT/vm/hermes-certify-vm.sh"
     The status should be success
     The output should equal "start_unlock_monitor
 wait_ssh || die 'certification VM did not become reachable over SSH' 69

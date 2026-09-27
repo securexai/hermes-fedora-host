@@ -974,7 +974,10 @@ section "17. Duplicate helper identity (no silently divergent copy)"
 #   controller.py     285 differing lines. scripts/hermes/simple/ is the provisioned SSH
 #                     controller; scripts/hermes/unattended/ is the noninteractive dispatcher
 #                     seam. Different programs that share a name.
-DIVERGENT_ALLOWED="harden-config.py host.py controller.py"
+#   deploy.sh         scripts/hermes/deploy.sh is the promotion-gated legacy controller;
+#                     scripts/hermes/simple/deploy.sh dispatches the bounded application-only
+#                     installer. Canonical relocations of distinct root commands.
+DIVERGENT_ALLOWED="harden-config.py host.py controller.py deploy.sh"
 dupes=$(
   {
     find "$REPO_ROOT/scripts" -type f \( -name '*.sh' -o -name '*.py' \) -print

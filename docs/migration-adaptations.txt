@@ -9,11 +9,11 @@ docs/reviews/HERMES_MANUAL_CORRECTION_REPRO.py	Executable bit (100755) retained 
 AGENTS.md	Repository-authored guidance; replaces the source repository's AGENTS.md rather than copying it.
 docs/HERMES_UNATTENDED_DEPLOYMENT.md	Replaced retired `devbox run --` prefixes with the dev-toolbox Toolbox equivalents.
 docs/VM_TESTING_GUIDE.md	Devbox to Toolbox translation; checkout defaults to the current repository path and remains overrideable, while media and identity use operator-supplied variables; excluded workstation assets marked external; substantive watcher and certification prose preserved; later added the retained DeepSeek VM workflow and idempotent helper references.
-hermes-certify-vm.sh	run_offline_tests now invokes the explicit Toolbox check-only gate (run-offline-checks.sh plus run-check-only-lint.sh) instead of bare bash/python3/pre-commit on the host.
-hermes-fedora-server-install-guide.html	Hard-coded checkout replaced with HERMES_REPO using the current repository path as an overrideable default; ISO, checksum, keyring and SSH identity inputs use operator-supplied variables.
-secure-hermes-installation-plan.html	Hard-coded checkout replaced with HERMES_REPO using the current repository path as an overrideable default; ISO, checksum, keyring and SSH identity inputs use operator-supplied variables.
-setup-ssh-key-only.md	Replaced retired `devbox run --` prefixes with the dev-toolbox Toolbox equivalents.
-spec/hermes/deploy_spec.sh	SSH fixture examples use a per-example isolated marker directory and add positive and negative fixture controls.
+hermes-certify-vm.sh	Compatibility navigation/exec entrypoint for vm/hermes-certify-vm.sh; preserves existing public paths.
+hermes-fedora-server-install-guide.html	Compatibility navigation/exec entrypoint for docs/hermes-fedora-server-install-guide.html; preserves existing public paths.
+secure-hermes-installation-plan.html	Compatibility navigation/exec entrypoint for docs/secure-hermes-installation-plan.html; preserves existing public paths.
+setup-ssh-key-only.md	Compatibility navigation/exec entrypoint for docs/setup-ssh-key-only.md; preserves existing public paths.
+spec/hermes/deploy_spec.sh	SSH fixture examples use a per-example isolated marker directory and add positive and negative fixture controls. Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
 tests/Containerfile.e2e	Scope note added: the workstation setup.sh it targets stays in the source repository and was not migrated; reference-only file.
 tests/Containerfile.sshd	Scope note added: the workstation enable-sshd.sh it targets stays in the source repository and was not migrated; reference-only file.
 tests/test_hermes_lab_disk.py	Real libguestfs disk test moved to the opt-in integration allowlist and gated on an explicit opt-in; the mocked unit coverage is unaffected.
@@ -52,7 +52,7 @@ docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table,
 docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged.
 docs/hook-parity.md	Ported-gate rows updated for the structural hook-wiring check and check-only Markdown linting; documented commit-only branch protection and Toolbox hook execution.
 docs/plans/2026-09-20-hermes-manual-review-corrections.md	Canonical correction record restored byte-for-byte to its recorded SHA-256 f838188c..., which differs from the base-commit copy.
-tests/test-hermes-guide.sh	Source-repository assertions re-pointed; structural hook-wiring checks with negative controls added in place of string greps.
+tests/test-hermes-guide.sh	Source-repository assertions re-pointed; structural hook-wiring checks with negative controls added in place of string greps. Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
 toolbox/extensions.yaml	Stale ShellSpec purpose corrected: the migrated specs now run from the offline and certification gates.
 toolbox/install-extensions.sh	Scope clarified: installs the ShellSpec extension only and points at provision-environment.sh for the uv-locked tooling.
 toolbox/run-offline-checks.sh	Python discovery replaced with the explicit reviewed allowlist runner; full-working-tree secret scan added.
@@ -64,7 +64,7 @@ docs/HERMES_INSTALLATION_VERIFICATION.md	Later added the current DeepSeek VM evi
 docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md	Later documented the latest pinned Hermes DeepSeek VM profile and provider-specific manual steps.
 scripts/hermes/manual/README.md	Later documented the native DeepSeek candidate and its credential-free resolution gate.
 scripts/hermes/manual/boot/fallback-wipe.sh	Later corrected the historical TPM fallback helper to report a failed passphrase check or missing completion markers as failure rather than printing a false success verdict.
-scripts/hermes/manual/boot/rehearse-clean-install.sh	Later added synthetic verdict regression checks for the historical fallback helper's passphrase failure and completion markers.
+scripts/hermes/manual/boot/rehearse-clean-install.sh	Later added synthetic verdict regression checks for the historical fallback helper's passphrase failure and completion markers. Document the intentional deploy.sh basename collision after canonical relocation.
 scripts/hermes/manual/config/set-model.py	Later allowed native DeepSeek and avoided rewriting an already converged model config.
 scripts/hermes/manual/boot/tpm-enroll.sh	Later corrected preflight and failure verdicts, verified an unchanged TPM enrollment on rerun, and preserved staged recovery files for the DeepSeek VM.
 scripts/hermes/manual/m02-deploy-and-validate.sh	Later repinned the manual gateway to Hermes v2026.9.24; current lab work moved the worker's per-instance public key out of its reusable image build context.
@@ -86,3 +86,19 @@ tests/test-hermes-manual-profile.sh	Later added native DeepSeek model, redaction
 
 # --- REPOSITORY HYGIENE: documentation only, selected dependencies retained ---
 docs/ENVIRONMENT.md	Document optional locked developer checks and non-syncing dependency audits without changing pins or mandatory gates.
+
+# --- ROOT ORGANIZATION: canonical relocations and compatibility entrypoints ---
+scripts/hermes/deploy.sh	Preserved original implementation. Relocated canonical content with location-relative paths corrected.
+hermes-deploy.sh	Compatibility navigation/exec entrypoint for scripts/hermes/deploy.sh; preserves existing public paths.
+scripts/hermes/remediation-wizard.sh	Preserved original implementation. Relocated canonical content with location-relative paths corrected.
+hermes-remediation-wizard.sh	Compatibility navigation/exec entrypoint for scripts/hermes/remediation-wizard.sh; preserves existing public paths.
+scripts/hermes/simple/deploy.sh	Preserved original implementation. Relocated canonical content with location-relative paths corrected.
+hermes-simple-deploy.sh	Compatibility navigation/exec entrypoint for scripts/hermes/simple/deploy.sh; preserves existing public paths.
+vm/hermes-certify-vm.sh	run_offline_tests now invokes the explicit Toolbox check-only gate (run-offline-checks.sh plus run-check-only-lint.sh) instead of bare bash/python3/pre-commit on the host. Relocated canonical content with location-relative paths corrected.
+docs/hermes-fedora-server-install-guide.html	Hard-coded checkout replaced with HERMES_REPO using the current repository path as an overrideable default; ISO, checksum, keyring and SSH identity inputs use operator-supplied variables. Relocated canonical content with location-relative paths corrected.
+docs/secure-hermes-installation-plan.html	Hard-coded checkout replaced with HERMES_REPO using the current repository path as an overrideable default; ISO, checksum, keyring and SSH identity inputs use operator-supplied variables. Relocated canonical content with location-relative paths corrected.
+docs/setup-ssh-key-only.md	Replaced retired `devbox run --` prefixes with the dev-toolbox Toolbox equivalents. Relocated canonical content with location-relative paths corrected.
+scripts/hermes/promotion-record.sh	Include all four compatibility launchers and relocated implementations in certification fingerprints so changes invalidate old evidence.
+tests/test-hermes-links.sh	Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
+spec/vm/standards_spec.sh	Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
+tests/check_ssh_key_only_docs.py	Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.

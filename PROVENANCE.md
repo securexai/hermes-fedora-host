@@ -245,3 +245,14 @@ and `profiles/Containerfile.python` build inputs, and the nested setup inputs th
 the six template hashes above do not cover. `docs/migration-manifest.txt`
 recomputes and records the same values, so a drift in the tooling baseline is
 detectable.
+
+## Canonical relocations
+
+`RELOCATED_SOURCES` in `toolbox/generate-migration-manifest.py` maps each moved
+implementation or guide to its original source-relative path. The manifest
+records these as `# relocation` audit lines and keeps SOURCE hashes and modes.
+Source-aware verification re-derives the mappings and fails if a declared source
+counterpart is missing or the recorded map differs. Adaptations require reasons
+in `docs/migration-adaptations.txt`; root compatibility pages and launchers remain
+separate source-derived rows. See the
+[root organization record](docs/plans/2026-09-26-root-entrypoint-organization.md).

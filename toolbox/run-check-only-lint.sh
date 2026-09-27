@@ -60,10 +60,10 @@ printf 'Check-only lint: %d shell files, %d Markdown files\n' \
   "${#shell_files[@]}" "${#markdown_files[@]}"
 
 # The certifier's original shellcheck input (source hermes-certify-vm.sh). Kept
-# exactly so the promoted gate does not silently narrow its reviewed coverage;
+# with relocated implementations added so the gate retains its reviewed coverage;
 # run at default severity.
 certifier_shell=()
-for path in hermes-deploy.sh hermes-certify-vm.sh tests/test-hermes-e2e-vm.sh \
+for path in scripts/hermes/simple/deploy.sh vm/hermes-certify-vm.sh hermes-deploy.sh hermes-certify-vm.sh tests/test-hermes-e2e-vm.sh \
   vm/create-hermes-server-vm.sh vm/lib-hermes-luks-console.sh vm/lib-vm-common.sh; do
   [[ -f "$path" ]] && certifier_shell+=("$path")
 done

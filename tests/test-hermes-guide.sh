@@ -21,10 +21,10 @@ source "$SCRIPT_DIR/lib-test-helpers.sh"
 VERBOSE=false
 [[ "${1:-}" == -v ]] && VERBOSE=true
 
-readonly GUIDE="$REPO_ROOT/hermes-fedora-server-install-guide.html"
-readonly DEPLOY="$REPO_ROOT/hermes-deploy.sh"
+readonly GUIDE="$REPO_ROOT/docs/hermes-fedora-server-install-guide.html"
+readonly DEPLOY="$REPO_ROOT/scripts/hermes/deploy.sh"
 readonly DEPLOY_LIB="$REPO_ROOT/scripts/hermes/deploy-lib.sh"
-readonly CERTIFIER="$REPO_ROOT/hermes-certify-vm.sh"
+readonly CERTIFIER="$REPO_ROOT/vm/hermes-certify-vm.sh"
 readonly REMOTE_STATE="$REPO_ROOT/scripts/hermes/remote-state.sh"
 readonly REMOTE_PREFLIGHT="$REPO_ROOT/scripts/hermes/remote-preflight.sh"
 readonly HOST_MODULE="$REPO_ROOT/scripts/hermes/fedora-server-host.sh"
@@ -44,7 +44,7 @@ readonly LINKS="$REPO_ROOT/tests/test-hermes-links.sh"
 readonly PLAN="$REPO_ROOT/docs/HERMES_DEPLOYMENT_PLAN.md"
 readonly HANDOFF="$REPO_ROOT/docs/HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md"
 readonly VERIFICATION="$REPO_ROOT/docs/HERMES_INSTALLATION_VERIFICATION.md"
-readonly SECURITY_PLAN="$REPO_ROOT/secure-hermes-installation-plan.html"
+readonly SECURITY_PLAN="$REPO_ROOT/docs/secure-hermes-installation-plan.html"
 readonly VM_GUIDE="$REPO_ROOT/docs/VM_TESTING_GUIDE.md"
 readonly AGENTS_MD="$REPO_ROOT/AGENTS.md"
 # The source repository wired its guide checks into Lefthook. Lefthook is retired
@@ -54,7 +54,9 @@ readonly PRECOMMIT="$REPO_ROOT/.pre-commit-config.yaml"
 readonly OFFLINE_CHECKS="$REPO_ROOT/toolbox/run-offline-checks.sh"
 readonly HOOK_WIRING="$REPO_ROOT/tests/check_hook_wiring.py"
 
-for required in "$GUIDE" "$DEPLOY" "$DEPLOY_LIB" "$CERTIFIER" "$REMOTE_STATE" \
+for required in "$REPO_ROOT/hermes-deploy.sh" "$REPO_ROOT/hermes-certify-vm.sh" \
+  "$REPO_ROOT/hermes-simple-deploy.sh" "$REPO_ROOT/hermes-remediation-wizard.sh" \
+  "$REPO_ROOT/scripts/hermes/simple/deploy.sh" "$REPO_ROOT/scripts/hermes/remediation-wizard.sh" "$GUIDE" "$DEPLOY" "$DEPLOY_LIB" "$CERTIFIER" "$REMOTE_STATE" \
   "$REMOTE_PREFLIGHT" "$HOST_MODULE" "$AUTH_MODULE" "$CERT_EVIDENCE" "$PROMOTION_MODULE" "$ACCEPTANCE" \
   "$ROOT_ACCEPTANCE" "$STATUS_WRAPPER" "$VM_CREATOR" "$LUKS_CONSOLE" "$LUKS_CONSOLE_HELPER" \
   "$KICKSTART" "$VM_COMMON" \

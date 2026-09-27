@@ -203,7 +203,7 @@ record. Do not redirect the provider-authentication terminal to a file.
 
 See [the Hermes deployment plan](HERMES_DEPLOYMENT_PLAN.md), [the one-command
 handoff](HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md),
-and [the Fedora Server installation guide](../hermes-fedora-server-install-guide.html) for the complete contract.
+and [the Fedora Server installation guide](hermes-fedora-server-install-guide.html) for the complete contract.
 
 ## Unattended TPM staging
 
