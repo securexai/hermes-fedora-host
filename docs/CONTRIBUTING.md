@@ -62,6 +62,14 @@ not run, and installing libguestfs, a kernel package, `ukify`, dracut or
 `openssh-server` does not widen the gate into real VM, disk, firmware or
 host-service work, until it is reviewed and added to the allowlist.
 
+The PR #1 follow-up regressions in `tests/test_pr1_regressions.py` are included
+in the offline allowlist. They check the fixed-domain power helper under normal
+and optimized Python with mocked subprocesses, the synthetic HTTP handler's
+keyword-compatible quiet logging, and the simple installer's memory preflight.
+Missing or malformed `MemTotal` data rejects with `memtotal-invalid`; a valid
+value below 8 GiB retains `8-gib-memory-required`. These tests do not operate a
+VM, run host preflight commands, start an HTTP server, or contact a provider.
+
 Two further entrypoints are deliberately separate:
 
 | Entrypoint | Purpose |

@@ -115,8 +115,11 @@ def preflight(config):
     crypt_backed('/home/hermes' if Path('/home/hermes').exists() else '/home')
     crypt_backed('/var/lib')
     require(shutil.disk_usage('/var').free >= 20 * 1024 ** 3, '20-gib-var-space-required')
-    require(int(re.search(r'MemTotal:\s+(\d+)', Path('/proc/meminfo').read_text())[1]) >= 8388608,
-            '8-gib-memory-required')
+    memory = re.search(r'^MemTotal:[ \t]+([0-9]+)[ \t]+kB[ \t]*$',
+                       Path('/proc/meminfo').read_text(), re.MULTILINE)
+    if memory is None:
+        raise Failure('memtotal-invalid')
+    require(int(memory[1]) >= 8388608, '8-gib-memory-required')
     require(Path('/sys/fs/cgroup/cgroup.controllers').exists(), 'cgroup-v2-required')
     require(re.fullmatch(r'[a-z_][a-z0-9_-]*@[A-Za-z0-9.-]+', config['target']), 'target-invalid')
     admin = config['target'].split('@')[0]

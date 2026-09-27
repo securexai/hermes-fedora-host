@@ -84,4 +84,6 @@ scripts/hermes/manual/redact-stream.py	Later added DEEPSEEK_API_KEY to the secre
 scripts/hermes/set-model.py	Later kept the shared model setter byte-identical to the manual profile's native DeepSeek and idempotent setter.
 tests/test-hermes-manual-profile.sh	Later added native DeepSeek model, redaction, and retained VM safety checks.
 scripts/hermes/unattended/credentials.py	Made the existing missing-lease Failure(66) guard explicit for static narrowing without changing the rejection behavior.
+scripts/hermes/unattended/certify_power.py	Replaced optimization-sensitive operational assertions with explicit rejection and guarded a missing disk source; retained the exit 78 JSON rejection contract.
+scripts/hermes/simple/host.py	Reject missing or malformed MemTotal through Failure before the existing minimum-memory verdict.
 pyproject.toml	Configured optional ty diagnostics for maintained Python and the existing test/unattended import layout; retained Python constraints, dependencies, lockfile and required gates.

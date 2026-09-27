@@ -28,6 +28,9 @@
 # `restic` binary but only against a disposable local repository and synthetic
 # data, with --no-cache, no network and no privileged or host-mutating calls.
 test_hermes_certify.CandidateBoundaryTests
+test_pr1_regressions.PowerGuardTests
+test_pr1_regressions.MemoryInputTests
+test_pr1_regressions.HttpSignatureTests
 test_hermes_certify.PolicyBoundaryTests
 test_hermes_certify.RevocationReconciliationTests
 test_hermes_lab_enroll_boot.IsolatedEntrypointTests
