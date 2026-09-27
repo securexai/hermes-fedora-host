@@ -21,11 +21,11 @@
 # identity	version	3
 # identity	base_commit	de8fb8ba1ef8729e895e340ff6244232d3d2193e
 # identity	payload_algorithm	sha256-lines(path NUL dest_sha256 NUL dest_mode LF, path-sorted)
-# identity	payload_fingerprint	0de3bbc706c8b90f738d0cb9fdc14379f50bd22705f39560f653cd1d72cbecae
+# identity	payload_fingerprint	d36564c1fb2e3c2896ce63bf6b03c0a7ebeb78ffed5a9b80d024d1f947b85d5c
 # identity	payload_rows	393
 # identity	payload_excludes	docs/migration-manifest.txt
 # identity	inventory_algorithm	sha256(json object path -> {sha256, mode}, path-sorted, sort_keys, indent 2, trailing LF)
-# identity	inventory_fingerprint	93c7f99d7191d5124354f6413d946e893a6393b799da23d0508af461735887e9
+# identity	inventory_fingerprint	0ea843e346cb424e1848ef42efaa6010bd52a5121be69da375095315da12621b
 # identity	inventory_rows	393
 # identity	inventory_excludes	docs/migration-manifest.txt
 # identity	source_root	/var/home/aicloudopspecial/code/repos/mikrotik
@@ -58,13 +58,13 @@
 # identity	destination_index_mode_mismatches	0
 # --- end identity ---
 #
-# Payload identity (manifest-excluding): 0de3bbc706c8b90f738d0cb9fdc14379f50bd22705f39560f653cd1d72cbecae
+# Payload identity (manifest-excluding): d36564c1fb2e3c2896ce63bf6b03c0a7ebeb78ffed5a9b80d024d1f947b85d5c
 #   SHA-256 over sorted 'path\0dest_sha256\0dest_mode\n' for every row
 #   below. This deliberately EXCLUDES this manifest file, so it identifies
 #   the payload and is not a hash binding this file. The manifest's own
 #   SHA-256 is recorded separately in the handoff, not here.
 #
-# Inventory identity (manifest-excluding): 93c7f99d7191d5124354f6413d946e893a6393b799da23d0508af461735887e9
+# Inventory identity (manifest-excluding): 0ea843e346cb424e1848ef42efaa6010bd52a5121be69da375095315da12621b
 #   Reproducible inventory of the whole destination: SHA-256 over a
 #   path-sorted JSON object mapping every path to its sha256 and mode,
 #   serialized with sort_keys, indent 2 and a trailing LF. Reproduce it with
@@ -157,7 +157,7 @@ ed8158ca2a80df4f1af11a7166c84950adc3ab16366f730a8c86c3c584c35af4 100644 - - FOUN
 60a78af72fcc2d4d7c862d2983da35fbceb6991ca092a56a7e00727d35d28f2e 100644 - - FOUNDATION UNCHANGED .editorconfig
 0d6335cd5e1ec2ba364d3fba01f30696bf514a247dad9e14d5a4abe4715c0826 100644 - - FOUNDATION MODIFIED .gitignore
 7881e53fc58780460e200695d9176bbfaa3072667e12a657a496ab9af75634c0 100644 - - FOUNDATION MODIFIED .markdownlint-cli2.yaml
-37d33ca4c609a646f7e025ae8ec49c930f7ebcf560af72bc116505082a9309b7 100644 - - FOUNDATION MODIFIED .pre-commit-config.yaml
+437b1eb50067fbee4dfe8eb4407a3de92837778ad1075e4aa8e4e51aee60be9c 100644 - - FOUNDATION MODIFIED .pre-commit-config.yaml
 a876e0b10411037a012498b9fe18d9bc1df32ed8b722a13564dc944ddcfd9135 100644 - - FOUNDATION UNCHANGED .python-version
 0fd5c76baf0e51f56d9a1216f32837858ae7beb92ac0fee0c90e59e60f553877 100644 0fd5c76baf0e51f56d9a1216f32837858ae7beb92ac0fee0c90e59e60f553877 100644 SOURCE IDENTICAL .shellspec
 a918b3eddcf985a1f9b0674b77105caa03cf03cf356a2541cc656f4c3685db41 100644 b1c0cf31c4e755739ec079083231b5d143ed2da633dc27b0f3030800eab4f0e9 100644 SOURCE ADAPTED AGENTS.md
@@ -189,8 +189,8 @@ fe1570367fc750a7ef43b962092084b0fdc9034c6d0994e10f6c90ea80e3b751 100644 fe157036
 5eba05bde1823dbd32e4d21babce1c473e8931478993a416344cf8d528310b96 100644 5eba05bde1823dbd32e4d21babce1c473e8931478993a416344cf8d528310b96 100644 SOURCE IDENTICAL docs/archive/hermes-bare-metal-deployment-handoff-kinoite.md
 30d9950784c4392d765d31c22b3690730c571d1a2b2219dbdca5bba471dbb3bf 100644 30d9950784c4392d765d31c22b3690730c571d1a2b2219dbdca5bba471dbb3bf 100644 SOURCE IDENTICAL docs/archive/secure-hermes-installation-plan-kinoite.html
 14b6b956b36c058d606bd955aaa2e2aa5cea95fccf2c61ab9d82ba8c02a521a8 100644 - - FOUNDATION UNCHANGED docs/extraction-manifest.txt
-92e304795cb3d20a52e587d75b9c4510fa1e62663b6e5db68764976673b8d9cb 100644 - - FOUNDATION MODIFIED docs/hook-parity.md
-5c151141ed042cb4eb9d18e2439fceb4e44e0debf38cdfd28337f00af6586f19 100644 - - AUTHORED ADDED docs/migration-adaptations.txt
+0325a0387b39b5c97399d09a5e66df2a10b636fe382b646e0c9082011b39544e 100644 - - FOUNDATION MODIFIED docs/hook-parity.md
+1036df5b7d562fbe18d109b177a014826928d603b214b2358a3dea48845753a6 100644 - - AUTHORED ADDED docs/migration-adaptations.txt
 61a350611dcae0138606c3ffb1c9903a4c5b75360336a335f45e9611856e6e35 100644 61a350611dcae0138606c3ffb1c9903a4c5b75360336a335f45e9611856e6e35 100644 SOURCE IDENTICAL docs/plans/2026-09-07-hermes-unattended.md
 ffc3afcf52b5a13155e56f1d1807feaabacb84603e3c4c69d03319238fa3798e 100644 ffc3afcf52b5a13155e56f1d1807feaabacb84603e3c4c69d03319238fa3798e 100644 SOURCE IDENTICAL docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md
 201b564424f02667f7373b76b1d069b8f1fb883e906b4ff20e886b7b14dad62a 100644 201b564424f02667f7373b76b1d069b8f1fb883e906b4ff20e886b7b14dad62a 100644 SOURCE IDENTICAL docs/plans/2026-09-12-fedora-ssh-key-only.md

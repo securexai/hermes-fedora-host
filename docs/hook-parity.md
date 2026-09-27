@@ -27,9 +27,12 @@ commit-message convention is lost.
 
 ## Pre-push stage
 
-The shared template intentionally omits `pre-push` because no baseline hook uses
-that stage. The Hermes-specific suites are therefore ported as an explicit
-project extension rather than silently dropped.
+The Hermes-specific suites run as an explicit `pre-push` project extension.
+Baseline hooks may also run at this stage according to their supported stages.
+The `no-commit-to-branch` guard is restricted to `pre-commit`: it blocks direct
+commits on protected branches while allowing an authorized push after merging
+validated feature work. Run Git operations inside `dev-infra-hermes` so the
+installed hooks can load `pre_commit`.
 
 | Source gate | Source command | Decision |
 | --- | --- | --- |
@@ -38,7 +41,7 @@ project extension rather than silently dropped.
 | `test-routeros` | `./tests/test-routeros.sh` | Out of scope — stays in the source repository |
 | `test-vlan30-firewall` | `./tests/test-vlan30-firewall-deploy.sh` | Out of scope — stays in the source repository |
 | `test-nix-guide` | `./tests/test-nix-guide.sh` | Out of scope — stays in the source repository |
-| `branch-check` | block direct push to `main` | Local convenience only; server-side protection is deferred |
+| `branch-check` | block direct push to `main` | Not enforced locally; authorized pushes after feature-branch merges are allowed. Server-side protection is deferred |
 
 ## Non-hook gates carried across unchanged
 
