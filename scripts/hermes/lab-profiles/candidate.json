@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "preparation_revision": 1,
+  "fedora": 44,
+  "gateway_image": "docker.io/nousresearch/hermes-agent@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7",
+  "model": "deepseek-flash",
+  "vm": {"memory_mb": 4096, "vcpus": 2, "disk_gb": 20},
+  "gateway": {"memory_mb": 2048, "pids_limit": 512, "restart_seconds": 1},
+  "worker": {"memory_mb": 2048, "pids_limit": 512, "restart_seconds": 0}
+}

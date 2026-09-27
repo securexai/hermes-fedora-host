@@ -25,6 +25,9 @@ import sys
 import tempfile
 from contextlib import contextmanager
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from lab_profile import ProfileError, load, render_unit  # noqa: E402
+
 HERE = pathlib.Path(__file__).resolve().parent
 MANUAL = HERE / "manual"
 HOME = pathlib.Path("/home/hermes")
@@ -35,6 +38,10 @@ TRANSPORT = HOME / "transport"
 WORKER_IMAGE = "localhost/hermes-worker:1"
 PACKAGES = ("podman", "container-selinux", "passt", "openssh-clients", "policycoreutils")
 SYNTHETIC_KEY = "synthetic-hermes-lab-only"
+PROFILE = None
+WORKER_ID = None
+GATEWAY_ID = None
+MODEL = "deepseek-flash"
 
 
 class DeployError(RuntimeError):
@@ -117,6 +124,10 @@ def require_host():
 
 
 def pinned_gateway() -> str:
+    if GATEWAY_ID:
+        return GATEWAY_ID
+    if PROFILE is not None:
+        return PROFILE["gateway_image"]
     unit = (MANUAL / "quadlets/hermes-gateway.container").read_text()
     refs = [
         line.split("=", 1)[1].strip() for line in unit.splitlines() if line.startswith("Image=")
@@ -227,6 +238,11 @@ def prepare() -> bool:
     if podman("image", "exists", gateway, check=False).returncode:
         podman("pull", gateway)
         changed = True
+    if WORKER_ID is not None:
+        if podman("image", "exists", WORKER_ID, check=False).returncode:
+            raise DeployError("retained worker artifact is absent; import it before deployment")
+        print(f"PREPARE={'CHANGED' if changed else 'UNCHANGED'} worker_id={WORKER_ID}")
+        return changed
     stamp = HOME / ".cache/hermes-worker-build.sha256"
     want = worker_source_hash()
     have = stamp.read_text().strip() if stamp.exists() else ""
@@ -350,6 +366,7 @@ def model_check() -> bool:
         "r=resolve_runtime_provider(target_model='deepseek-flash'); "
         "assert r.get('provider')=='deepseek' and r.get('base_url')=='https://api.deepseek.com/v1'"
     )
+    code = code.replace("deepseek-flash", MODEL)
     result = podman(
         "exec",
         "--user",
@@ -373,7 +390,7 @@ def config_current() -> bool:
         "hermes-gateway",
         "/opt/hermes/.venv/bin/python3",
         "/opt/hermes/gateway-ssh/harden-config.py",
-        "--check",
+        "--runtime-check",
         check=False,
     )
     return checked.returncode == 0 and model_check()
@@ -409,12 +426,17 @@ def configure(gateway: str):
         "--env",
         "HERMES_PROVIDER=deepseek",
         "--env",
-        "HERMES_MODEL=deepseek-flash",
+        f"HERMES_MODEL={MODEL}",
         "--entrypoint",
         "/opt/hermes/.venv/bin/python3",
         gateway,
         "/opt/hermes/gateway-ssh/set-model.py",
     )
+    # Let the pinned application initialize its own supported schema before
+    # final hardening. Its first-save formatter renders empty hooks as null.
+    # Never invent a schema version or relax the empty-hooks contract.
+    podman(*prefix, gateway, "-c", "from hermes_cli.config import load_config; load_config()")
+    podman(*prefix, gateway, "/opt/hermes/gateway-ssh/harden-config.py")
 
 
 def install_quadlets(uid: int, mode: str) -> bool:
@@ -423,6 +445,10 @@ def install_quadlets(uid: int, mode: str) -> bool:
     changed = False
     for name in ("hermes-worker.container", "hermes-gateway.container"):
         content = (MANUAL / "quadlets" / name).read_text()
+        if PROFILE is not None:
+            content = render_unit(content, name.split("-")[1].split(".")[0], PROFILE, WORKER_ID)
+            if name == "hermes-gateway.container" and GATEWAY_ID:
+                content = content.replace(PROFILE["gateway_image"], GATEWAY_ID)
         if name == "hermes-gateway.container" and mode == "synthetic":
             content = content.replace("[Container]\n", "[Container]\nNetwork=none\n", 1)
         changed |= write_file(target / name, content.encode(), 0o644, 0, 0)
@@ -464,6 +490,25 @@ def verify(mode: str):
     )
     if result.stdout.strip() != "HERMES_WORKER_OK":
         raise DeployError("gateway-to-worker SSH round trip failed")
+    if not config_current():
+        raise DeployError("effective Hermes configuration differs from the requested profile")
+    if PROFILE is not None:
+        for name in ("gateway", "worker"):
+            info = json.loads(podman("inspect", f"hermes-{name}").stdout)[0]
+            wanted = pinned_gateway() if name == "gateway" else WORKER_ID
+            image_id = (
+                podman("image", "inspect", wanted, "--format", "{{.Id}}").stdout.strip()
+                if wanted
+                else None
+            )
+            if image_id and info["Image"] != image_id:
+                raise DeployError("running container image differs from the locked artifact")
+            limits = PROFILE[name]
+            if (
+                info["HostConfig"]["Memory"] != limits["memory_mb"] * 1024 * 1024
+                or info["HostConfig"]["PidsLimit"] != limits["pids_limit"]
+            ):
+                raise DeployError("running container resource limits differ from the profile")
     print("STATUS=PASS worker=active gateway=active worker_network=none")
 
 
@@ -510,12 +555,40 @@ def apply(mode: str):
     print(f"DEPLOY={'CHANGED' if changed else 'UNCHANGED'} mode={mode}")
 
 
+def configure_profile():
+    global PROFILE, WORKER_ID, GATEWAY_ID, MODEL
+    profile_file = HERE / "lab-effective.json"
+    if profile_file.exists():
+        PROFILE = load(profile_file)
+        MODEL = PROFILE["model"]
+        lock = HERE / "lab-worker-id"
+        if lock.exists():
+            WORKER_ID = lock.read_text().strip() or None
+            render_unit(
+                (MANUAL / "quadlets/hermes-worker.container").read_text(),
+                "worker",
+                PROFILE,
+                WORKER_ID,
+            )
+        gateway_lock = HERE / "lab-gateway-id"
+        if gateway_lock.exists():
+            GATEWAY_ID = gateway_lock.read_text().strip() or None
+            if GATEWAY_ID:
+                render_unit(
+                    (MANUAL / "quadlets/hermes-worker.container").read_text(),
+                    "worker",
+                    PROFILE,
+                    GATEWAY_ID,
+                )
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("prepare", "apply", "status"))
     parser.add_argument("--mode", choices=("synthetic", "live"), default="synthetic")
     args = parser.parse_args(argv)
     try:
+        configure_profile()
         require_host()
         with locked():
             if args.action == "prepare":
@@ -524,7 +597,7 @@ def main(argv: list[str]) -> int:
                 apply(args.mode)
             else:
                 verify(args.mode)
-    except DeployError as exc:
+    except (DeployError, ProfileError) as exc:
         print(f"STOP: {exc}", file=sys.stderr)
         return 1
     return 0

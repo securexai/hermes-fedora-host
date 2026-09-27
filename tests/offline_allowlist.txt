@@ -117,3 +117,9 @@ test_ssh_key_only.KeyOnlyTests.test_initially_inactive_services_restored
 
 # Synthetic relocation fixtures: no remote or VM actions.
 test_root_entrypoints.RootEntrypointTests
+
+# Synthetic fast-lab profiles, cache and ownership guards.
+test_hermes_lab.ProfileTests
+test_hermes_lab.LabTests
+test_hermes_lab.DeploymentTests
+test_hermes_lab.RestoreTests

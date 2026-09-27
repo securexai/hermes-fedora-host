@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib.util
+import io
 import json
 import pathlib
 import re
@@ -28,7 +29,12 @@ CACHE = LAB / "cache"
 INSTANCE = LAB / "instances/hermes-disposable-lab"
 NAME = "hermes-disposable-lab"
 PORT = 22222
+PROFILE = None
+WORKER_ID = None
+GATEWAY_ID = None
+GUARDED = False
 IMAGE = "Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2"
+BASE_SHA256 = "28680fe5b371a5a82ebf43a31926e086a168e59949d03969c5093e7071f90b7f"
 CHECKSUM = "Fedora-Cloud-44-1.7-x86_64-CHECKSUM"
 BASE_URL = (
     f"https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/{IMAGE}"
@@ -38,6 +44,8 @@ FEDORA_KEY = pathlib.Path("/usr/share/distribution-gpg-keys/fedora/RPM-GPG-KEY-f
 SIGNER = "36F612DCF27F7D1A48A835E4DBFCF71C6D9F90A6"
 SOURCE_FILES = (
     "scripts/hermes/profile-deploy.py",
+    "scripts/hermes/lab_profile.py",
+    "scripts/hermes/lab_guest.py",
     "scripts/hermes/live-guest.py",
     "scripts/hermes/manual/manifest.yaml",
     "scripts/hermes/manual/config/harden-config.py",
@@ -116,7 +124,7 @@ def verified_base() -> pathlib.Path:
     with base.open("rb") as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
-    if digest.hexdigest() != match.group(1):
+    if digest.hexdigest() != match.group(1) or digest.hexdigest() != BASE_SHA256:
         raise LabError("Fedora Cloud image checksum mismatch")
     print(f"BASE=PASS sha256={digest.hexdigest()}")
     return base
@@ -209,6 +217,8 @@ def ssh_base() -> list[str]:
 def guest(
     command: str, *, check: bool = True, timeout: int = 600
 ) -> subprocess.CompletedProcess[str]:
+    if GUARDED:
+        assert_identity()
     result = run([*ssh_base(), command], check=False, timeout=timeout)
     if check and result.returncode:
         raise LabError(f"guest command failed (exit {result.returncode})")
@@ -238,6 +248,16 @@ def source_archive() -> pathlib.Path:
             info.mode = 0o644
             with source.open("rb") as stream:
                 archive.addfile(info, stream)
+        if PROFILE is not None:
+            for name, data in (
+                ("lab-effective.json", json.dumps(PROFILE).encode()),
+                ("lab-worker-id", (WORKER_ID or "").encode()),
+                ("lab-gateway-id", (GATEWAY_ID or "").encode()),
+            ):
+                info = tarfile.TarInfo("scripts/hermes/" + name)
+                info.mode = 0o644
+                info.size = len(data)
+                archive.addfile(info, io.BytesIO(data))
     return target
 
 
@@ -294,25 +314,53 @@ def deploy() -> None:
     print(result.stdout.strip())
 
 
-def fresh_run() -> None:
+def fresh_run(base=None, *, deploy_now=True) -> None:
     if domain_exists() or INSTANCE.exists():
         raise LabError("disposable lab already exists; inspect or clean the exact instance first")
     start = time.monotonic()
-    base = verified_base()
+    base = base or verified_base()
     INSTANCE.mkdir(parents=True, mode=0o700)
     create_seed()
     overlay = INSTANCE / "disk.qcow2"
-    run(["qemu-img", "create", "-f", "qcow2", "-F", "qcow2", "-b", str(base), str(overlay), "20G"])
+    run(
+        [
+            "qemu-img",
+            "create",
+            "-f",
+            "qcow2",
+            "-F",
+            "qcow2",
+            "-b",
+            str(base),
+            str(overlay),
+            f"{PROFILE['vm']['disk_gb'] if PROFILE else 20}G",
+        ]
+    )
+    vm_uuid = str(uuid.uuid4())
+    (INSTANCE / "identity.json").write_text(
+        json.dumps(
+            {
+                "name": NAME,
+                "uuid": vm_uuid,
+                "disk": str(overlay),
+                "seed": str(INSTANCE / "seed.iso"),
+                "port": PORT,
+            }
+        )
+        + "\n"
+    )
     command = [
         "virt-install",
+        "--uuid",
+        vm_uuid,
         "--connect",
         "qemu:///session",
         "--name",
         NAME,
         "--memory",
-        "4096",
+        str(PROFILE["vm"]["memory_mb"] if PROFILE else 4096),
         "--vcpus",
-        "2",
+        str(PROFILE["vm"]["vcpus"] if PROFILE else 2),
         "--os-variant",
         "fedora43",
         "--disk",
@@ -337,15 +385,17 @@ def fresh_run() -> None:
                 "uuid": vm_uuid,
                 "disk": str(overlay),
                 "seed": str(INSTANCE / "seed.iso"),
+                "port": PORT,
             }
         )
         + "\n"
     )
     wait_ssh()
     print(f"BOOT_SECONDS={time.monotonic() - start:.2f}")
-    deploy_start = time.monotonic()
-    deploy()
-    print(f"DEPLOY_SECONDS={time.monotonic() - deploy_start:.2f}")
+    if deploy_now:
+        deploy_start = time.monotonic()
+        deploy()
+        print(f"DEPLOY_SECONDS={time.monotonic() - deploy_start:.2f}")
 
 
 def status() -> None:
@@ -590,6 +640,24 @@ def live_stop() -> None:
     print("LIVE=STOPPED guest tmpfs cleared; synthetic profile restored")
 
 
+def assert_identity() -> None:
+    marker = INSTANCE / "identity.json"
+    if INSTANCE.is_symlink() or marker.is_symlink() or not marker.is_file():
+        raise LabError("owned instance marker is absent or unsafe")
+    identity = json.loads(marker.read_text())
+    if (
+        identity.get("name") != NAME
+        or identity.get("disk") != str(INSTANCE / "disk.qcow2")
+        or identity.get("seed") != str(INSTANCE / "seed.iso")
+    ):
+        raise LabError("instance ownership paths changed")
+    if virsh("domuuid", NAME).stdout.strip() != identity.get("uuid"):
+        raise LabError("domain identity changed")
+    devices = virsh("domblklist", NAME, "--details").stdout
+    if set(re.findall(r"/\S+", devices)) != {identity["disk"], identity["seed"]}:
+        raise LabError("domain disk attachments changed")
+
+
 def clean() -> None:
     marker = INSTANCE / "identity.json"
     if domain_exists():
@@ -621,6 +689,8 @@ def clean() -> None:
             "known_hosts",
             "disk.qcow2",
             "deploy-source.tar",
+            "profile.json",
+            "artifact.json",
         }
         if marker.is_file():
             identity = json.loads(marker.read_text())

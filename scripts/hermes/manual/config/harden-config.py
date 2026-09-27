@@ -44,6 +44,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true",
                         help="verify the profile already satisfies the contract; write nothing")
+    parser.add_argument("--runtime-check", action="store_true",
+                        help="verify only; accept upstream empty-hook serialization only with zero resolved hooks")
     parser.add_argument("--upgrade", action="store_true",
                         help="explicit upgrade: write and back up even when nothing changed")
     return parser.parse_args(argv)
@@ -90,6 +92,20 @@ def effective(document: Any) -> Any:
         profile = clone.get("manual_profile")
         if isinstance(profile, dict):
             profile.pop("applied_utc", None)
+    return clone
+
+
+def runtime_effective(document: Any) -> Any:
+    """The pinned gateway may serialize the disabled empty hooks map as null.
+
+    Its default-stripping writer can also omit the empty section. A runtime
+    check separately requires zero resolved shell and outbound hooks. Do not
+    accept lists, strings, nonempty mappings, or drift in other fields.
+    Configuration writes still use the canonical explicit empty mapping.
+    """
+    clone = effective(document)
+    if isinstance(clone, dict) and clone.get("hooks") is None:
+        clone["hooks"] = {}
     return clone
 
 
@@ -195,6 +211,22 @@ def main(argv: list[str]) -> int:
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
     contract, desired, desired_env, replace_paths = load_contract(contract_path)
+    if args.runtime_check:
+        # Use the pinned application's actual resolver, refusing any request to
+        # rewrite configuration during this check. An unsupported/new resolver
+        # fails closed, and the normal --check remains strictly structural.
+        try:
+            from unittest.mock import patch
+
+            from agent.outbound_webhooks import iter_configured_targets
+            from agent.shell_hooks import iter_configured_hooks
+            from hermes_cli.config import load_config
+            with patch("hermes_cli.config.save_config", side_effect=RuntimeError("write refused")):
+                resolved = load_config()
+            if iter_configured_hooks(resolved) or iter_configured_targets(resolved):
+                fail("runtime hooks must be empty")
+        except Exception:
+            fail("runtime hook resolution could not be verified without config writes")
     existing = load_existing(config_path)
     config = apply_contract(existing, desired, replace_paths)
 
@@ -211,10 +243,11 @@ def main(argv: list[str]) -> int:
     # so a matching re-run is byte-for-byte stable instead of churning metadata.
     profile["applied_utc"] = previous_profile.get("applied_utc", stamp)
 
-    config_changed = effective(existing) != effective(config) or not config_path.exists()
+    compare = runtime_effective if args.runtime_check else effective
+    config_changed = compare(existing) != compare(config) or not config_path.exists()
     env_changed = env_needs_update(env_path, desired_env)
 
-    if args.check:
+    if args.check or args.runtime_check:
         # Verify BOTH the configuration and the environment allowlist without
         # writing either. A matching config with a drifted .env is not converged.
         if config_changed or env_changed:

@@ -29,7 +29,10 @@ The current lab workflow is the
 network-disabled containers and synthetic services; separately selected VM
 checks use disposable, unencrypted Fedora guests. Real provider and Telegram
 smoke tests are optional, private operations requiring explicit authorization.
-The lab guide defines the commands and acceptance boundaries.
+The lab guide defines the commands and acceptance boundaries. The local
+`python3 scripts/hermes/lab.py` entrypoint adds named configuration profiles,
+prepared VM bases, and quick/VM/candidate test suites; mutating operations
+preview unless `--apply` is supplied.
 
 Repository and Toolbox migrations are completed historical work. Their records
 remain available for provenance:

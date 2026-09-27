@@ -15,6 +15,8 @@ from hermes_cli import runtime_provider
 from openai import OpenAI
 from plugins.platforms.telegram import adapter as telegram
 
+MODEL = os.environ.get("HERMES_LAB_MODEL", "deepseek-flash")
+
 
 class MockServices(BaseHTTPRequestHandler):
     requests: list[tuple[str, dict, str]] = []
@@ -27,7 +29,7 @@ class MockServices(BaseHTTPRequestHandler):
                 "id": "synthetic-1",
                 "object": "chat.completion",
                 "created": 1,
-                "model": "deepseek-flash",
+                "model": MODEL,
                 "choices": [
                     {
                         "index": 0,
@@ -57,7 +59,7 @@ def provider_checks(port: int) -> None:
     profile = SimpleNamespace(api_key_env_vars=("DEEPSEEK_API_KEY",))
     model = {
         "provider": "deepseek",
-        "default": "deepseek-flash",
+        "default": MODEL,
         "base_url": f"http://127.0.0.1:{port}/v1",
     }
     synthetic = {
@@ -69,7 +71,7 @@ def provider_checks(port: int) -> None:
         runtime_provider, "resolve_api_key_provider_credentials", return_value=synthetic
     ):
         resolved = runtime_provider._api_key_provider_runtime(
-            "deepseek", profile, "deepseek", model, "deepseek-flash"
+            "deepseek", profile, "deepseek", model, MODEL
         )
     assert resolved["provider"] == "deepseek"
     assert resolved["api_mode"] == "chat_completions"
@@ -82,7 +84,7 @@ def provider_checks(port: int) -> None:
         timeout=5,
     )
     answer = client.chat.completions.create(
-        model="deepseek-flash",
+        model=MODEL,
         messages=[{"role": "user", "content": "Reply OK."}],
         max_tokens=8,
     )
@@ -94,7 +96,7 @@ def provider_checks(port: int) -> None:
     ):
         try:
             runtime_provider._api_key_provider_runtime(
-                "deepseek", profile, "deepseek", model, "deepseek-flash"
+                "deepseek", profile, "deepseek", model, MODEL
             )
         except runtime_provider.AuthError:
             pass

@@ -102,3 +102,11 @@ scripts/hermes/promotion-record.sh	Include all four compatibility launchers and 
 tests/test-hermes-links.sh	Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
 spec/vm/standards_spec.sh	Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
 tests/check_ssh_key_only_docs.py	Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
+
+# --- FAST LAB: named profiles, immutable prepared bases and candidate rehearsals ---
+docs/HERMES_DISPOSABLE_LAB.md	Document profiles, prepared cache, test suites, exact artifacts, recovery and production boundaries.
+scripts/hermes/profile-deploy.py	Consume validated resolved profiles and retained image identities with effective runtime verification.
+vm/hermes-disposable.py	Support owned named instances, pinned stock checksum, prepared backing images and early ownership markers.
+tests/hermes-synthetic-smoke.py	Exercise the profile-selected DeepSeek model with the existing offline mock boundaries.
+tests/offline_allowlist.txt	Approve the new synthetic lab profile, cache, identity and deployment regression classes.
+scripts/hermes/manual/config/harden-config.py	Added read-only runtime verification of equivalent disabled empty-hook representations; strict writes and all other checks remain.

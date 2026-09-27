@@ -1,8 +1,9 @@
 # Disposable Hermes lab
 
-This is the current **lab** procedure for the pinned Hermes DeepSeek/manual
-profile. It uses the same `scripts/hermes/profile-deploy.py` implementation and
-gateway digest in `scripts/hermes/manual/manifest.yaml` for every lab run. It
+This is the current **lab** procedure for the Hermes DeepSeek/manual profile.
+Named profiles use the same `scripts/hermes/profile-deploy.py` implementation.
+The baseline follows the gateway digest in `scripts/hermes/manual/manifest.yaml`;
+a candidate can select another immutable Hermes digest. It
 does not deploy to production or promote an artifact. The older M01–M05,
 TPM/LUKS, retained-VM and encrypted certifier procedures remain historical or
 separate production-candidate work; their dated evidence does not certify this
@@ -18,7 +19,163 @@ limit accidental disclosure to the tool environment, but do not protect a
 secret from host administrators, a compromised gateway process, or offline
 access to unencrypted storage.
 
-## Requirements and commands
+## Fast local workflow
+
+The preferred entrypoint is `python3 scripts/hermes/lab.py`, from the repository
+root. It uses only Python's standard library on the host and the existing
+Toolbox, libvirt, Podman and cloud-init workflow. Run `doctor` to check the host
+prerequisites listed below. Allow approximately 15 GiB free for one prepared
+cache and its builder; candidate bundles retain additional image archives.
+Routine operation needs no host sudo grant or stored password.
+
+```bash
+python3 scripts/hermes/lab.py doctor
+python3 scripts/hermes/lab.py plan --profile candidate --instance dev
+python3 scripts/hermes/lab.py prepare --profile candidate --apply
+python3 scripts/hermes/lab.py up --profile candidate --instance dev --apply
+# Edit the non-secret candidate profile, inspect differences, then converge:
+python3 scripts/hermes/lab.py plan --profile candidate --instance dev
+python3 scripts/hermes/lab.py deploy --profile candidate --instance dev --apply
+python3 scripts/hermes/lab.py status --instance dev
+python3 scripts/hermes/lab.py clean --instance dev --apply
+```
+
+`prepare`, `up`, `deploy`, `clean`, VM tests and live start/stop preview unless
+`--apply` is provided. `plan` never changes state. `status` and `doctor` inspect
+only. With no explicit profile, operations reuse the instance's recorded profile,
+or select `candidate` for a new instance. Existing instances are never implicitly
+destroyed by `up`. Changing VM sizing requires a fresh instance.
+
+### Profiles and effective configuration
+
+Profiles are strict version-1 JSON in `scripts/hermes/lab-profiles/`; `--profile`
+also accepts a JSON file. `baseline` reproduces the reviewed application settings.
+The initial `candidate` demonstrates a gateway PID-limit/restart-delay change.
+Supported fields are preparation revision, Fedora release (currently 44), immutable gateway image,
+DeepSeek model, VM RAM/vCPUs/disk size, and gateway/worker memory, PID limits and
+restart delays. Unknown fields and unsupported values fail before deployment.
+
+The security contract remains mandatory: enforcing SELinux, rootless services,
+read-only container roots, key-only SSH, offline worker, restricted toolsets,
+and Telegram authorization. Profiles cannot contain arbitrary environment
+variables, credentials, user IDs, private chat IDs, network overrides or shell
+commands. Model configuration and synthetic tests receive the same selected
+model; runtime verification checks configuration, images and resource limits.
+The pinned gateway can omit the disabled `hooks: {}` section or serialize it
+as null. Runtime verification accepts these empty representations only after
+the pinned application resolves zero shell and outbound hooks; resolution that
+requires a configuration write fails closed. Nonempty, list or string hook
+values and all other contract drift still fail.
+Configuration writes keep the canonical empty mapping.
+A model passing mocked resolution is not proof that a provider serves it.
+
+### Prepared images and artifact identity
+
+`prepare` creates a dedicated builder that installs runtime packages and pulls
+or builds images, without configuring application state. It retains gateway and
+worker OCI archives and their image IDs. It then removes builder access, host
+keys, cloud-init seed/cache and machine identity, and powers off. A separate
+clone must pass first-boot identity and empty-application-state checks before
+atomic publication. A running or deployed test VM is never captured as a base.
+Archives are exported by image ID so OCI conversion cannot retain a conflicting
+registry manifest digest as their import name; the manifest preserves provenance.
+
+Caches live under ignored `.toolbox/hermes-disposable/v2/prepared/`. Their keys
+cover the Fedora image/checksum, gateway digest and preparation/worker sources;
+manifests record installed package versions and checksums for the prepared disk
+and archives. Reuse verifies every artifact. Configuration-only changes reuse
+the same cache. A changed release or preparation source requires a new cache. Increment
+`preparation_revision` to explicitly rebuild packages against current Fedora
+repositories while preserving previously referenced caches. Package versions
+are recorded; independent builds are not claimed to be byte-reproducible.
+Caches stay immutable while instances reference them; `clean` never removes
+shared caches. `up --stock` bypasses the prepared disk and installs retained
+application artifacts on the original signed Fedora image.
+
+Named instances use `hermes-lab-<name>` in `qemu:///session`, separate private
+state directories and fresh identities. Ports are selected from 22222–22999 on
+loopback under a host allocation lock; a collision is an error, never authority
+to stop another process. Instance locks reject concurrent changes. UUID, disk
+attachments, host key and owned-path checks guard operations and deletion.
+
+### Test suites and reports
+
+```bash
+python3 scripts/hermes/lab.py test --profile candidate --suite quick
+python3 scripts/hermes/lab.py test --profile candidate --suite vm --instance check --repeat 3 --apply
+python3 scripts/hermes/lab.py test --profile candidate --suite candidate --instance rehearsal --apply
+```
+
+- `quick` validates rendering, runs focused Toolbox regressions and exercises
+  the selected image/model with network-disabled synthetic services. Image
+  acquisition can contact the public registry; the running test has no egress.
+- `vm` starts fresh prepared instances, checks real configuration and isolation,
+  proves a no-op does not restart containers or rotate identities, changes and
+  restores a resource limit, reboots, repairs a stopped worker, and cleans twice.
+  Three repeats compare identities and measure medians. Targets are readiness
+  under 30 seconds, no-op under 5 seconds and configuration change under 10
+  seconds. Readiness is measured after cache verification, including boot and
+  application deployment; cache building is reported separately. Missed targets
+  are reported as FAIL rather than silently accepted.
+- `candidate` runs the full offline/lint gates, installs baseline on stock
+  Fedora, backs up stopped synthetic state, upgrades to the candidate, tests it,
+  restores baseline state/artifacts, and restores into a second stock VM. It
+  stages and verifies content and numeric ownership/modes before stopping writers,
+  rolls back partial state swaps before restarting, and checks a
+  persisted worker file afterward. VM sizing must match baseline for an upgrade
+  rehearsal. Both instances are removed on success.
+
+Every applied operation writes an ignored report under
+`.toolbox/hermes-disposable/v2/reports/`, with source/profile hashes, step results,
+timings and artifact/package identities. Candidate success produces a bundle
+with baseline/candidate image archives, profiles, deployment sources, recovery
+instructions and file hashes. Synthetic backup state is removed after successful
+rehearsal and is not included in the bundle. Raw logs and private values are not
+exported. The full repository gates remain the canonical commands documented in
+[CONTRIBUTING.md](CONTRIBUTING.md); focused quick checks do not replace them.
+
+### Failure and recovery
+
+A failed step records FAIL and retains owned resources for inspection. `status`
+distinguishes a missing domain from retained files and an inaccessible libvirt
+connection. Use the exact reported instance name for guarded cleanup, then rerun
+from a fresh instance. Unexpected paths, changed UUIDs, attachments or symlinks
+must be investigated; do not broaden deletion or weaken guards.
+
+An interrupted prepared build retains its exact `.building` directory and
+`build-<cache-prefix>` or `audit-<cache-prefix>` instance. Clean those exact owned
+instances through the runner after inspection. A retained `.building` directory
+is not an accepted cache; inspect and remove only that failed build's files
+before retrying. Successful prepared caches are never overwritten in place.
+
+A failed configuration deployment is not claimed rolled back automatically:
+services may be stopped or partially changed. Reapply the recorded baseline only
+after inspecting the failure. For application upgrades, stop both writers and
+restore the pre-upgrade backup together with its matching image artifacts and
+profile. Do not start an older application against newer application state.
+The candidate rehearsal demonstrates this procedure with synthetic state only;
+production backup storage and credential recovery require separate provisioning.
+
+Live tests use the same named instance and retained image IDs:
+
+```bash
+python3 scripts/hermes/lab.py live-start --instance dev --apply
+python3 scripts/hermes/lab.py live-status --instance dev
+# Only after explicit authorization: send one private test message.
+python3 scripts/hermes/lab.py live-stop --instance dev --apply
+python3 scripts/hermes/lab.py clean --instance dev --apply
+```
+
+The private setup and limits below still apply. Synthetic deploy and backup
+refuse an active live tmpfs profile. No test suite automatically contacts real
+DeepSeek or Telegram services. Reports leave live smoke and production acceptance
+NOT RUN; an older live pass does not certify a changed candidate.
+
+## Compatibility workflow: requirements and commands
+
+The following original commands remain supported for the single legacy-named
+disposable instance. They retain their original immediate-action semantics;
+the new runner's preview behavior does not change those interfaces.
 
 On a Fedora host, use libvirt's `qemu:///session`, `virt-install`, `qemu-img`,
 `genisoimage`, `gpgv`, Fedora's `distribution-gpg-keys`, `curl`, `ssh`, `scp`,
