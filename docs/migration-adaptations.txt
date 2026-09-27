@@ -47,8 +47,8 @@ vm/lib-vm-common.sh	Only executable mode changed from source 100644 to destinati
 .markdownlint-cli2.yaml	Blanket `docs/HERMES_*.md` and VM-guide ignores replaced by exact preserved-record paths; fix disabled (check-only); one narrow MD038 override documented for a meaningful trailing space; the byte-bound September 23/24 lab plans are excluded by exact path.
 .pre-commit-config.yaml	Preserved-evidence exclude list made exact; shellcheck and pre-push comments corrected; maintained guides no longer blanket-excluded; branch guard restricted to pre-commit so authorized pushes after feature-branch merges can run.
 PROVENANCE.md	Migration record updated: staleness of the old extraction manifest corrected, the new manifest identified as authoritative, and the current toolbox checkout path corrected.
-README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step and current disposable lab linked.
-docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented; incremental organization working-branch convention and canonical audit record linked.
+README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step and current disposable lab linked; current status separates completed migrations, disposable-lab scope and retained controllers.
+docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented; feature branches now start from main; earlier organization record retained as historical consolidation evidence.
 docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged.
 docs/hook-parity.md	Ported-gate rows updated for the structural hook-wiring check and check-only Markdown linting; documented commit-only branch protection and Toolbox hook execution.
 docs/plans/2026-09-20-hermes-manual-review-corrections.md	Canonical correction record restored byte-for-byte to its recorded SHA-256 f838188c..., which differs from the base-commit copy.
@@ -83,3 +83,6 @@ scripts/hermes/manual/worker/Containerfile	Current disposable lab removed the pe
 scripts/hermes/manual/redact-stream.py	Later added DEEPSEEK_API_KEY to the secret-redaction set.
 scripts/hermes/set-model.py	Later kept the shared model setter byte-identical to the manual profile's native DeepSeek and idempotent setter.
 tests/test-hermes-manual-profile.sh	Later added native DeepSeek model, redaction, and retained VM safety checks.
+
+# --- REPOSITORY HYGIENE: documentation only, selected dependencies retained ---
+docs/ENVIRONMENT.md	Document optional locked developer checks and non-syncing dependency audits without changing pins or mandatory gates.

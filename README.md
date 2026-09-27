@@ -24,24 +24,25 @@ in the source repository and are not part of this tree.
 
 ## Status
 
-Under construction. The repository migration is the current work; the approved
-records are the canonical source:
+The current lab workflow is the
+[disposable Hermes lab](docs/HERMES_DISPOSABLE_LAB.md): routine tests use
+network-disabled containers and synthetic services; separately selected VM
+checks use disposable, unencrypted Fedora guests. Real provider and Telegram
+smoke tests are optional, private operations requiring explicit authorization.
+The lab guide defines the commands and acceptance boundaries.
 
-- [`docs/plans/2026-09-21-hermes-repository-migration.md`](docs/plans/2026-09-21-hermes-repository-migration.md)
-  — the Hermes repository migration.
-- [`docs/plans/2026-09-20-hermes-fedora-host-toolbox-migration.md`](docs/plans/2026-09-20-hermes-fedora-host-toolbox-migration.md)
-  — the Toolbox migration and environment standard.
+Repository and Toolbox migrations are completed historical work. Their records
+remain available for provenance:
 
-Scope and boundaries of the current milestone:
+- [Repository migration](docs/plans/2026-09-21-hermes-repository-migration.md).
+- [Toolbox migration](docs/plans/2026-09-20-hermes-fedora-host-toolbox-migration.md).
+- [Branch consolidation](docs/plans/2026-09-26-incremental-repository-organization.md).
 
-- Development happens inside the dev-toolbox `infra` Toolbox
-  (`dev-infra-hermes`). The host itself intentionally has no development
-  toolchain installed.
-- Toolbox shares the host home directory and user session. It is a development
-  convenience, **not** a security sandbox. Keep credentials out of images.
-- Offline checks do **not** establish deployment acceptance. Gate 2 and all
-  privileged runtime work (rootless Podman, SELinux relabelling, DAC, systemd
-  recovery, reboot, guest/provider acceptance) remain out of scope and unrun.
+Development happens inside `dev-infra-hermes`. Toolbox shares the host home
+directory and user session; it is a development convenience, **not** a security
+sandbox. Keep credentials out of images. Offline checks do **not** establish
+live deployment, SELinux, systemd, guest or provider acceptance. Dated results
+and remaining limitations belong to the workflow and inputs actually tested.
 
 ### Recorded results versus current source
 
@@ -70,10 +71,9 @@ Container runs it through `postCreateCommand`) and validate it with
 
 ## Alternative and historical paths
 
-`hermes-deploy.sh` is the intended one-command path, but the changed host and
-Toolbox integration introduced by the repository migration is **not accepted**:
-no live certification or deployment has been run against this tree, and the
-certifier's check gate now requires the `dev-infra-hermes` Toolbox container
+`hermes-deploy.sh` remains an alternative one-command controller. Its changed
+host and Toolbox integration requires fresh certification before acceptance.
+The certifier's check gate requires the `dev-infra-hermes` Toolbox container
 (see [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md)). Treat controller invocations
 as unaccepted until a fresh certification passes.
 

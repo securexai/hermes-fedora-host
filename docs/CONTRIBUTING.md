@@ -16,16 +16,20 @@ part of this tree.
 
 ## Working branch
 
-Continue incremental repository organization on
-`docs/incremental-repository-organization`. It consolidates the existing local
-branch histories without rewriting their commits. Keep the other branches as
-historical pointers; do not commit directly to `main`.
+Start each new change on a scoped feature branch from `main`, with a clean
+working tree. Preserve existing branches and unrelated work; do not commit
+directly to `main`.
+
+```bash
+git switch main
+git switch -c chore/my-change
+```
 
 The [organization audit record](plans/2026-09-26-incremental-repository-organization.md)
-records the starting tips, preservation checks and validation for this
-consolidation. Directory restructuring is outside this change. Future work should
-use small, scoped commits on the working branch, with the applicable checks and
-explicit authorization for commits, pushes and other Git delivery actions.
+records the earlier branch consolidation and its validation. Its working-branch
+instructions describe that historical operation. New work uses its own feature
+branch, applicable checks and explicit authorization for commits, pushes and
+other Git delivery actions.
 
 ## Offline checks
 

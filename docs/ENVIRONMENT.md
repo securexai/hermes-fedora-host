@@ -69,6 +69,45 @@ works. Treat `uv run --locked` and the provisioning script as the supported
 entrypoints, and recreate the virtualenv from scratch (remove `.venv`, then
 provision) if a stale entrypoint matters. No gate depends on it.
 
+## Optional developer tools and dependency audits
+
+Keep the selected Ruff, `ty` and yamllint tools and their transitive dependencies
+in the project environment. `pyproject.toml` declares the development group and
+`uv.lock` selects exact versions; `toolbox/extensions.yaml` describes their
+purposes. ShellSpec is separately pinned and installed in `toolbox/.tools/` and
+is required by the offline suite. PyYAML comes from the shared `infra` profile.
+Do not remove shared profile packages as project cleanup.
+
+Ruff lint/format, `ty` type checking and yamllint are optional developer checks;
+they are not additional required acceptance gates. Their presence/version
+verification is separate from running those checks. Existing offline and
+check-only lint gates remain required as documented in
+[CONTRIBUTING.md](CONTRIBUTING.md). Optional checks can be run on selected files
+inside the Toolbox without synchronizing the environment:
+
+```bash
+UV_NO_SYNC=1 uv run --locked ruff check path/to/file.py
+UV_NO_SYNC=1 uv run --locked ruff format --check path/to/file.py
+UV_NO_SYNC=1 uv run --locked ty check path/to/file.py
+UV_NO_SYNC=1 uv run --locked yamllint path/to/file.yaml
+```
+
+For a read-only dependency audit, run from this checkout inside
+`dev-infra-hermes`:
+
+```bash
+uv sync --locked --offline --dry-run
+uv pip list --python .venv/bin/python
+bash toolbox/verify-extensions.sh
+```
+
+The dry-run should propose no installations, removals or updates. Compare the
+installed inventory with `uv.lock` when investigating drift; the list command
+alone does not prove equality. Extension verification sets `UV_NO_SYNC=1` and
+forbids Python downloads. If verification reports missing tools, use the existing
+provisioning procedure deliberately; auditing does not authorize package changes.
+Ignored caches and bytecode are generated state, not unused dependencies.
+
 ## Current documents versus preserved records
 
 Dated records are preserved byte-for-byte, so their `devbox run --` examples,

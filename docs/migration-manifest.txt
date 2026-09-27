@@ -21,12 +21,12 @@
 # identity	version	3
 # identity	base_commit	de8fb8ba1ef8729e895e340ff6244232d3d2193e
 # identity	payload_algorithm	sha256-lines(path NUL dest_sha256 NUL dest_mode LF, path-sorted)
-# identity	payload_fingerprint	d36564c1fb2e3c2896ce63bf6b03c0a7ebeb78ffed5a9b80d024d1f947b85d5c
-# identity	payload_rows	393
+# identity	payload_fingerprint	de53a9473cd99ebb5954deb2afba3ddf517463ed5316ef2717565aae4487e049
+# identity	payload_rows	394
 # identity	payload_excludes	docs/migration-manifest.txt
 # identity	inventory_algorithm	sha256(json object path -> {sha256, mode}, path-sorted, sort_keys, indent 2, trailing LF)
-# identity	inventory_fingerprint	0ea843e346cb424e1848ef42efaa6010bd52a5121be69da375095315da12621b
-# identity	inventory_rows	393
+# identity	inventory_fingerprint	ac9095f391fb36eb148c9840ace6fe9182deb20221c40596c7fb6660750f8230
+# identity	inventory_rows	394
 # identity	inventory_excludes	docs/migration-manifest.txt
 # identity	source_root	/var/home/aicloudopspecial/code/repos/mikrotik
 # identity	source_head	130bf8f2dbdc95e0db25407d5b3b155b627d1473
@@ -58,13 +58,13 @@
 # identity	destination_index_mode_mismatches	0
 # --- end identity ---
 #
-# Payload identity (manifest-excluding): d36564c1fb2e3c2896ce63bf6b03c0a7ebeb78ffed5a9b80d024d1f947b85d5c
+# Payload identity (manifest-excluding): de53a9473cd99ebb5954deb2afba3ddf517463ed5316ef2717565aae4487e049
 #   SHA-256 over sorted 'path\0dest_sha256\0dest_mode\n' for every row
 #   below. This deliberately EXCLUDES this manifest file, so it identifies
 #   the payload and is not a hash binding this file. The manifest's own
 #   SHA-256 is recorded separately in the handoff, not here.
 #
-# Inventory identity (manifest-excluding): 0ea843e346cb424e1848ef42efaa6010bd52a5121be69da375095315da12621b
+# Inventory identity (manifest-excluding): ac9095f391fb36eb148c9840ace6fe9182deb20221c40596c7fb6660750f8230
 #   Reproducible inventory of the whole destination: SHA-256 over a
 #   path-sorted JSON object mapping every path to its sha256 and mode,
 #   serialized with sort_keys, indent 2 and a trailing LF. Reproduce it with
@@ -86,12 +86,12 @@
 #   skipped deletions and collapsed untracked directories) are retained in
 #   the identity block so earlier recorded values are not redefined.
 #
-# Rows: 393; excluded candidates: 13
+# Rows: 394; excluded candidates: 13
 # This manifest does not list a row for itself (a file cannot record its own
 # hash); it is identified by the payload fingerprint above.
 #
 # Counts by origin/state:
-#   AUTHORED/ADDED: 50
+#   AUTHORED/ADDED: 51
 #   FOUNDATION/MODIFIED: 36
 #   FOUNDATION/UNCHANGED: 133
 #   SOURCE/ADAPTED: 36
@@ -162,10 +162,10 @@ a876e0b10411037a012498b9fe18d9bc1df32ed8b722a13564dc944ddcfd9135 100644 - - FOUN
 0fd5c76baf0e51f56d9a1216f32837858ae7beb92ac0fee0c90e59e60f553877 100644 0fd5c76baf0e51f56d9a1216f32837858ae7beb92ac0fee0c90e59e60f553877 100644 SOURCE IDENTICAL .shellspec
 a918b3eddcf985a1f9b0674b77105caa03cf03cf356a2541cc656f4c3685db41 100644 b1c0cf31c4e755739ec079083231b5d143ed2da633dc27b0f3030800eab4f0e9 100644 SOURCE ADAPTED AGENTS.md
 62a01deb68aa0602a9a16468b9037b3474e4687d796a153412203949a647d49c 100644 - - FOUNDATION MODIFIED PROVENANCE.md
-d19de1a72a0689814665d0b3f0a18fc840321b81efb1126c4d34304af2fcf54f 100644 - - FOUNDATION MODIFIED README.md
+3e38724f865699a657105cef378bd3396bc4af5a84a89bb39e9f4c6be717a0dd 100644 - - FOUNDATION MODIFIED README.md
 c4dd919f9f66fe3082d0a29a1741aa91d33bdd85be8036c83645472a70af5f5d 100644 - - FOUNDATION UNCHANGED commitlint.config.js
-b7e71623498793e1acea1adbcff3b80233d4520fdb1d2386488768c8a10726b4 100644 - - FOUNDATION MODIFIED docs/CONTRIBUTING.md
-9aa683bc79847b5a142630a04eeca021c5c613ec9f7d7eb2467355266774f3ca 100644 - - AUTHORED ADDED docs/ENVIRONMENT.md
+5b1e4372910f02b0a35de441ea365dea9526fad9b00f6311bdfca8de3637d614 100644 - - FOUNDATION MODIFIED docs/CONTRIBUTING.md
+ca6c2c975c8fc91455eedb75e655c6138b9f147487da31d95a6dac9a01451640 100644 - - AUTHORED ADDED docs/ENVIRONMENT.md
 8f2bf8db4cc25a814853da53f514386f0d76455866e86153f85ad6d77fd85818 100644 - - FOUNDATION UNCHANGED docs/HERMES_B6_CLEAN_INSTALL_HANDOFF.md
 5df3b517c24593c0f4d77fe8687bf8a8a1e6c3dd971825c3a24ade26e838704d 100644 - - FOUNDATION UNCHANGED docs/HERMES_BOOT_AUTOMATION.md
 3e29287bbdcd0469e4825893dd7f4d9520b8a1cd600d0580018f74ace0dd9ba2 100644 - - FOUNDATION UNCHANGED docs/HERMES_BOOT_CLEAN_INSTALL.md
@@ -190,7 +190,7 @@ fe1570367fc750a7ef43b962092084b0fdc9034c6d0994e10f6c90ea80e3b751 100644 fe157036
 30d9950784c4392d765d31c22b3690730c571d1a2b2219dbdca5bba471dbb3bf 100644 30d9950784c4392d765d31c22b3690730c571d1a2b2219dbdca5bba471dbb3bf 100644 SOURCE IDENTICAL docs/archive/secure-hermes-installation-plan-kinoite.html
 14b6b956b36c058d606bd955aaa2e2aa5cea95fccf2c61ab9d82ba8c02a521a8 100644 - - FOUNDATION UNCHANGED docs/extraction-manifest.txt
 0325a0387b39b5c97399d09a5e66df2a10b636fe382b646e0c9082011b39544e 100644 - - FOUNDATION MODIFIED docs/hook-parity.md
-1036df5b7d562fbe18d109b177a014826928d603b214b2358a3dea48845753a6 100644 - - AUTHORED ADDED docs/migration-adaptations.txt
+e71467426c5edc255e7f284034367e9906bd5e49beefb60d39239f13e3f5ec69 100644 - - AUTHORED ADDED docs/migration-adaptations.txt
 61a350611dcae0138606c3ffb1c9903a4c5b75360336a335f45e9611856e6e35 100644 61a350611dcae0138606c3ffb1c9903a4c5b75360336a335f45e9611856e6e35 100644 SOURCE IDENTICAL docs/plans/2026-09-07-hermes-unattended.md
 ffc3afcf52b5a13155e56f1d1807feaabacb84603e3c4c69d03319238fa3798e 100644 ffc3afcf52b5a13155e56f1d1807feaabacb84603e3c4c69d03319238fa3798e 100644 SOURCE IDENTICAL docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md
 201b564424f02667f7373b76b1d069b8f1fb883e906b4ff20e886b7b14dad62a 100644 201b564424f02667f7373b76b1d069b8f1fb883e906b4ff20e886b7b14dad62a 100644 SOURCE IDENTICAL docs/plans/2026-09-12-fedora-ssh-key-only.md
@@ -205,6 +205,7 @@ f585e9ed8e61ec969ce895242e8f5facd97300202cbd8129e7b67232c6020384 100644 - - AUTH
 094133518b59432c1c6925437847e7f63ca5ca11f4d2655e16c33c7618915601 100644 - - AUTHORED ADDED docs/plans/2026-09-24-hermes-gate2-unattended-access.md
 c59b1d06f75947db07c8365ae401d70246eb9bbcd7107cf67aaf75b1f8065796 100644 - - AUTHORED ADDED docs/plans/2026-09-25-hermes-disposable-lab.md
 efd219826eb00c3c1b6bb59771bfd3d4deebfd285864af8c51f600d77916ff92 100644 - - AUTHORED ADDED docs/plans/2026-09-26-incremental-repository-organization.md
+75b02d18d4630f80534d513a560fed62c97c140939ec046936e41d8b00de61d7 100644 - - AUTHORED ADDED docs/plans/2026-09-26-repository-hygiene.md
 2f5d494aee702aae03a3a2ce78bb1a96e8584d78669bdcbacea946f98a4afcdf 100644 2f5d494aee702aae03a3a2ce78bb1a96e8584d78669bdcbacea946f98a4afcdf 100644 SOURCE IDENTICAL docs/plans/evidence/2026-09-07-advisory-policy.json
 8cbb097ecfc7b207b33b255caf1937e0641cf0f17ddbed02ec964e2537183a6e 100644 8cbb097ecfc7b207b33b255caf1937e0641cf0f17ddbed02ec964e2537183a6e 100644 SOURCE IDENTICAL docs/plans/evidence/2026-09-07-guest-candidate.json
 69fdad065ac688fda74eb30e95d1d891bc4108aa6b0eaa1d11a7d002396c9f65 100644 - - FOUNDATION UNCHANGED docs/plans/evidence/2026-09-07-hermes-api-acceptance.json
