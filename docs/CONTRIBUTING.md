@@ -14,6 +14,19 @@ part of this tree.
 - Run the offline checks below inside the `dev-infra-hermes` Toolbox before
   pushing, from the repository root.
 
+## Working branch
+
+Continue incremental repository organization on
+`docs/incremental-repository-organization`. It consolidates the existing local
+branch histories without rewriting their commits. Keep the other branches as
+historical pointers; do not commit directly to `main`.
+
+The [organization audit record](plans/2026-09-26-incremental-repository-organization.md)
+records the starting tips, preservation checks and validation for this
+consolidation. Directory restructuring is outside this change. Future work should
+use small, scoped commits on the working branch, with the applicable checks and
+explicit authorization for commits, pushes and other Git delivery actions.
+
 ## Offline checks
 
 Run the whole offline set through the single shared entrypoint — the same
