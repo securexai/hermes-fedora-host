@@ -2,7 +2,7 @@
 
 <!-- markdownlint-disable MD013 -->
 
-Record state: COMPLETE
+Record state: COMPLETE (including review corrections)
 
 ## Approved baseline — preserve after approval
 
@@ -27,11 +27,11 @@ Record state: COMPLETE
 
 | Gate | Method / expected result | Status | Evidence |
 | --- | --- | --- | --- |
-| G01 | Focused offline tests: invalid config, previews, rendering, no-op, identity and failure guards | ✅ PASS | 35 focused Toolbox cases and 64 existing configuration cases; details below |
-| G02 | Real dedicated builder, verified cache, unique clones and three-run timing; reject corrupt/stale cache | ✅ PASS | Final report `20260927T043132Z-b19edc26`; all targets met |
-| G03 | quick/vm/candidate suites: boot, config, no-op, reboot, fault, upgrade, rollback, isolated restore and double clean | ✅ PASS | Candidate report `20260927T042346Z-5b086002`; all 25 steps PASS |
-| G04 | Toolbox full offline gate, check-only lint, manifest verification and diff check | ✅ PASS | Final candidate full gates, refreshed lint log and source-aware 411-row manifest verification |
-| G05 | Documentation, diagnostics privacy and final acceptance reconciliation | ✅ PASS | 27 local links, exact diff review, safe diagnostics regressions, bundle hashes and cleanup verified |
+| G01 | Focused offline tests: invalid config, previews, rendering, no-op, identity and failure guards | ✅ PASS | 40 focused Toolbox cases, including five review regressions; full offline gate also passed |
+| G02 | Real dedicated builder, verified cache, unique clones and three-run timing; reject corrupt/stale cache | ✅ PASS | Corrected-input report `20260927T155040Z-d9eeccf4`; all targets met |
+| G03 | quick/vm/candidate suites: boot, config, no-op, reboot, fault, upgrade, rollback, isolated restore and double clean | ✅ PASS | Corrected-input candidate report `20260927T154256Z-90c8635d`; all 25 steps PASS |
+| G04 | Toolbox full offline gate, check-only lint, manifest verification and diff check | ✅ PASS | Corrected-input candidate full gates, final record lint and source-aware 411-row manifest verification |
+| G05 | Documentation, diagnostics privacy and final acceptance reconciliation | ✅ PASS | 27 local links, exact diff review, safe diagnostics regressions, 38 bundle hashes and cleanup verified |
 
 ## Evidence history
 
@@ -101,3 +101,29 @@ Record state: COMPLETE
 - Next operator action: follow `docs/HERMES_DISPOSABLE_LAB.md`; create a named instance with `lab.py up --profile candidate --instance dev --apply`, or edit a non-secret profile and preview it before applying.
 - Delivery: `feat/hermes-fast-lab`; changes remain uncommitted. No commits, pushes, PR modifications, production deployment or live credential operations were performed.
 - Final state: COMPLETE.
+
+## Review corrections — 2026-09-27
+
+- Authorization: user requested “Fix all gaps” for the three P2 review findings. Preserve the approved scope and historical evidence above; no new Git delivery or live-provider authorization.
+- R01 IN_PROGRESS: require bounded read-only application health after reboot before fault recovery; reject preparation input drift before cache publication; keep preparation-only resource settings valid for every supported profile.
+- Acceptance: regressions reproduce failed reboot health, preparation input drift and large valid profiles, then pass with the corrections. Run focused tests, full offline checks, check-only lint, manifest verification and affected synthetic VM/candidate rehearsals.
+- G01–G05 STALE for changed inputs; prior results above remain historical. Runtime source changes invalidate the prepared cache.
+- Next action: implement the three corrections and regression coverage, then refresh applicable gates.
+- Corrections implemented with five focused regressions. First test attempt exposed four test-double errors (mock assertion method and shared clock patch), corrected without changing production behavior. All 40 focused cases now PASS in Toolbox; scoped Ruff PASS. Initial manifest verification correctly reported the five edited inputs as stale; regenerate before full gates.
+- Next action: refresh the manifest, run the candidate rehearsal and three-cycle prepared VM suite, then reconcile documentation and final checks.
+- Validation on `feat/hermes-fast-lab` at `c4c089b` plus the review correction working diff: 40 focused tests PASS, including five new regressions; full Toolbox offline gate PASS (549 Python cases, 140 ShellSpec examples, guide checks, full-tree secret scan and 411-row manifest). Check-only lint, scoped Ruff, diff whitespace and all 27 local documentation links PASS. Logs: `/tmp/hermes-review-fixes-offline.log` and `/tmp/hermes-review-fixes-lint.log`. Changed implementation inputs are `lab.py`, `lab_runtime.py` and `test_hermes_lab.py`; guide/record/manifest also updated. The refreshed manifest records exact file fingerprints.
+- R01 implementation and offline regression coverage complete. G01/G04/G05 PASS within offline scope. G02/G03 BLOCKED: automatic approval review rejected the synthetic candidate command before execution, interpreting “Fix all gaps” as insufficient explicit authorization for VM/guest lifecycle operations under repository rules. No VM operations occurred in this correction run. Earlier VM results remain STALE for the changed inputs. A user approval question is pending; live-provider and production acceptance remain NOT_RUN.
+- Current outcome: all three reported code defects corrected; full runtime acceptance remains open. No commit, push or PR change in this correction run.
+- Exact next action after explicit approval: run `python3 -B scripts/hermes/lab.py test --suite candidate --profile candidate --instance review-fixes --apply`, then `python3 -B scripts/hermes/lab.py test --suite vm --profile candidate --instance review-vm --repeat 3 --apply`; record results and reconcile G02/G03 before closing R01.
+- User explicitly approved the synthetic VM rehearsals with “Yes”. Candidate rehearsal PASS: `.toolbox/hermes-disposable/v2/reports/20260927T154256Z-90c8635d/report.json`; all 25 steps passed, including fresh preparation/audit (133.103 seconds), stock installation, configuration upgrade, read-only post-reboot health (18.407 seconds), worker recovery, rollback, isolated restore and repeated cleanup. Full offline and check-only lint passed again inside the rehearsal. G03 PASS for corrected inputs; live and production checks remain NOT_RUN.
+- Next action: complete the running three-cycle prepared VM suite, verify bundle checksums and resource cleanup, then refresh the final record and manifest.
+- Final G02 PASS: `.toolbox/hermes-disposable/v2/reports/20260927T155040Z-d9eeccf4/report.json`, three distinct fresh identities, all reboot health and recovery checks, repeated cleanup and timing targets passed. Readiness median 15.373 seconds (18.572, 15.362, 15.373); unchanged deployment 4.163 seconds (4.234, 4.163, 4.138); configuration change 7.597 seconds (7.597, 7.597, 7.606). Cache verification is outside the readiness measurement.
+- Independently verified all 38 candidate bundle checksums and absence of the temporary backup. Session libvirt domain listing and v2 instance directories were empty after the tests. Reports cover the unchanged corrected implementation and retain exact source/profile/artifact identities. The final record and regenerated manifest receive check-only lint and manifest verification after this update.
+- R01 DONE; G01–G05 PASS for corrected inputs within the approved synthetic scope. The earlier approval block is resolved by the user's explicit “Yes” and completed rehearsals. No remaining review correction or required synthetic check. Live-provider/Telegram and production acceptance remain NOT_RUN; this candidate changes configuration at the same gateway release.
+- Final outcome: all three reviewed gaps fixed and verified. Corrections remain uncommitted; no commit, push or PR operation was requested for this correction run. Next action: none required for this scope; Git delivery or live acceptance requires its own explicit request.
+
+## Authorized Git delivery — 2026-09-27
+
+- User subsequently requested “commit, push and merge”. This authorizes delivery of the completed fast-lab feature and review corrections to `origin/main`, preserving the feature branch and historical evidence.
+- Delivery inputs: reviewed six-file correction diff on `feat/hermes-fast-lab`, based on `c4c089b`; the runtime source remains identical to the passing candidate and three-cycle VM reports above. Only this authorization record and its manifest fingerprint change for delivery.
+- Delivery procedure: refresh provenance, run required commit hooks in Toolbox, push the feature branch through the full pre-push gate, fast-forward `main` when ancestry permits, push it through the same required gate, then verify both remote refs and a clean working tree. No forced push, branch deletion, production deployment or live-provider operation is included.

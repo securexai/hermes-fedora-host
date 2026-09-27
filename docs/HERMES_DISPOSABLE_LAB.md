@@ -92,6 +92,11 @@ Caches stay immutable while instances reference them; `clean` never removes
 shared caches. `up --stock` bypasses the prepared disk and installs retained
 application artifacts on the original signed Fedora image.
 
+Preparation uses a 4 GiB, two-CPU, 20 GiB builder with container limits capped
+to its memory. Requested VM and application limits are preserved for deployment.
+Preparation inputs are rechecked before publication; a changed input leaves an
+unpublished `.building` directory for inspection instead of an accepted cache.
+
 Named instances use `hermes-lab-<name>` in `qemu:///session`, separate private
 state directories and fresh identities. Ports are selected from 22222–22999 on
 loopback under a host allocation lock; a collision is an error, never authority
@@ -112,6 +117,8 @@ python3 scripts/hermes/lab.py test --profile candidate --suite candidate --insta
 - `vm` starts fresh prepared instances, checks real configuration and isolation,
   proves a no-op does not restart containers or rotate identities, changes and
   restores a resource limit, reboots, repairs a stopped worker, and cleans twice.
+  Reboot acceptance requires read-only application verification within 120 seconds
+  after the guest returns; failure stops the suite before worker repair can hide it.
   Three repeats compare identities and measure medians. Targets are readiness
   under 30 seconds, no-op under 5 seconds and configuration change under 10
   seconds. Readiness is measured after cache verification, including boot and

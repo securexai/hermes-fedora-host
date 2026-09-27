@@ -12,7 +12,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/hermes"))
@@ -142,6 +142,136 @@ class LabTests(unittest.TestCase):
         self.assertEqual(runtime.cache_key(self.profile), runtime.cache_key(changed))
         changed["gateway_image"] = "docker.io/nousresearch/hermes-agent@sha256:" + "c" * 64
         self.assertNotEqual(runtime.cache_key(self.profile), runtime.cache_key(changed))
+
+    def test_reboot_waits_for_read_only_application_health(self):
+        instance = runtime.Instance("dev", self.profile)
+        with (
+            patch.object(instance.vm, "reboot"),
+            patch.object(
+                instance.vm,
+                "guest",
+                side_effect=[
+                    subprocess.CompletedProcess([], 1, "", ""),
+                    subprocess.CompletedProcess([], 0, "healthy", ""),
+                ],
+            ) as guest,
+            patch.object(runtime.time, "sleep") as sleep,
+        ):
+            instance.reboot()
+        self.assertEqual(guest.call_count, 2)
+        self.assertTrue(all("status --mode synthetic" in c.args[0] for c in guest.call_args_list))
+        sleep.assert_called_once_with(3)
+
+    def test_failed_reboot_blocks_fault_repair_and_records_failure(self):
+        instance = runtime.Instance("dev", self.profile)
+        with patch.object(lab, "source_identity", return_value={}):
+            report = lab.Report(self.profile, "test")
+        with (
+            patch.object(instance, "identities", return_value={}),
+            patch.object(lab, "runtime_images", return_value=[]),
+            patch.object(instance, "deploy"),
+            patch.object(lab, "Instance", return_value=instance),
+            patch.object(instance.vm, "reboot"),
+            patch.object(
+                instance.vm, "guest", return_value=subprocess.CompletedProcess([], 1, "", "")
+            ),
+            patch.object(instance.vm, "fault_test") as repair,
+            patch.object(runtime, "time") as clock,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            clock.monotonic.side_effect = [0, 0, 121]
+            with self.assertRaisesRegex(runtime.LabError, "recover after reboot"):
+                lab.verify_vm(instance, {}, report)
+        repair.assert_not_called()
+        self.assertEqual(report.data["steps"][-1]["name"], "reboot")
+        self.assertEqual(report.data["steps"][-1]["status"], "FAIL")
+
+    def exercise_preparation(self, drift=False):
+        key = "a" * 64
+        builder = MagicMock(name="builder")
+        builder.vm.assert_identity = MagicMock()
+        builder.name = "builder"
+        builder.path = pathlib.Path(self.temp.name) / "builder"
+        builder.vm.virsh.return_value.stdout = "shut off"
+        builder.vm.guest.side_effect = [
+            subprocess.CompletedProcess([], 0, "builder-id", ""),
+            subprocess.CompletedProcess([], 0, "", ""),
+            subprocess.CompletedProcess(
+                [],
+                0,
+                json.dumps(
+                    {
+                        "gateway_id": "sha256:" + "b" * 64,
+                        "worker_id": "sha256:" + "c" * 64,
+                    }
+                ),
+                "",
+            ),
+            subprocess.CompletedProcess([], 0, "", ""),
+        ]
+        builder.copy_from.side_effect = lambda source, target: target.write_bytes(b"archive")
+        probe = MagicMock(name="probe")
+        probe.name = "probe"
+        probe.path = pathlib.Path(self.temp.name) / "probe"
+        probe.path.mkdir()
+        (probe.path / "client_ed25519.pub").write_text("new-key")
+        probe.vm.guest.side_effect = [
+            subprocess.CompletedProcess([], 0, "", ""),
+            subprocess.CompletedProcess([], 0, "clone-id", ""),
+            subprocess.CompletedProcess([], 0, "new-key", ""),
+        ]
+        profiles = []
+
+        def instance(name, requested):
+            profile.validate(requested)
+            profiles.append(copy.deepcopy(requested))
+            return probe if name.startswith("audit-") else builder
+
+        destination = self.state / "prepared" / key
+        with (
+            patch.object(runtime, "Instance", side_effect=instance),
+            patch.object(runtime, "cache_key", side_effect=[key, "d" * 64 if drift else key]),
+            patch.object(runtime, "checked"),
+            patch.object(runtime, "file_hash", return_value="synthetic-hash"),
+            patch.object(runtime, "read_cache", return_value=(destination, {})) as read,
+            patch.object(pathlib.Path, "chmod"),
+            patch.object(subprocess, "run", side_effect=AssertionError("external command")),
+        ):
+            if drift:
+                with self.assertRaisesRegex(runtime.LabError, "preparation inputs changed"):
+                    runtime.prepare(self.profile)
+                self.assertFalse(destination.exists())
+                self.assertTrue(destination.with_name(key + ".building").is_dir())
+                read.assert_not_called()
+                builder.clean.assert_not_called()
+            else:
+                runtime.prepare(self.profile)
+                self.assertTrue(destination.is_dir())
+                read.assert_called_once_with(self.profile)
+                builder.clean.assert_called_once()
+        return profiles
+
+    def test_changed_preparation_inputs_never_publish_cache(self):
+        self.exercise_preparation(drift=True)
+
+    def test_unchanged_preparation_publishes_cache(self):
+        self.exercise_preparation()
+
+    def test_large_valid_profile_can_prepare_without_changing_requested_limits(self):
+        self.profile["vm"] = {"memory_mb": 32768, "vcpus": 16, "disk_gb": 200}
+        self.profile["gateway"]["memory_mb"] = 8192
+        self.profile["worker"]["memory_mb"] = 16384
+        original = copy.deepcopy(self.profile)
+        profile.validate(original)
+        prepared = self.exercise_preparation()
+        self.assertEqual(self.profile, original)
+        self.assertEqual(len(prepared), 2)
+        for requested in prepared:
+            self.assertEqual(requested["vm"]["disk_gb"], 20)
+            for component in ("gateway", "worker"):
+                self.assertLessEqual(
+                    requested[component]["memory_mb"], requested["vm"]["memory_mb"]
+                )
 
     def test_interrupted_creation_keeps_ownership_marker(self):
         instance = runtime.Instance("dev", self.profile)

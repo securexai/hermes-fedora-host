@@ -185,7 +185,7 @@ def verify_vm(instance, manifest, report):
     alternate = Instance(instance.name, varied)
     report.step("configuration-change", lambda: alternate.deploy(manifest))
     report.step("configuration-restore", lambda: instance.deploy(manifest))
-    report.step("reboot", instance.vm.reboot)
+    report.step("reboot", instance.reboot)
     report.step("worker-recovery", instance.vm.fault_test)
     return identity
 

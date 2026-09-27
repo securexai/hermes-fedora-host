@@ -333,8 +333,28 @@ class Instance:
     def identities(self):
         return json.loads(self.vm.guest(GUEST + "identities").stdout)
 
+    def reboot(self):
+        self.vm.reboot()
+        deadline = time.monotonic() + 120
+        while time.monotonic() < deadline:
+            result = self.vm.guest(
+                "sudo -n python3 /opt/hermes-deploy/scripts/hermes/profile-deploy.py status --mode synthetic",
+                check=False,
+                timeout=30,
+            )
+            if result.returncode == 0:
+                return
+            time.sleep(3)
+        raise LabError("Hermes did not recover after reboot")
+
 
 def prepare(profile):
+    builder_profile = copy.deepcopy(profile)
+    builder_profile["vm"] = {"memory_mb": 4096, "vcpus": 2, "disk_gb": 20}
+    # Preparation only builds images; it does not run the requested application.
+    for component in ("gateway", "worker"):
+        builder_profile[component]["memory_mb"] = min(builder_profile[component]["memory_mb"], 4096)
+    validate(builder_profile)
     key = cache_key(profile)
     with lock("cache-" + key):
         destination = STATE / "prepared" / key
@@ -347,8 +367,6 @@ def prepare(profile):
                 "interrupted cache build retained; inspect the .building directory before recovery"
             )
         directory(stage)
-        builder_profile = copy.deepcopy(profile)
-        builder_profile["vm"] = {"memory_mb": 4096, "vcpus": 2, "disk_gb": 20}
         builder = Instance("build-" + key[:16], builder_profile)
         with lock("instance-" + builder.name):
             base = builder.vm.verified_base()
@@ -416,6 +434,10 @@ def prepare(profile):
                 probe.clean()
             manifest["clone_audit"] = "PASS"
             write_json(stage / "manifest.json", manifest)
+            if cache_key(profile) != key:
+                raise LabError(
+                    "preparation inputs changed; unpublished build retained for inspection"
+                )
             for path in stage.iterdir():
                 path.chmod(0o400)
             stage.chmod(0o500)
