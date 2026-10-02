@@ -13,6 +13,7 @@ import shutil
 import sys
 import tarfile
 import tempfile
+import time
 
 HERE = pathlib.Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("profile_deploy", HERE / "profile-deploy.py")
@@ -242,7 +243,13 @@ def sanitize() -> None:
     # The SSH command that scheduled this service may already have exited.
     # A missing logind user is acceptable only if no account process remains.
     deploy.command(["/usr/bin/loginctl", "terminate-user", "labadmin"], check=False)
-    remaining = deploy.command(["/usr/bin/pgrep", "-u", "labadmin"], check=False)
+    # terminate-user is asynchronous: give the account's processes a bounded time to exit.
+    deadline = time.monotonic() + 20
+    while True:
+        remaining = deploy.command(["/usr/bin/pgrep", "-u", "labadmin"], check=False)
+        if remaining.returncode != 0 or time.monotonic() > deadline:
+            break
+        time.sleep(1)
     if remaining.returncode != 1:
         raise deploy.DeployError("bootstrap account processes remain or cannot be inspected")
     cmd("/usr/sbin/userdel", "--remove", "labadmin")
