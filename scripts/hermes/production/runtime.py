@@ -13,8 +13,9 @@ import tarfile
 import time
 from pathlib import Path, PurePosixPath
 
-from . import bundle, receivers, startup
+from . import bundle, egress, receivers, startup
 from .primitives import (
+    Refused,
     atomic,
     canonical,
     durable_directory,
@@ -30,6 +31,13 @@ from .primitives import (
 HOME = Path("/home/hermes")
 STATE = Path("/var/lib/hermes-production")
 TREES = ("gateway-state", "gateway-ssh", "worker-state")
+# Reason codes a receiver may print after "STOP: " (never free text or values).
+REASON = re.compile(r"[A-Za-z0-9][A-Za-z0-9:._-]{0,159}")
+# Worker local-network probe (bash -c PROBE TARGET PORT): prints its verdict, exits 0.
+PROBE = (
+    'if timeout 5 bash -c "exec 3<>/dev/tcp/$0/$1" 2>/dev/null; '
+    "then echo REACHED; else echo BLOCKED; fi"
+)
 
 
 # The gateway image writes its own key for its built-in API server into the stored
@@ -268,7 +276,24 @@ class Backend:
         if receivers.running_matches(manifest):
             return False
         entry = receivers.for_release(manifest) / "productionctl.py"
-        run(["/usr/bin/python3", "-I", str(entry), "release-action", action, release], timeout=1800)
+        result = run(
+            ["/usr/bin/python3", "-I", str(entry), "release-action", action, release],
+            timeout=1800,
+            check=False,
+        )
+        if result.returncode != 0:
+            # Surface only the receiver's own reason code. A PASS report with a failing
+            # exit means a detached descendant failed under this transaction's guard.
+            reasons = [
+                line[len(b"STOP: ") :].decode("ascii", "replace")
+                for line in result.stderr.splitlines()
+                if line.startswith(b"STOP: ")
+            ]
+            if reasons:
+                reason = reasons[-1] if REASON.fullmatch(reasons[-1]) else "unreadable"
+                raise Refused(f"receiver-{action}:{reason}")
+            passed = result.stdout.strip() == canonical({"status": "PASS"}).strip()
+            raise Refused(f"receiver-{action}-" + ("descendant-failed" if passed else "failed"))
         return True
 
     def stop(self):
@@ -564,3 +589,27 @@ class Backend:
             "id -u",
         ).stdout.strip()
         require(worker_uid == b"1000", "worker-process-identity")
+        egress.check(self.uid)
+        if self.mode == "production":
+            # The worker has internet; the server itself, pasta's host map and link-local
+            # metadata must stay unreachable. The probe reports its verdict and exits 0:
+            # an exec that exits non-zero leaves a failed detached session process, which
+            # a cross-receiver action's transaction guard would count as a failure, and a
+            # probe that could not run must never pass as "blocked".
+            for target, port in (
+                (egress.host_address(), 22),
+                ("169.254.1.2", 22),
+                ("169.254.169.254", 80),
+            ):
+                probe = self.user(
+                    "podman",
+                    "exec",
+                    "hermes-worker",
+                    "bash",
+                    "-c",
+                    PROBE,
+                    target,
+                    str(port),
+                    timeout=60,
+                )
+                require(probe.stdout.strip() == b"BLOCKED", "worker-reached-local-network")

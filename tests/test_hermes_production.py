@@ -9,6 +9,7 @@ import os
 import runpy
 import shutil
 import signal
+import socket
 import stat
 import subprocess
 import sys
@@ -27,6 +28,7 @@ from production import (  # noqa: E402
     bundle,
     client,
     commission,
+    egress,
     escrow,
     host,
     install,
@@ -918,7 +920,7 @@ class ProductionReceiverTests(ProductionBundleFixture):
                         side_effect=lambda path, **kw: primitives.read_json(path),
                     )
                 )
-        for module in (receivers, host):
+        for module in (receivers, host, egress):
             self.stack.enter_context(
                 patch.object(module, "public_directory", side_effect=self.public)
             )
@@ -1129,6 +1131,14 @@ def verify(mode):
                 DEPLOY_HOME=self.root / "var/empty/hermes-deploy",
             ),
             patch.object(host, "__file__", str(source / "production/host.py")),
+            patch.multiple(
+                egress,
+                RULES=etc / "egress.nft",
+                UNIT=systemd / "hermes-egress.service",
+                SYSTEMD=systemd,
+            ),
+            patch.object(egress, "run", side_effect=command),
+            patch.object(egress.shutil, "which", return_value="/usr/sbin/nft"),
             patch.object(runtime.Backend, "release", return_value=None),
             patch.object(preflight, "CONFIG", installed_config),
             patch.object(preflight, "collect", return_value={"status": "PASS"}),
@@ -1195,6 +1205,15 @@ def verify(mode):
                     {"receiver": old_receiver if active else expected_receiver},
                 )
                 receivers.validate(expected_receiver)
+                # The egress guard is written, labelled and in front of the user manager.
+                self.assertEqual((etc / "egress.nft").read_bytes(), egress.rules(self.owner))
+                self.assertEqual(
+                    (systemd / "hermes-egress.service").read_bytes(), egress.UNIT_BYTES
+                )
+                self.assertEqual(
+                    (systemd / f"user@{self.owner}.service.d" / egress.DROPIN).read_bytes(),
+                    egress.DROPIN_BYTES,
+                )
             finally:
                 os.umask(original_mask)
 
@@ -1233,6 +1252,44 @@ def verify(mode):
                     self.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o755)
             finally:
                 os.umask(previous)
+
+    def test_only_production_workers_get_outbound_pasta_networking(self):
+        spec = importlib.util.spec_from_file_location(
+            "network_profile", ROOT / "scripts/hermes/profile-deploy.py"
+        )
+        engine = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(engine)
+        engine.PRODUCTION = True
+        ensure = engine.ensure_directory
+        rendered = {}
+        for mode in ("synthetic", "production"):
+            engine.QUADLET_USERS = self.root / mode / "users"
+            with (
+                patch.object(primitives, "public_directory", side_effect=self.public),
+                patch.object(
+                    engine,
+                    "ensure_directory",
+                    side_effect=lambda path, m, uid, gid: ensure(path, m, self.owner, os.getgid()),
+                ),
+                patch.object(engine.os, "chown"),
+                patch.object(engine, "command"),
+                patch.object(engine, "user_systemctl"),
+            ):
+                engine.install_quadlets(1234, mode)
+            target = engine.QUADLET_USERS / "1234"
+            rendered[mode] = {
+                name: (target / name).read_text()
+                for name in ("hermes-worker.container", "hermes-gateway.container")
+            }
+        worker = rendered["production"]["hermes-worker.container"]
+        self.assertIn("\nNetwork=pasta:--no-map-gw\n", worker)
+        self.assertNotIn("Network=none", worker)
+        self.assertIn("\nNetwork=none\n", rendered["synthetic"]["hermes-worker.container"])
+        self.assertIn("\nNetwork=none\n", rendered["synthetic"]["hermes-gateway.container"])
+        self.assertNotIn("Network=", rendered["production"]["hermes-gateway.container"])
+        self.assertEqual(engine.worker_network("production"), "pasta")
+        self.assertEqual(engine.worker_network("synthetic"), "none")
+        self.assertEqual(engine.worker_network("live"), "none")
 
     def test_public_directory_rejects_existing_unsafe_paths(self):
         path = self.root / "unsafe"
@@ -1661,6 +1718,87 @@ class ProductionTransactionTests(unittest.TestCase):
                     )
                     self.assertNotEqual(result.returncode, 0)
                     self.assertTrue((root / "written").exists())
+
+    def test_cross_receiver_descendant_failure_is_named_not_hidden(self):
+        # Production 2026-10-02: a cross-receiver verify passed, but the probes' failed
+        # detached exec sessions failed the one transaction guard around the whole action.
+        child = "import time, sys; time.sleep(0.2); sys.exit(3)"
+        entry = (
+            "import os, subprocess, sys\n"
+            f"subprocess.Popen([sys.executable, '-c', {child!r}], start_new_session=True)\n"
+            'sys.stdout.write(\'{"status":"PASS"}\'); sys.stdout.flush(); os._exit(0)\n'
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "productionctl.py").write_text(entry)
+            backend = runtime.Backend.__new__(runtime.Backend)
+            with (
+                lock(root / "lock"),
+                patch.object(runtime.Backend, "release", return_value=(None, {})),
+                patch.object(runtime.receivers, "running_matches", return_value=False),
+                patch.object(runtime.receivers, "for_release", return_value=root),
+                self.assertRaises(Refused) as caught,
+            ):
+                backend.receiver_action("candidate", "verify")
+            self.assertEqual(str(caught.exception), "receiver-verify-descendant-failed")
+
+    def test_cross_receiver_failure_surfaces_only_reason_codes(self):
+        backend = runtime.Backend.__new__(runtime.Backend)
+        cases = (
+            (0, b"", b"", None),
+            (
+                1,
+                b"",
+                b"noise\nSTOP: worker-reached-local-network\n",
+                ":worker-reached-local-network",
+            ),
+            (1, b"", b"STOP: value with spaces /etc/x\n", ":unreadable"),
+            (1, canonical({"status": "PASS"}), b"", "-descendant-failed"),
+            (1, b"", b"Traceback (most recent call last)\n", "-failed"),
+        )
+        with (
+            patch.object(runtime.Backend, "release", return_value=(None, {})),
+            patch.object(runtime.receivers, "running_matches", return_value=False),
+            patch.object(runtime.receivers, "for_release", return_value=Path("/receiver")),
+        ):
+            for code, out, err, reason in cases:
+                calls = []
+                result = SimpleNamespace(returncode=code, stdout=out, stderr=err)
+
+                def fake(argv, _result=result, **kwargs):
+                    calls.append(kwargs)
+                    return _result
+
+                with self.subTest(reason=reason), patch.object(runtime, "run", side_effect=fake):
+                    if reason is None:
+                        self.assertTrue(backend.receiver_action("candidate", "configure"))
+                    else:
+                        with self.assertRaises(Refused) as caught:
+                            backend.receiver_action("candidate", "configure")
+                        self.assertEqual(str(caught.exception), "receiver-configure" + reason)
+                    self.assertIs(calls[0]["check"], False)
+
+    def test_worker_probe_reports_verdict_and_always_exits_zero(self):
+        listener = socket.socket()
+        listener.bind(("127.0.0.1", 0))
+        listener.listen(1)
+        closed = socket.socket()
+        closed.bind(("127.0.0.1", 0))
+        closed_port = closed.getsockname()[1]
+        closed.close()
+        try:
+            for port, verdict in (
+                (listener.getsockname()[1], b"REACHED"),
+                (closed_port, b"BLOCKED"),
+            ):
+                result = subprocess.run(
+                    ["bash", "-c", runtime.PROBE, "127.0.0.1", str(port)],
+                    capture_output=True,
+                    timeout=30,
+                )
+                self.assertEqual((result.returncode, result.stdout.strip()), (0, verdict))
+        finally:
+            listener.close()
 
     def test_all_failed_update_stages_restore_matching_state_before_restart(self):
         for failure in (
@@ -2804,6 +2942,152 @@ class ProductionUnattendedTests(unittest.TestCase):
         with self.assertRaisesRegex(Refused, "^remote-operation-failed$"):
             remote("silent")
 
+    def egress_json(self, uid, *, drop_prefix=None, extra_rule=False, verdict="drop"):
+        """nft -j shape for the owned table (prefix sets, th dport exception)."""
+
+        def prefixes(values):
+            out = []
+            for value in values:
+                if value == drop_prefix:
+                    continue
+                addr, _, length = value.partition("/")
+                out.append({"prefix": {"addr": addr, "len": int(length)}} if length else value)
+            return {"set": out} if len(out) > 1 else out[0]
+
+        def rule(protocol, values, dns=False):
+            expr = [
+                {"match": {"op": "==", "left": {"meta": {"key": "skuid"}}, "right": uid}},
+                {
+                    "match": {
+                        "op": "==",
+                        "left": {"payload": {"protocol": protocol, "field": "daddr"}},
+                        "right": prefixes(values),
+                    }
+                },
+            ]
+            if dns:
+                expr.append(
+                    {
+                        "match": {
+                            "op": "!=",
+                            "left": {"payload": {"protocol": "th", "field": "dport"}},
+                            "right": 53,
+                        }
+                    }
+                )
+            expr += [{"counter": {"packets": 0, "bytes": 0}}, {verdict: None}]
+            return {
+                "rule": {
+                    "family": "inet",
+                    "table": "hermes_egress",
+                    "chain": "output",
+                    "expr": expr,
+                }
+            }
+
+        rows = [
+            {"metainfo": {"json_schema_version": 1}},
+            {"table": {"family": "inet", "name": "hermes_egress"}},
+            {
+                "chain": {
+                    "family": "inet",
+                    "table": "hermes_egress",
+                    "name": "output",
+                    "type": "filter",
+                    "hook": "output",
+                    "prio": 0,
+                    "policy": "accept",
+                }
+            },
+            rule("ip", egress.BLOCKED_V4),
+            rule("ip6", egress.BLOCKED_V6),
+            rule("ip", ["127.0.0.0/8"], dns=True),
+            rule("ip6", ["::1"], dns=True),
+        ]
+        if extra_rule:
+            rows.append(rule("ip", ["8.8.8.8/32"]))
+        return canonical({"nftables": rows})
+
+    def test_egress_guard_rules_install_and_live_table_checks(self):
+        uid = 1001
+        text = egress.rules(uid).decode()
+        self.assertTrue(
+            text.startswith("table inet hermes_egress\ndelete table inet hermes_egress\n")
+        )
+        for prefix in (*egress.BLOCKED_V4, *egress.BLOCKED_V6):
+            self.assertIn(prefix, text)
+        self.assertIn(f"meta skuid {uid} ip daddr 127.0.0.0/8 th dport != 53 counter drop", text)
+        self.assertNotIn("127.0.0.0/8 counter drop", text)
+        for bad in (0, 999, "1001", None):
+            with self.subTest(uid=bad), self.assertRaises(Refused):
+                egress.rules(bad)
+        etc, systemd = self.root / "etc", self.root / "systemd"
+        etc.mkdir()
+        systemd.mkdir()
+        with (
+            patch.object(egress, "RULES", etc / "egress.nft"),
+            patch.object(egress, "UNIT", systemd / "hermes-egress.service"),
+            patch.object(egress, "SYSTEMD", systemd),
+            patch.object(
+                egress, "public_directory", side_effect=lambda p: Path(p).mkdir(exist_ok=True)
+            ),
+            patch.object(egress.shutil, "which", return_value="/usr/sbin/nft"),
+        ):
+            paths = egress.install(uid)
+            self.assertEqual(egress.install(uid), paths)
+            self.assertEqual((etc / "egress.nft").read_bytes(), egress.rules(uid))
+            unit = (systemd / "hermes-egress.service").read_text()
+            self.assertIn("ExecStart=/usr/sbin/nft -f /etc/hermes-production/egress.nft", unit)
+            self.assertIn("WantedBy=multi-user.target", unit)
+            dropin = (systemd / "user@1001.service.d" / "40-hermes-egress.conf").read_text()
+            self.assertEqual(
+                dropin, "[Unit]\nRequires=hermes-egress.service\nAfter=hermes-egress.service\n"
+            )
+            state = {"json": self.egress_json(uid), "enabled": "enabled", "active": "active"}
+
+            def fake(argv, **kwargs):
+                if argv[:2] == ["nft", "-j"]:
+                    return SimpleNamespace(stdout=state["json"], returncode=0)
+                if argv[0] == "systemctl":
+                    word = state["enabled"] if argv[1] == "is-enabled" else state["active"]
+                    return SimpleNamespace(stdout=word.encode() + b"\n", returncode=0)
+                return SimpleNamespace(stdout=b"", returncode=0)
+
+            with patch.object(egress, "run", side_effect=fake):
+                self.assertEqual(egress.check(uid), "egress-guard-active")
+                for change, reason in (
+                    (
+                        {"json": self.egress_json(uid, drop_prefix="10.0.0.0/8")},
+                        "egress-table-mismatch",
+                    ),
+                    ({"json": self.egress_json(uid, extra_rule=True)}, "egress-table-mismatch"),
+                    ({"json": self.egress_json(uid, verdict="accept")}, "egress-rule-not-drop"),
+                    ({"json": self.egress_json(1002)}, "egress-rule-uid-mismatch"),
+                    ({"active": "inactive"}, "egress-unit-not-active"),
+                    ({"enabled": "disabled"}, "egress-unit-not-enabled"),
+                ):
+                    saved = dict(state)
+                    state.update(change)
+                    with self.subTest(reason=reason), self.assertRaisesRegex(Refused, reason):
+                        egress.check(uid)
+                    state.clear()
+                    state.update(saved)
+                (etc / "egress.nft").write_bytes(egress.rules(1002))
+                with self.assertRaisesRegex(Refused, "egress-rules-file-drift"):
+                    egress.check(uid)
+            # Activation never restarts the unit: user@ Requires= it, so a restart would
+            # restart the running application on every bootstrap.
+            calls = []
+            with patch.object(egress, "run", side_effect=lambda argv, **kw: calls.append(argv)):
+                egress.activate()
+            self.assertEqual(
+                calls,
+                [
+                    ["systemctl", "enable", "--now", "hermes-egress.service"],
+                    ["nft", "-f", str(etc / "egress.nft")],
+                ],
+            )
+
     def test_pin_host_requires_the_console_fingerprint(self):
         key = self.root / "host_key"
         run(["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-f", str(key)])
@@ -2997,7 +3281,10 @@ class ProductionQualifyPipelineTests(ProductionBundleFixture):
         upgraded = unpack("upgrade.tar")
         self.assertEqual(identities["upgrade"], bundle.identity(upgraded))
         self.assertNotEqual(identities["upgrade"], identities["candidate"])
-        self.assertEqual(receivers.expected(upgraded), receivers.expected(baseline))
+        # The variant needs a controller update: its receiver adds only the marker module.
+        old, new = receivers.expected(baseline)["files"], receivers.expected(upgraded)["files"]
+        self.assertEqual(set(new) - set(old), {"production/qualification_marker.py"})
+        self.assertEqual({k: new[k] for k in old}, old)
         with self.assertRaisesRegex(Refused, "artifact-hash-mismatch"):
             unpack("corrupt.tar")
 
@@ -3042,7 +3329,34 @@ class ProductionQualifyPipelineTests(ProductionBundleFixture):
         self.assertTrue(callable(getattr(self.qualify.Run, "evidence", None)))
         source = Path(self.qualify.__file__).read_text()
         self.assertIn("rm -rf /tmp/hermes-approval-check", source)
+        self.assertIn("git ls-remote https://github.com/torvalds/linux HEAD", source)
         self.assertIn("DENY it", source)
+
+    def test_live_questions_wait_for_a_sole_telegram_poller(self):
+        state = self.qualify.telegram_poll_state
+        quiet = self.qualify.TELEGRAM_QUIET
+        self.assertEqual(state([], 100.0), "waiting")
+        self.assertEqual(state([(0.0, "connect")], 10.0), "waiting")
+        self.assertEqual(state([(0.0, "connect")], quiet), "ready")
+        # Production 2026-10-02: another gateway polled the same token.
+        clash = [(0.0, "connect"), (5.0, "conflict"), (32.0, "conflict")]
+        self.assertEqual(state(clash, 40.0), "conflict")
+        self.assertEqual(state(clash + [(90.0, "connect")], 100.0), "waiting")
+        self.assertEqual(state(clash + [(90.0, "connect")], 90.0 + quiet), "ready")
+        self.assertEqual(state([(0.0, "conflict")], 500.0), "conflict")
+
+    def test_live_application_stops_at_the_first_failed_question(self):
+        run_ = self.qualify.Run.__new__(self.qualify.Run)
+        asked = []
+        with (
+            patch.object(self.qualify.sys.stdin, "isatty", return_value=True),
+            patch.object(self.qualify.Run, "telegram_ready", return_value=None) as ready,
+            patch.object(self.qualify, "ask", side_effect=lambda q: asked.append(q) or "NO"),
+            self.assertRaisesRegex(Refused, "live-application-failed:tool_round_trip"),
+        ):
+            run_.application()
+        ready.assert_called_once()
+        self.assertEqual(len(asked), 1)
 
     def test_previous_vm_removal_requires_pipeline_ownership(self):
         vm = self.root / "vm"

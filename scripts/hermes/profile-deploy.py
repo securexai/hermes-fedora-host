@@ -466,6 +466,15 @@ def configure(gateway: str):
     podman(*prefix, gateway, "/opt/hermes/gateway-ssh/harden-config.py")
 
 
+WORKER_OFFLINE = "Network=none\n"
+WORKER_ONLINE = "Network=pasta:--no-map-gw\n"
+
+
+def worker_network(mode: str) -> str:
+    """Expected Podman network mode of the worker container."""
+    return "pasta" if mode == "production" else "none"
+
+
 def install_quadlets(uid: int, mode: str) -> bool:
     target = QUADLET_USERS / str(uid)
     if PRODUCTION:
@@ -482,6 +491,13 @@ def install_quadlets(uid: int, mode: str) -> bool:
                 content = content.replace(PROFILE["gateway_image"], GATEWAY_ID)
         if name == "hermes-gateway.container" and mode == "synthetic":
             content = content.replace("[Container]\n", "[Container]\nNetwork=none\n", 1)
+        if name == "hermes-worker.container" and mode == "production":
+            # Production workers get outbound internet through rootless pasta without the
+            # gateway-to-host-loopback mapping; the host egress guard keeps them off local
+            # networks. Synthetic and lab workers stay offline.
+            if content.count(WORKER_OFFLINE) != 1:
+                raise DeployError("worker unit network line not found")
+            content = content.replace(WORKER_OFFLINE, WORKER_ONLINE, 1)
         if PRODUCTION:
             content = content.replace(
                 "[Service]\n",
@@ -499,7 +515,7 @@ def verify(mode: str):
     if not active("hermes-worker.service") or not active("hermes-gateway.service"):
         raise DeployError("Hermes services are not both active")
     for container, expected in (
-        ("hermes-worker", "none"),
+        ("hermes-worker", worker_network(mode)),
         ("hermes-gateway", "none" if mode == "synthetic" else ""),
     ):
         network = podman(
@@ -546,7 +562,7 @@ def verify(mode: str):
                 or info["HostConfig"]["PidsLimit"] != limits["pids_limit"]
             ):
                 raise DeployError("running container resource limits differ from the profile")
-    print("STATUS=PASS worker=active gateway=active worker_network=none")
+    print(f"STATUS=PASS worker=active gateway=active worker_network={worker_network(mode)}")
 
 
 def apply(mode: str):

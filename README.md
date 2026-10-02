@@ -21,7 +21,7 @@ in the source repository and are not part of this tree.
 | Use the unattended controller | [`docs/HERMES_UNATTENDED_DEPLOYMENT.md`](docs/HERMES_UNATTENDED_DEPLOYMENT.md) |
 | Review older VM certification | [`docs/VM_TESTING_GUIDE.md`](docs/VM_TESTING_GUIDE.md), [`vm/DEPLOYMENT_TASKS.md`](vm/DEPLOYMENT_TASKS.md) |
 | See what was actually verified, and when | [`docs/HERMES_INSTALLATION_VERIFICATION.md`](docs/HERMES_INSTALLATION_VERIFICATION.md) |
-| Check where this tree came from | [`PROVENANCE.md`](PROVENANCE.md), [`docs/migration-manifest.txt`](docs/migration-manifest.txt) |
+| Check where this tree came from (frozen historical record) | [`PROVENANCE.md`](PROVENANCE.md), [`docs/migration-manifest.txt`](docs/migration-manifest.txt) |
 | Contribute | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md) |
 
 ## Status
@@ -38,7 +38,8 @@ preview unless `--apply` is supplied.
 
 The separate [production bundle workflow](docs/HERMES_PRODUCTION_DEPLOYMENT.md)
 adds signed retained artifacts, encrypted-host preflight, a bounded SSH
-dispatcher, matching-state rollback and an unattended explicit-disk installation:
+dispatcher, matching-state rollback, an internet-capable worker kept off local
+networks by a host egress guard, and an unattended explicit-disk installation:
 the installer generates and escrows every secret, firstboot commissions the host,
 and `vm/hermes-production-qualify.py` qualifies a release in one disposable-VM run.
 Its [execution record](docs/plans/2026-09-27-hermes-production-bundle.md) tracks

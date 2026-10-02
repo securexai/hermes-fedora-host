@@ -1,14 +1,16 @@
 FROM registry.fedoraproject.org/fedora@sha256:2648f667bd180801195d3f3a385cf0d2e390bd80611dbedac8275253c89cdbc7
 
-# Offline Hermes worker: tools are baked in, so the running container needs no
-# package downloads and no network at all (Network=none).
+# Hermes worker: tools are baked in, so the container never needs package downloads to
+# start. Lab and synthetic workers run with no network at all (Network=none); production
+# workers get outbound internet (curl, pip, git) while the host egress guard keeps them
+# off local networks.
 
 RUN dnf -y install \
       openssh-server openssh-clients socat \
       bash coreutils findutils grep sed gawk \
       tar gzip xz bzip2 unzip file diffutils patch \
       rsync git jq procps-ng iproute less which \
-      python3 ca-certificates \
+      python3 python3-pip curl ca-certificates \
  && dnf clean all \
  && rm -rf /var/cache/dnf
 

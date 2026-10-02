@@ -104,7 +104,7 @@ The historical M01–M06 results do not certify this repinned bundle.
 
 ## Why the transport looks like this
 
-The worker must keep `Network=none`. OpenSSH has no Unix-socket listener, so:
+The transport never uses the worker's network: in this manual profile the worker keeps `Network=none` (the production profile gives it outbound internet behind a host egress guard, see [the production runbook](../../../docs/HERMES_PRODUCTION_DEPLOYMENT.md)). OpenSSH has no Unix-socket listener, so:
 
 - the worker runs `socat` on a socket in a minimal shared directory and hands each
   accepted stream to `sshd -i` (inetd mode) — no TCP listener, not even loopback;

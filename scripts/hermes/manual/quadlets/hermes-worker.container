@@ -1,12 +1,14 @@
 [Unit]
-Description=Hermes offline worker (Unix-socket SSH target)
+Description=Hermes worker (Unix-socket SSH target)
 
 [Container]
 ContainerName=hermes-worker
 Image=localhost/hermes-worker:1
 
-# No network namespace connectivity at all: the only transport is the shared
-# Unix socket mounted below. sshd is reached in inetd mode, never over TCP.
+# The gateway reaches sshd only through the shared Unix socket mounted below, in
+# inetd mode, never over TCP. The worker has no network here (lab and synthetic);
+# production deployment renders outbound-only pasta networking instead, with the
+# host egress guard blocking local networks.
 Network=none
 
 # Requirements are known and satisfiable read-only; the two writable paths the

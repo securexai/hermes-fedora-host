@@ -1,8 +1,9 @@
 # Worker sshd configuration.
 #
 # This sshd never opens a TCP listener: it is started once per connection in
-# inetd mode (sshd -i) by the Unix-socket adapter, so the worker can keep
-# Network=none with no loopback service and no route anywhere.
+# inetd mode (sshd -i) by the Unix-socket adapter, so the worker needs no
+# network for the transport (Network=none in lab/synthetic mode) and exposes no
+# listening service even when production gives it outbound internet.
 #
 # The host key comes from the persistent, worker-only mount at
 # /etc/ssh/host-keys so image rebuilds preserve the pinned identity.

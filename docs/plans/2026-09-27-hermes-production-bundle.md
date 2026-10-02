@@ -3970,3 +3970,144 @@ Prior G03/G04/G05 work is STALE: superseded by this approach, with its evidence 
   - **Installer:** the Kickstart uses `firewall --enabled --service=ssh --remove-service=cockpit` and `services --enabled=sshd,chronyd --disabled=cockpit.socket`. The pipeline's `enroll` stage now requires `cockpit.socket` disabled and inactive and no `cockpit` firewall service in the VM.
   - Runbook updated (Cockpit, CLI behavior, controller-update commands). 84 tests PASS.
   - **Production impact:** none now. The client fix runs locally and works against the installed receiver. The next release changes the receiver identity, so it needs the documented controller update before deploy. The production host's Cockpit was already disabled by hand. Validation: canonical offline gate and an unattended full pipeline run on this tree.
+- **Run r16 (fixes, unattended) PASS** (`runs/20261002T031652Z`, 893 s): every local stage PASS on the fixed tree. The `enroll` stage's new Cockpit check passed (socket disabled and inactive, no firewall service) on a fresh unattended install, and every remote operation used the new client (deploy, failed update, concurrency, interruption recovery, rollback). Application BLOCKED (synthetic). The two follow-up fixes are DONE.
+
+## Approved scope change — worker internet access, LAN blocked (2026-10-02)
+
+**Approval evidence:** after the running bot could not look up the TRM, the user asked how Hermes can be safe and useful and reviewed the pros and cons of each network level. They then chose "I want full network access for the worker", "Internet only since hermes is on an isolated vlan from management and users vlans", and "No, network only" (no search toolset, recall or task lists), and approved the plan saved at `~/.claude/plans/this-is-taking-an-tingly-barto.md`.
+
+**Baseline (frozen):**
+
+- **Outcome:** in production mode the worker gets outbound internet through rootless pasta with host-loopback mapping disabled. Synthetic mode keeps `Network=none`.
+- **Unchanged:** the worker still mounts no gateway state and holds no credentials; read-only root, limits, SELinux, approvals (`manual`), allowlist, signed releases and restricted deploy access.
+- **Egress guard:** a host `table inet hermes_egress` (from `/etc/hermes-production/egress.nft`, loaded by the enabled oneshot `hermes-egress.service`, which the `user@<uid>` drop-in Requires/After) drops traffic from the `hermes` uid to RFC1918, CGNAT, link-local and metadata, multicast/reserved and IPv6 ULA/link-local/multicast. Loopback stays allowed for pasta's DNS forwarder. Installed by bootstrap; firewalld untouched.
+- **Verify:** the table matches exactly and the unit is active. In production mode, worker probes to the host's LAN address and to the pasta host map must fail.
+- **Worker image:** adds `curl` and `python3-pip`, so a new prepared cache entry is needed.
+- **Qualification:** the live question `git ls-remote https://github.com/torvalds/linux HEAD`. An unattended dummy-credential production-mode check covers internet OK, LAN and metadata blocked, and persistence across reboot.
+- **Residual risks accepted:** worker files can be uploaded; downloaded code can run (only dangerous-pattern commands stop for approval); downloads persist in `/home/worker`; traffic uses the server's IP.
+- **Constraint found while planning:** `preflight.PACKAGES` must not change (it feeds `packages_sha256` in the commissioning record), so `nftables` presence is checked by the egress code itself.
+- **Authority:** repository changes, the local `lab.py prepare`, local disposable VMs and dummy credentials. Production upgrade, the controller update and real credentials remain operator steps. No commit or push requested.
+
+| Task | Outcome | Progress |
+| --- | --- | --- |
+| N01 | Quadlet render (production pasta, synthetic none) and verify network mode | ✅ DONE |
+| N02 | Egress guard: nft file, unit, drop-in, bootstrap install, verify and probes | ✅ DONE |
+| N03 | Worker image `curl` and `python3-pip`; new cache entry | ✅ DONE (`03c660d2…`) |
+| N04 | Pipeline live question; dummy-credential egress check | ✅ DONE |
+| N05 | Tests, docs, record, gates | ✅ DONE |
+| N06 | Operator rollout: live run, bundle, controller update, upgrade | ✅ DONE (release `6db112a1…` on 10.0.30.10) |
+| N07 | Fix cross-receiver verify failure; qualify the controller-update path | ✅ DONE |
+
+- **N01–N02 implemented:**
+  - **N01:** `profile-deploy.py` renders `Network=pasta:--no-map-gw` for production workers (exactly one `Network=none` line replaced, otherwise refused); `worker_network(mode)` drives `verify` and the status line. Synthetic, live-lab and lab workers stay `none`.
+  - **N02:** new `production/egress.py` (rules, install, activate, check, host address), called from `bootstrap` before the user manager starts (preview lists it), with restorecon of its files. `Backend.verify` runs `egress.check` and, in production mode, worker probes (`bash /dev/tcp`, 5 s) to the host's address on port 22, `169.254.1.2:22` and `169.254.169.254:80`, which must fail. Loopback for the `hermes` uid is dropped except DNS (port 53), covering any host-loopback mapping.
+  - New and updated tests: 86 PASS.
+- **N03:** the Containerfile adds `curl` and `python3-pip`. Docs updated: runbook "Worker internet access", contract scope and transport, README, manual README, sshd comment; adaptation reasons extended.
+- **Lab prepare attempt 1** (cache `b93ae6e2…`): base verified and both images built and exported, then FAIL: "builder did not shut down after sanitization". The builder's `hermes-lab-sanitize` journal showed `STOP: bootstrap account processes remain`: `loginctl terminate-user` is asynchronous, so the immediate `pgrep -u labadmin` raced it. This is a pre-existing lab race, not the network change. **Fix:** poll `pgrep` for up to 20 s before refusing (lab tests 32 PASS). The retained builder was removed with `lab.py clean --instance build-b93ae6e260a7b7f8 --apply` (CLEAN=PASS) and the partial `.building` entry deleted. Attempt 2 started (the cache key changes again because `lab_guest.py` is a cache input).
+- **N03 cache:** lab prepare attempt 2 PASS, new entry `03c660d2c64bc268a9c50e06a147b786d7b6344c008ffe448381f3e4289ef831`. The worker archive layers contain `usr/bin/curl`, `pip3`, `git` and `python3` (checked directly; the manifest's package list is the builder VM's). Offline gate PASS (652 tests) after adding adaptation reasons; lint PASS.
+- **Egress check attempt 1** (dummy credentials, production mode): install, commission (bootstrap installed the guard: unit enabled and active, table loaded), enroll and credentials PASS. Deploy refused with `remote:initial-install-incomplete-private-recovery-required`, the new client surfacing the server reason. The failed attempt stopped at `verification`. Cause: nft merged `224.0.0.0/4` and `240.0.0.0/4` into **`224.0.0.0/3`**, so the exact-match check refused the correctly loaded table. The agent ran the normalizer against the VM's real `nft -j` output: it parsed correctly, with only that prefix differing. The worker had started with pasta and served the gateway's SSH round trip before recovery stopped it. **Fix:** declare `224.0.0.0/3` (same coverage). 86 tests PASS. Attempt 2 started.
+- **Egress check attempt 2 PASS** (`runs/20261002T040355Z`, report `21bf4b1c4f82f827a8071c819fc6cc3352934d69337fb247340f148be78b7027`, dummy credentials, production mode). Deploy PASS (73.2 s; in-transaction verify ran the exact table check and three worker probes). Explicit probes from the worker:
+  - `https://github.com` returned **200**;
+  - `192.168.99.254:53` (LAN gateway), `169.254.1.2:22` (pasta host map) and `169.254.169.254:80` (metadata) were **dropped by the guard** (its counters increased);
+  - the host's own `192.168.99.184:22` was unreachable, because pasta gives the container the host's address, so traffic stays inside the container;
+  - the guard was still present after `firewall-cmd --reload`;
+  - after a reboot (`reboot_guard` 39.5 s) the guard was active again before the user manager and the LAN probe stayed blocked.
+- **Run r17 (synthetic, new image) PASS** (`runs/20261002T041708Z`, report `4ce77e9fe4604ff5fc0702d4039d20fddbf2866565309adec205394e8b764799`, 882 s): every local stage PASS with the worker offline and the egress guard installed and checked; application BLOCKED (synthetic). Offline gate PASS (652 tests), lint PASS, manifest verified. **Exact next action (operator):** attended live run with `A=…/03c660d2…`, then `bundle --evidence`, the controller update on 10.0.30.10 (installs the guard), `upgrade --bundle … --apply` and `verify`.
+- **Run r18 — attended live qualification PASS, all seven gates** (`runs/20261002T043729Z`; `qualification.json` `d009089206f0758752b0e660addf0bcd7fb02fc000bd1e69e3045a984c5fbac3`, report `b65c5f7d828e4e4c5f3ece86700c6001b6c4991067c8c6e0167b1002001a7c2c`, artifact `689d0271d05258ed52f6871645d8847f25bce8addb0adc589f5f4e0bc7342fab`, cache `03c660d2…`). Every stage PASS. **Application (233.3 s)**, with operator-observed answers:
+  - `uname -sr` answered;
+  - `git ls-remote https://github.com/torvalds/linux HEAD` returned a commit hash (`worker_reaches_internet: YES`);
+  - `rm -rf /tmp/hermes-approval-check` stopped for approval and did not run after denial;
+  - no reply while the allowlist excluded the operator.
+
+  Restore PASS rests on the recorded no-off-host-backup waiver. `background.log` holds only the expected `operation-busy` refusal from the concurrent-upgrade stage. The agent dry-ran `bundle.build` on the current tree and cache, stopping before signing: the identity equals the evidence and validation passes. The VM was removed on PASS. **Next (operator):** `bundle --evidence` to `~/hermes-production/hermes-net.tar`, the controller update on 10.0.30.10, `upgrade --apply`, `verify`.
+- **Bundle and controller update (operator):** `hermes-net.tar` (`47d806006bdd96e4628daa131536c0bbfe48a1331f4c2415446fb1de2605641d`). The agent verified the signature against the operator's `allowed_signers`, production-policy validation, stage `qualified`, identity `689d0271…` (recomputed) and all seven gates bound to `d0090892…`. Bootstrap on 10.0.30.10 returned `BOOTSTRAPPED`, receiver `b9aa6c40c13287dcba85a67c3345f7742f52a5089e4d8dc13a076b20cf6b2156`. `"commissioning":"REQUIRED"` is a fixed string in the bootstrap result, not a state; the following `preflight` was PASS with commissioning evidence current.
+- **Production upgrade attempt 1 — FAIL, automatically recovered** (transaction `907218bbda7f4af2b52bebe38687d0f2`, 00:05–00:07 −05:00). The client printed `STOP: remote:command-failed:python3`. `status` showed stage `recovered`, current release `8c03e71a…` with receiver `cbfe4c3b…`, timings stopped_backup 4.2 s, import 4.7 s, configuration 3.2 s, restart 0.9 s; verification failed. `verify` afterwards PASS. Read-only diagnostics run by the operator (agent-written scripts, gateway application logs excluded, token-shaped text redacted) showed:
+  - the new code's `egress.check` passes on production, the table matches, the host address is `10.0.30.10` (single NIC `eno1`), and the new worker image reaches `https://github.com` (200) through the guard with DNS working;
+  - timeline: new worker and gateway started 00:07:16; gateway-to-worker checks passed 00:07:18–22; probe 1 (`10.0.30.10:22`) refused in 0.03 s; probes 2 (`169.254.1.2:22`) and 3 (`169.254.169.254:80`) each blocked until `timeout` at 5 s; `failed.json` written 00:07:32, immediately after the last probe. Every probe was blocked as intended and verify itself completed.
+  - **Root cause (reproduced locally):** for a cross-receiver upgrade the old receiver runs the release's `release-action verify` as one subprocess under one transaction writer guard. Each `podman exec` leaves a detached session process that the guard adopts and that exits with the exec'd command's status. The guard returns `result or descendant_failed`, so the probes' intended non-zero exits failed the whole action although it printed PASS. With the real `writer_guard.py` and the worker image: an exec of `true` → guard 0; a blocked probe (inner 124) or `false` → guard **1** while the parent exited 0. Same-receiver upgrades (the only kind qualification ran) run each command under its own guard, where the probe's failure is the expected result, so the VM never showed it. The old receiver discarded the subprocess output, hiding the reason.
+  - **Second finding:** bootstrap's `systemctl restart hermes-egress.service` restarted `user@1001` through `Requires=` (journal 00:05:39–44), so every bootstrap briefly restarted the running bot.
+  - The agent's first diagnostic probes returned 125 because GNU `timeout` fails as a container's PID 1 (reproduced locally); the second diagnostic used `podman exec` as verify does: refused (1), blocked (124), blocked (124), `1.1.1.1:443` reached (0); the container had `10.0.30.10` and `127.0.0.1`.
+- **N07 fix (agent, in scope as correction of an introduced issue):**
+  - `runtime.PROBE`: each probe prints `BLOCKED` or `REACHED` and exits 0; verify requires `BLOCKED` with a checked exec, so a probe that cannot run now fails instead of counting as blocked. Validated under the real guard with the worker image: blocked → `BLOCKED`/guard 0, reachable → `REACHED`/guard 0, missing container → no verdict/non-zero.
+  - `Backend.receiver_action` surfaces the receiver's sanitized `STOP:` code as `receiver-ACTION:REASON` (else `unreadable`), `receiver-ACTION-descendant-failed` for a PASS report with a failing exit, or `receiver-ACTION-failed`.
+  - `egress.activate()` uses `systemctl enable --now` and `nft -f` instead of a restart, so bootstrap no longer restarts the runtime user manager.
+  - **Qualification:** the upgrade variant gains `source/production/qualification_marker.py`, so it has its own receiver; the new `controller_update` stage (repeatability gate, before `concurrent_upgrade`) copies that receiver with the admin key and runs the documented `sudo … bootstrap`, then requires the expected receiver, an unchanged `user@` InvocationID, the unchanged release and `verify` PASS. `concurrent_upgrade` and `interrupted_upgrade` therefore cross receivers in both directions.
+  - Tests: real-guard reproduction (`receiver-verify-descendant-failed`), reason-code surfacing, real `bash` probe verdicts, activation never restarts, variant receiver differs only by the marker. 89 production tests PASS; lint and format PASS on the changed files; runbook updated (worker internet, controller update, qualification); migration manifest regenerated (840 rows, verified).
+  - **Rollback safety:** the old release's verify has no exec expected to fail, so a later cross-receiver `rollback` to `8c03e71a…` is not affected by this class.
+- **N07 validation:** canonical offline gate PASS (655 tests, secret scan, migration manifest). **Cross-receiver VM check PASS** (agent-run, unattended, disposable VM, production mode with dummy credentials only; `runs/20261002T115333Z`, report `99ff1b52180c27ebeab33fbde5f8fc6c25b587d7f0290c06f4ecc77b89b6359e`): install, commission, enroll, credentials, deploy of candidate `a2d1c9cf7a147a906c48ca053451b73acf845d160ebed396ae2a595821c0b040` (worker on pasta, guard and probes in verify), rerun, failed update, then:
+  - `controller_update` (18.2 s): receiver `0c664780…`, runtime user manager NOT_RESTARTED;
+  - `concurrent_upgrade` (75.5 s): `operation-busy`, upgrade CHANGED and rollback ROLLED_BACK, each verified across receivers, with the probes running in the other receiver;
+  - `interrupted_upgrade` (66.5 s): interrupted at configuration (the cross-receiver subprocess) and recovered.
+
+  The VM is kept with dummy credentials. The next pipeline run's `--replace-previous` removes it. **Exact next action (operator):** attended live qualification on this tree (the candidate should again be `a2d1c9cf…`), then `bundle --evidence`, the controller update (the bot must not restart), `upgrade --apply` and `verify` on 10.0.30.10.
+- **Run r19 — attended live run FAIL (application), cause: Telegram token in use by production** (`runs/20261002T121801Z`). Stages through deploy PASS. The operator got no reply to `uname -sr`, answered "no" to the first three questions, and the remaining questions were pointless. The VM gateway journal (agent-read, filtered to adapter events, token-shaped text redacted) shows:
+  - initial connect failed with `Conflict: terminated by other getUpdates request`;
+  - after connecting, five polling-conflict back-offs (20–60 s), then `Fatal telegram adapter error (telegram_polling_conflict)` at 12:34:46 and a restart.
+
+  The production gateway on 10.0.30.10 polls the same token. r18 passed only by luck, and the runbook already forbade sharing a live token. The agent stopped the gateway inside the disposable VM (`systemctl --user stop`; VM kept) to release the token for production.
+- **Fix (pipeline and runbook; no runtime code change):**
+  - the application stage first waits until the VM gateway is connected and has logged no polling conflict for 75 s (longer than the adapter's longest back-off). Only timestamps and fixed event kinds are read from the journal;
+  - on a conflict it immediately says another poller holds the token and keeps waiting for up to 15 minutes, failing with `telegram-token-in-use-elsewhere` or `telegram-not-connected`;
+  - the questions stop at the first "no" (`live-application-failed:KEY`).
+
+  The runbook documents a separate qualification bot (copy the environment file and replace only `TELEGRAM_BOT_TOKEN`) or stopping and starting the production gateway with `sudo systemctl --user -M hermes@ stop|start hermes-gateway.service` (`-M` transport verified on the installed image). The agent validated the event query and classifier against the VM's real journal: `conflict` one second after the first conflict, `ready` when quiet. Tests added for the classifier and stop-at-first-failure.
+- **Follow-up (not blocking):** Podman writes the host's upstream resolver after pasta's forwarder into both containers' `/etc/resolv.conf` (VM: `nameserver 169.254.1.1`, `nameserver 192.168.99.254`, the host's search domain). The guard drops the second server (VM counter 80 packets), so lookups use only the forwarder, and a fallback to the second server times out. Candidate fix: `DNS=169.254.1.1` (and no host search domain) for production containers, with its own validation.
+- **Run r20 — repository gate FAIL; operator decision: decouple from the `mikrotik` repository** (`runs/20261002T131712Z`). Only the migration-manifest step failed. Its source-aware verify reads the separate `~/code/repos/mikrotik` checkout, which the operator was cleaning up (staged deletions of the files that moved here). The operator had already stopped the production gateway for this run. Operator instruction: "The mikrotik repo has been cleaned up of all work, do not use anything related with mikrotik repo anymore since it is a different solution."
+  - Removed the `migration manifest` step from `toolbox/run-offline-checks.sh`. Nothing in the gate, the pipeline or the release reads that repository; the provenance unit tests use synthetic temporary workspaces only.
+  - `PROVENANCE.md`, `docs/migration-manifest.txt` and `docs/migration-adaptations.txt` are a **frozen historical record**, last regenerated and verified source-aware on 2026-10-02 (840 rows, payload `9b8eb6dd…`, source HEAD `17d6415c…`). They are not regenerated or verified afterwards; Git tracks later changes.
+  - Docs updated: `CONTRIBUTING.md` (check table and maintenance text), `PROVENANCE.md` status note, the `AGENTS.md` and `README.md` reading maps, and an `AGENTS.md` rule never to read, run or depend on the `mikrotik` repository. Preserved evidence and review records are untouched.
+- **Run r21 — attended live qualification PASS, all seven gates** (`runs/20261002T150413Z`; `qualification.json` `3f3a93a81e3f6442e6b6149b1dcb8120cff4a945189793b49cd66c14550e7c9e`, artifact `6db112a13e0063c1b63dac82bb57b0a1cf6e05618a237cacbf10c7fe0d1c0eb3`). The production gateway was stopped by the operator for the run.
+  - **Application:** all four operator answers YES, including the worker reaching GitHub.
+  - **Controller update:** receiver `26d99ca5…`; the runtime user manager was not restarted.
+  - **Upgrade stages:** the concurrent upgrade and the rollback crossed receivers; the interrupted cross-receiver upgrade (at configuration) recovered.
+  - **Restore:** PASS on the recorded waiver.
+  - The agent dry-ran `bundle.build` on the current tree and cache: the identity equals the evidence. The VM was removed on PASS.
+
+  **Next (operator):** `bundle --evidence` to `~/hermes-production/hermes-net2.tar`, the controller update on 10.0.30.10, `upgrade --apply` (starts the gateway on the new release) and `verify`.
+- **Production rollout complete (2026-10-02, operator-run, agent-verified):**
+  - **Bundle:** `hermes-net2.tar` `12e3249f3eabaa1b5d3ea3e070f8c011cf00e8fa5d3c35905095b5025c127c28`, verified against the operator's `allowed_signers` with production policy: stage `qualified`, identity `6db112a1…` (recomputed), all seven gates bound to `3f3a93a8…`, receiver `6ced79eb400c0ce70b20141151fcfce0f698d674ded53514b60895e416f81e0f`.
+  - **Controller update:** `BOOTSTRAPPED`, receiver `6ced79eb…`, host `2bbd26a6…` unchanged.
+  - **Upgrade:** `CHANGED` to `6db112a13e0063c1b63dac82bb57b0a1cf6e05618a237cacbf10c7fe0d1c0eb3` (transfer verification 12.7 s, stopped/backup 1.1 s, import 0.5 s, configuration 3.3 s, restart 1.0 s, verification 15.9 s including the egress check and the LAN probes in the release's receiver).
+  - **Verify:** `verify` PASS (credential-free runtime). This also started the production gateway, which the operator had stopped for the live run.
+  - **Rollback:** `rollback --apply` returns to `8c03e71a…` (offline worker); that release's verify has no probe, so the cross-receiver rollback is unaffected by the N07 defect class.
+  - **Retained, never pruned automatically:** the unused staged receiver `b9aa6c40…` from attempt 1, plus the receivers `cbfe4c3b…` and `6ced79eb…`.
+  - **Open follow-ups:**
+    - container resolver cleanup (`DNS=169.254.1.1`);
+    - off-site backup target (recorded waiver);
+    - operator backup of `~/hermes-production`, which now also holds `hermes-net2.tar`;
+    - Git delivery not requested.
+- **Post-upgrade acceptance (operator, Telegram):**
+  - The first question after the upgrade (today's TRM) got "this sandbox has no DNS/outbound network … I re-checked" — a stale belief carried in the chat history from the offline-worker release.
+  - After `/new` (the gateway's fresh-session command, alias `/reset`, confirmed in the deployed gateway image), `curl https://www.banrep.gov.co` from the worker returned 301.
+  - Hermes then fetched the TRM for 2026-10-02 from the datos.gov.co dataset `32sa-8pi3` (3,307.73 COP, as reported by the bot). Worker internet in production is confirmed.
+  - The runbook now tells operators to send `/new` after moving from an offline-worker release.
+
+## Independent branch review (2026-10-02) — findings, agent triage
+
+An external read-only reviewer, using the agent-written prompt, reported 15 findings; the full report is with the operator. The agent checked each finding against the code: all hold, with one correction and one item of context.
+
+| # | Severity | Finding (short) | Agent check |
+| --- | --- | --- | --- |
+| 1 | High (Critical with IPv6 on the VLAN) | Guard does not block global IPv6 or NAT64; no IPv6 probe | Holds. Production context: `eno1` had only `10.0.30.10/24` and a link-local `fe80::` address (diag2), so it is not exploitable today |
+| 2 | High | Each receiver byte-compares the host-wide guard files with its own constants, so the first rule change breaks recovery and rollback to older receivers | Holds: `egress.check`, and `host.py` bootstrap refuses `recover-pending-transaction-before-bootstrap` |
+| 3 | Medium | N07 covers only the probes' deliberate failures; a transient exec failure still fails a cross-receiver action | Holds. **Correction:** the proposed lock-fd-via-environment fix cannot work, because `writer_guard.py` closes fds for its child (old-receiver code in forward upgrades). Alternative: per-command no-lock guards inside `release-action` (helps only when the newer receiver executes) |
+| 4 | Medium | Rollback restores the pre-upgrade gateway `.env` (credential changes reverted) | Holds: `TREES` includes `gateway-state`, and `restore` replaces trees |
+| 5 | Medium | Probes 1 and 3 cannot detect a missing guard; a refused connection counts as BLOCKED; runbook overstates | Holds (matches r18 and N07 notes) |
+| 6 | Medium | A failed first deploy wedges the host (`initial-install-incomplete-private-recovery-required`) | Holds (`operations.recover`) |
+| 7 | Medium | A failed live run leaves the VM polling with the real token | Holds (r19) |
+| 8 | Medium | The controller update runs admin-writable code as root | Holds (runbook procedure) |
+| 9 | Medium | The production Kickstart template is not in the release identity | Holds (`bundle.build` file set) |
+| 10 | Medium | The gate table overstates; the rejection question does not wait for a fresh connect; `controller_update` does not check the controller pointer | Holds; the table row still lists provenance after today's decoupling (agent miss) |
+| 11 | Medium | A failed later attempt discards the previous rollback point | Holds (`rollback` reads only the latest journal row) |
+| 12 | Medium | Tests stub the field-failure paths | Fair |
+| 13 | Low | `egress.loaded()` ignores operators and extra expressions | Holds |
+| 14 | Low | `remote()` lacks `GlobalKnownHostsFile=/dev/null` | Holds |
+| 15 | Low | No upload read deadline while the lock is held | Plausible |
+
+**Operational notes until a fix release:**
+
+- keep IPv6 router advertisements off the server VLAN;
+- after any `rollback`, re-run `credentials` with the current environment file;
+- consider a passphrase on the admin key.
+
+**Exact next action:** the operator chooses the fix-release scope and whether to commit the deployed tree first.

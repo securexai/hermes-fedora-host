@@ -49,7 +49,7 @@ vm/lib-vm-common.sh	Only executable mode changed from source 100644 to destinati
 PROVENANCE.md	Migration record updated: staleness of the old extraction manifest corrected, the new manifest identified as authoritative, and the current toolbox checkout path corrected.
 README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step and current disposable lab linked; current status separates completed migrations, disposable-lab scope and retained controllers. Link the production qualification workflow and bounded temporary local backup fixture.
 docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented; feature branches now start from main; earlier organization record retained as historical consolidation evidence.
-docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged.
+docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged; later gave the production worker outbound internet behind the host egress guard (2026-10-02).
 docs/hook-parity.md	Ported-gate rows updated for the structural hook-wiring check and check-only Markdown linting; documented commit-only branch protection and Toolbox hook execution.
 docs/plans/2026-09-20-hermes-manual-review-corrections.md	Canonical correction record restored byte-for-byte to its recorded SHA-256 f838188c..., which differs from the base-commit copy.
 tests/test-hermes-guide.sh	Source-repository assertions re-pointed; structural hook-wiring checks with negative controls added in place of string greps. Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
@@ -62,7 +62,7 @@ toolbox/verify-extensions.sh	Verification is now genuinely non-syncing (UV_NO_SY
 # --- LATER FEATURE WORK: fresh DeepSeek VM, not a historical migration pass ---
 docs/HERMES_INSTALLATION_VERIFICATION.md	Later added the current DeepSeek VM evidence boundary; historical installation results remain dated.
 docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md	Later documented the latest pinned Hermes DeepSeek VM profile and provider-specific manual steps.
-scripts/hermes/manual/README.md	Later documented the native DeepSeek candidate and its credential-free resolution gate.
+scripts/hermes/manual/README.md	Later documented the native DeepSeek candidate and its credential-free resolution gate; later gave the production worker outbound internet behind the host egress guard (2026-10-02).
 scripts/hermes/manual/boot/fallback-wipe.sh	Later corrected the historical TPM fallback helper to report a failed passphrase check or missing completion markers as failure rather than printing a false success verdict.
 scripts/hermes/manual/boot/rehearse-clean-install.sh	Later added synthetic verdict regression checks for the historical fallback helper's passphrase failure and completion markers. Document the intentional deploy.sh basename collision after canonical relocation.
 scripts/hermes/manual/config/set-model.py	Later allowed native DeepSeek and avoided rewriting an already converged model config.
@@ -78,8 +78,8 @@ scripts/hermes/manual/manifest.yaml	Later recorded the latest release, image ind
 scripts/hermes/manual/provision-openai-key.sh	Later repinned the manual gateway image while retaining the existing OpenAI provisioner.
 scripts/hermes/manual/provision-telegram.sh	Later repinned the manual gateway image and preserved an unchanged Telegram profile on rerun for the DeepSeek VM test.
 scripts/hermes/manual/quadlets/hermes-gateway.container	Later repinned the manual gateway Quadlet to Hermes v2026.9.24.
-scripts/hermes/manual/quadlets/hermes-worker.container	Current disposable lab binds each instance's public worker authorization key at runtime so its worker image can be cached without an instance identity.
-scripts/hermes/manual/worker/Containerfile	Current disposable lab removed the per-instance authorized key COPY from the reusable, credential-free worker image.
+scripts/hermes/manual/quadlets/hermes-worker.container	Current disposable lab binds each instance's public worker authorization key at runtime so its worker image can be cached without an instance identity; later gave the production worker outbound internet behind the host egress guard (2026-10-02).
+scripts/hermes/manual/worker/Containerfile	Current disposable lab removed the per-instance authorized key COPY from the reusable, credential-free worker image; later gave the production worker outbound internet behind the host egress guard (2026-10-02).
 scripts/hermes/manual/redact-stream.py	Later added DEEPSEEK_API_KEY to the secret-redaction set.
 scripts/hermes/set-model.py	Later kept the shared model setter byte-identical to the manual profile's native DeepSeek and idempotent setter.
 tests/test-hermes-manual-profile.sh	Later added native DeepSeek model, redaction, and retained VM safety checks.
@@ -108,8 +108,9 @@ tests/check_ssh_key_only_docs.py	Inspect canonical relocated implementations/gui
 pyproject.toml	Add locked pykickstart development dependency for Fedora44 production Kickstart syntax qualification.
 uv.lock	Record pykickstart and its transitive parser dependencies without changing existing developer tool pins.
 docs/HERMES_DISPOSABLE_LAB.md	Document profiles, prepared cache, test suites, exact artifacts, recovery and production boundaries.
-scripts/hermes/profile-deploy.py	Consume validated resolved profiles and retained image identities with effective runtime verification; supervise production subprocess writers under the transaction lock through descendant exit.
+scripts/hermes/profile-deploy.py	Consume validated resolved profiles and retained image identities with effective runtime verification; supervise production subprocess writers under the transaction lock through descendant exit; later gave the production worker outbound internet behind the host egress guard (2026-10-02).
 vm/hermes-disposable.py	Support owned named instances, pinned stock checksum, prepared backing images and early ownership markers.
 tests/hermes-synthetic-smoke.py	Exercise the profile-selected DeepSeek model with the existing offline mock boundaries.
 tests/offline_allowlist.txt	Approve the new synthetic lab profile, cache, identity, deployment and production regression classes, plus mocked production VM and temporary local backup fixture tests. Keep live lifecycle operations outside the offline set.
 scripts/hermes/manual/config/harden-config.py	Added read-only runtime verification of equivalent disabled empty-hook representations; strict writes and all other checks remain.
+scripts/hermes/manual/worker/sshd_worker_config	Comment updated: the transport needs no worker network, and production gives the worker outbound internet behind the host egress guard while sshd still opens no listener (2026-10-02).

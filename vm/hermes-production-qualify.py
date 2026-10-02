@@ -37,12 +37,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts/hermes"))
-from production import bundle, client, escrow, media  # noqa: E402
+from production import bundle, client, escrow, media, receivers  # noqa: E402
 from production.primitives import (  # noqa: E402
     Refused,
     atomic,
     canonical,
     decode,
+    digest,
     read_json,
     regular,
     require,
@@ -53,6 +54,7 @@ CTL = ROOT / "scripts/hermes/productionctl.py"
 WORK = ROOT / ".toolbox/hermes-qualify"
 ROLE = "qualify"
 ADMIN = "hermesadmin"
+RECEIVER_MARKER = "source/production/qualification_marker.py"
 PROMPT = re.compile(rb"(?i)(?:passphrase|recovery key) for disk")
 FINGERPRINT = re.compile(rb"SSH host key: (SHA256:[A-Za-z0-9+/]{43}) \(ED25519\)")
 ESCROW_ONLY = re.compile(rb"Pending: encrypted_offhost_recovery\r?\n")
@@ -531,6 +533,60 @@ class Run:
     def current(self):
         return ctl("status", *self.target())["current"]["release"]
 
+    def controller_update(self):
+        """The documented private controller update, on a host running the application.
+
+        Stages the upgrade variant's receiver with the administrator key and sudo, exactly
+        as the runbook does. The active receiver, release and runtime user manager (so the
+        running application) must stay untouched until the explicit upgrade.
+        """
+        uid = self.root("id -u hermes").stdout.decode().strip()
+        require(uid.isdigit(), "runtime-uid")
+        manager = f"systemctl show user@{uid}.service --property=InvocationID --value"
+        before = self.root(manager).stdout.strip()
+        require(before, "runtime-user-manager-not-running")
+        payload = io.BytesIO()
+        with (
+            tarfile.open(self.dir / "upgrade.tar", "r:") as release,
+            tarfile.open(fileobj=payload, mode="w", format=tarfile.USTAR_FORMAT) as output,
+        ):
+            manifest = json.loads(release.extractfile("manifest.json").read())
+            wanted = receivers.expected(manifest)["files"]
+            for item in release.getmembers():
+                name = item.name.removeprefix("source/")
+                if item.name.startswith("source/") and name in wanted:
+                    member = tarfile.TarInfo(name)
+                    member.mode, member.size = 0o644, item.size
+                    output.addfile(member, release.extractfile(item))
+        copy_ = client.ssh(
+            "127.0.0.1",
+            PORT,
+            ADMIN,
+            self.dir / "admin_ed25519",
+            self.dir / "known_hosts",
+            "rm -rf ~/hermes-controller && mkdir -m 700 ~/hermes-controller"
+            " && tar -C ~/hermes-controller -xf -",
+        )
+        command(copy_, data=payload.getvalue(), timeout=120)
+        result = self.root(
+            f"python3 -I -B ~{ADMIN}/hermes-controller/productionctl.py bootstrap"
+            " --config /etc/hermes-production/host.json"
+            " --signers /etc/hermes-production/allowed_signers --apply",
+            timeout=900,
+        )
+        report = decode(result.stdout)
+        receiver = digest(receivers.expected(manifest))
+        require(
+            report.get("status") == "BOOTSTRAPPED" and report.get("receiver") == receiver,
+            "controller-update-receiver",
+        )
+        require(self.root(manager).stdout.strip() == before, "controller-update-restarted-runtime")
+        require(
+            self.current() == self.facts["candidates"]["candidate"], "controller-update-release"
+        )
+        require(ctl("verify", *self.target())["status"] == "PASS", "verify-after-controller-update")
+        return {"receiver": receiver, "runtime_user_manager": "NOT_RESTARTED"}
+
     def concurrent_upgrade(self):
         upgrade = self.background(
             "upgrade", *self.target(), "--bundle", str(self.dir / "upgrade.tar"), "--apply"
@@ -657,18 +713,12 @@ class Run:
         stop for approval.
         """
         require(sys.stdin.isatty(), "live-application-test-needs-an-interactive-terminal")
+        self.telegram_ready()
         results = {}
-        results["tool_round_trip"] = ask(
-            "From an ALLOWED Telegram account, send the bot:\n"
-            "  Use the terminal tool to run: uname -sr\n"
-            "Did it reply with a Linux kernel version?"
-        )
-        results["dangerous_command_needs_approval"] = ask(
-            "Now send the bot:\n"
-            "  Use the terminal tool to run: rm -rf /tmp/hermes-approval-check\n"
-            "It must ask you to approve that command first. DENY it.\n"
-            "Did it ask for approval, and not run the command after you denied it?"
-        )
+        for key, question in LIVE_QUESTIONS:
+            results[key] = ask(question)
+            # A later question cannot pass once one fails; stop instead of asking on.
+            require(results[key] == "YES", f"live-application-failed:{key}")
         rejecting = self.dir / "live-reject.env"
         text = regular(self.args.live_env, private=True).read_text()
         swapped = re.sub(r"(?m)^TELEGRAM_ALLOWED_USERS=.*$", "TELEGRAM_ALLOWED_USERS=1", text)
@@ -686,6 +736,52 @@ class Run:
             ctl("credentials", *self.target(), "--env-file", str(self.args.live_env), "--apply")
         require(all(value == "YES" for value in results.values()), "live-application-failed")
         return results
+
+    def telegram_events(self):
+        """(time, kind) Telegram adapter events this boot, and the VM's clock.
+
+        Only timestamps and fixed event kinds leave the VM, never log text.
+        """
+        out = (
+            self.root(
+                "journalctl -b -o short-unix --no-pager _SYSTEMD_USER_UNIT=hermes-gateway.service"
+                ' | awk \'/Connected to Telegram [(]polling mode[)]/ {print $1, "connect"}'
+                " /polling conflict|telegram_polling_conflict|terminated by other getUpdates/"
+                ' {print $1, "conflict"}\'; date +%s'
+            )
+            .stdout.decode()
+            .split("\n")
+        )
+        rows = [line.split() for line in out if line.strip()]
+        now = float(rows.pop()[0])
+        return [(float(when), kind) for when, kind in rows], now
+
+    def telegram_ready(self, timeout=900):
+        """The VM gateway must hold the bot's only Telegram poll before any question.
+
+        Two gateways polling one token keep ending each other's getUpdates, so neither
+        answers reliably. A conflict here means another gateway (such as production)
+        uses this token: say so at once and keep waiting while the operator stops it.
+        """
+        deadline, warned = time.monotonic() + timeout, False
+        while True:
+            events, now = self.telegram_events()
+            state = telegram_poll_state(events, now)
+            if state == "ready":
+                return
+            if state == "conflict" and not warned:
+                warned = True
+                print(
+                    "\nTelegram reports ANOTHER bot instance polling this token (for example"
+                    " production).\nStop it, or rerun with a separate qualification bot token."
+                    " Waiting for the conflict to clear...",
+                    flush=True,
+                )
+            require(
+                time.monotonic() < deadline,
+                "telegram-token-in-use-elsewhere" if warned else "telegram-not-connected",
+            )
+            time.sleep(5)
 
     def warm_reboot(self):
         before, offset = self.boot_id(), self.offset()
@@ -774,6 +870,7 @@ GATE_STAGES = {
     "repeatability": (
         "rerun",
         "failed_update",
+        "controller_update",
         "concurrent_upgrade",
         "interrupted_upgrade",
         "missing_mount",
@@ -796,6 +893,7 @@ STAGES = (
     "application",
     "rerun",
     "failed_update",
+    "controller_update",
     "concurrent_upgrade",
     "interrupted_upgrade",
     "missing_mount",
@@ -805,6 +903,46 @@ STAGES = (
     "canary",
 )
 LIVE_ONLY = {"credentials", "application"}
+
+
+# Longer than the Telegram adapter's longest conflict back-off (60 s between retries).
+TELEGRAM_QUIET = 75
+LIVE_QUESTIONS = (
+    (
+        "tool_round_trip",
+        "From an ALLOWED Telegram account, send the bot:\n"
+        "  Use the terminal tool to run: uname -sr\n"
+        "Did it reply with a Linux kernel version?",
+    ),
+    (
+        "worker_reaches_internet",
+        "Now send the bot:\n"
+        "  Use the terminal tool to run: git ls-remote https://github.com/torvalds/linux HEAD\n"
+        "Did it reply with a 40-character commit hash?",
+    ),
+    (
+        "dangerous_command_needs_approval",
+        "Now send the bot:\n"
+        "  Use the terminal tool to run: rm -rf /tmp/hermes-approval-check\n"
+        "It must ask you to approve that command first. DENY it.\n"
+        "Did it ask for approval, and not run the command after you denied it?",
+    ),
+)
+
+
+def telegram_poll_state(events, now, quiet=TELEGRAM_QUIET):
+    """'ready' once connected with no adapter event for `quiet` seconds.
+
+    Otherwise 'conflict' when a polling conflict followed the last connect (another
+    poller holds the token, or a previous session is still expiring), else 'waiting'.
+    """
+    connects = [when for when, kind in events if kind == "connect"]
+    conflicts = [when for when, kind in events if kind == "conflict"]
+    if connects and now - max(connects + conflicts) >= quiet:
+        return "ready"
+    if conflicts and (not connects or max(conflicts) >= max(connects)):
+        return "conflict"
+    return "waiting"
 
 
 def ask(question):
@@ -832,11 +970,22 @@ def derive_candidates(directory):
                 "baseline": bundle.identity(baseline),
             }
         )
-        changed["files"][name] = {
-            "sha256": hashlib.sha256(marker).hexdigest(),
-            "size": len(marker),
-            "mode": 0o644,
+        # An extra receiver module gives the variant its own receiver, so upgrade and
+        # rollback cross receivers after a controller update, as every code release does.
+        added = {
+            name: marker,
+            RECEIVER_MARKER: (
+                '"""Qualification-only receiver marker; baseline '
+                + bundle.identity(baseline)
+                + '."""\n'
+            ).encode(),
         }
+        for path, data in added.items():
+            changed["files"][path] = {
+                "sha256": hashlib.sha256(data).hexdigest(),
+                "size": len(data),
+                "mode": 0o644,
+            }
         changed["qualification"]["artifact_sha256"] = bundle.identity(changed)
         bundle.validate(changed)
         with tempfile.TemporaryDirectory(prefix="signing-", dir=directory) as temporary:
@@ -871,9 +1020,10 @@ def derive_candidates(directory):
                         output.addfile(member, io.BytesIO(data))
                     else:
                         output.addfile(item, original.extractfile(item))
-                member = tarfile.TarInfo(name)
-                member.mode, member.size = 0o644, len(marker)
-                output.addfile(member, io.BytesIO(marker))
+                for path, data in added.items():
+                    member = tarfile.TarInfo(path)
+                    member.mode, member.size = 0o644, len(data)
+                    output.addfile(member, io.BytesIO(data))
         target = "source/PRODUCTION_RUNBOOK.md"
         with (
             (directory / "corrupt.tar").open("xb") as stream,

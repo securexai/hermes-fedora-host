@@ -10,7 +10,7 @@ import time
 from contextlib import ExitStack
 from pathlib import Path
 
-from . import bundle, preflight, receivers, startup
+from . import bundle, egress, preflight, receivers, startup
 from .operations import Transaction
 from .primitives import (
     Refused,
@@ -84,6 +84,7 @@ def bootstrap(config_path, signers, *, apply=False):
                 "install trusted receiver",
                 "create locked runtime and bounded deployment accounts",
                 "install mount guard and SSH forced command",
+                "install egress guard (runtime account kept off local networks)",
                 "enable runtime user manager",
             ],
             "preflight": report,
@@ -206,6 +207,7 @@ def bootstrap(config_path, signers, *, apply=False):
         ):
             require(expected in effective.splitlines(), "effective-sshd-policy-conflict")
         mount_guard(config, account.pw_uid)
+        guard = egress.install(account.pw_uid)
         run(["systemctl", "daemon-reload"])
         run(
             [
@@ -216,8 +218,11 @@ def bootstrap(config_path, signers, *, apply=False):
                 str(public),
                 str(sshpath),
                 str(SUDOERS),
+                *(str(path) for path in guard),
             ]
         )
+        # The runtime account never runs without the egress guard loaded.
+        egress.activate()
         run(["systemctl", "reload", "sshd"])
         run(["loginctl", "enable-linger", "hermes"])
         run(["systemctl", "start", f"user@{account.pw_uid}.service"])
