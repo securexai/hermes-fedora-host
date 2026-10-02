@@ -51,10 +51,9 @@ run "python suites (reviewed offline allowlist)" python3 -B tests/run-reviewed-s
 # be widened with filenames, so this closes the coverage gap the hook leaves.
 run "secret scan (full working tree)" bash toolbox/scan-secrets.sh
 
-# Provenance is part of the gate: the manifest must still match the working tree.
-# This requires the source checkout and the dev-toolbox checkout recorded in
-# PROVENANCE.md (both exist on the development workstation).
-run "migration manifest" python3 toolbox/generate-migration-manifest.py --verify
+# docs/migration-manifest.txt is a frozen historical record of the extraction from
+# the separate mikrotik repository. That repository is a different solution and no
+# check reads it (operator decision 2026-10-02); see PROVENANCE.md.
 
 # `tests/test-hermes-e2e-vm.sh` and `tests/test-hermes-links.sh` are deliberately
 # NOT run here. The first drives real VM lifecycle through hermes-certify-vm.sh;

@@ -3,6 +3,15 @@
 This file records exactly which source state this repository was derived from, so
 that later reviews can tell whether an evidence claim still applies.
 
+**Status (2026-10-02): frozen historical record.** The `mikrotik` repository is a
+separate solution. No check or procedure in this repository reads it any more.
+`docs/migration-manifest.txt` was last regenerated and verified source-aware on
+2026-10-02 (840 rows, payload fingerprint
+`9b8eb6dd9ad21394da9edd21e24cde099cba55fa55a87af68eae82b0225024e7`, source HEAD
+`17d6415c8fe72d91d3c91e87e942e2a09b0d544e`) and is not maintained afterwards;
+Git history tracks later changes. The verification commands below describe how
+the record was checked while that checkout was part of the workflow.
+
 ## Hermes source (content extracted into this repository)
 
 | Item | Value |
@@ -153,7 +162,7 @@ this manifest, so neither is a hash binding this file; the manifest's own SHA-25
 is reported separately in the handoff. The header also carries a complete
 inclusion/exclusion inventory over the declared Hermes scope.
 
-Re-verify it with:
+While the source checkout was part of the workflow it was verified with:
 
 ```bash
 python3 toolbox/generate-migration-manifest.py --verify

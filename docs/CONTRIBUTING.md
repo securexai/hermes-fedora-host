@@ -56,18 +56,12 @@ The individual suites it runs:
 | Deployment and VM ShellSpec specs | `toolbox/.tools/shellspec/shellspec spec/` |
 | Reviewed Python unit allowlist | `python3 -B tests/run-reviewed-suites.py --set offline` |
 | Full working-tree secret scan | `bash toolbox/scan-secrets.sh` |
-| Migration manifest | `python3 toolbox/generate-migration-manifest.py --verify` |
 
-The manifest check recomputes destination hashes, actual working-tree executable
-modes and the payload identity (which deliberately excludes the manifest itself;
-the manifest's own SHA-256 is reported separately). It parses the recorded
-identity block strictly and, when the `mikrotik`, `dev-toolbox` and companion
-checkouts named in [PROVENANCE.md](../PROVENANCE.md) are present, re-derives every
-recorded HEAD, dirty-input fingerprint, audit line and provenance row
-(source-aware verification). Without them it reports destination-only verification
-explicitly and warns that identity was **not** re-derived. Regenerate with
-`python3 toolbox/generate-migration-manifest.py` after any change to the tree, and
-add a reason to `docs/migration-adaptations.txt` for every newly adapted file.
+`docs/migration-manifest.txt` and `docs/migration-adaptations.txt` are a frozen
+historical record of the extraction from the separate `mikrotik` repository, last
+regenerated on 2026-10-02. That repository is a different solution: no check or
+procedure here reads it, and the manifest is no longer regenerated or verified.
+Git history tracks later changes. See [PROVENANCE.md](../PROVENANCE.md).
 
 The Python suites are **not** discovered. `tests/offline_allowlist.txt` lists the
 exact reviewed `module.Class` (and, for the mixed ssh-key-only class,

@@ -5,6 +5,8 @@ This repository holds the Hermes Fedora host work: the reviewed manual profile
 certification entrypoints, the VM assets and the dated evidence record. It does
 **not** hold production credentials, VM disks, or the unrelated network,
 Kubernetes and workstation components that stay in the source repository.
+That source repository (`mikrotik`) is a separate solution: never read it, run
+anything from it, or make any check depend on it.
 
 ## Reading map
 
@@ -17,7 +19,7 @@ Kubernetes and workstation components that stay in the source repository.
 | Unattended controller | `docs/HERMES_UNATTENDED_DEPLOYMENT.md`, `scripts/hermes/unattended/` |
 | VM creation and testing | `vm/DEPLOYMENT_TASKS.md`, `docs/VM_TESTING_GUIDE.md` |
 | Evidence ledger | `docs/HERMES_INSTALLATION_VERIFICATION.md` |
-| Migration provenance | `PROVENANCE.md`, `docs/migration-manifest.txt` |
+| Migration provenance (frozen historical record) | `PROVENANCE.md`, `docs/migration-manifest.txt` |
 | Environment and migration record | `docs/ENVIRONMENT.md`, `docs/plans/` |
 
 ## Development environment
