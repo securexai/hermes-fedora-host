@@ -1,0 +1,19 @@
+{
+  "status": "FAIL",
+  "scope": "Installer boot on the same approved empty qualification VM after observed shutdown",
+  "started_at_utc": "2026-09-28T21:54:14.508564+00:00",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "before_state": "shut off (shutdown)",
+  "system_disk": "VERIFIED_EMPTY",
+  "canary": "VERIFIED_UNCHANGED",
+  "disk_recreated": false,
+  "initial_xml_sha256": "7e2a1e14ab7983db2bb756dd78eab8b9e1e3cbb1d1fb24a591852afa1eb8c4ab",
+  "console_input_sent": false,
+  "exit_code": 0,
+  "stdout": "\nStarting install...\n\rRetrieving 'vmlinuz'                                        |  18 MB  00:00     \n\rRetrieving 'initrd.img'                                     | 252 MB  00:00     \n\rCreating domain...                                          |         00:00     \n\nDomain is still running. Installation may be in progress.\nYou can reconnect to the console to complete the installation process.\n",
+  "stderr": "WARNING  Treating --wait 0 as --noautoconsole\n",
+  "elapsed_seconds": 0.982,
+  "persistent_xml_unchanged": false,
+  "state": "running",
+  "finished_at_utc": "2026-09-28T21:54:15.511467+00:00"
+}

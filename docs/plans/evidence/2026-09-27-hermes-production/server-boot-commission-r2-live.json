@@ -1,0 +1,110 @@
+{
+  "active_swap": false,
+  "boot_id": "87e1d398-7465-4586-a77d-4eaf03245b73",
+  "checked_at_utc": "2026-09-28T16:11:09.919976+00:00",
+  "checks": {
+    "default_kernel": {
+      "exit": 0,
+      "stderr": "grep: /boot/grub2/grubenv: Permission denied",
+      "stdout": "/boot"
+    },
+    "failed_units": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "secure_boot": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "SecureBoot enabled"
+    },
+    "selinux": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "Enforcing"
+    },
+    "system_state": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "running"
+    }
+  },
+  "cold_start": "NOT_RUN",
+  "firmware_power_restoration": "NOT_RUN",
+  "kernel": "6.19.10-300.fc44.x86_64",
+  "paths": {
+    "/boot/initramfs-6.19.10-300.fc44.x86_64.img": {
+      "bytes": 79104547,
+      "gid": 0,
+      "mode": "0o600",
+      "sha256": "ROOT_ONLY",
+      "symlink": false,
+      "uid": 0
+    },
+    "/etc/crypttab": {
+      "bytes": 130,
+      "gid": 0,
+      "mode": "0o600",
+      "sha256": "ROOT_ONLY",
+      "symlink": false,
+      "uid": 0
+    },
+    "/etc/dracut.conf.d/99-hermes-production-tpm.conf": {
+      "bytes": 51,
+      "gid": 0,
+      "mode": "0o644",
+      "sha256": "1fcc50d72b1315c427f28f9ae44b0e46bdc5e081d545b63e56d4819dd8553834",
+      "symlink": false,
+      "uid": 0
+    },
+    "/var/lib/hermes-production-boot/baseline": {
+      "bytes": 74,
+      "gid": 0,
+      "mode": "0o700",
+      "symlink": false,
+      "uid": 0
+    },
+    "/var/lib/hermes-production-boot/build-state.json": {
+      "bytes": 86,
+      "gid": 0,
+      "mode": "0o600",
+      "sha256": "ROOT_ONLY",
+      "symlink": false,
+      "uid": 0
+    },
+    "/var/lib/hermes-production-boot/report.json": {
+      "bytes": 952,
+      "gid": 0,
+      "mode": "0o644",
+      "sha256": "65bd5ac30d23de6eb80d31b3b5a812e4cf8dbe1175f0da6682bb6b00da2a73ee",
+      "symlink": false,
+      "uid": 0
+    }
+  },
+  "reboot": "NOT_RUN",
+  "recovery_boot": "NOT_RUN",
+  "report": {
+    "baseline_directory": "/var/lib/hermes-production-boot/baseline",
+    "cold_start": "NOT_RUN",
+    "configuration": "UPDATED",
+    "crypttab_sha256": "c1d4d852af5786dc38601e75cddf3ba0657268e74ac595f3b4b61f1146202fe6",
+    "firmware_power_on": "OPERATOR_CONFIRMED",
+    "initramfs_sha256": "26462706a0cb7cf18bda8563cafab2280381177715f32f0133eac6907b280378",
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "luks_uuid": "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6",
+    "passphrase_test_after": "PASS",
+    "passphrase_test_before": "PASS",
+    "pcr7_sha256": "957573cbfc6490be17df43197f4eef2c38ee6cb370c57a00a4c2c10b210ac858",
+    "reboot": "NOT_RUN",
+    "recovery_boot": "NOT_RUN",
+    "recovery_slot_preserved": true,
+    "scope": "TPM enrollment and current-kernel boot configuration",
+    "script_sha256": "9a4c0ff7d97b202c49d2bfce39b2834fdf1becc45b4e8bb322c3665035891e0d",
+    "status": "PASS",
+    "timestamp_utc": "2026-09-28T16:07:34.435256+00:00",
+    "tpm_enrollment": "UNCHANGED"
+  },
+  "scope": "Pinned SSH readback of root-owned setup result and credential-free state; protected live hashes remain from the reviewed root helper",
+  "server_checked_at_utc": "2026-09-28T16:11:37.332604+00:00",
+  "status": "PASS_WITH_BOOT_SELECTION_DEFERRED"
+}

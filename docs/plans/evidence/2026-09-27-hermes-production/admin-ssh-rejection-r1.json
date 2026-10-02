@@ -1,0 +1,17 @@
+{
+  "audit_command_execution": "NOT_RUN",
+  "authentication_exit": 255,
+  "checked_at_utc": "2026-09-29T01:46:12.153419+00:00",
+  "host_key_verification": "PASS_PINNED_ED25519",
+  "key_matches_generated_kickstart": true,
+  "next_action": "Private operator console login, then inspect account home/key permissions, key fingerprint and SELinux labels before correcting the cause.",
+  "offered_key_fingerprint": "SHA256:JzhGuldy7SI0F2s3RFR9e1ZQg4IB6UyHLzwnN7QIg3M",
+  "operator_normal_boot": "REPORTED_BOOTED_AND_DETACHED",
+  "password_authentication_attempted": false,
+  "private_key_contents_inspected": false,
+  "scope": "Pinned public-key authentication to normally booted qualification VM",
+  "server_key_acceptance": false,
+  "ssh_banner": "OBSERVED",
+  "status": "FAIL",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

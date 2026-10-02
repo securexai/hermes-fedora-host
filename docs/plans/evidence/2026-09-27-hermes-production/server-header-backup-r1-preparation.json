@@ -1,0 +1,19 @@
+{
+  "local_recovery_directory": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-recovery",
+  "offhost_verification": "NOT_RUN",
+  "preview": {
+    "artifact_directory": "/var/lib/hermes-production-recovery/header-before-tpm-6446c3506a759740",
+    "certificate_sha256": "6446c3506a759740ba8340a1bd055b99d2d4aadbf1023390333178414c5628ea",
+    "changes": [
+      "create encrypted header backup only"
+    ],
+    "luks_uuid": "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6",
+    "openssl": "OpenSSL 3.5.8 25 Aug 2026 (Library: OpenSSL 3.5.8 25 Aug 2026)",
+    "status": "PREVIEW"
+  },
+  "private_key": "LOCAL_ONLY; not included in evidence",
+  "privileged_backup": "NOT_RUN",
+  "remote_path": "/home/aicowork/hermes-header-backup-db2ceeae744d230d.py",
+  "script_sha256": "db2ceeae744d230d2f7186a080bb8f83dd4a9e561df11e3aac3a03d9dae15ba7",
+  "status": "PREPARED"
+}

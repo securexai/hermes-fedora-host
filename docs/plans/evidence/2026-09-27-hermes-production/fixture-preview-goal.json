@@ -1,0 +1,13 @@
+{
+  "status": "PREVIEW",
+  "name": "hermes-production-qualification",
+  "media_sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+  "boot": "UEFI Secure Boot with enrolled keys and TPM2 emulator",
+  "memory_mb": 8192,
+  "installation": "BLOCKED until private console supplies encryption and administrator secrets",
+  "scope": "read-only-preview-with-ephemeral-nonoperational-key",
+  "disk_virtual_mib": 181024,
+  "disk_to_erase": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+  "real_installation": "NOT_RUN",
+  "credential_provisioning": "NOT_RUN"
+}

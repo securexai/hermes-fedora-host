@@ -1,0 +1,23 @@
+{
+  "checked_at_utc": "2026-09-29T22:43:49.269936+00:00",
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-normal-platform-predicate-r1.json": "6eec23606cea86c196299056a983311c1cfaa0c3e5b00f2dd6b205f29ec8f610",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-normal-prerequisite-binding-r1.json": "ec822394636a92792cfc11b35f98327e7ecb6fcc33a0de59e504b7505c62da86",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-normal-public-audit-r1.json": "0e23a3215737c47893b626d3c43be930e120e51ea08e363b04ab49ba3db3f300",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-prerequisites-memory-prepared-r2.json": "f78e96c9c7460c782c9c1a06af7915ef6d69b7a80c6485c40fd08f83e5edb07b"
+  },
+  "full_application_preflight": "NOT_RUN",
+  "local_preparation_sha256": {
+    ".toolbox/hermes-production-restore/prerequisites-r1/guest-prerequisites-r1.py": "28afee2c6ef712ba797f24976dc289090315de471867745496eaa7aed60001bb",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-8gib-before-r1.xml": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-proposal-r1.xml": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+    ".toolbox/hermes-production-restore/prerequisites-r1/run-private-prerequisites-r2.sh": "8dd3bc5665ed62e0556824ce9ab29a1fa112dc5edb640d3a0928524cd654f8db",
+    ".toolbox/hermes-production-restore/prerequisites-r1/run-private-prerequisites.sh": "3f492449b9ec09319053cb5b066f308ace436f84e6b7f2c26f1bfac58dca6c94",
+    ".toolbox/hermes-production-restore/prerequisites-r1/test-guest-prerequisites-r1.py": "5998d65a9b9057b2ad24969d3ac23ef7ffa577a9442d8229c011bcce0798105c"
+  },
+  "memory_change": "NOT_AUTHORIZED_OR_APPLIED",
+  "private_root_execution": "NOT_RUN",
+  "production_preflight_sha256": "642f5f66b13ed284c460fd8e215b1f3f95cb91d68bcff0326583c5247d256460",
+  "scope": "Actual normal-boot restore facts and prepared bounded corrections; no application qualification or RAM approval inferred",
+  "status": "NORMAL_BOOT_PUBLIC_FACTS_OBSERVED_WITH_MEMORY_AND_PACKAGE_SERVICE_BLOCKERS"
+}

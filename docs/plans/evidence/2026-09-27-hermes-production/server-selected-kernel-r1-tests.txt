@@ -1,0 +1,289 @@
+import importlib.util
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
+
+
+def load(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+mod = load("selected", sys.argv.pop(1))
+api = load("reviewed", sys.argv.pop(1))
+
+
+class SelectedKernelTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        self.base = self.root / "state"
+        self.base.mkdir(mode=0o755)
+        self.image = self.root / "boot" / "initramfs-selected.img"
+        self.image.parent.mkdir()
+        self.image.write_bytes(b"original")
+        self.image.chmod(0o600)
+        (self.base / ".lock").touch(mode=0o600)
+        self.backup = self.base / "baseline"
+        self.calls = []
+        self.failure = None
+        self.bad_candidate = False
+        self.post_failure = False
+        self.restore_failure = False
+        self.restore_calls = 0
+        changes = {
+            "KERNEL": "7.2.7-200.fc44.x86_64",
+            "BASE": self.base,
+            "IMAGE": self.image,
+            "BACKUP": self.backup,
+            "REPORT": self.base / "report.json",
+        }
+        self.start(patch.multiple(mod, **changes))
+        self.start(patch.object(mod, "select_for_apply"))
+        self.start(patch.object(api, "secure", side_effect=self.secure))
+        self.start(patch.object(api, "command", side_effect=self.command))
+        self.start(patch.object(api, "check_image", side_effect=self.check_image))
+        self.start(
+            patch.object(mod.shutil, "disk_usage", return_value=SimpleNamespace(free=10**10))
+        )
+
+    def start(self, mock):
+        self.addCleanup(mock.stop)
+        return mock.start()
+
+    def secure(self, path, *, directory=False):
+        p = Path(path)
+        self.assertFalse(p.is_symlink())
+        info = p.stat()
+        return SimpleNamespace(
+            st_mode=info.st_mode, st_size=info.st_size, st_uid=0, st_nlink=info.st_nlink
+        )
+
+    def command(self, args, **kwargs):
+        self.calls.append(args)
+        if args[0] == "dracut":
+            if self.failure:
+                raise self.failure
+            Path(args[-1]).write_bytes(b"bad" if self.bad_candidate else b"validated")
+        if args[0] == "restorecon":
+            self.restore_calls += 1
+            if self.restore_failure and self.restore_calls == 1:
+                raise RuntimeError("context-restore-failed")
+        return b""
+
+    def check_image(self, path):
+        if self.post_failure and path == self.image:
+            raise RuntimeError("post-publication-inspection-failed")
+        if Path(path).read_bytes() != b"validated":
+            raise RuntimeError("invalid-candidate")
+
+    def test_build_and_safe_noop_rerun(self):
+        self.assertEqual(mod.build(api), "UPDATED")
+        self.assertEqual(mod.build(api), "UNCHANGED")
+        self.assertEqual((self.backup / "initramfs.before").read_bytes(), b"original")
+        self.assertEqual(self.image.read_bytes(), b"validated")
+        self.assertEqual(self.image.stat().st_mode & 0o777, 0o600)
+        self.assertEqual(self.backup.stat().st_mode & 0o777, 0o700)
+        self.assertEqual(sum(c[0] == "dracut" for c in self.calls), 1)
+
+    def test_failed_build_retains_original_and_cleans_candidate(self):
+        self.failure = RuntimeError("build-failed")
+        with self.assertRaisesRegex(RuntimeError, "build-failed"):
+            mod.build(api)
+        self.assertEqual(self.image.read_bytes(), b"original")
+        self.assertEqual(list(self.image.parent.glob(".hermes-*")), [])
+
+    def test_bad_candidate_never_published(self):
+        self.bad_candidate = True
+        with self.assertRaisesRegex(RuntimeError, "invalid-candidate"):
+            mod.build(api)
+        self.assertEqual(self.image.read_bytes(), b"original")
+
+    def test_failed_postcheck_restores_original(self):
+        self.post_failure = True
+        with self.assertRaisesRegex(RuntimeError, "post-publication-inspection-failed"):
+            mod.build(api)
+        self.assertEqual(self.image.read_bytes(), b"original")
+
+    def test_rollback_failure_is_explicit(self):
+        self.post_failure = True
+        with patch.object(mod, "restore", side_effect=RuntimeError("restore-failed")):
+            with self.assertRaisesRegex(RuntimeError, "selected-image-rollback-failed"):
+                mod.build(api)
+
+    def test_interruption_retains_original(self):
+        self.failure = KeyboardInterrupt()
+        with self.assertRaises(KeyboardInterrupt):
+            mod.build(api)
+        self.assertEqual(self.image.read_bytes(), b"original")
+
+    def test_context_failure_recovers_and_retry_succeeds(self):
+        self.restore_failure = True
+        with self.assertRaisesRegex(RuntimeError, "context-restore-failed"):
+            mod.build(api)
+        self.assertEqual(self.image.read_bytes(), b"original")
+        self.restore_failure = False
+        self.assertEqual(mod.build(api), "UPDATED")
+
+    def test_corrupt_recovery_copy_refused(self):
+        mod.build(api)
+        (self.backup / "initramfs.before").write_bytes(b"corrupted")
+        with self.assertRaisesRegex(RuntimeError, "selected-recovery-copy-changed"):
+            mod.build(api)
+        self.assertEqual(self.image.read_bytes(), b"validated")
+
+    def test_external_image_change_preserved_and_refused(self):
+        mod.build(api)
+        self.image.write_bytes(b"outside-change")
+        with self.assertRaisesRegex(RuntimeError, "selected-image-changed-outside-operation"):
+            mod.build(api)
+        self.assertEqual(self.image.read_bytes(), b"outside-change")
+
+    def test_selection_rejects_wrong_default_and_one_shot(self):
+        correct = "/boot/vmlinuz-" + mod.KERNEL
+        for default, env, reason in [
+            ("wrong", "", "selected-kernel-changed"),
+            (correct, "next_entry=other", "one-shot-boot-selection-present"),
+        ]:
+            with self.subTest(reason=reason):
+
+                def response(args, **kwargs):
+                    if args[0] == "grub2-editenv":
+                        return env.encode()
+                    if args[1] == "--default-kernel":
+                        return default.encode()
+                    return f'kernel="{correct}"\ninitrd="{self.image}"'.encode()
+
+                with patch.object(api, "command", side_effect=response):
+                    with self.assertRaisesRegex(RuntimeError, reason):
+                        mod.selected_entry(api)
+
+    def test_precondition_failure_never_builds_or_reboots(self):
+        with (
+            patch.object(mod.os, "geteuid", return_value=0),
+            patch.object(mod.sys.stdin, "isatty", return_value=True),
+            patch.object(mod.sys.stdout, "isatty", return_value=True),
+            patch.object(mod, "preconditions", side_effect=RuntimeError("wrong-boot")),
+            patch.object(mod, "build") as build,
+        ):
+            self.assertEqual(mod.apply_and_reboot(api), 1)
+            build.assert_not_called()
+        self.assertFalse(any(c == ["systemctl", "reboot"] for c in self.calls))
+
+    def test_success_requests_reboot_only_after_real_build(self):
+        with (
+            patch.object(mod.os, "geteuid", return_value=0),
+            patch.object(mod.sys.stdin, "isatty", return_value=True),
+            patch.object(mod.sys.stdout, "isatty", return_value=True),
+            patch.object(mod, "preconditions", return_value={"recovery_slots": {"0": "retained"}}),
+            patch.object(api, "check_tokens"),
+            patch.object(api, "metadata", return_value={}),
+        ):
+            self.assertEqual(mod.apply_and_reboot(api), 0)
+        self.assertEqual(self.calls[-1], ["systemctl", "reboot"])
+        self.assertEqual(self.image.read_bytes(), b"validated")
+        self.assertEqual(api.read_json(mod.REPORT)["status"], "READY_TO_REBOOT")
+
+    def test_already_validated_current_kernel_reuses_image(self):
+        self.image.write_bytes(b"validated")
+        with (
+            patch.object(mod, "KERNEL", api.KERNEL),
+            patch.object(mod.os, "geteuid", return_value=0),
+            patch.object(mod.sys.stdin, "isatty", return_value=True),
+            patch.object(mod.sys.stdout, "isatty", return_value=True),
+            patch.object(mod, "preconditions", return_value={"recovery_slots": {"0": "retained"}}),
+            patch.object(api, "check_tokens"),
+            patch.object(api, "metadata", return_value={}),
+            patch.object(mod, "build") as build,
+        ):
+            self.assertEqual(mod.apply_and_reboot(api), 0)
+            build.assert_not_called()
+        self.assertEqual(self.calls[-1], ["systemctl", "reboot"])
+        self.assertEqual(
+            api.read_json(mod.REPORT)["configuration"], "UNCHANGED_CURRENT_VALIDATED_IMAGE"
+        )
+
+    def test_changed_boot_refused_before_other_checks(self):
+        with (
+            patch.object(mod.Path, "read_text", return_value="changed-boot"),
+            patch.object(api, "public_checks") as check,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "boot-already-changed"):
+                mod.preconditions(api)
+            check.assert_not_called()
+
+    def test_automatic_selection_uses_default_not_running_kernel(self):
+        version = "8.1.2-200.fc44.x86_64"
+        with (
+            patch.object(api, "secure"),
+            patch.object(
+                api,
+                "command",
+                side_effect=[("/boot/vmlinuz-" + version).encode(), version.encode()],
+            ),
+        ):
+            mod.detect_target(api)
+        self.assertEqual(mod.KERNEL, version)
+        self.assertNotEqual(mod.KERNEL, api.KERNEL)
+        self.assertEqual(mod.IMAGE, Path("/boot/initramfs-" + version + ".img"))
+        self.assertEqual(api.read_json(self.base / "selected-target.json")["kernel"], version)
+
+    def test_automatic_selection_refuses_changed_pinned_default(self):
+        first = "7.2.7-200.fc44.x86_64"
+        second = "8.1.2-200.fc44.x86_64"
+        with (
+            patch.object(api, "secure"),
+            patch.object(
+                api,
+                "command",
+                side_effect=[
+                    ("/boot/vmlinuz-" + first).encode(),
+                    first.encode(),
+                    ("/boot/vmlinuz-" + second).encode(),
+                    second.encode(),
+                ],
+            ),
+        ):
+            mod.detect_target(api)
+            with self.assertRaisesRegex(RuntimeError, "selected-target-changed-since-preparation"):
+                mod.detect_target(api)
+        self.assertEqual(api.read_json(self.base / "selected-target.json")["kernel"], first)
+        self.assertEqual(mod.KERNEL, first)
+
+    def test_automatic_selection_rejects_unsafe_or_rescue_path(self):
+        for value in [
+            "/boot",
+            "/boot/vmlinuz-../other",
+            "/boot/vmlinuz-0-rescue-abc",
+            "/boot/vmlinuz-7.2.7-200.fc44.x86_64\n/boot/other",
+        ]:
+            with (
+                self.subTest(value=value),
+                patch.object(api, "command", return_value=value.encode()),
+            ):
+                with self.assertRaises(RuntimeError):
+                    mod.detect_target(api)
+        self.assertFalse((self.base / "selected-target.json").exists())
+
+    def test_automatic_selection_requires_matching_installed_package(self):
+        with (
+            patch.object(api, "secure"),
+            patch.object(
+                api,
+                "command",
+                side_effect=[b"/boot/vmlinuz-7.2.7-200.fc44.x86_64", b"different-package"],
+            ),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "default-kernel-package-mismatch"):
+                mod.detect_target(api)
+        self.assertFalse((self.base / "selected-target.json").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()

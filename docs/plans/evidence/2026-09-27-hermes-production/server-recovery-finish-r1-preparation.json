@@ -1,0 +1,28 @@
+{
+  "candidate_artifact_changed": false,
+  "checked_at_utc": "2026-09-28T20:44:26.167876+00:00",
+  "cleanup": "NOT_RUN",
+  "prerequisite": "Operator confirms passphrase recovery and independent corrected-boot validation passes before issuing this later command",
+  "recovery_passphrase_proof": "NOT_RUN",
+  "remote_upload": {
+    "path": "/home/aicowork/hermes-finish-recovery-85ca63a84613c2b2.py",
+    "preview": {
+      "prerequisite": "Operator recovery-passphrase success plus independent corrected-boot verification",
+      "scope": "Remove only the unchanged recovery test entry after preserving a copy, then reboot to the normal saved default",
+      "status": "PREVIEW"
+    },
+    "privileged_apply": "NOT_RUN",
+    "sha256": "85ca63a84613c2b22c453506dff9fb0fb531fcf23ec7a74a105e4ef3c5db4f96",
+    "status": "UPLOADED_PREVIEW_PASS"
+  },
+  "scope": "Cleanup of exact temporary recovery entry and return to normal saved boot selection; no LUKS/token/initramfs/normal-entry changes",
+  "script_sha256": "85ca63a84613c2b22c453506dff9fb0fb531fcf23ec7a74a105e4ef3c5db4f96",
+  "status": "PREPARED_NOT_APPLIED",
+  "subsequent_automatic_boot": "NOT_RUN",
+  "tests": {
+    "count": 8,
+    "coverage": "Exact corrected-boot options, old-boot rejection, changed/missing entry rejection, retained-copy identity, failed-copy preservation and unchanged rerun",
+    "runtime": "dev-infra-hermes",
+    "status": "PASS"
+  }
+}

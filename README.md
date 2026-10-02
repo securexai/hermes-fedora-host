@@ -13,6 +13,8 @@ in the source repository and are not part of this tree.
 | I want to… | Read |
 | --- | --- |
 | Run the current disposable Hermes lab | [`docs/HERMES_DISPOSABLE_LAB.md`](docs/HERMES_DISPOSABLE_LAB.md) |
+| Prepare the portable production profile (qualification open) | [`docs/HERMES_PRODUCTION_DEPLOYMENT.md`](docs/HERMES_PRODUCTION_DEPLOYMENT.md) |
+| Test temporary local encrypted backup and file restore | [`docs/HERMES_LOCAL_BACKUP_FIXTURE.md`](docs/HERMES_LOCAL_BACKUP_FIXTURE.md) |
 | Install Hermes on a Fedora host | [`docs/hermes-fedora-server-install-guide.html`](docs/hermes-fedora-server-install-guide.html) |
 | Understand the environment and retired Devbox commands | [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md) |
 | Run the reviewed manual profile (M01–M05) | [`scripts/hermes/manual/README.md`](scripts/hermes/manual/README.md), [`docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md`](docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md) |
@@ -33,6 +35,14 @@ The lab guide defines the commands and acceptance boundaries. The local
 `python3 scripts/hermes/lab.py` entrypoint adds named configuration profiles,
 prepared VM bases, and quick/VM/candidate test suites; mutating operations
 preview unless `--apply` is supplied.
+
+The separate [production bundle workflow](docs/HERMES_PRODUCTION_DEPLOYMENT.md)
+adds signed retained artifacts, encrypted-host preflight, a bounded SSH
+dispatcher, matching-state rollback and an unattended explicit-disk installation:
+the installer generates and escrows every secret, firstboot commissions the host,
+and `vm/hermes-production-qualify.py` qualifies a release in one disposable-VM run.
+Its [execution record](docs/plans/2026-09-27-hermes-production-bundle.md) tracks
+the remaining off-host restore, application and physical-target acceptance gates.
 
 Repository and Toolbox migrations are completed historical work. Their records
 remain available for provenance:

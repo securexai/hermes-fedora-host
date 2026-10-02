@@ -1,0 +1,71 @@
+{
+  "active_swap": false,
+  "before_boot_id": "01760717-a7ef-49a4-a424-c799e37921fb",
+  "boot_id": "4cea93af-9409-42b1-a5c2-ad4c8d8cfd60",
+  "checked_at_utc": "2026-09-28T20:28:02.935987+00:00",
+  "checks": {
+    "boot_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "1947d07c-1b67-4341-b196-65dbdce0fddc"
+    },
+    "cryptsetup_unit": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "LoadState=loaded\nActiveState=active\nSubState=exited"
+    },
+    "failed_units": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "hermes_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "eb129d35-1f52-4577-99e5-25daa322febc"
+    },
+    "kernel": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "7.2.7-200.fc44.x86_64"
+    },
+    "root_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "b69e7182-5b5c-4212-a024-968fec581441"
+    },
+    "secure_boot": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "SecureBoot enabled"
+    },
+    "selinux": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "Enforcing"
+    },
+    "system_state": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "running"
+    },
+    "var_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "15a5d3d9-8e39-4fb9-9631-323e7b038a65"
+    }
+  },
+  "failures": [],
+  "luks_options": [
+    "rd.luks.options=8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6=discard,key-slot=0,password-cache=no,headless=no"
+  ],
+  "operator_passphrase_success": "PENDING",
+  "operator_prompt_observation": "PENDING",
+  "recovery_boot": "IN_PROGRESS",
+  "remote_checks": "PASS",
+  "scope": "Read-only pinned SSH validation of the one-boot recovery option, new boot identity, storage and security/service health",
+  "server_checked_at_utc": "2026-09-28T20:28:31.081957+00:00",
+  "server_mutations": "NONE",
+  "status": "REMOTE_PASS_OPERATOR_PENDING",
+  "subsequent_automatic_boot": "NOT_RUN"
+}

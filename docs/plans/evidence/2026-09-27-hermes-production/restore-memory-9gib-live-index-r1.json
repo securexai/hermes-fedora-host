@@ -1,0 +1,19 @@
+{
+  "actual_memory_predicate": "PASS",
+  "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+  "current_memory_gib": 9,
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-live-result-r1.json": "7d8fe3763009c9a4d287460b3cbc32497b8562e74b7570562186d19990f51e01",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-public-audit-r1.json": "a0e1bd810088e933e188c8ef25d82c6ea7015986776c4b66984c750c21fb4840"
+  },
+  "full_application_preflight": "NOT_RUN",
+  "local_input_sha256": {
+    ".toolbox/hermes-production-restore/memory-9gib-public-audit-r1.json": "a0e1bd810088e933e188c8ef25d82c6ea7015986776c4b66984c750c21fb4840",
+    ".toolbox/hermes-production-restore/memory-9gib-public-audit-r1.log": "06b20b024baeba1b899ab3e487fb395577bb88a7610e4e127c7d10dff9d7cbfe",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-applied-r1.xml": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+    ".toolbox/hermes-production-restore/prerequisites-r1/public-memory-9gib-audit-r1.py": "712bdcd1a317bd77ff1e41e08fed21e5f098ac630e47f0e807759e41c655a208"
+  },
+  "prior_memory_index_sha256": "9481515fa2e10ba93bc7388667e624af1f8a1e481fa454b3f35970dbc410fcc7",
+  "private_installer_log_inspection": "NOT_RUN",
+  "status": "ACTUAL_RAM_BOOT_PUBLIC_POSTCONDITIONS_PASS"
+}

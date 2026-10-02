@@ -1,0 +1,45 @@
+{
+  "checked_at_utc": "2026-09-29T20:40:58.481291+00:00",
+  "result": {
+    "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+    "processes": {
+      "4192": {
+        "status": "ABSENT"
+      },
+      "4280": {
+        "status": "ABSENT"
+      },
+      "4293": {
+        "status": "ABSENT"
+      }
+    },
+    "reports": {
+      "application-bootstrap-report.json": {
+        "fields": {
+          "bootstrap_sha256": "7d93bb6f2a13f00cc65afdf1d9e68d86e585fd91bccb07df12357374f2f5f60d",
+          "receiver": "bad84b56cd7d384e73ff60d3831f866ecff525f409e864699fd3989d8bf2c647",
+          "status": "PASS",
+          "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+        },
+        "file_sha256": "4da430b36ac94bb0c3c8810bbbf5e9b7a850ba95be9e069e35d7d402ffa71135",
+        "metadata": "ROOT_OWNED_REGULAR_SINGLE_LINK_NO_GROUP_OR_WORLD_WRITES"
+      },
+      "application-interruption-report-r1.json": {
+        "fields": {
+          "attempt": "96cbdc942a0442b8b3ff9912e498c3a6",
+          "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+          "candidate": "6b3e4e7f141a114e428b56f885c9b47b3231f4043aad93b4e66f3d1d3e916ed5",
+          "guard_signals": "NONE",
+          "interruption_helper_revision": "r2",
+          "journal_stage": "prepared",
+          "receiver": "bad84b56cd7d384e73ff60d3831f866ecff525f409e864699fd3989d8bf2c647",
+          "status": "INTERRUPTED_SAFELY_JOURNAL_RETAINED",
+          "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+        },
+        "file_sha256": "69d918fc9044259f80988c3d6b8bc6c1f0020623b00e6e7ab436aceee8cb98e5",
+        "metadata": "ROOT_OWNED_REGULAR_SINGLE_LINK_NO_GROUP_OR_WORLD_WRITES"
+      }
+    }
+  },
+  "scope": "Pinned synthetic qualification guest, fixed public receipts and three known process metadata only; no sudo, signals or lifecycle change"
+}

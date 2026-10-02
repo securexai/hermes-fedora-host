@@ -1,0 +1,39 @@
+1 file reformatted, 2 files left unchanged
+All checks passed!
+...................................................FF.....
+======================================================================
+FAIL: test_dispatcher_sigkill_keeps_receiver_and_detached_writer_serialized (tests.test_hermes_production.ProductionTransactionTests.test_dispatcher_sigkill_keeps_receiver_and_detached_writer_serialized) (detached=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 1480, in test_dispatcher_sigkill_keeps_receiver_and_detached_writer_serialized
+    wait_for(lambda: (root / "writer-pid").exists())
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 1471, in wait_for
+    self.assertLess(
+    ~~~~~~~~~~~~~~~^
+        time.monotonic(), deadline, "subprocess handshake timed out"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: 8758.208344892 not less than 8758.203718157 : subprocess handshake timed out
+
+======================================================================
+FAIL: test_dispatcher_sigkill_keeps_receiver_and_detached_writer_serialized (tests.test_hermes_production.ProductionTransactionTests.test_dispatcher_sigkill_keeps_receiver_and_detached_writer_serialized) (detached=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 1480, in test_dispatcher_sigkill_keeps_receiver_and_detached_writer_serialized
+    wait_for(lambda: (root / "writer-pid").exists())
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 1471, in wait_for
+    self.assertLess(
+    ~~~~~~~~~~~~~~~^
+        time.monotonic(), deadline, "subprocess handshake timed out"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: 8768.209863796 not less than 8768.209700255 : subprocess handshake timed out
+
+----------------------------------------------------------------------
+Ran 57 tests in 22.686s
+
+FAILED (failures=2)

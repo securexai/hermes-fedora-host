@@ -1,0 +1,22 @@
+{
+  "account_status_before_private_setup": "LOCKED",
+  "authentication": "NOT_RUN",
+  "boot_identity": "RESCUE_NOT_INSTALLED_RUNTIME",
+  "checked_at_utc": "2026-09-29T01:26:51.307918+00:00",
+  "disk_formatting": "NOT_RUN",
+  "fingerprint": "SHA256:lcfXGGLMwN88u+qwkBdjmJKagPoyMkpn7cJSOxWLUKQ",
+  "installed_version": "Fedora Server 44",
+  "known_hosts_sha256": "0cbbb7e0813e05e70f8e8ad4f0a6c7976eed8cacf179acfa3e1670e9f2642495",
+  "logical_volumes": [
+    "hermes_system/root",
+    "hermes_system/var",
+    "hermes_system/hermes"
+  ],
+  "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "password_setup": "PRIVATE_OPERATOR_STEP_PENDING",
+  "root_filesystem_uuid": "5e9daa7d-624a-4248-b394-e90f0493ee77",
+  "root_mount": "VERIFIED_READ_ONLY_THEN_PREPARED_READ_WRITE",
+  "scope": "Independent installed-OS SSH identity verification through known VM rescue console",
+  "status": "PASS",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

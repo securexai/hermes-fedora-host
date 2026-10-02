@@ -1,0 +1,22 @@
+{
+  "checked_at_utc": "2026-09-28T14:12:34.146583+00:00",
+  "enrollment_help": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "     --unlock-tpm2-device=PATH\n     --tpm2-device=PATH|auto|list\n     --tpm2-device-key=PATH\n     --tpm2-pcrs=PCR1+PCR2+PCR3+\u2026\n     --tpm2-with-pin=BOOL"
+  },
+  "estimated_server_offset_seconds": 27.31,
+  "time_sync": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "Timezone=America/Bogota\nNTP=yes\nNTPSynchronized=yes\n"
+  },
+  "unix_seconds": 1790604781.2979898,
+  "workstation_end_unix": 1790604754.1465511,
+  "workstation_start_unix": 1790604753.8289416,
+  "workstation_time_sync": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "Timezone=America/Bogota\nNTP=no\nNTPSynchronized=no\n"
+  }
+}

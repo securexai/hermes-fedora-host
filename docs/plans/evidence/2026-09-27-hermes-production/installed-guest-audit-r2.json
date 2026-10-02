@@ -1,0 +1,91 @@
+{
+  "active_swap": {
+    "exit_code": 0,
+    "stdout": ""
+  },
+  "administrator_identity": {
+    "gid": 1000,
+    "home": "/home/hermesadmin",
+    "name": "hermesadmin",
+    "paths_and_selinux": "PASS",
+    "public_key": "MATCH",
+    "shell": "/bin/bash",
+    "uid": 1000,
+    "wheel": true
+  },
+  "administrator_password_changed": false,
+  "administrator_password_status": "P",
+  "boot_id": "00442d11-6441-42ce-8594-3dab8700c1c5",
+  "checked_at_utc": "2026-09-29T02:08:16.552940+00:00",
+  "default_kernel": {
+    "exit_code": 0,
+    "stdout": "/boot/vmlinuz-6.19.10-300.fc44.x86_64"
+  },
+  "failed_units": {
+    "exit_code": 0,
+    "stdout": "* mcelog.service loaded failed failed Machine Check Exception Logging Daemon"
+  },
+  "kernel": "6.19.10-300.fc44.x86_64",
+  "logical_volumes": {
+    "exit_code": 0,
+    "stdout": "{\n      \"report\": [\n          {\n              \"lv\": [\n                  {\"lv_name\":\"hermes\", \"vg_name\":\"hermes_system\", \"lv_size\":\"64424509440\", \"segtype\":\"linear\"},\n                  {\"lv_name\":\"root\", \"vg_name\":\"hermes_system\", \"lv_size\":\"32212254720\", \"segtype\":\"linear\"},\n                  {\"lv_name\":\"var\", \"vg_name\":\"hermes_system\", \"lv_size\":\"85899345920\", \"segtype\":\"linear\"}\n              ]\n          }\n      ]\n      ,\n      \"log\": [\n      ]\n  }"
+  },
+  "luks_keyslots": [
+    "0"
+  ],
+  "luks_token_types": [],
+  "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "machine_id": "ac93d8fa31b5450a9386d2cae12019b7",
+  "mounts": {
+    "/": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/\",\n         \"source\": \"/dev/mapper/hermes_system-root\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"5e9daa7d-624a-4248-b394-e90f0493ee77\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    },
+    "/boot": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/boot\",\n         \"source\": \"/dev/vda2\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"88f3f314-dd2c-47a6-8f82-35f768220573\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    },
+    "/boot/efi": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/boot/efi\",\n         \"source\": \"/dev/vda1\",\n         \"fstype\": \"vfat\",\n         \"uuid\": \"780E-8333\",\n         \"options\": \"rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=ascii,shortname=winnt,errors=remount-ro\"\n      }\n   ]\n}"
+    },
+    "/home/hermes": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/home/hermes\",\n         \"source\": \"/dev/mapper/hermes_system-hermes\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"c1d72dcd-df77-4a2d-a9d0-cc700e5b03a9\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    },
+    "/var": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/var\",\n         \"source\": \"/dev/mapper/hermes_system-var\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"6b81f85e-a80c-4913-a4b0-7439d0e3ed38\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    }
+  },
+  "packages": {
+    "exit_code": 0,
+    "stdout": "podman-5.8.1-1.fc44.x86_64\ncontainer-selinux-2.247.0-1.fc44.noarch\npasst-0^20260120.g386b5f5-1.fc44.x86_64\nopenssh-clients-10.2p1-7.fc44.x86_64\nopenssh-server-10.2p1-7.fc44.x86_64\npolicycoreutils-3.10-1.fc44.x86_64\nshadow-utils-4.19.0-6.fc44.x86_64\nsudo-1.9.17-7.p2.fc44.x86_64\nrestic-0.18.1-3.fc44.x86_64\ncryptsetup-2.8.4-1.fc44.x86_64\nmokutil-0.7.2-3.fc44.x86_64\ntpm2-tools-5.7-5.fc44.x86_64\ntpm2-tss-4.1.3-9.fc44.x86_64\ndracut-108-6.fc44.x86_64\nsystemd-259.5-1.fc44.x86_64\ntar-1.35-8.fc44.x86_64\nutil-linux-2.41.3-12.fc44.x86_64\nlvm2-2.03.38-2.fc44.x86_64"
+  },
+  "private_installer_log_inspection": "NOT_RUN",
+  "production_deployment": "NOT_RUN",
+  "public_ssh_host_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINsY3nLuUP1bfbaNPJ2LT3yMcYvRJV4Z6hIHDwtD6anP",
+  "reserved_operator": "ORIGINAL_IDENTITY_LOCKED",
+  "retained_kickstart_paths": {
+    "/root/anaconda-ks.cfg": false,
+    "/root/original-ks.cfg": false,
+    "/var/log/anaconda/anaconda-ks.cfg": false,
+    "/var/log/anaconda/original-ks.cfg": false
+  },
+  "scope": "Read-only installed qualification VM commissioning facts",
+  "secure_boot": {
+    "exit_code": 0,
+    "stdout": "SecureBoot enabled"
+  },
+  "selinux": {
+    "exit_code": 0,
+    "stdout": "Enforcing"
+  },
+  "status": "OBSERVED",
+  "system_state": {
+    "exit_code": 1,
+    "stdout": "degraded"
+  },
+  "tpm_enrollment": "NOT_RUN",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

@@ -1,0 +1,101 @@
+{
+  "G03_G04_G05_G06": "OPEN",
+  "application_restore": "NOT_RUN",
+  "checked_at_utc": "2026-09-30T16:14:12.265169+00:00",
+  "cleanup": {
+    "before_boot_id": "11065a57-afa3-491c-870a-aa3419b5a449",
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "luks_metadata": "UNCHANGED",
+    "normal_default": "PRESERVED",
+    "operator_passphrase_observation": "REQUIRED_SEPARATE_EVIDENCE",
+    "retained_entry_sha256": "cd2afa80376e2f887f07b5c805789d1c7eab6030efae48ac8864b93628b32b31",
+    "script_sha256": "741b37c6a31d25a947aa5646869668863ba1c82639b20964d39e7d55481ed005",
+    "ssh_exit": 255,
+    "status": "READY_FOR_NORMAL_REBOOT",
+    "subsequent_automatic_boot": "NOT_RUN",
+    "temporary_entry": "REMOVED",
+    "timestamp_utc": "2026-09-30T16:13:37.127601+00:00",
+    "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+  },
+  "console_attachment_by_agent": "NONE",
+  "independent_recovery_boot": {
+    "boot_id": "11065a57-afa3-491c-870a-aa3419b5a449",
+    "checked_at_utc": "2026-09-30T16:13:12.009051+00:00",
+    "crypttab_sha256": "3de8ab9027d74fc406e773cd6bec5076f282504e6d0fcec3ea931e7955f98f17",
+    "initramfs_sha256": "004102cd24ab964530393e43100da12aac17effd33d6a1063962131c5503b1a9",
+    "luks_uuid": "3f6f7774-6672-40d9-afc7-d1bd03f9baa1",
+    "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+    "recovery_parameters_present": true,
+    "recovery_slot_preserved": true,
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "6.19.10-300.fc44.x86_64",
+    "ssh_exit": 0,
+    "status": "OBSERVED",
+    "system_state": "running",
+    "tpm_policy": "PCR7_SHA256_NO_PIN",
+    "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+  },
+  "next_action": "Prepare the restore-specific private synthetic application dispatcher using current identity and actual boot evidence; no application deployment in bootstrap",
+  "operator_report": {
+    "evidence_kind": "OPERATOR_REPORTED_PRIVATE_UNLOCK_AND_CONSOLE_DETACHMENT",
+    "message": "booted and detached",
+    "private_input_captured": "NONE"
+  },
+  "qualification_vm": "SHUT_OFF",
+  "readiness": {
+    "attempts": [
+      {
+        "ssh_exit": 255
+      },
+      {
+        "boot_id": "35b9ffc1-26b6-474c-a23e-68983f95bfbb",
+        "system_state": "running"
+      }
+    ],
+    "before_boot_id": "11065a57-afa3-491c-870a-aa3419b5a449",
+    "console_or_secret_input": "NONE_BY_AGENT",
+    "elapsed_seconds": 6.265,
+    "ready": {
+      "boot_id": "35b9ffc1-26b6-474c-a23e-68983f95bfbb",
+      "system_state": "running"
+    },
+    "stage": "after-recovery-r1",
+    "status": "PUBLIC_NEW_BOOT_READY",
+    "workstation_observed_at_utc": "2026-09-30T16:13:25.398369+00:00"
+  },
+  "reenrollment": "NOT_RUN",
+  "scope": "Restore VM private passphrase recovery, exact temporary-entry cleanup and subsequent automatic boot; no application restore or TPM re-enrollment",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/boot-r1/after-recovery-r1-readiness.json": "11a53f41b64db3f0e5a57bce54acd016131e5bd7fca77ec0b779ad03d41171be",
+    ".toolbox/hermes-production-restore/boot-r1/check-ready.py": "dcd957af3e89751eb54457977a2242f2d2476740682358aee0f1fb7d724c26d6",
+    ".toolbox/hermes-production-restore/boot-r1/commission-boot.py": "22b534fd18815678be4722450e97da12d2566c0ffbd7887e19f50d461b227f31",
+    ".toolbox/hermes-production-restore/boot-r1/finish-recovery.py": "741b37c6a31d25a947aa5646869668863ba1c82639b20964d39e7d55481ed005",
+    ".toolbox/hermes-production-restore/boot-r1/observations/20260930T161239283665-facts.json": "ba8f45bc9bed1093942da4984d5fe79934fa6434529ac93e2e7edaeb2979d892",
+    ".toolbox/hermes-production-restore/boot-r1/observations/20260930T161304315214-finish-recovery.json": "d7b92e55735ac6e499de6ec795b9b3a576f5fe0f9bb432dac5d5281212a51e77",
+    ".toolbox/hermes-production-restore/boot-r1/observations/20260930T161325527651-facts.json": "cfb449b6dbaf9bb874c4e5c41bfd9c2cfee8353c9a9031c21d8df601060ecc70",
+    ".toolbox/hermes-production-restore/boot-r1/recovery-once.py": "a04b373b373c4dda6d0502b67997209062b3c905a43f12e5f9a239283f47f804",
+    ".toolbox/hermes-production-restore/boot-r1/run-boot-operation.py": "9d857305a54c88e841a7e960bbce667d54d6050af2218d7edc48fab687794ab3",
+    ".toolbox/hermes-production-restore/boot-r1/wait-for-boot-r1.py": "4edd0f93e571740046a7c4859b6f1483994f7c5d8f606a45ec781ed27a1b3e12",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-automatic-boot-live-r1.json": "929416e557bbc13fc64fd69caaf46ba676cd96a1dc8c402b8e1e6d545019f8d3",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-bootstrap-prepared-r1.json": "dbc9b8be230753f06d56f020bb31364a4bd03c2425a1d4ece827ce17ff47a70c",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-private-recovery-handoff-r1.json": "50586b30a26be1af30b80223c281c98a863a8a2bbfacbe5fb142891dbc120278"
+  },
+  "status": "PASS",
+  "subsequent_automatic_boot": {
+    "boot_id": "35b9ffc1-26b6-474c-a23e-68983f95bfbb",
+    "checked_at_utc": "2026-09-30T16:13:57.957236+00:00",
+    "crypttab_sha256": "3de8ab9027d74fc406e773cd6bec5076f282504e6d0fcec3ea931e7955f98f17",
+    "initramfs_sha256": "004102cd24ab964530393e43100da12aac17effd33d6a1063962131c5503b1a9",
+    "luks_uuid": "3f6f7774-6672-40d9-afc7-d1bd03f9baa1",
+    "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+    "recovery_parameters_present": false,
+    "recovery_slot_preserved": true,
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "6.19.10-300.fc44.x86_64",
+    "ssh_exit": 0,
+    "status": "OBSERVED",
+    "system_state": "running",
+    "tpm_policy": "PCR7_SHA256_NO_PIN",
+    "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+  }
+}

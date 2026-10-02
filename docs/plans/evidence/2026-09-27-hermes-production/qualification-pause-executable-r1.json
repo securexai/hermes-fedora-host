@@ -1,0 +1,22 @@
+{
+  "checked_at_utc": "2026-09-29T20:09:24.714827+00:00",
+  "result": {
+    "/usr/bin/catatonit": {
+      "present": false
+    },
+    "/usr/libexec/podman/catatonit": {
+      "mode": "0o755",
+      "owner_uid": 0,
+      "present": true,
+      "regular": true,
+      "resolved_path": "/usr/libexec/catatonit/catatonit",
+      "safe_parents": true,
+      "sha256": "73fddf8122b7a92630bcffccf92c9742f64e49b2f61b067a431bc6280d7f618a"
+    },
+    "package": {
+      "exit": 1,
+      "identity": null
+    }
+  },
+  "scope": "Read-only public installed executable resolution and bytes; no processes signalled"
+}

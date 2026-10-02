@@ -1,0 +1,141 @@
+import importlib.util
+import stat
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
+
+spec = importlib.util.spec_from_file_location("reboot", sys.argv.pop(1))
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+
+class RebootGuardTests(unittest.TestCase):
+    def test_preview_never_requests_reboot(self):
+        with patch.object(mod, "verify") as verify, patch.object(mod, "command") as command:
+            self.assertEqual(mod.main([]), 0)
+        verify.assert_not_called()
+        command.assert_not_called()
+
+    def test_failure_never_requests_reboot(self):
+        with (
+            patch.object(mod.os, "geteuid", return_value=0),
+            patch.object(mod.sys.stdin, "isatty", return_value=True),
+            patch.object(mod.sys.stdout, "isatty", return_value=True),
+        ):
+            with (
+                patch.object(mod, "verify", side_effect=RuntimeError("default-kernel-mismatch")),
+                patch.object(mod, "command") as command,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "default-kernel-mismatch"):
+                    mod.main(["--reboot"])
+                command.assert_not_called()
+
+    def test_verified_action_requests_only_reboot(self):
+        with (
+            patch.object(mod.os, "geteuid", return_value=0),
+            patch.object(mod.sys.stdin, "isatty", return_value=True),
+            patch.object(mod.sys.stdout, "isatty", return_value=True),
+        ):
+            with patch.object(mod, "verify") as verify, patch.object(mod, "command") as command:
+                self.assertEqual(mod.main(["--reboot"]), 0)
+                verify.assert_called_once_with()
+                command.assert_called_once_with(["systemctl", "reboot"])
+
+    def test_nonprivate_session_refused(self):
+        with (
+            patch.object(mod.os, "geteuid", return_value=0),
+            patch.object(mod.sys.stdin, "isatty", return_value=False),
+            patch.object(mod, "command") as command,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "private-root-terminal-required"):
+                mod.main(["--reboot"])
+            command.assert_not_called()
+
+    def test_duplicate_boot_entry_refused(self):
+        with self.assertRaisesRegex(RuntimeError, "ambiguous-default-entry"):
+            mod.boot_entry('kernel="/boot/a"\nkernel="/boot/b"')
+
+    def test_quoted_entry_preserved(self):
+        self.assertEqual(
+            mod.boot_entry('kernel="/boot/a"\ninitrd="/boot/b"\nargs="ro quiet"'),
+            {"kernel": "/boot/a", "initrd": "/boot/b", "args": "ro quiet"},
+        )
+
+    def test_success_with_stderr_refused(self):
+        result = mod.subprocess.CompletedProcess([], 0, "/boot", "Permission denied")
+        with patch.object(mod.subprocess, "run", return_value=result):
+            with self.assertRaisesRegex(RuntimeError, "command-refused:grubby"):
+                mod.command(["grubby", "--default-kernel"])
+
+    def test_actual_guards_reject_changed_boot_hash_and_selection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            image = Path(tmp) / "image"
+            image.write_bytes(b"synthetic verified image")
+            expected = mod.hashlib.sha256(image.read_bytes()).hexdigest()
+            commands = {
+                "findmnt": "b69e7182-5b5c-4212-a024-968fec581441",
+                "--default-kernel": "/boot/vmlinuz-" + mod.KERNEL,
+                "--info=DEFAULT": f'kernel="/boot/vmlinuz-{mod.KERNEL}"\ninitrd="{mod.IMAGE}"',
+                "grub2-editenv": "saved_entry=synthetic",
+                "systemctl": "running",
+                "mokutil": "SecureBoot enabled",
+                "getenforce": "Enforcing",
+            }
+            failures = [
+                ("boot-already-changed", "boot", "another-boot"),
+                ("verified-file-changed:image", "hash", "0" * 64),
+                ("default-kernel-mismatch", "--default-kernel", "/boot/other"),
+                (
+                    "default-entry-initramfs-mismatch",
+                    "--info=DEFAULT",
+                    f'kernel="/boot/vmlinuz-{mod.KERNEL}"\ninitrd="/boot/other"',
+                ),
+                ("one-shot-boot-selection-present", "grub2-editenv", "next_entry=other"),
+            ]
+            for error, field, value in failures + [(None, "unchanged", None)]:
+                with self.subTest(error=error):
+                    responses = dict(commands)
+                    responses[field] = value
+                    boot = value if field == "boot" else mod.BOOT_ID
+                    digest = value if field == "hash" else expected
+
+                    def text(path, *args, **kwargs):
+                        return (
+                            boot
+                            if str(path).endswith("boot_id")
+                            else "Filename Type Size Used Priority\n"
+                        )
+
+                    with (
+                        patch.object(
+                            mod.os, "uname", return_value=SimpleNamespace(release=mod.KERNEL)
+                        ),
+                        patch.object(mod.Path, "read_text", text),
+                        patch.object(
+                            mod.Path,
+                            "lstat",
+                            return_value=SimpleNamespace(
+                                st_mode=stat.S_IFREG | 0o600, st_uid=0, st_nlink=1
+                            ),
+                        ),
+                        patch.object(mod, "HASHES", {str(image): digest}),
+                        patch.object(
+                            mod,
+                            "command",
+                            side_effect=lambda args: responses[
+                                args[1] if args[0] == "grubby" else args[0]
+                            ],
+                        ),
+                    ):
+                        if error:
+                            with self.assertRaisesRegex(RuntimeError, error):
+                                mod.verify()
+                        else:
+                            mod.verify()
+
+
+if __name__ == "__main__":
+    unittest.main()

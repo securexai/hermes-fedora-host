@@ -1,0 +1,13 @@
+{
+  "checked_at_utc": "2026-09-29T20:42:22.125274+00:00",
+  "next_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/run-private-bootstrap.sh",
+  "replacement_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "result": {
+    "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+    "bootstrap_sha256": "31501c3893e12a4f308ed018ddc9959bb11f90b2c3fd329fdddd2265615712a0",
+    "metadata": "ADMINISTRATOR_OWNED_REGULAR_SINGLE_LINK_MODE0600",
+    "selected_receiver": "bad84b56cd7d384e73ff60d3831f866ecff525f409e864699fd3989d8bf2c647"
+  },
+  "scope": "Public staged helper byte/metadata check, unchanged old receiver and boot; root execution NOT_RUN",
+  "status": "PRIVATE_NAMESPACE_BOOTSTRAP_READY_AFTER_VALIDATED_INTERRUPTION"
+}

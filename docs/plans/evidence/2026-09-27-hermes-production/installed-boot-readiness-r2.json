@@ -1,0 +1,15 @@
+{
+  "checked_at_utc": "2026-09-28T22:44:40.007645+00:00",
+  "domain_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "state": "running",
+  "guest_agent_exit": 1,
+  "guest_agent": "error: Guest agent is not responding: QEMU guest agent is not connected",
+  "ssh": "UNAVAILABLE",
+  "console_attached": false,
+  "authentication_attempted": false,
+  "scope": "Third consecutive resumed goal-turn audit of pending private unlock and guest access",
+  "turn_classification": "VERIFIED_WAIT",
+  "goal_outcome": "INCOMPLETE",
+  "blocker": "Private LUKS unlock and usable guest access remain unverified",
+  "audit_execution": "NOT_RUN"
+}

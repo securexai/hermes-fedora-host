@@ -1,0 +1,23 @@
+{
+  "account_login": "NOT_YET_CONFIRMED",
+  "backup_restore_provider_telegram": "NOT_RUN",
+  "checked_at_utc": "2026-09-29T21:50:42.746914+00:00",
+  "memory_gib": 8,
+  "operator_report": {
+    "console": "ttyS0",
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "normal_login_prompt": "hermes-restore login:",
+    "os": "Fedora Linux 44 (Server Edition)"
+  },
+  "os_packages_encrypted_layout_log_hygiene": "NOT_YET_AUDITED",
+  "persistent_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "private_input": "NOT_COLLECTED",
+  "qualification_state": "shut off",
+  "restore_state": "running",
+  "scope": "Read-only libvirt facts and operator-supplied public console banner; no guest SSH connection or console capture",
+  "ssh_host_identity": "AWAITING_PUBLIC_KEY_FROM_PRIVATE_CONSOLE",
+  "status": "PASS_WITHIN_VM_IDENTITY_AND_OPERATOR_REPORTED_LOGIN_PROMPT_SCOPE",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53834682368
+}

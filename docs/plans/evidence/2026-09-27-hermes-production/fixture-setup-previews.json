@@ -1,0 +1,43 @@
+{
+  "scope": "read-only-preview; temporary nonoperational key; no VM, disk or operational credential created",
+  "roles": {
+    "qualification": {
+      "status": "PREVIEW",
+      "name": "hermes-production-qualification",
+      "role": "qualification",
+      "directory": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-fixture",
+      "ssh": {
+        "host": "127.0.0.1",
+        "port": 22224
+      },
+      "guest_definition": "fedora43",
+      "media_sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+      "boot": "UEFI Secure Boot with enrolled keys and TPM2 emulator",
+      "memory_mb": 8192,
+      "vcpus": 2,
+      "disk_virtual_mib": 181024,
+      "disk_to_erase": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+      "minimum_host_free_bytes": 21474836480,
+      "installation": "BLOCKED until private console supplies encryption and administrator secrets"
+    },
+    "restore": {
+      "status": "PREVIEW",
+      "name": "hermes-production-restore",
+      "role": "restore",
+      "directory": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore",
+      "ssh": {
+        "host": "127.0.0.1",
+        "port": 22225
+      },
+      "guest_definition": "fedora43",
+      "media_sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+      "boot": "UEFI Secure Boot with enrolled keys and TPM2 emulator",
+      "memory_mb": 8192,
+      "vcpus": 2,
+      "disk_virtual_mib": 181024,
+      "disk_to_erase": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+      "minimum_host_free_bytes": 21474836480,
+      "installation": "BLOCKED until private console supplies encryption and administrator secrets"
+    }
+  }
+}

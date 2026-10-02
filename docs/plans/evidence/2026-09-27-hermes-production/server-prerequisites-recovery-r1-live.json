@@ -1,0 +1,135 @@
+{
+  "generated_swap_units": [],
+  "persistent_override": {
+    "owner_uid": 0,
+    "symlink": true,
+    "target": "/dev/null"
+  },
+  "preview": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "{\"status\": \"PREVIEW\", \"target_home_uuid\": \"eb129d35-1f52-4577-99e5-25daa322febc\", \"changes\": [\"install missing Restic and required dependencies\", \"disable default zram0 swap persistently\"], \"active_swap_devices\": 0, \"zram_device\": {\"present\": false, \"initialized\": 0, \"size_bytes\": 0}, \"zram_units\": {\"dev-zram0.swap\": {\"LoadState\": \"not-found\", \"ActiveState\": \"inactive\"}, \"systemd-zram-setup@zram0.service\": {\"LoadState\": \"loaded\", \"ActiveState\": \"inactive\"}}, \"zramctl\": \"zramctl from util-linux 2.41.5\", \"root_report\": \"/var/lib/hermes-production-prerequisites/report.json\"}\n"
+  },
+  "report": {
+    "active_swap": false,
+    "production_deployment": "NOT_RUN",
+    "reboot": "NOT_RUN",
+    "recovery_proofs": "NOT_RUN",
+    "restic": "restic 0.19.1 compiled with go1.26.5-X:nodwarf5 on linux/amd64",
+    "root_inspection": {
+      "crypttab": [
+        {
+          "keyfile_bypass": false,
+          "tpm2_auto": false
+        }
+      ],
+      "initramfs_tpm_modules": {
+        "inspection_exit": 0,
+        "systemd-cryptsetup": true,
+        "tpm2-tss": false
+      },
+      "logical_volumes": {
+        "log": [],
+        "report": [
+          {
+            "lv": [
+              {
+                "lv_name": "hermes",
+                "lv_size": "85899345920",
+                "segtype": "linear",
+                "vg_name": "hermes_system"
+              },
+              {
+                "lv_name": "root",
+                "lv_size": "32212254720",
+                "segtype": "linear",
+                "vg_name": "hermes_system"
+              },
+              {
+                "lv_name": "var",
+                "lv_size": "64424509440",
+                "segtype": "linear",
+                "vg_name": "hermes_system"
+              }
+            ]
+          }
+        ]
+      },
+      "luks2": {
+        "keyslot_count": 1,
+        "tpm_tokens": []
+      },
+      "volume_group": {
+        "log": [],
+        "report": [
+          {
+            "vg": [
+              {
+                "vg_free": "326333628416",
+                "vg_name": "hermes_system",
+                "vg_size": "508869738496"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "scope": "Restic/zram prerequisites only",
+    "script_sha256": "8ae885cbe870e5795e8e4049cefb47ead1fbf74a4bffcbc5a66d283cc998a59f",
+    "stage": "complete",
+    "status": "PASS",
+    "timestamp_utc": "2026-09-28T13:22:47.719763+00:00",
+    "zram_persistent_override": true,
+    "zram_recovery": {
+      "after": {
+        "initialized": 0,
+        "present": false,
+        "size_bytes": 0
+      },
+      "before": {
+        "initialized": 1,
+        "present": true,
+        "size_bytes": 8589934592
+      },
+      "cleared_failed_units": [
+        "systemd-zram-setup@zram0.service"
+      ],
+      "explicit_device_reset": true,
+      "final_units": {
+        "dev-zram0.swap": {
+          "ActiveState": "inactive",
+          "LoadState": "not-found"
+        },
+        "systemd-zram-setup@zram0.service": {
+          "ActiveState": "inactive",
+          "LoadState": "loaded"
+        }
+      },
+      "initial_units": {
+        "dev-zram0.swap": {
+          "ActiveState": "inactive",
+          "LoadState": "loaded"
+        },
+        "systemd-zram-setup@zram0.service": {
+          "ActiveState": "failed",
+          "LoadState": "loaded"
+        }
+      }
+    }
+  },
+  "restic": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "restic 0.19.1 compiled with go1.26.5-X:nodwarf5 on linux/amd64\n"
+  },
+  "swap": "Filename\t\t\t\tType\t\tSize\t\tUsed\t\tPriority\n",
+  "timestamp_utc": "2026-09-28T13:23:30.296190+00:00",
+  "units": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "Id=dev-zram0.swap\nLoadState=not-found\nActiveState=inactive\nSubState=dead\nResult=success\n\nId=systemd-zram-setup@zram0.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nResult=success\n"
+  },
+  "verification_status": "PASS",
+  "zram_device_present": false,
+  "zram_sysfs_present": false
+}

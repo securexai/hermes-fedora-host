@@ -47,7 +47,7 @@ vm/lib-vm-common.sh	Only executable mode changed from source 100644 to destinati
 .markdownlint-cli2.yaml	Blanket `docs/HERMES_*.md` and VM-guide ignores replaced by exact preserved-record paths; fix disabled (check-only); one narrow MD038 override documented for a meaningful trailing space; the byte-bound September 23/24 lab plans are excluded by exact path.
 .pre-commit-config.yaml	Preserved-evidence exclude list made exact; shellcheck and pre-push comments corrected; maintained guides no longer blanket-excluded; branch guard restricted to pre-commit so authorized pushes after feature-branch merges can run.
 PROVENANCE.md	Migration record updated: staleness of the old extraction manifest corrected, the new manifest identified as authoritative, and the current toolbox checkout path corrected.
-README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step and current disposable lab linked; current status separates completed migrations, disposable-lab scope and retained controllers.
+README.md	Entrypoints and status corrected; the one-command controller is no longer called supported without the changed and unaccepted host/Toolbox integration caveat; provisioning step and current disposable lab linked; current status separates completed migrations, disposable-lab scope and retained controllers. Link the production qualification workflow and bounded temporary local backup fixture.
 docs/CONTRIBUTING.md	Scope corrected to the complete migrated tree; suite table, reviewed allowlist, integration runner and provisioning documented; feature branches now start from main; earlier organization record retained as historical consolidation evidence.
 docs/HERMES_MANUAL_PROFILE_CONTRACT.md	One MD013 over-length paragraph reflowed so the maintained contract lints check-only; content unchanged.
 docs/hook-parity.md	Ported-gate rows updated for the structural hook-wiring check and check-only Markdown linting; documented commit-only branch protection and Toolbox hook execution.
@@ -104,9 +104,12 @@ spec/vm/standards_spec.sh	Inspect canonical relocated implementations/guides and
 tests/check_ssh_key_only_docs.py	Inspect canonical relocated implementations/guides and include compatibility paths in coverage where applicable.
 
 # --- FAST LAB: named profiles, immutable prepared bases and candidate rehearsals ---
+# Production bundle development adds the Fedora44 Kickstart parser.
+pyproject.toml	Add locked pykickstart development dependency for Fedora44 production Kickstart syntax qualification.
+uv.lock	Record pykickstart and its transitive parser dependencies without changing existing developer tool pins.
 docs/HERMES_DISPOSABLE_LAB.md	Document profiles, prepared cache, test suites, exact artifacts, recovery and production boundaries.
-scripts/hermes/profile-deploy.py	Consume validated resolved profiles and retained image identities with effective runtime verification.
+scripts/hermes/profile-deploy.py	Consume validated resolved profiles and retained image identities with effective runtime verification; supervise production subprocess writers under the transaction lock through descendant exit.
 vm/hermes-disposable.py	Support owned named instances, pinned stock checksum, prepared backing images and early ownership markers.
 tests/hermes-synthetic-smoke.py	Exercise the profile-selected DeepSeek model with the existing offline mock boundaries.
-tests/offline_allowlist.txt	Approve the new synthetic lab profile, cache, identity and deployment regression classes.
+tests/offline_allowlist.txt	Approve the new synthetic lab profile, cache, identity, deployment and production regression classes, plus mocked production VM and temporary local backup fixture tests. Keep live lifecycle operations outside the offline set.
 scripts/hermes/manual/config/harden-config.py	Added read-only runtime verification of equivalent disabled empty-hook representations; strict writes and all other checks remain.

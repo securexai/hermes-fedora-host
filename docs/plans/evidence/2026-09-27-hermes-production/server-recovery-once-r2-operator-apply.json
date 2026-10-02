@@ -1,0 +1,42 @@
+{
+  "cleanup": "NOT_RUN",
+  "luks_prompt_observation": "PENDING",
+  "operator_connection_result": "Connection reset by peer; connection closed; broken pipe",
+  "operator_reboot_broadcast": "The system will reboot now!",
+  "passphrase_success_observation": "PENDING",
+  "postboot_identity_and_health": "NOT_RUN",
+  "postboot_ssh": {
+    "error": "ssh: connect to host 10.0.30.10 port 22: Connection timed out",
+    "exit": 255
+  },
+  "recorded_at_utc": "2026-09-28T21:02:30.884380+00:00",
+  "root_report": {
+    "before_boot_id": "4cea93af-9409-42b1-a5c2-ad4c8d8cfd60",
+    "grub_cfg_sha256": "de36bbf6b41024d7fe337a371e01e19949ba110b2e4960524adb23958f77ceb6",
+    "initramfs_sha256": "f8a7bfe4ce5c15cc1896cfdcc8f81405f3fd2c3377f6ea9b1ee9a8e150a0f44e",
+    "kernel": "7.2.7-200.fc44.x86_64",
+    "luks_metadata_sha256": "c9df696e798da101b12c6ba99726561af5d3e4896ca0469f21fba1c26c090b92",
+    "normal_default": "PRESERVED",
+    "normal_entry": "2e6a125765004b0ebfafbe4c0a05f609-7.2.7-200.fc44.x86_64",
+    "normal_entry_sha256": "99347e330a29f538c721708bb9fee2e8658fff80338b2d6a553482e7fdad46cb",
+    "recovery_boot": "NOT_RUN",
+    "recovery_entry": "2e6a125765004b0ebfafbe4c0a05f609-7.2.7-200.fc44.x86_64-hermes-recovery-r2",
+    "recovery_entry_sha256": "6d24b0c8912a33480406275f60dad32528095a6ae2a9c5c8effec23ed14c6012",
+    "recovery_slot": "NOT_CHANGED",
+    "scope": "Separate BLS entry and one-time GRUB selection for attended passphrase recovery",
+    "script_sha256": "8d6ccdaef18f5f0a5b59d55646a8fb69e2575a34ba49cf9129802fd1e3098740",
+    "status": "READY_TO_REBOOT",
+    "subsequent_automatic_boot": "NOT_RUN",
+    "temporary_parameters": [
+      "rd.luks.options=8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6=discard,key-slot=0,password-cache=no,headless=no",
+      "systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0",
+      "hermes.recovery=r2"
+    ],
+    "timestamp_utc": "2026-09-28T21:00:37.102993+00:00",
+    "token_enrollment": "NOT_CHANGED"
+  },
+  "root_report_source": "USER_SUPPLIED_NOT_YET_RETRIEVED_INDEPENDENTLY",
+  "scope": "Operator-supplied root preparation report and reboot broadcast; initial pinned SSH availability check",
+  "status": "REBOOT_REQUEST_REPORTED_POSTBOOT_PENDING",
+  "subsequent_automatic_boot": "NOT_RUN"
+}

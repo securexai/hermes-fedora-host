@@ -1,0 +1,42 @@
+{
+  "G03": "OPEN_QUALIFICATION_FIXTURE_HYGIENE_REMAINS",
+  "G04_G05_G06": "OPEN",
+  "checked_at_utc": "2026-09-30T14:50:40.009284+00:00",
+  "next_action": "Prepare and validate restore-specific encrypted header recovery copy before private TPM commissioning; retain independent qualification hygiene gate",
+  "public_observation": {
+    "checked_at_utc": "2026-09-30T14:50:00.925912+00:00",
+    "receipt": {
+      "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+      "checked_at_utc": "2026-09-30T14:48:46.244875+00:00",
+      "helper_sha256": "46df3a07be7e613de77adc1cef7559a8f50a0977a6d306d3983121f109aec31a",
+      "known_private_value_log_comparison": "PASS_NO_LITERAL_SERIALIZED_URL_BASE64_MATCH",
+      "log_bytes": 6980807,
+      "log_file_count": 12,
+      "log_set_sha256": "d5c3ed0b4dca53744e181b88e3ec5b02eb4724fc21457d05955b120780dac2ac",
+      "logs_copied_modified_deleted": "NONE",
+      "luks_uuid": "3f6f7774-6672-40d9-afc7-d1bd03f9baa1",
+      "private_operator_log_review": "CONFIRMED_ALL_FILES_NO_SECRETS",
+      "receipt_path": "/var/lib/hermes-production-restore-public/installer-hygiene-r1.json",
+      "recovery_passphrase_test": "PASS_READ_ONLY",
+      "saved_kickstart_paths": "ABSENT",
+      "scope": "Restore VM saved-Kickstart absence, known recovery-value comparisons and actual private operator review of all retained Anaconda logs",
+      "status": "PASS",
+      "tpm_enrollment_application_reboot_backup_provider_telegram": "NOT_RUN",
+      "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+    },
+    "scope": "Root-owned public receipt and pinned host/schema/boot/source binding; private review remains an operator attestation",
+    "status": "VALIDATED_PUBLIC_PRIVATE_REVIEW_RECEIPT"
+  },
+  "receipt_canonical_sha256": "9df1b37a0d42c4802372b43669bddd7f123719e44de39cb7b74ff4416bdb3232",
+  "scope": "Restore fixture only: private recovery-value comparison, saved-Kickstart absence and complete operator review of retained Anaconda logs; no raw logs collected by agent",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r5.py": "b2705c35a49994a70579d5a8aa80b5b4dea55c9cefd5873d9e960c1c49fa7679",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/completed-review-observation-r1.json": "4a4ac9d5677f3f2a70cd140ba68d55045828a21bf50d159215801c909cc5f63d",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/completed-review-observation-r1.log": "4a4ac9d5677f3f2a70cd140ba68d55045828a21bf50d159215801c909cc5f63d",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/host-guard.py": "4503f9a8aa4e2ad6d59a62bd6d24a388d213a9d01479a9c7ce9094e07a25d9c8",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-hygiene.py": "46df3a07be7e613de77adc1cef7559a8f50a0977a6d306d3983121f109aec31a",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/run-private-installer-hygiene.sh": "317011f19345a41430cf225e069f4ef448801f22282b0582b13e27c6992193b6",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-installer-findings-review-live-r2.json": "16ea068d6a6f558f15fdc166da30820a2567509300ded3a0321818a20125339e"
+  },
+  "status": "PASS_RESTORE_INSTALLER_SECRET_HYGIENE"
+}

@@ -1,0 +1,8 @@
+{
+  "checked_at_utc": "2026-09-29T21:08:36.939967+00:00",
+  "correction": "Resolve repository-relative evidence keys from repository root, basename keys from evidence directory; require every resolved path inside that evidence directory and verify all hashes",
+  "failure": "FileNotFoundError from prefixing an already repository-relative child evidence path with the evidence directory",
+  "previous_closure_attempt": "Ran before canonical closure update; retained as historical, final r2 refresh required",
+  "scope": "Read-only local evidence-index verification; no VM or application mutation",
+  "status": "LOCAL_INDEX_READER_FAILED_THEN_CORRECTED"
+}

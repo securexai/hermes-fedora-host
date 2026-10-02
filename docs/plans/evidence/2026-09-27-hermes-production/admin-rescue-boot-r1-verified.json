@@ -1,0 +1,14 @@
+{
+  "status": "RESCUE_STARTED_CONFIG_VERIFIED",
+  "checked_at_utc": "2026-09-29T01:11:17.268547+00:00",
+  "scope": "Same approved VM rescue boot; restore installer-changed libosinfo metadata",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "state": "running",
+  "metadata_restored_to": "http://fedoraproject.org/fedora/43",
+  "persistent_change": "ONLY_READONLY_DVD_SOURCE_ADDED",
+  "kernel_command_line": "inst.rescue inst.text inst.nosave=all console=ttyS0,115200n8 TERM=xterm-256color quiet systemd.show_status=no",
+  "disks_recreated": false,
+  "administrator_password_change": "NOT_RUN",
+  "private_unlock": "NOT_RUN",
+  "first_guard_failure": "RETAINED"
+}

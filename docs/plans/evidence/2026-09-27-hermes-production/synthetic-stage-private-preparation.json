@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "scope": "Dedicated synthetic-stage keys and non-secret installation inputs",
+  "checked_at_utc": "2026-09-28T21:29:25.139483+00:00",
+  "private_directory": "/var/home/aicloudopspecial/.local/share/hermes-production-qualification",
+  "keys": {
+    "signing": {
+      "state": "CREATED",
+      "public_fingerprint": "SHA256:+gKd3IZFZeTU4ksPsPrSCFn7Y+GYWqmfPwT9k/HHImE"
+    },
+    "qualification-commission": {
+      "state": "CREATED",
+      "public_fingerprint": "SHA256:JzhGuldy7SI0F2s3RFR9e1ZQg4IB6UyHLzwnN7QIg3M"
+    },
+    "qualification-deploy": {
+      "state": "CREATED",
+      "public_fingerprint": "SHA256:bzW76Z2Z6LIQhWWLCWsBX9hktfEUQr/gRnddYrCmHf0"
+    },
+    "restore-commission": {
+      "state": "CREATED",
+      "public_fingerprint": "SHA256:3B/VjvJQvDzaJdSL5ypK6f6P4S/lIZFDKhTA00N4OLw"
+    },
+    "restore-deploy": {
+      "state": "CREATED",
+      "public_fingerprint": "SHA256:V0GyCegpa96qMvJelfPbxZ2wwmAoyRmq6+4MZ5HrKs8"
+    }
+  },
+  "installation": {
+    "qualification": {
+      "settings_sha256": "fea7112cbe14e1d4891eac3c24368d62432b7e8556c2cf5881815ff2b7e648eb",
+      "kickstart_sha256": "5356273ae1f4cb71ec75806ecde1a1cba50faa6ea25dbd894a707daa51b269a9",
+      "disk_id": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+      "admin": "operator",
+      "contains_password": false
+    },
+    "restore": {
+      "settings_sha256": "f020954989c7db0b5c40a4ec9db161eaa7c8b78f3644408018155dde726c06ee",
+      "kickstart_sha256": "447592f5f4afd1a7b46e98207d53e1e53dd05183a52452a5ce721f481cf8ee18",
+      "disk_id": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+      "admin": "operator",
+      "contains_password": false
+    }
+  },
+  "vm_creation": "NOT_RUN"
+}

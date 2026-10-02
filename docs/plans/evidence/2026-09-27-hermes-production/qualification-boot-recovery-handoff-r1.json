@@ -1,0 +1,8 @@
+{
+  "status": "PAUSED_FOR_PRIVATE_RECOVERY",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "canary": "UNCHANGED",
+  "persistent_xml_sha256": "764cbd31772ef7c9680090eb45f4b6284b27b255c250d513515a89e4da7a329d",
+  "checked_at_utc": "2026-09-29T18:03:54.414324+00:00",
+  "recovery_boot": "NOT_RUN"
+}

@@ -1,0 +1,18 @@
+test_changed_attempt_and_any_application_mutation_refused (__main__.InterruptionGuards.test_changed_attempt_and_any_application_mutation_refused) ... ok
+test_changed_executable_and_alias_refused (__main__.InterruptionGuards.test_changed_executable_and_alias_refused) ... ok
+test_diagnostics_only_emit_named_booleans (__main__.InterruptionGuards.test_diagnostics_only_emit_named_booleans) ... ok
+test_exact_pause_tree (__main__.InterruptionGuards.test_exact_pause_tree) ... ok
+test_exact_prepared_attempt (__main__.InterruptionGuards.test_exact_prepared_attempt) ... ok
+test_foreign_receiver_and_guard_refused (__main__.InterruptionGuards.test_foreign_receiver_and_guard_refused) ... ok
+test_known_executable_digest_accepted (__main__.InterruptionGuards.test_known_executable_digest_accepted) ... ok
+test_nonprivate_invocation_refused_before_process_inspection_or_signals (__main__.InterruptionGuards.test_nonprivate_invocation_refused_before_process_inspection_or_signals) ... ok
+test_resolved_package_executable_required (__main__.InterruptionGuards.test_resolved_package_executable_required) ... ok
+test_root_file_symlink_refused (__main__.InterruptionGuards.test_root_file_symlink_refused) ... ok
+test_root_without_terminal_refused (__main__.InterruptionGuards.test_root_without_terminal_refused) ... ok
+test_writable_or_foreign_executable_ancestors_refused (__main__.InterruptionGuards.test_writable_or_foreign_executable_ancestors_refused) ... ok
+test_writing_or_foreign_pause_refused (__main__.InterruptionGuards.test_writing_or_foreign_pause_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.003s
+
+OK

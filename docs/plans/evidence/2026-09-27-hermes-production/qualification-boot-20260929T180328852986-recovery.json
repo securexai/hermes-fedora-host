@@ -1,0 +1,31 @@
+{
+  "operation": "recovery",
+  "result": {
+    "before_boot_id": "da9f1fef-bc7f-4283-9184-17ee9c6b8b5e",
+    "grub_cfg_sha256": "a4a671cbb41d974f828d62441ed47978950eb09cd8f6b39e22e895d18127d18f",
+    "initramfs_sha256": "2df447c5315532576332f46fa62922051ac4cdc12970d7279cc19e20055ef4ce",
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "luks_metadata_sha256": "118878a0ebb925ec954007b8b306687209f7c0db04209e6fb363b8c9ca188a8e",
+    "normal_default": "PRESERVED",
+    "normal_entry": "ac93d8fa31b5450a9386d2cae12019b7-6.19.10-300.fc44.x86_64",
+    "normal_entry_sha256": "7ae536acc578c9fe035083135189189b5126bfd8a467fadbe49a08dbda838653",
+    "recovery_boot": "NOT_RUN",
+    "recovery_entry": "ac93d8fa31b5450a9386d2cae12019b7-6.19.10-300.fc44.x86_64-hermes-recovery-r2",
+    "recovery_entry_sha256": "3529450194143424a286c5ccd397972d1edd127fda5fcaaf97444184e78ba399",
+    "recovery_slot": "NOT_CHANGED",
+    "scope": "Qualification VM separate one-time recovery entry and poweroff before private console attachment",
+    "script_sha256": "26a5b9366ac321c7f8e51bb0f6161eb29c7c45a51c7e2af6b5ef42b6bdc7ea78",
+    "ssh_exit": 255,
+    "status": "READY_FOR_PRIVATE_BOOT",
+    "subsequent_automatic_boot": "NOT_RUN",
+    "temporary_parameters": [
+      "rd.luks.options=bf1c622c-17c0-4d2b-9b51-82c345ad1de7=discard,key-slot=0,password-cache=no,headless=no",
+      "systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0",
+      "hermes.recovery=r2"
+    ],
+    "timestamp_utc": "2026-09-29T18:04:00.616377+00:00",
+    "token_enrollment": "NOT_CHANGED",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "workstation_observed_at_utc": "2026-09-29T18:03:28.852986+00:00"
+}

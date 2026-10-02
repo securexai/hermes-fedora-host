@@ -1,0 +1,77 @@
+E702 Multiple statements on one line (semicolon)
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py:15:25
+   |
+13 | assert identity['machine_id']=='ac93d8fa31b5450a9386d2cae12019b7'
+14 | key=(Path.home()/'.local/share/hermes-production-qualification/qualification-deploy.pub').read_text().split()
+15 | public=' '.join(key[:2]);assert key[0]=='ssh-ed25519'
+   |                         ^
+16 | config={'schema':1,'kind':'fixture','application_mode':'synthetic','machine_id':identity['machine_id'],
+17 | 'home_uuid':'c1d72dcd-df77-4a2d-a9d0-cc700e5b03a9','luks_uuid':'bf1c622c-17c0-4d2b-9b51-82c345ad1de7',
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py:22:41
+   |
+20 | 'deploy_public_key':public,'deploy_from':str(ipaddress.ip_network(identity['connection_source']+'/32'))}
+21 | proof_path=repo/'docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-live-r2.json'
+22 | proof=json.loads(proof_path.read_text());assert proof['status']=='PASS'
+   |                                         ^
+23 | def sha(data):
+24 |  return hashlib.sha256(data).hexdigest()
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py:32:40
+   |
+30 | payload={}
+31 | for name,wanted in json.loads((base/'receiver.json').read_text())['files'].items():
+32 |  data=(base/'source'/name).read_bytes();assert sha(data)==wanted
+   |                                        ^
+33 |  payload[name]={'sha256':wanted,'data':base64.b64encode(data).decode()}
+34 | s=(base/'bootstrap-template.py').read_text()
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py:38:74
+   |
+36 |  name='EXPECTED_BOOT' if marker=='BOOT' else marker
+37 |  pattern=rf'^{name} = .*  # BUILD_{marker}$'
+38 |  s,count=re.subn(pattern,lambda match:f'{name} = {value!r}',s,flags=re.M);assert count==1,marker
+   |                                                                          ^
+39 | p=base/'bootstrap.py';p.write_text(s);p.chmod(0o600)
+40 | (base/'host-config.json').write_text(json.dumps(config,indent=2)+'\n');(base/'host-config.json').chmod(0o600)
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py:39:22
+   |
+37 |  pattern=rf'^{name} = .*  # BUILD_{marker}$'
+38 |  s,count=re.subn(pattern,lambda match:f'{name} = {value!r}',s,flags=re.M);assert count==1,marker
+39 | p=base/'bootstrap.py';p.write_text(s);p.chmod(0o600)
+   |                      ^
+40 | (base/'host-config.json').write_text(json.dumps(config,indent=2)+'\n');(base/'host-config.json').chmod(0o600)
+41 | print(json.dumps({'bootstrap_sha256':sha(p.read_bytes()),'bytes':p.stat().st_size,'boot_proof_sha256':boot_sha,'application_mode':conf…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py:39:38
+   |
+37 |  pattern=rf'^{name} = .*  # BUILD_{marker}$'
+38 |  s,count=re.subn(pattern,lambda match:f'{name} = {value!r}',s,flags=re.M);assert count==1,marker
+39 | p=base/'bootstrap.py';p.write_text(s);p.chmod(0o600)
+   |                                      ^
+40 | (base/'host-config.json').write_text(json.dumps(config,indent=2)+'\n');(base/'host-config.json').chmod(0o600)
+41 | print(json.dumps({'bootstrap_sha256':sha(p.read_bytes()),'bytes':p.stat().st_size,'boot_proof_sha256':boot_sha,'application_mode':conf…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py:40:71
+   |
+38 |  s,count=re.subn(pattern,lambda match:f'{name} = {value!r}',s,flags=re.M);assert count==1,marker
+39 | p=base/'bootstrap.py';p.write_text(s);p.chmod(0o600)
+40 | (base/'host-config.json').write_text(json.dumps(config,indent=2)+'\n');(base/'host-config.json').chmod(0o600)
+   |                                                                       ^
+41 | print(json.dumps({'bootstrap_sha256':sha(p.read_bytes()),'bytes':p.stat().st_size,'boot_proof_sha256':boot_sha,'application_mode':conf…
+   |
+
+Found 8 errors (1 fixed, 7 remaining).

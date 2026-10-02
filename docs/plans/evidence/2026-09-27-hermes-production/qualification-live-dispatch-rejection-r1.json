@@ -1,0 +1,44 @@
+{
+  "candidate": "6b3e4e7f141a114e428b56f885c9b47b3231f4043aad93b4e66f3d1d3e916ed5",
+  "cases": {
+    "concurrent-operation-rejection": {
+      "busy_refusal_observed": true,
+      "ssh_exit": 1,
+      "status": "PASS"
+    },
+    "duplicate-field": {
+      "expected_refusal": "STOP: duplicate-json-field",
+      "ssh_exit": 1,
+      "status": "PASS"
+    },
+    "extra-field": {
+      "expected_refusal": "STOP: operation-not-permitted",
+      "ssh_exit": 1,
+      "status": "PASS"
+    },
+    "forced-command-shell-rejection": {
+      "shell_output": "ABSENT",
+      "ssh_exit": 0,
+      "status": "PASS"
+    },
+    "nonboolean-apply": {
+      "expected_refusal": "STOP: operation-not-permitted",
+      "ssh_exit": 1,
+      "status": "PASS"
+    },
+    "unknown-operation": {
+      "expected_refusal": "STOP: operation-not-permitted",
+      "ssh_exit": 1,
+      "status": "PASS"
+    },
+    "wrong-pinned-host-key": {
+      "host_key_rejected": true,
+      "ssh_exit": 255,
+      "status": "PASS"
+    }
+  },
+  "checked_at_utc": "2026-09-29T19:44:36.779511+00:00",
+  "receiver": "bad84b56cd7d384e73ff60d3831f866ecff525f409e864699fd3989d8bf2c647",
+  "scope": "Actual pinned SSH forced-command and malformed-request rejection on synthetic qualification VM; no invalid mutation requested",
+  "status": "PASS"
+}

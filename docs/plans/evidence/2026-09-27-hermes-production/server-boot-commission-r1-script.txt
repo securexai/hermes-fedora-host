@@ -1,0 +1,516 @@
+"""Guarded private-console TPM setup for one reviewed server; never reboots."""
+
+import argparse
+import datetime
+import fcntl
+import hashlib
+import json
+import os
+import re
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+LUKS_UUID = "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6"
+DEVICE = "/dev/disk/by-uuid/" + LUKS_UUID
+KERNEL = "6.19.10-300.fc44.x86_64"
+UUIDS = {
+    "/": "b69e7182-5b5c-4212-a024-968fec581441",
+    "/var": "15a5d3d9-8e39-4fb9-9631-323e7b038a65",
+    "/home/hermes": "eb129d35-1f52-4577-99e5-25daa322febc",
+    "/boot": "1947d07c-1b67-4341-b196-65dbdce0fddc",
+}
+BASE = Path("/var/lib/hermes-production-boot")
+BACKUPS = BASE / "baseline"
+CT = Path("/etc/crypttab")
+DC = Path("/etc/dracut.conf.d/99-hermes-production-tpm.conf")
+DC_BYTES = b'add_dracutmodules+=" systemd-cryptsetup tpm2-tss "\n'
+IMAGE = Path("/boot/initramfs-" + KERNEL + ".img")
+RECOVERY = Path("/var/lib/hermes-production-recovery/header-before-tpm-6446c3506a759740")
+CIPHER_SHA = "4d97171dce96796aa757e64342810a94880917fd40a34f6530ba908c2005478c"
+REQUIRED_MODULES = {"systemd-cryptsetup", "tpm2-tss"}
+
+
+def require(value, reason):
+    if not value:
+        raise RuntimeError(reason)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def sha(path):
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def command(args, *, interactive=False, timeout=120):
+    if interactive:
+        require(sys.stdin.isatty() and sys.stdout.isatty(), "private-interactive-terminal-required")
+    result = subprocess.run(
+        args,
+        capture_output=not interactive,
+        timeout=timeout,
+        stdin=None if interactive else subprocess.DEVNULL,
+        env={
+            "PATH": "/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG": "C.UTF-8",
+            "TERM": os.environ.get("TERM", "xterm"),
+        },
+    )
+    require(result.returncode == 0, "command-failed:" + Path(args[0]).name)
+    return result.stdout or b""
+
+
+def secure(path, *, directory=False):
+    info = path.lstat()
+    require(
+        (stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode))
+        and info.st_uid == 0
+        and not info.st_mode & 0o022,
+        "unsafe-root-path",
+    )
+    if not directory:
+        require(info.st_nlink == 1, "unsafe-root-file-links")
+    return info
+
+
+def atomic(path, data, mode=0o600):
+    secure(path.parent, directory=True)
+    if path.exists() or path.is_symlink():
+        secure(path)
+    fd, name = tempfile.mkstemp(prefix=".hermes-", dir=path.parent)
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            os.fchmod(stream.fileno(), mode)
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(name, path)
+    finally:
+        Path(name).unlink(missing_ok=True)
+
+
+def save_json(path, value, mode=0o600):
+    atomic(path, (json.dumps(value, sort_keys=True, indent=2) + "\n").encode(), mode)
+
+
+def read_json(path):
+    secure(path)
+    return json.loads(path.read_bytes())
+
+
+def metadata():
+    return json.loads(command(["cryptsetup", "luksDump", "--dump-json-metadata", DEVICE]))
+
+
+def keyslot_identity(slot):
+    return digest(json.dumps(slot, sort_keys=True, separators=(",", ":")).encode())
+
+
+def check_tokens(data, recovery_slots, *, allow_absent=False):
+    slots = data.get("keyslots", {})
+    for key, expected in recovery_slots.items():
+        require(key in slots and keyslot_identity(slots[key]) == expected, "recovery-slot-changed")
+    tokens = list(data.get("tokens", {}).values())
+    if not tokens and allow_absent:
+        require(set(slots) == set(recovery_slots), "unexpected-unbound-keyslot")
+        return False
+    require(len(tokens) == 1, "unexpected-token-count")
+    token = tokens[0]
+    require(
+        token.get("type") == "systemd-tpm2"
+        and token.get("tpm2-pcrs") == [7]
+        and token.get("tpm2-pcr-bank") == "sha256"
+        and token.get("tpm2-pin", False) is False
+        and not token.get("tpm2-salt")
+        and not token.get("tpm2_pcrlock")
+        and not token.get("tpm2_pubkey_pcrs")
+        and not token.get("tpm2-public-key-pcrs"),
+        "unexpected-tpm-policy",
+    )
+    enrolled = set(token.get("keyslots", []))
+    require(
+        len(enrolled) == 1
+        and not enrolled & set(recovery_slots)
+        and set(slots) == set(recovery_slots) | enrolled,
+        "unexpected-tpm-keyslot-layout",
+    )
+    return True
+
+
+def crypttab_change(raw):
+    rows = raw.decode().splitlines(keepends=True)
+    matched = 0
+    for i, line in enumerate(rows):
+        content = line.split("#", 1)[0]
+        fields = list(re.finditer(r"\S+", content))
+        if len(fields) < 2 or fields[1].group() != "UUID=" + LUKS_UUID:
+            continue
+        matched += 1
+        require(
+            len(fields) == 4 and fields[2].group() in ("none", "-"),
+            "crypttab-layout-or-keyfile-conflict",
+        )
+        options = fields[3].group().split(",")
+        tpm = [option for option in options if option.startswith("tpm2-")]
+        require(tpm in ([], ["tpm2-device=auto"]), "crypttab-tpm-options-conflict")
+        if not tpm:
+            options = ([] if options == ["-"] else options) + ["tpm2-device=auto"]
+            rows[i] = line[: fields[3].start()] + ",".join(options) + line[fields[3].end() :]
+    require(matched == 1, "crypttab-target-row-count")
+    return "".join(rows).encode()
+
+
+def public_checks():
+    require(os.uname().release == KERNEL, "kernel-changed")
+    for mount, expected in UUIDS.items():
+        require(
+            command(["findmnt", "-n", "-o", "UUID", "--target", mount]).decode().strip()
+            == expected,
+            "wrong-target-filesystem",
+        )
+    require(b"SecureBoot enabled" in command(["mokutil", "--sb-state"]), "secure-boot-not-enabled")
+    require(Path("/dev/tpmrm0").exists(), "tpm-resource-manager-missing")
+    available = command(["dracut", "--list-modules"]).decode().split()
+    require(REQUIRED_MODULES <= set(available), "required-dracut-modules-unavailable")
+    for parent in [Path("/etc"), CT.parent, DC.parent, IMAGE.parent, Path("/var"), BASE.parent]:
+        secure(parent, directory=True)
+    secure(CT)
+    secure(IMAGE)
+    # Refuse automatic policy discovery that would extend this reviewed PCR7-only policy.
+    for prefix in ["/etc/systemd", "/run/systemd", "/usr/lib/systemd"]:
+        for name in ["tpm2-pcr-public-key.pem", "tpm2-pcr-signature.json"]:
+            path = Path(prefix) / name
+            require(
+                not path.exists() and not path.is_symlink(), "additional-tpm-policy-needs-review"
+            )
+
+
+def pcr_identity():
+    return digest(command(["tpm2_pcrread", "sha256:7"]))
+
+
+def check_image(path):
+    modules = set(command(["lsinitrd", "-m", str(path)]).decode().split())
+    require(REQUIRED_MODULES <= modules, "initramfs-tpm-modules-missing")
+    embedded = command(["lsinitrd", "-f", "etc/crypttab", str(path)])
+    require(crypttab_change(embedded) == embedded, "initramfs-crypttab-mismatch")
+
+
+def make_baseline(data):
+    require(
+        not data.get("tokens") and len(data.get("keyslots", {})) == 1,
+        "unexpected-initial-luks-state",
+    )
+    require(not DC.exists() and not DC.is_symlink(), "existing-dracut-config-needs-review")
+    original = CT.read_bytes()
+    desired = crypttab_change(original)
+    require(desired != original, "initial-crypttab-already-tpm")
+    require(
+        shutil.disk_usage(IMAGE.parent).free >= IMAGE.stat().st_size * 2 + 256 * 1024**2,
+        "insufficient-boot-space",
+    )
+    require(
+        shutil.disk_usage(BASE).free >= IMAGE.stat().st_size * 2 + 256 * 1024**2,
+        "insufficient-recovery-space",
+    )
+    stage = Path(tempfile.mkdtemp(prefix=".baseline-", dir=BASE))
+    try:
+        shutil.copy2(CT, stage / "crypttab.before")
+        shutil.copy2(IMAGE, stage / "initramfs.before")
+        baseline = {
+            "luks_uuid": LUKS_UUID,
+            "kernel": KERNEL,
+            "recovery_slots": {
+                key: keyslot_identity(value) for key, value in data["keyslots"].items()
+            },
+            "crypttab_sha": digest(original),
+            "desired_crypttab_sha": digest(desired),
+            "image_sha": sha(IMAGE),
+            "image_mode": stat.S_IMODE(IMAGE.stat().st_mode),
+            "crypttab_mode": stat.S_IMODE(CT.stat().st_mode),
+            "pcr7_sha": pcr_identity(),
+        }
+        save_json(stage / "baseline.json", baseline)
+        os.rename(stage, BACKUPS)
+        return baseline
+    finally:
+        if stage.exists():
+            shutil.rmtree(stage)
+
+
+def baseline_checks(baseline):
+    require(
+        baseline["luks_uuid"] == LUKS_UUID and baseline["kernel"] == KERNEL,
+        "baseline-target-mismatch",
+    )
+    require(
+        stat.S_IMODE(secure(BACKUPS, directory=True).st_mode) == 0o700,
+        "unsafe-baseline-directory-mode",
+    )
+    for name in ["crypttab.before", "initramfs.before"]:
+        secure(BACKUPS / name)
+    require(
+        sha(BACKUPS / "crypttab.before") == baseline["crypttab_sha"]
+        and sha(BACKUPS / "initramfs.before") == baseline["image_sha"],
+        "recovery-copy-mismatch",
+    )
+    require(pcr_identity() == baseline["pcr7_sha"], "pcr7-changed-since-baseline")
+    require(
+        sha(CT) in (baseline["crypttab_sha"], baseline["desired_crypttab_sha"]),
+        "crypttab-changed-outside-operation",
+    )
+    if DC.exists() or DC.is_symlink():
+        secure(DC)
+        require(DC.read_bytes() == DC_BYTES, "dracut-config-conflict")
+    published = read_json(BASE / "build-state.json") if (BASE / "build-state.json").exists() else {}
+    require(
+        sha(IMAGE) in (baseline["image_sha"], published.get("image_sha")),
+        "initramfs-changed-outside-operation",
+    )
+    return published
+
+
+def restore_image(baseline):
+    if sha(IMAGE) == baseline["image_sha"]:
+        return
+    fd, name = tempfile.mkstemp(prefix=".hermes-restore-", suffix=".img", dir=IMAGE.parent)
+    os.close(fd)
+    try:
+        shutil.copyfile(BACKUPS / "initramfs.before", name)
+        os.chmod(name, baseline["image_mode"])
+        with open(name, "rb") as stream:
+            os.fsync(stream.fileno())
+        os.replace(name, IMAGE)
+        command(["restorecon", str(IMAGE)])
+    finally:
+        Path(name).unlink(missing_ok=True)
+
+
+def configure(baseline, published):
+    original = (BACKUPS / "crypttab.before").read_bytes()
+    desired = crypttab_change(original)
+    if (
+        CT.read_bytes() == desired
+        and DC.exists()
+        and DC.read_bytes() == DC_BYTES
+        and sha(IMAGE) == published.get("image_sha")
+    ):
+        command(["restorecon", str(CT), str(DC), str(IMAGE)])
+        check_image(IMAGE)
+        return "UNCHANGED"
+    candidate = None
+    try:
+        atomic(CT, desired, baseline["crypttab_mode"])
+        atomic(DC, DC_BYTES, 0o644)
+        command(["restorecon", str(CT), str(DC)])
+        fd, name = tempfile.mkstemp(prefix=".hermes-tpm-", suffix=".img", dir=IMAGE.parent)
+        os.close(fd)
+        candidate = Path(name)
+        print("Building a candidate initramfs; the current boot image is retained.", flush=True)
+        command(
+            [
+                "dracut",
+                "--force",
+                "--kver",
+                KERNEL,
+                "--add",
+                "systemd-cryptsetup tpm2-tss",
+                str(candidate),
+            ],
+            timeout=900,
+        )
+        secure(candidate)
+        check_image(candidate)
+        candidate.chmod(baseline["image_mode"])
+        with candidate.open("rb") as stream:
+            os.fsync(stream.fileno())
+        save_json(BASE / "build-state.json", {"image_sha": sha(candidate)})
+        os.replace(candidate, IMAGE)
+        command(["restorecon", str(IMAGE)])
+        check_image(IMAGE)
+        return "UPDATED"
+    except (Exception, KeyboardInterrupt) as error:
+        failures = []
+        for name, operation in [
+            ("crypttab", lambda: atomic(CT, original, baseline["crypttab_mode"])),
+            ("dracut", lambda: DC.unlink(missing_ok=True)),
+            ("image", lambda: restore_image(baseline)),
+            ("contexts", lambda: command(["restorecon", str(CT)])),
+        ]:
+            try:
+                operation()
+            except Exception:
+                failures.append(name)
+        if failures:
+            raise RuntimeError(
+                "setup-failed-and-rollback-incomplete:" + ",".join(failures)
+            ) from error
+        raise
+    finally:
+        if candidate is not None:
+            candidate.unlink(missing_ok=True)
+
+
+def apply():
+    require(os.geteuid() == 0, "private-sudo-step-required")
+    require(sys.stdin.isatty() and sys.stdout.isatty(), "private-interactive-terminal-required")
+    public_checks()
+    require(
+        command(["cryptsetup", "luksUUID", DEVICE]).decode().strip() == LUKS_UUID,
+        "luks-identity-mismatch",
+    )
+    report = read_json(RECOVERY / "report.json")
+    secure(RECOVERY / "header.cms")
+    require(
+        report["luks_uuid"] == LUKS_UUID
+        and report["ciphertext_sha256"] == CIPHER_SHA
+        and sha(RECOVERY / "header.cms") == CIPHER_SHA,
+        "verified-header-backup-mismatch",
+    )
+    if not BASE.exists() and not BASE.is_symlink():
+        BASE.mkdir(mode=0o755)
+        BASE.chmod(0o755)
+    secure(BASE, directory=True)
+    fd = os.open(BASE / ".lock", os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
+    with os.fdopen(fd, "w") as lock:
+        secure(BASE / ".lock")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        result = {
+            "status": "FAIL",
+            "scope": "TPM enrollment and current-kernel boot configuration",
+            "luks_uuid": LUKS_UUID,
+            "kernel": KERNEL,
+            "firmware_power_on": "OPERATOR_CONFIRMED",
+            "reboot": "NOT_RUN",
+            "cold_start": "NOT_RUN",
+            "recovery_boot": "NOT_RUN",
+        }
+        try:
+            before = metadata()
+            baseline = (
+                read_json(BACKUPS / "baseline.json") if BACKUPS.exists() else make_baseline(before)
+            )
+            published = baseline_checks(baseline)
+            enrolled = check_tokens(before, baseline["recovery_slots"], allow_absent=True)
+            slot = next(iter(baseline["recovery_slots"]))
+            test = [
+                "cryptsetup",
+                "open",
+                "--test-passphrase",
+                "--type",
+                "luks2",
+                "--disable-external-tokens",
+                "--key-slot",
+                slot,
+                "--tries",
+                "1",
+                DEVICE,
+            ]
+            print(
+                "Privately enter the existing LUKS recovery passphrase for verification.",
+                flush=True,
+            )
+            command(test, interactive=True, timeout=None)
+            result["passphrase_test_before"] = "PASS"
+            if not enrolled:
+                print("Privately enter that passphrase again for TPM enrollment.", flush=True)
+                command(
+                    [
+                        "systemd-cryptenroll",
+                        "--tpm2-device=auto",
+                        "--tpm2-pcrs=7:sha256",
+                        "--tpm2-with-pin=no",
+                        "--tpm2-pcrlock=",
+                        DEVICE,
+                    ],
+                    interactive=True,
+                    timeout=None,
+                )
+            check_tokens(metadata(), baseline["recovery_slots"])
+            result["tpm_enrollment"] = "UNCHANGED" if enrolled else "ADDED"
+            print("Verify that the original recovery passphrase still works.", flush=True)
+            command(test, interactive=True, timeout=None)
+            result["passphrase_test_after"] = "PASS"
+            result["configuration"] = configure(baseline, published)
+            check_tokens(metadata(), baseline["recovery_slots"])
+            require(pcr_identity() == baseline["pcr7_sha"], "pcr7-changed-during-setup")
+            result.update(
+                status="PASS",
+                recovery_slot_preserved=True,
+                crypttab_sha256=sha(CT),
+                initramfs_sha256=sha(IMAGE),
+                baseline_directory=str(BACKUPS),
+                pcr7_sha256=baseline["pcr7_sha"],
+            )
+        except (Exception, KeyboardInterrupt) as error:
+            result["error"] = (
+                str(error) if isinstance(error, RuntimeError) else type(error).__name__
+            )
+        result["script_sha256"] = sha(Path(__file__))
+        result["timestamp_utc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        save_json(
+            BASE
+            / (
+                "attempt-"
+                + datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%S%f")
+                + ".json"
+            ),
+            result,
+            0o644,
+        )
+        save_json(BASE / "report.json", result, 0o644)
+        print(json.dumps(result, sort_keys=True, indent=2))
+        return int(result["status"] != "PASS")
+
+
+def main():
+    os.umask(0o077)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--apply", action="store_true")
+    args = parser.parse_args()
+    if args.apply:
+        return apply()
+    public_checks()
+    print(
+        json.dumps(
+            {
+                "status": "PREVIEW",
+                "luks_uuid": LUKS_UUID,
+                "kernel": KERNEL,
+                "changes": [
+                    "private recovery-passphrase tests",
+                    "one PCR7/SHA256/no-PIN TPM token",
+                    "matching crypttab row and scoped dracut configuration",
+                    "validate then replace current-kernel initramfs",
+                ],
+                "reboot": "NOT_RUN",
+                "root_checks": "DEFERRED_TO_PRIVATE_APPLY",
+            },
+            indent=2,
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except (Exception, KeyboardInterrupt) as error:
+        print(
+            json.dumps(
+                {
+                    "status": "REFUSED",
+                    "error": str(error)
+                    if isinstance(error, RuntimeError)
+                    else type(error).__name__,
+                }
+            ),
+            file=sys.stderr,
+        )
+        sys.exit(1)

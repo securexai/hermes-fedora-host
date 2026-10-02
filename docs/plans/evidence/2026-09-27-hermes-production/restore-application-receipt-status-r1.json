@@ -1,0 +1,55 @@
+{
+  "checked_at_utc": "2026-09-30T16:22:43.402353+00:00",
+  "client_checks": {
+    "actual_named_preflight": "NOT_RUN",
+    "deploy_backup_and_apply_options": "REFUSED_BEFORE_SSH",
+    "missing_receipt": "REFUSED_BEFORE_DEPLOYMENT_KEY_CONNECTION",
+    "syntax": "PASS"
+  },
+  "current_turn": "PROGRESS_NAMED_INSPECTION_CLIENT_PREPARED_AND_MISSING_RECEIPT_REVALIDATED",
+  "independent_gate_limitations": {
+    "G03": "qualification private log hygiene needs its separately active VM and operator review",
+    "G04": "private fault setup and isolated application restoration remain required; unconfigured backup endpoint unused",
+    "G05": "TPM re-enrollment needs a reviewed private recovery/enrollment sequence",
+    "G06": "separate authorization and protected provider/Telegram inputs absent"
+  },
+  "named_client_result": {
+    "deployment_key_connection": "NOT_RUN",
+    "named_operation": "NOT_RUN",
+    "public_observation": {
+      "application_dispatcher": "NOT_VALIDATED",
+      "observed_at_utc": "2026-09-30T16:22:34.241901+00:00",
+      "status": "APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+    },
+    "status": "BLOCKED_APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+  },
+  "native_goal": "ACTIVE_OBSERVED_FRESH_RESUMED_AUDIT",
+  "next_agent_command": "python3 -I -B .toolbox/hermes-production-restore/application-r1/run-named-inspection.py preflight r4",
+  "next_operator_action": "Use the already staged application-r1/run-private-bootstrap.sh in the private terminal; sudo input cannot be automated or collected",
+  "observations": [
+    {
+      "application_dispatcher": "NOT_VALIDATED",
+      "observed_at_utc": "2026-09-30T16:20:40.330031+00:00",
+      "status": "APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+    },
+    {
+      "application_dispatcher": "NOT_VALIDATED",
+      "observed_at_utc": "2026-09-30T16:22:34.241901+00:00",
+      "status": "APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+    }
+  ],
+  "previous_turn": "PROGRESS_RECOVERY_SEQUENCE_AND_BOOTSTRAP_PREPARATION",
+  "resumed_blocked_audit_turn": 1,
+  "scope": "Fresh pinned public receipt checks and prepared read-only named inspection client; no guest root setup or application operation",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/application-r1/check-public-bootstrap.py": "5567262c27412e3bb4ed2bf3f35f6fccc5243a65645286a9a70fd31d510a43fe",
+    ".toolbox/hermes-production-restore/application-r1/named-preflight-r3.json": "a5ada44aa065542ff1e5c8bdac4b8cec06660cd196999e596675f5094c001501",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r2.json": "e5698313e97ad45990a1d8612e4bf196da871cf1a710485f33ef307712cbd175",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r2.log": "e5698313e97ad45990a1d8612e4bf196da871cf1a710485f33ef307712cbd175",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r3.json": "1eb59546380fa28d55bb0ab906962f4a452226f301e0ea67c77f6653eb8e36df",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r3.log": "1eb59546380fa28d55bb0ab906962f4a452226f301e0ea67c77f6653eb8e36df",
+    ".toolbox/hermes-production-restore/application-r1/run-named-inspection.py": "78b25b2004eeebd5d06b4f380130e712aa20bb1bbb62841d0a6435d51b8a1377",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-application-prepared-r1.json": "c273fa79589ffbc3ce44584817bb9c2cbd906445163d819e7e3a97e6f3ae7ffc"
+  },
+  "status": "BLOCKED_APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+}

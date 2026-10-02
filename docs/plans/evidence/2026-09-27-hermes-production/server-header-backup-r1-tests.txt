@@ -1,0 +1,211 @@
+"""Exercise backup transaction with synthetic metadata and actual CMS encryption."""
+
+import contextlib
+import importlib.util
+import io
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+source = Path(sys.argv.pop(1)).resolve()
+spec = importlib.util.spec_from_file_location("backup", source)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+KEY = source.parent / "recovery-private.pem"
+CERT = source.parent / "recovery-public.pem"
+
+
+class BackupTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        root = Path(self.temporary.name)
+        self.enterContext(patch.object(m, "BASE", root / "recovery"))
+        self.enterContext(patch.object(m, "ARTIFACT", m.BASE / "artifact"))
+        self.target = self.enterContext(patch.object(m, "target"))
+        self.enterContext(patch.object(m.os, "geteuid", return_value=0))
+        self.enterContext(
+            patch.object(
+                m.pwd, "getpwnam", return_value=type("Account", (), {"pw_gid": os.getgid()})()
+            )
+        )
+        self.enterContext(patch.object(m.os, "chown"))
+        self.enterContext(patch.object(m, "owned"))
+        self.real_run = m.run
+        self.calls = []
+        self.bad_backup_uuid = False
+        self.encryption_failure = False
+        self.payload = b"LUKS\xba\xbe\x00\x02" + b"SYNTHETIC-HEADER" * 200
+        self.enterContext(patch.object(m, "run", self.command))
+
+    def command(self, args):
+        self.calls.append(args)
+        if args[:2] == ["cryptsetup", "luksUUID"]:
+            return (
+                "wrong" if self.bad_backup_uuid and args[2] != m.DEVICE else m.LUKS_UUID
+            ).encode()
+        if args[:2] == ["cryptsetup", "luksHeaderBackup"]:
+            self.assertEqual(args[-1], m.DEVICE)
+            Path(args[3]).write_bytes(self.payload)
+            return b""
+        if args[:2] == ["cryptsetup", "luksDump"]:
+            return b'{"keyslots":{"0":{}},"tokens":{}}'
+        if args[:2] == ["openssl", "cms"]:
+            if self.encryption_failure:
+                raise RuntimeError("command-failed:openssl")
+            return self.real_run(args)
+        self.fail("Unexpected command")
+
+    def test_transaction_encrypts_and_removes_plaintext(self):
+        report = m.apply()
+        self.assertEqual(report["status"], "ENCRYPTED_ON_SERVER")
+        self.assertEqual(set(p.name for p in m.ARTIFACT.iterdir()), {"header.cms", "report.json"})
+        result = subprocess.run(
+            [
+                "openssl",
+                "cms",
+                "-decrypt",
+                "-binary",
+                "-inform",
+                "DER",
+                "-in",
+                str(m.ARTIFACT / "header.cms"),
+                "-recip",
+                str(CERT),
+                "-inkey",
+                str(KEY),
+            ],
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, self.payload)
+        self.assertFalse(list(m.BASE.glob(".attempt-*")))
+
+    def test_second_apply_preserves_artifact(self):
+        first = m.apply()
+        raw = (m.ARTIFACT / "header.cms").read_bytes()
+        self.calls.clear()
+        self.assertEqual(m.apply(), first)
+        self.assertEqual(raw, (m.ARTIFACT / "header.cms").read_bytes())
+        self.assertFalse(any(cmd[:2] == ["cryptsetup", "luksHeaderBackup"] for cmd in self.calls))
+
+    def test_corrupted_existing_artifact_is_not_overwritten(self):
+        m.apply()
+        (m.ARTIFACT / "header.cms").write_bytes(b"corrupted")
+        self.calls.clear()
+        with self.assertRaisesRegex(RuntimeError, "existing-recovery-artifact-mismatch"):
+            m.apply()
+        self.assertEqual((m.ARTIFACT / "header.cms").read_bytes(), b"corrupted")
+        self.assertFalse(any(cmd[:2] == ["cryptsetup", "luksHeaderBackup"] for cmd in self.calls))
+
+    def test_encryption_failure_cleans_plaintext_and_does_not_publish(self):
+        self.encryption_failure = True
+        with self.assertRaisesRegex(RuntimeError, "command-failed:openssl"):
+            m.apply()
+        self.assertFalse(m.ARTIFACT.exists())
+        self.assertEqual([p.name for p in m.BASE.iterdir()], [".lock"])
+
+    def test_header_uuid_mismatch_refused_and_cleaned(self):
+        self.bad_backup_uuid = True
+        with self.assertRaisesRegex(RuntimeError, "backup-uuid-mismatch"):
+            m.apply()
+        self.assertFalse(m.ARTIFACT.exists())
+        self.assertFalse(list(m.BASE.glob(".attempt-*")))
+
+    def test_wrong_target_refused_before_commands(self):
+        self.target.side_effect = RuntimeError("wrong-target-filesystem")
+        with self.assertRaisesRegex(RuntimeError, "wrong-target-filesystem"):
+            m.apply()
+        self.assertEqual(self.calls, [])
+        self.assertFalse(m.BASE.exists())
+
+    def test_nonroot_apply_refused_before_commands(self):
+        with patch.object(m.os, "geteuid", return_value=1000):
+            with self.assertRaisesRegex(RuntimeError, "private-sudo-step-required"):
+                m.apply()
+        self.assertEqual(self.calls, [])
+
+    def test_preview_does_not_create_backup(self):
+        with (
+            patch.object(sys, "argv", [str(source)]),
+            patch.object(m, "run", return_value=b"OpenSSL fixture"),
+            contextlib.redirect_stdout(io.StringIO()) as output,
+        ):
+            m.main()
+        self.assertEqual(json.loads(output.getvalue())["status"], "PREVIEW")
+        self.assertFalse(m.BASE.exists())
+
+    def client(self):
+        report = m.apply()
+        client_spec = importlib.util.spec_from_file_location(
+            "client", source.parent / "fetch-and-verify.py"
+        )
+        client = importlib.util.module_from_spec(client_spec)
+        client_spec.loader.exec_module(client)
+        base = Path(self.temporary.name) / "client"
+        base.mkdir(mode=0o700)
+        (base / "create-header-backup.py").write_bytes(source.read_bytes())
+        self.enterContext(patch.object(client, "BASE", base))
+        self.enterContext(patch.object(client, "KEY", KEY))
+        self.enterContext(patch.object(client, "CERT", CERT))
+        report["artifact_directory"] = (
+            "/var/lib/hermes-production-recovery/header-before-tpm-" + m.CERT_SHA[:16]
+        )
+        self.client_report = report
+        self.client_cipher = (m.ARTIFACT / "header.cms").read_bytes()
+        self.enterContext(
+            patch.object(
+                client,
+                "fetch",
+                side_effect=lambda path: (
+                    json.dumps(self.client_report).encode()
+                    if path.endswith("report.json")
+                    else self.client_cipher
+                ),
+            )
+        )
+        return client
+
+    def test_client_fetch_decrypt_verify_and_repeat(self):
+        client = self.client()
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            client.main()
+        self.assertEqual(json.loads(out.getvalue())["status"], "PASS")
+        first = (client.BASE / "backup/verification.json").read_bytes()
+        with contextlib.redirect_stdout(io.StringIO()):
+            client.main()
+        self.assertEqual((client.BASE / "backup/verification.json").read_bytes(), first)
+        self.assertEqual(
+            set(p.name for p in (client.BASE / "backup").iterdir()),
+            {"header.cms", "server-report.json", "verification.json"},
+        )
+
+    def test_client_rejects_transfer_corruption(self):
+        client = self.client()
+        self.client_cipher += b"corruption"
+        with self.assertRaisesRegex(RuntimeError, "encrypted-transfer-hash-mismatch"):
+            client.main()
+        self.assertFalse((client.BASE / "backup").exists())
+
+    def test_client_rejects_wrong_header_magic(self):
+        self.payload = b"NOT-A-LUKS-HEADER"
+        client = self.client()
+        with self.assertRaisesRegex(RuntimeError, "decrypted-header-mismatch"):
+            client.main()
+        self.assertFalse((client.BASE / "backup/verification.json").exists())
+
+    def test_client_rejects_wrong_source_identity(self):
+        client = self.client()
+        self.client_report["script_sha256"] = "0" * 64
+        with self.assertRaisesRegex(RuntimeError, "server-backup-identity-mismatch"):
+            client.main()
+        self.assertFalse((client.BASE / "backup").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()

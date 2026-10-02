@@ -1,0 +1,58 @@
+{
+  "application_runtime": "NOT_RUN",
+  "bootstrap_report_sha256": "4da430b36ac94bb0c3c8810bbbf5e9b7a850ba95be9e069e35d7d402ffa71135",
+  "bootstrap_sha256": "7d93bb6f2a13f00cc65afdf1d9e68d86e585fd91bccb07df12357374f2f5f60d",
+  "candidate": "6b3e4e7f141a114e428b56f885c9b47b3231f4043aad93b4e66f3d1d3e916ed5",
+  "checked_at_utc": "2026-09-29T19:42:31.299890+00:00",
+  "commissioning_matches_actual_preflight": true,
+  "current_application": null,
+  "installed_receiver": {
+    "descriptor": {
+      "files": {
+        "lab_profile.py": "25d559b59439944f26b579b36d573e9fb403128d586df325a4c94cac9d1d4832",
+        "production-launcher.py": "8f97c53b5831be995dfead260d678dda9a5e6359ef1ad3833e4aad7bc87f19c6",
+        "production/__init__.py": "933e4494220c9cb65088dece7d4e088a3f3ee8204a046cab78853ca00db21a64",
+        "production/bundle.py": "1655c23f60c6b3e5c00ce5de8d88ad03dffa7d4beb37c5d4d42a4d4d8cc1b92a",
+        "production/host.py": "0cb67af1d32695b33395698a1c6b850386ba0d3d42202310747afc5ec3ac31b0",
+        "production/kickstart.py": "09524976daa12ce26873b12eb54864828e4e1eea9827dd11c51de5d6cc14b3ad",
+        "production/operations.py": "41e867cd929ab350a255b9397f858729f42e4f37d21c77cd4251e47c24fdfc69",
+        "production/preflight.py": "642f5f66b13ed284c460fd8e215b1f3f95cb91d68bcff0326583c5247d256460",
+        "production/primitives.py": "1a098525e83f4e1787657b45866d26a0b4559891a3c9c47074ab24df4604d804",
+        "production/receivers.py": "3bdde599640f1fcbabe6149c669c3dbd39780d9191aee0825eb1aa34c7ea73ca",
+        "production/restore.py": "ce01e114dc650e01f7f4d17edb186074f196abe7b09de562450bdf4d9f110bcf",
+        "production/runtime.py": "ec7c79d8be28a7dc59f43a0b8d3b4ed8eaba5dd39ecdb2916a9eab41ad693b6a",
+        "production/startup.py": "81488c88fce98e3acd1901844334d629607311e1c63714f089ebd2db31b6b417",
+        "production/writer_guard.py": "c3026823730d10d86d45ecaa2a55c99cad7b35094d09e8a34cf5e78946b554e3",
+        "productionctl.py": "2bdd94a815cbbb667c931d4beba2010e0c0809ae1cd3a57364b09e775f8cf056"
+      },
+      "protocol": 1
+    },
+    "exact_file_set": true,
+    "files": {
+      "lab_profile.py": true,
+      "production-launcher.py": true,
+      "production/__init__.py": true,
+      "production/bundle.py": true,
+      "production/host.py": true,
+      "production/kickstart.py": true,
+      "production/operations.py": true,
+      "production/preflight.py": true,
+      "production/primitives.py": true,
+      "production/receivers.py": true,
+      "production/restore.py": true,
+      "production/runtime.py": true,
+      "production/startup.py": true,
+      "production/writer_guard.py": true,
+      "productionctl.py": true
+    },
+    "identity": "bad84b56cd7d384e73ff60d3831f866ecff525f409e864699fd3989d8bf2c647",
+    "identity_matches_descriptor": true
+  },
+  "isolated_restore": "NOT_RUN",
+  "production_acceptance": "OPEN",
+  "receipt_matches_exact_bootstrap": true,
+  "scope": "Public bootstrap receipt validation plus actual named preflight and installed receiver hash/ownership inspection; application not yet deployed",
+  "status": "PASS",
+  "transaction": null,
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

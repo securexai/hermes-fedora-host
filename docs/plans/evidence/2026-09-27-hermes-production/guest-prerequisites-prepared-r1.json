@@ -1,0 +1,23 @@
+{
+  "checked_at_utc": "2026-09-29T02:16:09.671276+00:00",
+  "files": {
+    "guest-prerequisites-r1.py": "151355478243507f961e33cbfc4ec71e73a34f53bec8ab62bf8f4dae7576d6c9",
+    "guest-prerequisites-tests-r1.log": "56e03afda220e7ba78bbcecf9a2e53a0149cfc3e311fa10bbd01b25e8e5ba671",
+    "run-guest-prerequisites-r1.sh": "629f7abfbe284a8a44c049abd55a47f05e00eef41b7895a8cb066ddacd1fc637"
+  },
+  "mcelog_failure": "AMD family 25 processor unsupported; observed in current unit journal",
+  "mcelog_unit_sha256": "78d3ea288eebc5583a1ad0ea169ba1f41b20b6db89508b1f501ad61c6d01b056",
+  "package_sources": "Fedora 44 fedora/updates, RPM signature checks required",
+  "podman_minimum": "5.8.4",
+  "podman_observed": "5.8.1",
+  "production_changes": "NOT_RUN",
+  "proposed_dropin": "[Unit]\nConditionVirtualization=!kvm\n",
+  "reboot": "NOT_RUN",
+  "remote_staging": "PUBLIC_SCRIPT_HASH_AND_0600_MODE_VERIFIED",
+  "scope": "Existing approved qualification VM package/service prerequisites",
+  "status": "PREPARED_ROOT_EXECUTION_NOT_RUN",
+  "sudo": "PRIVATE_PROMPT_REQUIRED",
+  "synthetic_guard_tests": 4,
+  "tpm_enrollment": "NOT_RUN",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

@@ -1,0 +1,25 @@
+{
+  "baseline_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "changed_fields": [
+    "images.worker",
+    "qualification.artifact_sha256"
+  ],
+  "checked_at_utc": "2026-09-29T20:51:08.398936+00:00",
+  "corrupt_signature_archive": ".toolbox/hermes-production-validation/synthetic-stage/candidate-corrupt-signature-r1.tar",
+  "corrupt_signature_archive_bytes": 10240,
+  "corrupt_signature_archive_sha256": "5f2ed35f05aab9abf18145fb5b0e76f1c1a0540c3ad7a8283d31b4aee4ead493",
+  "corrupt_signature_local_refusal": "command-failed:ssh-keygen",
+  "expected_actual_failure": "After stopped-state snapshot and OCI load, podman image-exists must reject the intentionally absent declared worker ID; transaction must restore current candidate",
+  "failed_import_archive": ".toolbox/hermes-production-validation/synthetic-stage/candidate-intentional-import-failure-r1.tar",
+  "failed_import_archive_bytes": 1148764160,
+  "failed_import_archive_sha256": "3fb331ed0b3ff5e4f9bf0f65d07105c5eb5f4728a1d5c4bb03ef35c12e683e3c",
+  "failed_import_candidate": "a7a12989e363152f6e92174659a06164a7396ac3333b6ab69c572a92b4042a4a",
+  "intentional_missing_worker_image": "sha256:4a1f286678773ec09246c7867ef72204719f234bffa61209da80d4fdc9f09821",
+  "production_rejection": "PASS",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "runtime_execution": "NOT_RUN",
+  "scope": "Synthetic-only negative fixtures derived from exact current candidate; no VM mutation or application failure claimed",
+  "status": "PREPARED_AND_AUTHENTICATED_TEST_FIXTURES",
+  "unchanged_payload_files": true,
+  "workstation_free_bytes": 61524602880
+}

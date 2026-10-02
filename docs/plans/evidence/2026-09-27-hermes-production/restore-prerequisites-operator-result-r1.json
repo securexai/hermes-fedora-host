@@ -1,0 +1,17 @@
+{
+  "receipt": {
+    "application_deployment": "NOT_RUN",
+    "checked_at_utc": "2026-09-29T23:21:25.145240+00:00",
+    "failed_units": [],
+    "mcelog": "SKIPPED_FOR_THIS_KVM_GUEST_WITH_UNSUPPORTED_CPU",
+    "podman_after": "5.8.7",
+    "podman_before": "5.8.1",
+    "production_changes": "NOT_RUN",
+    "reboot": "NOT_RUN",
+    "scope": "Restore VM Podman and unsupported mcelog prerequisites only",
+    "status": "PASS",
+    "tpm_enrollment": "NOT_RUN",
+    "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+  },
+  "source": "Operator-pasted non-secret terminal receipt; independently observed postconditions recorded separately"
+}

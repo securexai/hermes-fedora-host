@@ -1,0 +1,33 @@
+{
+  "status": "OBSERVED",
+  "scope": "Stopped approved VM disk metadata and unrelated-disk integrity only",
+  "gpt_checksums_valid": true,
+  "partitions": [
+    {
+      "number": 1,
+      "type_guid": "c12a7328-f81f-11d2-ba4b-00a0c93ec93b",
+      "first_lba": 2048,
+      "last_lba": 2099199,
+      "size_mib": 1024
+    },
+    {
+      "number": 2,
+      "type_guid": "0fc63daf-8483-4772-8e79-3d69d8477de4",
+      "first_lba": 2099200,
+      "last_lba": 6293503,
+      "size_mib": 2048
+    },
+    {
+      "number": 3,
+      "type_guid": "0fc63daf-8483-4772-8e79-3d69d8477de4",
+      "first_lba": 6293504,
+      "last_lba": 370735103,
+      "size_mib": 177950
+    }
+  ],
+  "canary_sha256": "500cd343f8cbc50890577081f32c32105c725ccf10786ef5084f0599af7c750b",
+  "encrypted_unlock": "NOT_RUN",
+  "installed_packages": "NOT_RUN",
+  "secret_hygiene": "NOT_RUN",
+  "menu_defect": "AWAITING_SPECIFIC_REPRODUCTION"
+}

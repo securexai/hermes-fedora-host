@@ -1,0 +1,10 @@
+{
+  "checked_at_utc": "2026-09-29T02:06:06.294497+00:00",
+  "status": "PAUSED_READY_FOR_PRIVATE_BOOT",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "persistent_xml": "ORIGINAL_NORMAL_BOOT_RESTORED",
+  "rescue_media": "EJECTED",
+  "unrelated_disk_sha256": "500cd343f8cbc50890577081f32c32105c725ccf10786ef5084f0599af7c750b",
+  "console_capture": "NONE",
+  "installed_runtime_audit": "NOT_RUN"
+}

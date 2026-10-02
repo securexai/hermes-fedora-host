@@ -1,0 +1,43 @@
+{
+  "archive_sha256": "d2f206c87e4adc6373969f2720dc68b3e9d2e67ecf3525d0e9eebb9026a1d074",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-30T00:11:14.614208+00:00",
+  "expected_live_method": "Validate future sole qualification VM/boot/current A and stable journal; privately run watcher; authenticated marker C upgrade; catch exact supervised tar writer; PID-handle STOP writer/KILL dispatcher; named rollback must report operation-busy while guard lives; finally resume writer; validate drainage; named deploy A recovers stopped journal to aborted and returns UNCHANGED; actual runtime and rerun/canary evidence required",
+  "failure_policy": "Refuse wrong/missed process or transaction; resume paused writer on ordinary interruption/error; preserve partial snapshots, original operation-lock inode, journal and guard; never kill guard, replace lock or clear journal; inspect incomplete prior watcher attempts privately",
+  "live_interruption_missing_mount_restore": "NOT_RUN",
+  "mandatory_G04": "BLOCKED_NOT_CLOSED_BY_LOCAL_TESTS",
+  "prior_current_candidate_handoff_sha256": "3f3c485eb7a0c51656509d0e17e6477cf45b5a7aa80a62f5663e636e88a5c35c",
+  "prior_marker_fixture_record_sha256": "39f265f5f11168adfd3acf42331a67a98b5438e8711cfa1c17fb16d501c92855",
+  "private_launcher_and_guest_staging": "NOT_PREPARED_REQUIRES_FRESH_QUALIFICATION_BOOT_AND_RESTORE_PRIVATE_PHASE_COMPLETION",
+  "qualification_baseline": ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/memory-9gib-applied-r1.xml",
+  "qualification_baseline_sha256": "442d12df7ae3d01136d092042d501472fc1aef2e18a796fa2ba395d1121d0031",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "restore_current_baseline": ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-applied-r1.xml",
+  "restore_current_baseline_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "scope": "Future current-candidate synthetic snapshot-writer interruption using one private sudo watcher and existing named operations; no new sudo grant",
+  "source_sha256": {
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r1/host-guard.py": "f3c90a0b53bf8afee874fbbe33f41c7c7ba3069dc85aeda2dc922075f3265a86",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r1/private-watcher.py": "ac47ede367d1af6a26e7f8f013886f0b2779317ca40ad5966916101b3a333936",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r1/protocol.md": "ad3ff286030f41d1f23bcf90f1b867a4a84aff5f976c42632b68dce1f730fcf4",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r1/test-private-watcher.py": "8aba94ac4d0a22da9777bc5d8db8bfd258a2ade78c4bde936ad08234cc58fc4b",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r1/validate-preparation-r1.py": "015c7c1e313b163b3264c87c20b1f022775c84fc3fcbe2580e44e9e60bd1ff58",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r1/validation-r1.json": "46215fa95dbc7ef282638a2d8d0e44ad8a9bd3e6303472477b33a25ae039da40",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r1/validation-r1.log": "e49fdd784b7df4163a648cd7766b8bdb1672661e027d55acced3f1e2cf3ad6a9"
+  },
+  "status": "PREPARED_AND_LOCALLY_VALIDATED_GUEST_STAGING_AND_LIVE_TEST_NOT_RUN",
+  "sudo_grants_provider_telegram_external_backup_reboot_physical_git_delegation": "NOT_RUN",
+  "upgrade_archive": ".toolbox/hermes-production-validation/synthetic-stage/candidate-synthetic-upgrade-marker-r1.tar",
+  "upgrade_archive_sha256": "9710dcb206492a62ad12d9781d6dff089ed21e82140ecb847fad3b1b0086be23",
+  "upgrade_candidate": "b158afd97686a96977d2eafa819f0d58adc7286d13f95b30ad9df9b77ad8cc40",
+  "validation": {
+    "checked_at_utc": "2026-09-30T00:09:30.528756+00:00",
+    "focused_toolbox_tests": 11,
+    "guest_staging_private_execution_application_operations": "NOT_RUN",
+    "host_guard_current_state": "EXIT_1_QUALIFICATION_NOT_RUNNING_BEFORE_GUEST_CONTACT",
+    "private_terminal_guard": "EXIT_1_BEFORE_PRIVILEGED_INSPECTION",
+    "real_process_check": "Current candidate writer guard retains real flock across fixture dispatcher SIGKILL and fixture writer SIGSTOP; writer resumes and completes; guard drains; no guard signal",
+    "root_vm_identity_and_snapshot_process_matching": "MOCKED_IN_TESTS",
+    "status": "PASS_LOCAL_PREPARATION_ONLY"
+  },
+  "workstation_free_bytes": 53699817472
+}

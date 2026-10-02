@@ -1,0 +1,66 @@
+{
+  "application_fault_recovery_lifecycle_external_backup_provider_telegram_physical_contact": "NOT_RUN",
+  "archive_sha256": {
+    ".toolbox/hermes-production-validation/synthetic-stage/candidate-namespace-init-r1.tar": "d2f206c87e4adc6373969f2720dc68b3e9d2e67ecf3525d0e9eebb9026a1d074",
+    ".toolbox/hermes-production-validation/synthetic-stage/candidate-synthetic-upgrade-marker-r1.tar": "9710dcb206492a62ad12d9781d6dff089ed21e82140ecb847fad3b1b0086be23"
+  },
+  "boot_id": "e70a19f2-8e56-4a14-918d-92f3990fe712",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-30T16:48:16.767494+00:00",
+  "host_guards": "PASS_CURRENT_9GIB_UUID_PIN_ONE_VM_RESERVE",
+  "limitation": "No available independent live gate can close without private commissioning, private review/recovery, or separately authorized protected inputs; do not switch VMs during the pending watcher handoff.",
+  "live_attempt_intent": "ABSENT",
+  "native_goal": {
+    "status": "blocked",
+    "updated_at": 1790786875
+  },
+  "next_agent_command_after_fresh_live_ready": "python3 -I -B /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/run-live-interruption.py --apply",
+  "next_operator_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/run-private-watcher.sh",
+  "observations": [
+    {
+      "kind": "ready",
+      "observed_at_utc": "2026-09-30T16:44:28.479644+00:00",
+      "path": ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/public-ready-r2.json",
+      "status": "WATCHER_RECEIPT_ABSENT",
+      "watcher_liveness": "NOT_INFERRED"
+    },
+    {
+      "kind": "ready",
+      "observed_at_utc": "2026-09-30T16:47:40.323540+00:00",
+      "path": ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/public-ready-r3.json",
+      "status": "WATCHER_RECEIPT_ABSENT",
+      "watcher_liveness": "NOT_INFERRED"
+    },
+    {
+      "kind": "ready",
+      "observed_at_utc": "2026-09-30T16:48:11.839239+00:00",
+      "path": ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/public-ready-r4.json",
+      "status": "WATCHER_RECEIPT_ABSENT",
+      "watcher_liveness": "NOT_INFERRED"
+    }
+  ],
+  "packaged_source_inputs_verified": 34,
+  "prepared_source_and_result_rows_verified": 25,
+  "previous_goal_turn": "NO_PROGRESS",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "remaining_gates": [
+    "G03 qualification private installer hygiene",
+    "G04 exact-candidate interruption/missing mount and isolated encrypted application backup/restore/startup",
+    "G05 TPM re-enrollment",
+    "G06 separately authorized exact-candidate provider/Telegram/approval tests"
+  ],
+  "same_blocker_consecutive_resumed_turns": 3,
+  "scope": "Three consecutive resumed private-input audits; public receipts only, no fault or named mutation",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/public-ready-r2.json": "65eba89ce5e321012518ff44a9c82d063adadf5d4a4207da8ad9ed513ee4d8dc",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/public-ready-r3.json": "1c51e414bb9ca42b5cdc2a444f78ded539fa076c3b4704c04827851b51532672",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/interruption-writer-r2/public-ready-r4.json": "91f4b7b8e972f22298aba5810fddb21bbc64ad91ea69af49eca3a52e921d42d2",
+    "docs/plans/evidence/2026-09-27-hermes-production/bundle-namespace-init-r1.json": "55c693eb097f1165d9f2190dfb4477ebb12a3057d098b06bc8ac196b155bc7a1",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-writer-staged-r2.json": "9da9766ed61990d9aad065220417952d643092ea2cd7b5c82b15d364fba2b255"
+  },
+  "status": "BLOCKED_PRIVATE_WATCHER_REQUIRED",
+  "upgrade_candidate": "b158afd97686a96977d2eafa819f0d58adc7286d13f95b30ad9df9b77ad8cc40",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "watcher_helper_sha256": "1a82079f170c022fb68255ccab7ce636a5bdf68874f304bfe9b69e48af40dfd0",
+  "watcher_liveness": "NOT_INFERRED_FROM_ABSENCE"
+}

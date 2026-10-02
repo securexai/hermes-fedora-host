@@ -1,0 +1,43 @@
+{
+  "actual_runtime_verify": "PASS",
+  "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T20:53:18.651745+00:00",
+  "conmon_identities_unchanged": true,
+  "dispatcher_rejections": 7,
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-corrupt-signature-r1.json": "ab2d93e4dd45080d98e2a171beb04cca115ea61c586028b5023c8b25e6a16c98",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-dispatch-rejection-r2.json": "f0e0ff9a9424be392eeee0e336c1d584f6644014bbd250b908544565a641bf46",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-corruption-verify-r1.json": "1cca245a64cfae6159f0d04ad2da4d65fc179ea2928d70c232788535d7b0c6b3",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-deploy-apply-r1.json": "13df84fb12760df6a4a14f8639d4c537193f20812b6a9d04eab9f733f57cf516",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-deploy-preview-r1.json": "f588fd2453b7aa050fffab9a9425bb7b0346d22f690d9dcd486fa2dd6f70cbd3",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-deploy-rerun-r1.json": "1ccdb33907183a9129672e183cac73c1d2ce83d28578f4066a4b9ad6c22da750",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-runtime-verify-r1.json": "d061e45a89f4a217ae8c69f60d221984d7f2e84a94a24da7c2758f1439d5f4d5",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-committed-r1.json": "e9f6554f76d842fe47bbd54efe4cb68c4024253ec866618d97dd295512048f19",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-corruption-r1.json": "29b2ff04608ee2bbb553c3ffeabbc76f659558b6e2c5ec2046ffa967d93fdc16",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-rerun-r1.json": "14881cc2d86fa1ce9b49ef8ef55124460b3afbe01f307f5ef30fb7086bd9366f",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-negative-prepared-r1.json": "f9e76b915b9a90b269eb9b3eee45782e9a041b592343ec49ab5466e755571668",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-runtime-after-rerun-r1.json": "db1d79ffee13d03f750029ca52a06709e2508511af138ee9895e88d5910b3427",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-live-runtime-before-rerun-r1.json": "ad1bcfec4114022b170c9e3e0131aea5e2e5232b0905330bb0842cf3baf30beb"
+  },
+  "failed_update_recovery": "RUNNING_SEPARATE_TEST",
+  "isolated_application_restore": "NOT_RUN_UNCONFIGURED",
+  "journal_id": "da4acc2f4f704e2a99da54b8b26afbc0",
+  "journal_stage": "committed",
+  "namespace_pause_parent": "OBSERVED_RUNTIME_USER_MANAGER",
+  "production_acceptance": "OPEN",
+  "provider_telegram": "NOT_RUN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "runtime_process_and_unit_hash_comparison": "IDENTICAL",
+  "same_candidate_rerun": "UNCHANGED",
+  "scope": "Actual synthetic replacement candidate deployment and credential-free runtime, stable unchanged rerun, protocol/SSH/concurrency and signature-corruption rejection; broader mandatory live gates remain open",
+  "signature_corruption": "REJECTED_BEFORE_APPLICATION_OR_JOURNAL_CHANGE",
+  "status": "PASS_WITHIN_ACTUAL_INITIAL_RUNTIME_RERUN_AND_REJECTION_SCOPE",
+  "timings_seconds": {
+    "configuration": 1.8779624449998664,
+    "import": 35.24717351199979,
+    "restart": 0.45322117999967304,
+    "stopped_backup": 0.13829293100025097,
+    "verification": 2.4939156380005443
+  }
+}

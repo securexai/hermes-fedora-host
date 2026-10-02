@@ -1,0 +1,19 @@
+{
+  "boot_source": "existing installed system disk; CDROM empty; no installer kernel/initrd",
+  "checked_at_utc": "2026-09-29T21:36:44.536637+00:00",
+  "exact_next_action": "virsh -c qemu:///session --escape '^q' console hermes-production-restore --safe --resume",
+  "memory_gib": 8,
+  "os_account_packages_storage_log_hygiene": "NOT_YET_VERIFIED",
+  "persistent_configuration_changes": "NONE",
+  "persistent_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "private_input": "NOT_COLLECTED",
+  "qualification_state": "shut off",
+  "restore_state": "paused",
+  "scope": "Approved existing restore disk first-boot handoff; no reinstall, repartition, application deployment, TPM enrollment or backup",
+  "ssh_host_identity": "NOT_YET_PINNED_DO_NOT_CONNECT",
+  "status": "RESTORE_FIRST_BOOT_PAUSED_PRIVATE_CONSOLE_REQUIRED",
+  "unrelated_sha256": "5419b4c0655822bb292a539bed080d6b0c97dc8710a9a7bb26c58d3e33fbb0e7",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53857366016
+}

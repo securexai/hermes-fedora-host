@@ -1,0 +1,6 @@
+{
+  "memory_gib": 9,
+  "restore_state": "paused",
+  "retained_handoff_sha256": "3897cc74aeac9b0382c4e4f01f24275e770d0ed783f099f0d106a72fdf28201d",
+  "status": "ALREADY_APPLIED_NO_LIFECYCLE_REPLAY"
+}

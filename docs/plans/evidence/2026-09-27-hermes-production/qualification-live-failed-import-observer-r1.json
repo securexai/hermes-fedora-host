@@ -1,0 +1,20 @@
+{
+  "apply": true,
+  "archive_sha256": "3fb331ed0b3ff5e4f9bf0f65d07105c5eb5f4728a1d5c4bb03ef35c12e683e3c",
+  "baseline_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "case": "failed-import",
+  "checked_at_utc": "2026-09-29T20:53:01.228871+00:00",
+  "expected_refusal": "STOP: command-failed:podman",
+  "operation": "upgrade",
+  "provider_telegram_external_backup": "NOT_RUN",
+  "raw_error_output": "NOT_RETAINED",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "refusal_matches": false,
+  "scope": "Actual bounded named upgrade on authorized synthetic fixture only; transaction/current/runtime postconditions require independent verification",
+  "ssh_exit": 1,
+  "started_at_utc": "2026-09-29T20:52:46.834965+00:00",
+  "status": "FAIL",
+  "stderr_bytes": 29,
+  "stdout_bytes": 0,
+  "test_candidate": "a7a12989e363152f6e92174659a06164a7396ac3333b6ab69c572a92b4042a4a"
+}

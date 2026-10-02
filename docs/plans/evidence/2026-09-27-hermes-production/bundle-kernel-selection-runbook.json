@@ -1,0 +1,212 @@
+{
+  "archive_bytes": 1148753920,
+  "archive_sha256": "d107dec87fa26dc79a2b7b91af4dfa828a1857b16274a10bf3734dc6236bb053",
+  "artifact_sha256": "7de0e45f99b8208b3b203e1e297760c44c11de68356e54449bbffc8a5905b1ab",
+  "build_seconds": 2.6823032929969486,
+  "changed_packaged_files": [
+    "source/PRODUCTION_RUNBOOK.md"
+  ],
+  "files": {
+    "evidence/packages.json": {
+      "mode": 420,
+      "sha256": "e9bdd70fa064f7ca3453a7b3148d934764480e9ff169668d8128a75041598dda",
+      "size": 15084
+    },
+    "images/gateway.oci": {
+      "mode": 420,
+      "sha256": "fe69437be8ba714e14ef334dec059b37122fb481a6dcb46e9e60b80a2e6e20e0",
+      "size": 1005274112
+    },
+    "images/worker.oci": {
+      "mode": 420,
+      "sha256": "155c34c95b797f541fd2469ca63338d6fa00106318ec8171845c3a4d8f76c52a",
+      "size": 143215104
+    },
+    "source/PRODUCTION_RUNBOOK.md": {
+      "mode": 420,
+      "sha256": "7ead2537baa167e086473054222882dc5966b960342a4c4101fb8d555a2b6504",
+      "size": 31033
+    },
+    "source/lab_profile.py": {
+      "mode": 420,
+      "sha256": "25d559b59439944f26b579b36d573e9fb403128d586df325a4c94cac9d1d4832",
+      "size": 3824
+    },
+    "source/manual/config/harden-config.py": {
+      "mode": 493,
+      "sha256": "4682485f84f8154cd5aac8817e7dbb74aa93de1bed1480fb99ab695438263903",
+      "size": 12020
+    },
+    "source/manual/config/profile-contract.yaml": {
+      "mode": 420,
+      "sha256": "aae9327b88bd9c1be2bac87f1f4728263a3a0a6cca6f2c72ab4fa5dd8da0a148",
+      "size": 3369
+    },
+    "source/manual/config/set-model.py": {
+      "mode": 420,
+      "sha256": "7e46ed52ce5200af208258dbcf1c0733e207bf5d28e2c1a0499d32c6b14b0c23",
+      "size": 2125
+    },
+    "source/manual/config/verify-contract.py": {
+      "mode": 493,
+      "sha256": "97a9d13e6901f44f6325b63ec76da1e3e4ae59586b16efe48aabbdb4ee7274d6",
+      "size": 4325
+    },
+    "source/manual/gateway/m03-probe.py": {
+      "mode": 493,
+      "sha256": "2ab8c1e6ca5f67f3146b14310b7697e9e427bb6b6e433ca22a2e866cf6aa4040",
+      "size": 2201
+    },
+    "source/manual/gateway/memory-approval-probe.py": {
+      "mode": 493,
+      "sha256": "ad9d3e53fb51d5af20f592f39882d468c87a12b5306fb13813e23c17ff362148",
+      "size": 4158
+    },
+    "source/manual/gateway/scp": {
+      "mode": 493,
+      "sha256": "4bd6ba24c7c242ae7908824b15693a83f10845c7e14175735ec015d72bb64809",
+      "size": 903
+    },
+    "source/manual/gateway/sftp": {
+      "mode": 493,
+      "sha256": "818d9b9fb678edbdc0f0b0a1f34c62d85c9e8b0cb155d02f9063658fab44e244",
+      "size": 848
+    },
+    "source/manual/gateway/ssh": {
+      "mode": 493,
+      "sha256": "5af22f3697a6dd0efa14aefa976642ca593347af27da5c9caafecd58a8c054a6",
+      "size": 1339
+    },
+    "source/manual/gateway/unix-bridge.py": {
+      "mode": 493,
+      "sha256": "5d525a02f21811d2b808f1ccb6c26812adabddfe6d03de9b6584201cb37055ea",
+      "size": 1678
+    },
+    "source/manual/manifest.yaml": {
+      "mode": 420,
+      "sha256": "8226fe0d24c707b6f2d5fa31def1b105d9b98688f129b59db5c0ead5de08792d",
+      "size": 1958
+    },
+    "source/manual/quadlets/hermes-gateway.container": {
+      "mode": 420,
+      "sha256": "9a4950b616667654116d867297960ac9ef54de327a257076b56294172fe4e653",
+      "size": 2532
+    },
+    "source/manual/quadlets/hermes-worker.container": {
+      "mode": 420,
+      "sha256": "9bee94910f66e5b7e3bb95724e067231048c2ac95a5c0c1b5a38ba9347eca190",
+      "size": 1228
+    },
+    "source/manual/worker/Containerfile": {
+      "mode": 420,
+      "sha256": "73a2ce79ec27779434d371a3b4bd39207698099eabda41365c5b35a542870b19",
+      "size": 1960
+    },
+    "source/manual/worker/sshd_worker_config": {
+      "mode": 420,
+      "sha256": "b493df535c26749130a7206c1e3e4f3eb59bb1e56c66ef7df7c9a904e7f60ece",
+      "size": 1301
+    },
+    "source/manual/worker/worker-entrypoint": {
+      "mode": 493,
+      "sha256": "cf3ea6ac3350a1cfad3322ced3c50a1ae28c26b493a20206e239225e57a274da",
+      "size": 585
+    },
+    "source/manual/worker/worker-socket-adapter": {
+      "mode": 493,
+      "sha256": "43e222b055258e5bd1dc1d17051936199a91f973bd3a4c8fe3fac046e5cf3865",
+      "size": 771
+    },
+    "source/manual/worker/worker-sshd-inetd": {
+      "mode": 493,
+      "sha256": "3d2ee084b31ddacebc5273baf2ad6f4feb3904fc804f48d3c6bf72477958056f",
+      "size": 154
+    },
+    "source/production-launcher.py": {
+      "mode": 493,
+      "sha256": "8f97c53b5831be995dfead260d678dda9a5e6359ef1ad3833e4aad7bc87f19c6",
+      "size": 2205
+    },
+    "source/production/__init__.py": {
+      "mode": 420,
+      "sha256": "933e4494220c9cb65088dece7d4e088a3f3ee8204a046cab78853ca00db21a64",
+      "size": 82
+    },
+    "source/production/bundle.py": {
+      "mode": 420,
+      "sha256": "1655c23f60c6b3e5c00ce5de8d88ad03dffa7d4beb37c5d4d42a4d4d8cc1b92a",
+      "size": 12893
+    },
+    "source/production/host.py": {
+      "mode": 420,
+      "sha256": "5aa14d5a8ed3f9a0be1e8194f9c1169778109aa38391d0a310ec5318a28f118b",
+      "size": 13782
+    },
+    "source/production/kickstart.py": {
+      "mode": 420,
+      "sha256": "52fe55d6aa43f0af8207d5c0f5f51abf15a3e4b3aa3600c8982a3b56b764f895",
+      "size": 2969
+    },
+    "source/production/operations.py": {
+      "mode": 420,
+      "sha256": "41e867cd929ab350a255b9397f858729f42e4f37d21c77cd4251e47c24fdfc69",
+      "size": 6176
+    },
+    "source/production/preflight.py": {
+      "mode": 420,
+      "sha256": "1bf7daa0cb9d70c0b11c03fd5f049eb78f82b6d07c96e7e8c20a459160f5c5f1",
+      "size": 16966
+    },
+    "source/production/primitives.py": {
+      "mode": 420,
+      "sha256": "1a098525e83f4e1787657b45866d26a0b4559891a3c9c47074ab24df4604d804",
+      "size": 7732
+    },
+    "source/production/receivers.py": {
+      "mode": 420,
+      "sha256": "3bdde599640f1fcbabe6149c669c3dbd39780d9191aee0825eb1aa34c7ea73ca",
+      "size": 4391
+    },
+    "source/production/restore.py": {
+      "mode": 420,
+      "sha256": "ce01e114dc650e01f7f4d17edb186074f196abe7b09de562450bdf4d9f110bcf",
+      "size": 3753
+    },
+    "source/production/runtime.py": {
+      "mode": 420,
+      "sha256": "ec7c79d8be28a7dc59f43a0b8d3b4ed8eaba5dd39ecdb2916a9eab41ad693b6a",
+      "size": 19537
+    },
+    "source/production/startup.py": {
+      "mode": 420,
+      "sha256": "81488c88fce98e3acd1901844334d629607311e1c63714f089ebd2db31b6b417",
+      "size": 2635
+    },
+    "source/production/writer_guard.py": {
+      "mode": 420,
+      "sha256": "c3026823730d10d86d45ecaa2a55c99cad7b35094d09e8a34cf5e78946b554e3",
+      "size": 2631
+    },
+    "source/productionctl.py": {
+      "mode": 493,
+      "sha256": "2bdd94a815cbbb667c931d4beba2010e0c0809ae1cd3a57364b09e775f8cf056",
+      "size": 7758
+    },
+    "source/profile-deploy.py": {
+      "mode": 493,
+      "sha256": "d48eb1adddd179182219095e4993664dddb71afd52f240e8944bb624dfa7a3f4",
+      "size": 24566
+    }
+  },
+  "images": {
+    "gateway": "sha256:0ba99c713250dbc2e80a5806cd3eb6b3e6c39ee2f251627efaecce384da436fc",
+    "worker": "sha256:4d7b3f8712ed95efeed6e6756ff70859d896ffeb5e7c04da31504b0fe8203e52"
+  },
+  "previous_artifact_sha256": "834adb288d5ebdec3a700426fdd054801be3dfa10010534731b8e32939851df8",
+  "production_candidate_rejected": true,
+  "receiver_protocol": 1,
+  "receiver_sha256": "243d6db51984625138f02c8740352a3510ce37c3518568c6849e2fdc70f180a4",
+  "scope": "retained-OCI-package-signature-roundtrip-only",
+  "status": "PASS",
+  "verify_seconds": 1.6899597329975222
+}

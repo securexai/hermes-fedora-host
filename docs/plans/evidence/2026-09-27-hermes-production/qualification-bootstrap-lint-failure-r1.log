@@ -1,0 +1,25 @@
+E731 Do not assign a `lambda` expression, use a `def`
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-boot/build-bootstrap.py:8:1
+   |
+ 7 | base=Path(__file__).resolve().parent
+ 8 | sha=lambda data:hashlib.sha256(data).hexdigest()
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 9 | p=base/'recovery-once.py'
+10 | s=p.read_text()
+   |
+help: Rewrite `sha` as a `def`
+
+E402 Module level import not at top of file
+  --> .toolbox/hermes-production-validation/synthetic-stage/qualification-boot/build-bootstrap.py:11:1
+   |
+ 9 | p=base/'recovery-once.py'
+10 | s=p.read_text()
+11 | import re
+   | ^^^^^^^^^
+12 |
+13 | s=re.sub(r'^PREVIOUS_SHA = "[^"]+"',f'PREVIOUS_SHA = "{sha((base/"commission-boot.py").read_bytes())}"',s,flags=re.M)
+   |
+help: Move module level imports to top of file
+
+Found 3 errors (1 fixed, 2 remaining).
+No fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).

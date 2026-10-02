@@ -1,0 +1,11 @@
+{
+  "status": "UNVERIFIED_HOST_KEY",
+  "checked_at_utc": "2026-09-29T01:05:07.623890+00:00",
+  "target": "[127.0.0.1]:22224",
+  "algorithm": "ssh-ed25519",
+  "fingerprint": "SHA256:lcfXGGLMwN88u+qwkBdjmJKagPoyMkpn7cJSOxWLUKQ",
+  "file_sha256": "0cbbb7e0813e05e70f8e8ad4f0a6c7976eed8cacf179acfa3e1670e9f2642495",
+  "accepted_for_authentication": false,
+  "operator_unlock": "REPORTED",
+  "guest_agent": "NOT_CONNECTED"
+}

@@ -1,0 +1,59 @@
+{
+  "application_backup_restore": "NOT_RUN",
+  "checked_at_utc": "2026-09-29T21:04:02.888120+00:00",
+  "creation": {
+    "boot": "UEFI Secure Boot with enrolled keys and TPM2 emulator",
+    "console_command": "python3 -B vm/hermes-production-fixture.py --role restore --console",
+    "directory": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore",
+    "disk_to_erase": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+    "disk_virtual_mib": 181024,
+    "guest_definition": "fedora43",
+    "installation": "BLOCKED until private console supplies encryption and administrator secrets",
+    "media_sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+    "memory_mb": 8192,
+    "minimum_host_free_bytes": 21474836480,
+    "name": "hermes-production-restore",
+    "role": "restore",
+    "ssh": {
+      "host": "127.0.0.1",
+      "port": 22225
+    },
+    "status": "CREATED_COMMISSIONING_REQUIRED",
+    "unrelated_sha256": "5419b4c0655822bb292a539bed080d6b0c97dc8710a9a7bb26c58d3e33fbb0e7",
+    "vcpus": 2
+  },
+  "exact_next_action": "python3 -B /var/home/aicloudopspecial/code/repos/hermes-fedora-host/vm/hermes-production-fixture.py --role restore --console",
+  "external_backup_provider_telegram": "NOT_RUN",
+  "preview": {
+    "boot": "UEFI Secure Boot with enrolled keys and TPM2 emulator",
+    "console_command": "python3 -B vm/hermes-production-fixture.py --role restore --console",
+    "directory": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore",
+    "disk_to_erase": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+    "disk_virtual_mib": 181024,
+    "guest_definition": "fedora43",
+    "installation": "BLOCKED until private console supplies encryption and administrator secrets",
+    "media_sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+    "memory_mb": 8192,
+    "minimum_host_free_bytes": 21474836480,
+    "name": "hermes-production-restore",
+    "role": "restore",
+    "ssh": {
+      "host": "127.0.0.1",
+      "port": 22225
+    },
+    "status": "PREVIEW",
+    "vcpus": 2
+  },
+  "private_input": "NOT_COLLECTED",
+  "qualification_vm": "CLEANLY_SHUT_OFF_9_GIB_BASELINE_PRESERVED",
+  "restore_vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "restore_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "running_domains": [
+    "hermes-production-restore"
+  ],
+  "scope": "Approved 8 GiB/two-CPU isolated restore fixture creation only; no installation, application restoration or backup acceptance",
+  "settings_sha256": "fa8f73fd0d94304e094751bdc7e60d7bd908ec621eeefdefbc4805486b29d136",
+  "status": "CREATED_PRIVATE_INSTALLATION_REQUIRED",
+  "workstation_free_after_bytes": 57819529216,
+  "workstation_free_before_bytes": 57822126080
+}

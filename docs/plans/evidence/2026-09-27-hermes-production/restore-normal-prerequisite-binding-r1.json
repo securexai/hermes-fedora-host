@@ -1,0 +1,12 @@
+{
+  "checked_at_utc": "2026-09-29T22:40:00.434123+00:00",
+  "kvm": true,
+  "mcelog_vendor_unit_sha256": "78d3ea288eebc5583a1ad0ea169ba1f41b20b6db89508b1f501ad61c6d01b056",
+  "podman_binary_version": {
+    "exit_code": 0,
+    "stdout": "podman version 5.8.1"
+  },
+  "raw_cpuinfo": "NOT_PUBLISHED_OR_RETAINED",
+  "scope": "Public prerequisite binding facts only; no state changes",
+  "virtual_cpu_expected_amd_family_25": true
+}

@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "scope": "Fedora Server44 signed media verification",
+  "name": "Fedora-Server-dvd-x86_64-44-1.7.iso",
+  "sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+  "signer": "36F612DCF27F7D1A48A835E4DBFCF71C6D9F90A6",
+  "bytes": 3913023488
+}

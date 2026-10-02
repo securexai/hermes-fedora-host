@@ -1,0 +1,72 @@
+{
+  "local_isolated_tests": {
+    "environment": "dev-infra-hermes",
+    "passed": 20
+  },
+  "preview": {
+    "changes": [
+      "private recovery-passphrase tests",
+      "one PCR7/SHA256/no-PIN TPM token",
+      "matching crypttab row and scoped dracut configuration",
+      "validate then replace current-kernel initramfs"
+    ],
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "luks_uuid": "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6",
+    "reboot": "NOT_RUN",
+    "root_checks": "DEFERRED_TO_PRIVATE_APPLY",
+    "status": "PREVIEW"
+  },
+  "private_apply": "NOT_RUN",
+  "remote_path": "/home/aicowork/hermes-boot-commission-9a4c0ff7d97b202c.py",
+  "script_sha256": "9a4c0ff7d97b202c49d2bfce39b2834fdf1becc45b4e8bb322c3665035891e0d",
+  "server_synthetic_integration": {
+    "canonicalization_source": [
+      "            [[ $_dev == PARTUUID=* ]] \\",
+      "                && _dev=\"/dev/disk/by-partuuid/${_dev#PARTUUID=}\"",
+      "",
+      "            [[ $_dev == UUID=* ]] \\",
+      "                && _dev=\"/dev/disk/by-uuid/${_dev#UUID=}\"",
+      "",
+      "            [[ $_dev == ID=* ]] \\",
+      "                && _dev=\"/dev/disk/by-id/${_dev#ID=}\"",
+      ""
+    ],
+    "dracut_module_sha256": "3822844e45866d6b90ffc4bf357ece71acbdac5d44dfc98ebed30316b2ede7bc",
+    "lsinitrd_sha256": "3bd594c9f8b05d4cda04b82563c0771e185a75d1fd1f15af5afdd8334e09ac11",
+    "results": [
+      {
+        "actual": "crypttab-target-row-count",
+        "case": "original-with-real-lsinitrd",
+        "expected": "crypttab-target-row-count",
+        "status": "PASS"
+      },
+      {
+        "case": "corrected-with-real-lsinitrd",
+        "status": "PASS"
+      },
+      {
+        "case": "wrong-uuid",
+        "refusal": "crypttab-target-row-count",
+        "status": "PASS"
+      },
+      {
+        "case": "missing-auto",
+        "refusal": "initramfs-crypttab-mismatch",
+        "status": "PASS"
+      },
+      {
+        "case": "keyfile-bypass",
+        "refusal": "crypttab-layout-or-keyfile-conflict",
+        "status": "PASS"
+      },
+      {
+        "case": "duplicate-aliases",
+        "refusal": "crypttab-target-row-count",
+        "status": "PASS"
+      }
+    ],
+    "scope": "actual server lsinitrd against disposable synthetic CPIO, no privileged device/configuration operations",
+    "status": "PASS"
+  },
+  "status": "PREPARED"
+}

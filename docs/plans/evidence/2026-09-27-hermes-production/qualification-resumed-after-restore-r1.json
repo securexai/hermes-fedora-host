@@ -1,0 +1,42 @@
+{
+  "actual_boot_facts": {
+    "boot_id": "e70a19f2-8e56-4a14-918d-92f3990fe712",
+    "checked_at_utc": "2026-09-30T16:31:47.710830+00:00",
+    "crypttab_sha256": "f1458594a23fe04484815095a915329d2224db2b31552f448dcec2129d019be3",
+    "initramfs_sha256": "2df447c5315532576332f46fa62922051ac4cdc12970d7279cc19e20055ef4ce",
+    "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+    "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+    "recovery_parameters_present": false,
+    "recovery_slot_preserved": true,
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "6.19.10-300.fc44.x86_64",
+    "ssh_exit": 0,
+    "status": "OBSERVED",
+    "system_state": "running",
+    "tpm_policy": "PCR7_SHA256_NO_PIN",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "actual_preflight_status_verify": "PASS_CURRENT_CANDIDATE_AND_RECOVERED_JOURNAL",
+  "both_current_9gib_xml_and_disk_canaries": "MATCH",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-30T16:40:53.065075+00:00",
+  "correction": "READ_ONLY_EXPLICIT_RUNTIME_ANNOTATION_VALIDATION; NO_LIFECYCLE_REPLAY",
+  "initial_post_start_validation": "FAIL_OVERSTRICT_RUNTIME_DISK_XML_COMPARISON",
+  "qualification_boot_id": "e70a19f2-8e56-4a14-918d-92f3990fe712",
+  "qualification_state": "RUNNING_ONLY_VM",
+  "restore_state": "SHUT_OFF",
+  "scope": "Guarded clean switch from empty commissioned restore VM to current-candidate qualification and independent boot/runtime revalidation",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/boot-r1/observations/20260930T162935734281-poweroff.json": "180bb3ee776c1c75c9d42239c72aaabab754bba852090f99fa4174f9555a8ed1",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-boot/observations/20260930T163114953873-facts.json": "006949bbbcf39d5873f3f26f6776e2e12780687ee139dd0437a6a0162b89daf7",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/resumption-r1/observe-start-r1.py": "eacbff7b94cdc2a3d3552e0a1f05e426ea918a51ec437f9fae51904f9647bff7",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/resumption-r1/post-start-validated-r1.json": "e988b621471b175500040241d1a6d0922c281dbd708955f2b4b5a83fd6079791",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/resumption-r1/preflight-r1.json": "ddf0a18e805d3f27430ecbae7125653dbc9357f5c53a86d3b51d03113ed2ccec",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/resumption-r1/resume-qualification-r1.py": "b814e978d3154af34973c0bd7398dd5d16e363bc8268092b447cf4d295511c24",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/resumption-r1/start-intent-r1.json": "7c3e0a8fd76720079b421cffde8cd90308714f3cc7fa786e4fa39906a8148b11",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/resumption-r1/status-r1.json": "8f0c08c8558ff5d436f1649921e5ec0f914f57f864cecaadede3639373fdb630",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/resumption-r1/verify-r1.json": "15b7a49aa91542d537dc89ef835ab7310eab7e6ddc97bd6a0cd220984aa83e4a",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-application-bootstrap-live-r1.json": "ec7747906342823772aba87a7b7def6912d82eaae02a9bcaf7aa4dea49d7a54a"
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,14 @@
+{
+  "apply": false,
+  "checked_at_utc": "2026-09-29T21:01:22.797834+00:00",
+  "exit": 1,
+  "operation": "status",
+  "report": {
+    "status": "UNPARSEABLE_OUTPUT",
+    "stderr_bytes": 57,
+    "stdout_bytes": 0
+  },
+  "scope": "Named productionctl operation on pinned synthetic qualification VM using dedicated deployment key",
+  "ssh_policy": "BatchMode, IdentitiesOnly, IdentityAgent=none, strict pinned known-hosts, ForwardAgent=no, no password or keyboard-interactive fallback",
+  "started_at_utc": "2026-09-29T21:01:14.721128+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "boot_after_admin_setup": "NOT_RUN",
+  "canary_sha256": "500cd343f8cbc50890577081f32c32105c725ccf10786ef5084f0599af7c750b",
+  "checked_at_utc": "2026-09-29T01:42:36.015684+00:00",
+  "disks_recreated": false,
+  "persistent_xml_matches_pre_rescue": true,
+  "rescue_dvd_ejected": true,
+  "scope": "Clean rescue exit and baseline-preserving media eject on approved VM",
+  "shutdown_state": "shut off (shutdown)",
+  "start_mode": "PAUSED_FOR_PRIVATE_CONSOLE_ATTACH_THEN_RESUME",
+  "status": "READY_FOR_DISK_BOOT",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

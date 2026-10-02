@@ -1,0 +1,51 @@
+EEEE
+======================================================================
+ERROR: test_namespace_initialization_runs_under_user_manager_and_requires_rootless (tests.test_hermes_production.ProductionReceiverTests.test_namespace_initialization_runs_under_user_manager_and_requires_rootless) (output=b'true\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 715, in test_namespace_initialization_runs_under_user_manager_and_requires_rootless
+    backend.initialize_namespace()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Backend' object has no attribute 'initialize_namespace'
+
+======================================================================
+ERROR: test_namespace_initialization_runs_under_user_manager_and_requires_rootless (tests.test_hermes_production.ProductionReceiverTests.test_namespace_initialization_runs_under_user_manager_and_requires_rootless) (output=b'false\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 718, in test_namespace_initialization_runs_under_user_manager_and_requires_rootless
+    backend.initialize_namespace()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Backend' object has no attribute 'initialize_namespace'
+
+======================================================================
+ERROR: test_namespace_initialization_runs_under_user_manager_and_requires_rootless (tests.test_hermes_production.ProductionReceiverTests.test_namespace_initialization_runs_under_user_manager_and_requires_rootless) (output=b'')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 718, in test_namespace_initialization_runs_under_user_manager_and_requires_rootless
+    backend.initialize_namespace()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Backend' object has no attribute 'initialize_namespace'
+
+======================================================================
+ERROR: test_namespace_initialization_failure_precedes_transaction_recovery (tests.test_hermes_production.ProductionReceiverTests.test_namespace_initialization_failure_precedes_transaction_recovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 746, in test_namespace_initialization_failure_precedes_transaction_recovery
+    host.dispatch(io.BytesIO(canonical({"operation": "rollback", "apply": True})))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/scripts/hermes/production/host.py", line 313, in dispatch
+    with lock(STATE / "operation.lock"), ExitStack() as stack:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/scripts/hermes/production/primitives.py", line 231, in lock
+    require(info.st_uid == os.geteuid() and info.st_nlink == 1, "unsafe-lock")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/scripts/hermes/production/primitives.py", line 61, in require
+    raise Refused(reason)
+production.primitives.Refused: unsafe-lock
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.026s
+
+FAILED (errors=4)

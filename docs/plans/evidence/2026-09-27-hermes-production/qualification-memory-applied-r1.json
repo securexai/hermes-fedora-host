@@ -1,0 +1,13 @@
+{
+  "status": "APPLIED_AND_STARTED",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "memory_gib": 9,
+  "state": "running",
+  "only_changed_fields": [
+    "memory",
+    "currentMemory"
+  ],
+  "canary": "UNCHANGED",
+  "definition_sha256": "442d12df7ae3d01136d092042d501472fc1aef2e18a796fa2ba395d1121d0031",
+  "checked_at_utc": "2026-09-29T18:28:26.522129+00:00"
+}

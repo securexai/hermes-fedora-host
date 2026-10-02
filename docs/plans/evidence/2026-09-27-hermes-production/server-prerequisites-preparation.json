@@ -1,0 +1,36 @@
+{
+  "authorization": "continue with pending tasks after Restic/zram findings",
+  "local_checks": [
+    "syntax",
+    "Ruff check/format",
+    "kernel swap parser",
+    "KiB-to-byte conversion",
+    "malformed swap rejection",
+    "wrong-target refusal",
+    "preview without mutation",
+    "root requirement"
+  ],
+  "not_performed": [
+    "root application",
+    "reboot",
+    "TPM enrollment",
+    "disk changes",
+    "sudo policy changes",
+    "production deployment"
+  ],
+  "preview": {
+    "active_swap_devices": 1,
+    "changes": [
+      "install missing Restic and required dependencies",
+      "disable default zram0 swap persistently"
+    ],
+    "root_report": "/var/lib/hermes-production-prerequisites/report.json",
+    "status": "PREVIEW",
+    "target_home_uuid": "eb129d35-1f52-4577-99e5-25daa322febc"
+  },
+  "prior_failures": "Two swapon format previews refused before configuration changes; kernel /proc/swaps parser replaces those assumptions. Both failed sources and previews retained.",
+  "remote_path": "/home/aicowork/hermes-prerequisites-be66c2b6f902dc44.py",
+  "script_sha256": "be66c2b6f902dc44de6a852a6cfcf8c03485e51c1222f391c9819c99093e38a7",
+  "status": "PREPARED_NOT_APPLIED",
+  "sudo": "password required"
+}

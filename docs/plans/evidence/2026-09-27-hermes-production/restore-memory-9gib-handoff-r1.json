@@ -1,0 +1,19 @@
+{
+  "active_xml_sha256": "4e1ed324421f0ab0cbb637d43b7e3d7e9e164216965eea99493374458bf05571",
+  "actual_exposed_memory_boot_security_application_preflight": "NOT_RUN_PRIVATE_UNLOCK_PENDING",
+  "applied_xml_path": ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-applied-r1.xml",
+  "applied_xml_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "checked_at_utc": "2026-09-29T23:31:33.821669+00:00",
+  "console_capture": "NOT_ATTACHED",
+  "memory_gib": 9,
+  "private_console": "virsh -c qemu:///session --escape '^q' console hermes-production-restore --safe --resume",
+  "proposal_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "qualification_state": "shut off",
+  "restore_state": "paused",
+  "status": "APPROVED_MEMORY_ONLY_CHANGE_APPLIED_PAUSED_PRIVATE_BOOT_PENDING",
+  "tpm_backup_provider_telegram_physical_git_operations": "NOT_RUN",
+  "unrelated_sha256": "5419b4c0655822bb292a539bed080d6b0c97dc8710a9a7bb26c58d3e33fbb0e7",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53719232512
+}

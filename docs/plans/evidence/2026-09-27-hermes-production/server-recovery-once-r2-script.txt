@@ -1,0 +1,356 @@
+"""Prepare one BLS recovery entry, preserve the normal default, and reboot once."""
+
+import argparse
+import datetime
+import fcntl
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import shlex
+import stat
+import sys
+from pathlib import Path
+
+PREVIOUS = Path("/home/aicowork/hermes-boot-commission-9a4c0ff7d97b202c.py")
+PREVIOUS_SHA = "9a4c0ff7d97b202c49d2bfce39b2834fdf1becc45b4e8bb322c3665035891e0d"
+BASE = Path("/var/lib/hermes-production-boot")
+STATE = BASE / "recovery-r2"
+REPORT = BASE / "recovery-r2-report.json"
+ENTRIES = Path("/boot/loader/entries")
+ENV = Path("/boot/grub2/grubenv")
+BOOT_ID = "4cea93af-9409-42b1-a5c2-ad4c8d8cfd60"
+UUID = "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6"
+IMAGE_SHA = "f8a7bfe4ce5c15cc1896cfdcc8f81405f3fd2c3377f6ea9b1ee9a8e150a0f44e"
+CT_SHA = "c1d4d852af5786dc38601e75cddf3ba0657268e74ac595f3b4b61f1146202fe6"
+RECOVERY = f"rd.luks.options={UUID}=discard,key-slot=0,password-cache=no,headless=no"
+DISABLE_PLUGINS = "systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0"
+MARKER = "hermes.recovery=r2"
+
+
+def require(value, reason):
+    if not value:
+        raise RuntimeError(reason)
+
+
+def load_api():
+    info = PREVIOUS.lstat()
+    require(
+        stat.S_ISREG(info.st_mode)
+        and info.st_uid == 1000
+        and not info.st_mode & 0o022
+        and info.st_nlink == 1,
+        "unsafe-reviewed-helper",
+    )
+    require(
+        hashlib.sha256(PREVIOUS.read_bytes()).hexdigest() == PREVIOUS_SHA, "reviewed-helper-changed"
+    )
+    spec = importlib.util.spec_from_file_location("reviewed_boot", PREVIOUS)
+    api = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(api)
+    return api
+
+
+def parse_grubby(raw):
+    values = {}
+    for line in raw.splitlines():
+        key, sep, value = line.partition("=")
+        if key not in {"id", "kernel", "initrd"}:
+            continue
+        words = shlex.split(value)
+        require(sep and key not in values and len(words) == 1, "ambiguous-grubby-field")
+        values[key] = words[0]
+    require(set(values) == {"id", "kernel", "initrd"}, "missing-grubby-field")
+    require(
+        re.fullmatch(r"[A-Za-z0-9._-]+", values["id"]) and "hermes-recovery" not in values["id"],
+        "unsafe-default-entry-id",
+    )
+    return values
+
+
+def parse_env(raw):
+    result = {}
+    for line in raw.splitlines():
+        key, sep, value = line.partition("=")
+        require(sep and key not in result, "ambiguous-grub-environment")
+        result[key] = value
+    return result
+
+
+def check_env(env, normal_id, recovery_id):
+    require(env.get("saved_entry") == normal_id, "normal-default-not-pinned")
+    require(not env.get("prev_saved_entry"), "previous-saved-entry-present")
+    require(env.get("next_entry", "") in ("", recovery_id), "unrelated-one-shot-present")
+    require(not env.get("blsdir"), "nonstandard-bls-directory")
+
+
+def recovery_entry(raw, kernel, kernelopts):
+    lines = raw.splitlines(keepends=True)
+    fields = {}
+    for number, line in enumerate(lines):
+        words = line.strip().split(None, 1)
+        if not words or words[0].startswith("#"):
+            continue
+        if words[0] in {"title", "version", "linux", "initrd", "options"}:
+            require(len(words) == 2 and words[0] not in fields, "ambiguous-bls-field")
+            fields[words[0]] = (number, words[1])
+    require(set(fields) == {"title", "version", "linux", "initrd", "options"}, "missing-bls-field")
+    require(fields["version"][1] == kernel, "bls-version-mismatch")
+    require(fields["linux"][1] == "/vmlinuz-" + kernel, "bls-kernel-mismatch")
+    require(fields["initrd"][1] == "/initramfs-" + kernel + ".img", "bls-image-mismatch")
+    tokens = fields["options"][1].split()
+    expanded = []
+    for token in tokens:
+        expanded.extend(kernelopts.split() if token == "$kernelopts" else [token])
+    require(
+        expanded and all(re.fullmatch(r"[A-Za-z0-9_./,:=+@%-]+", t) for t in expanded),
+        "unsupported-boot-argument-syntax",
+    )
+    require(f"rd.luks.uuid=luks-{UUID}" in expanded, "root-luks-selector-missing")
+    require("rd.lvm.lv=hermes_system/root" in expanded, "root-lvm-selector-missing")
+    require(
+        not any(
+            t.startswith(("rd.luks.options=", "luks.options=", "hermes.recovery="))
+            or "SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE" in t
+            for t in expanded
+        ),
+        "persistent-recovery-or-token-override-present",
+    )
+    options = [t for t in expanded if t not in {"quiet", "rhgb"}]
+    options.extend([RECOVERY, DISABLE_PLUGINS, MARKER])
+    lines[fields["title"][0]] = f"title Hermes passphrase recovery test ({kernel})\n"
+    lines[fields["options"][0]] = "options " + " ".join(options) + "\n"
+    return "".join(lines).encode()
+
+
+def read_env(api):
+    return parse_env(api.command(["grub2-editenv", str(ENV), "list"]).decode())
+
+
+def disarm(api, entry, desired):
+    current = read_env(api)
+    if current.get("next_entry") == entry.stem:
+        api.command(["grub2-editenv", str(ENV), "unset", "next_entry"])
+        require(not read_env(api).get("next_entry"), "one-shot-clear-failed")
+    if entry.exists() or entry.is_symlink():
+        api.secure(entry)
+        require(entry.read_bytes() == desired, "recovery-entry-changed-no-delete")
+        entry.unlink()
+
+
+def arm(api, entry, desired, before, verify):
+    if entry.exists() or entry.is_symlink():
+        api.secure(entry)
+        require(entry.read_bytes() == desired, "existing-recovery-entry-conflict")
+    else:
+        api.atomic(entry, desired, 0o600)
+    try:
+        api.command(["restorecon", str(entry)])
+        verify()
+        api.command(["grub2-reboot", entry.stem])
+        after = read_env(api)
+        expected = dict(before, next_entry=entry.stem)
+        require(after == expected, "unexpected-grub-environment-change")
+        verify()
+    except BaseException:
+        disarm(api, entry, desired)
+        raise
+
+
+def execute(api):
+    require(
+        os.geteuid() == 0 and sys.stdin.isatty() and sys.stdout.isatty(),
+        "private-root-terminal-required",
+    )
+    api.secure(BASE, directory=True)
+    fd = os.open(BASE / ".lock", os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC)
+    with os.fdopen(fd, "r+") as lock:
+        api.secure(BASE / ".lock")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        require(
+            Path("/proc/sys/kernel/random/boot_id").read_text().strip() == BOOT_ID,
+            "boot-changed-do-not-replay",
+        )
+        default = parse_grubby(api.command(["grubby", "--info=DEFAULT"]).decode())
+        selected = api.command(["grubby", "--default-kernel"]).decode().strip()
+        require(
+            selected == default["kernel"] and selected.startswith("/boot/vmlinuz-"),
+            "default-kernel-mismatch",
+        )
+        kernel = selected.removeprefix("/boot/vmlinuz-")
+        require(
+            re.fullmatch(r"[0-9]+\.[0-9][A-Za-z0-9.+_-]*\.fc44\.x86_64", kernel),
+            "unsupported-kernel",
+        )
+        require(
+            api.command(["uname", "-r"]).decode().strip() == kernel,
+            "running-selected-kernel-mismatch",
+        )
+        image = Path("/boot/initramfs-" + kernel + ".img")
+        require(default["initrd"] == str(image), "default-image-mismatch")
+        for path in [ENTRIES, ENV.parent]:
+            api.secure(path, directory=True)
+        source = ENTRIES / (default["id"] + ".conf")
+        entry = ENTRIES / (default["id"] + "-hermes-recovery-r2.conf")
+        for path in [source, image, Path(selected), ENV, Path("/boot/grub2/grub.cfg")]:
+            api.secure(path)
+        env = read_env(api)
+        check_env(env, default["id"], entry.stem)
+        require(
+            api.command(["findmnt", "-n", "-o", "UUID", "--target", "/boot"]).decode().strip()
+            == "1947d07c-1b67-4341-b196-65dbdce0fddc",
+            "boot-filesystem-mismatch",
+        )
+        abstraction = (
+            api.command(["grub2-probe", "--target=abstraction", str(ENV)]).decode().split()
+        )
+        require(not abstraction, "grub-environment-not-on-plain-partition")
+        cfg = Path("/boot/grub2/grub.cfg").read_text()
+        require(
+            "blscfg" in cfg
+            and "save_env next_entry" in cfg
+            and "set next_entry=" in cfg
+            and 'set default="${saved_entry}"' in cfg,
+            "one-shot-grub-configuration-not-recognized",
+        )
+        desired = recovery_entry(source.read_text(), kernel, env.get("kernelopts", ""))
+        original_hash = api.sha(source)
+        cfg_hash = api.sha(Path("/boot/grub2/grub.cfg"))
+        metadata = api.metadata()
+        original = api.read_json(api.BACKUPS / "baseline.json")
+        require(set(original["recovery_slots"]) == {"0"}, "unexpected-recovery-slot")
+        api.check_tokens(metadata, original["recovery_slots"])
+        metadata_hash = api.keyslot_identity(metadata)
+
+        def verify():
+            require(
+                api.sha(image) == IMAGE_SHA and api.sha(api.CT) == CT_SHA,
+                "validated-boot-configuration-changed",
+            )
+            require(
+                api.sha(source) == original_hash
+                and api.sha(Path("/boot/grub2/grub.cfg")) == cfg_hash,
+                "normal-boot-entry-changed",
+            )
+            require(api.keyslot_identity(api.metadata()) == metadata_hash, "luks-metadata-changed")
+            require(
+                api.command(["grubby", "--default-kernel"]).decode().strip() == selected,
+                "normal-default-kernel-changed",
+            )
+            require(read_env(api).get("saved_entry") == default["id"], "saved-default-changed")
+
+        verify()
+        api.check_image(image)
+        require(
+            api.command(["systemctl", "is-system-running"]).decode().strip() == "running",
+            "system-not-running",
+        )
+        require(
+            not api.command(
+                ["systemctl", "--failed", "--no-legend", "--plain", "--no-pager"]
+            ).strip(),
+            "failed-units-present",
+        )
+        require(
+            api.command(["getenforce"]).decode().strip() == "Enforcing", "selinux-not-enforcing"
+        )
+        require(
+            api.command(["mokutil", "--sb-state"]).decode().strip() == "SecureBoot enabled",
+            "secure-boot-not-enabled",
+        )
+        require(len(Path("/proc/swaps").read_text().splitlines()) == 1, "swap-active")
+        if not STATE.exists() and not STATE.is_symlink():
+            STATE.mkdir(mode=0o700)
+        api.secure(STATE, directory=True)
+        baseline = {
+            "before_boot_id": BOOT_ID,
+            "normal_entry": default["id"],
+            "normal_entry_sha256": original_hash,
+            "grub_cfg_sha256": cfg_hash,
+            "recovery_entry": entry.stem,
+            "recovery_entry_sha256": hashlib.sha256(desired).hexdigest(),
+            "kernel": kernel,
+            "initramfs_sha256": IMAGE_SHA,
+            "luks_metadata_sha256": metadata_hash,
+        }
+        baseline_path = STATE / "baseline.json"
+        if baseline_path.exists():
+            require(api.read_json(baseline_path) == baseline, "recovery-baseline-changed")
+        else:
+            require(not env.get("next_entry") and not entry.exists(), "unowned-recovery-state")
+            api.atomic(STATE / "normal-entry.before", source.read_bytes())
+            api.atomic(STATE / "grubenv.before", ENV.read_bytes())
+            api.save_json(baseline_path, baseline)
+        try:
+            arm(api, entry, desired, env, verify)
+            result = dict(
+                baseline,
+                status="READY_TO_REBOOT",
+                recovery_boot="NOT_RUN",
+                subsequent_automatic_boot="NOT_RUN",
+                token_enrollment="NOT_CHANGED",
+                recovery_slot="NOT_CHANGED",
+                normal_default="PRESERVED",
+                temporary_parameters=[RECOVERY, DISABLE_PLUGINS, MARKER],
+                scope="Separate BLS entry and one-time GRUB selection for attended passphrase recovery",
+                timestamp_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                script_sha256=api.sha(Path(__file__)),
+            )
+            api.save_json(REPORT, result, mode=0o644)
+            print(json.dumps(result, indent=2, sort_keys=True), flush=True)
+            api.command(["sync"])
+            api.command(["systemctl", "reboot"])
+        except BaseException as error:
+            rollback = "PASS"
+            try:
+                disarm(api, entry, desired)
+            except Exception as rollback_error:
+                rollback = "FAIL: " + str(rollback_error)
+            api.save_json(
+                REPORT,
+                {
+                    "status": "FAIL",
+                    "error": str(error),
+                    "one_shot_cleanup": rollback,
+                    "recovery_boot": "NOT_RUN",
+                    "timestamp_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                },
+                mode=0o644,
+            )
+            if rollback != "PASS":
+                raise RuntimeError("one-shot-cleanup-needs-review") from error
+            raise
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--apply-and-reboot", action="store_true")
+    args = parser.parse_args()
+    if not args.apply_and_reboot:
+        print(
+            json.dumps(
+                {
+                    "status": "PREVIEW",
+                    "before_boot_id": BOOT_ID,
+                    "temporary_parameters": [RECOVERY, DISABLE_PLUGINS, MARKER],
+                    "changes": "Add a separate BLS entry, schedule it once, then reboot",
+                    "preserved": "Normal default, kernel, initramfs, crypttab and all LUKS keys/tokens",
+                }
+            )
+        )
+        return
+    try:
+        execute(load_api())
+    except Exception as error:
+        print(
+            json.dumps(
+                {"status": "REFUSED_OR_FAILED", "error": str(error), "recovery_boot": "NOT_RUN"}
+            ),
+            flush=True,
+        )
+        raise SystemExit(1) from None
+
+
+if __name__ == "__main__":
+    main()

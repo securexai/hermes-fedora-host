@@ -1,0 +1,31 @@
+{
+  "artifact_sha256": "b53ee4899b049b019ee4f0a1155a03545f1ed792520d578cee9174643060a12e",
+  "broader_live_qualification": "INCOMPLETE",
+  "canonical_python_tests": 617,
+  "checked_at_utc": "2026-09-29T02:16:09.677872+00:00",
+  "evidence_hashes": {
+    "admin-collision-repaired-r1.json": "77a044fe7a6db64ac195ccc3b85702dbb6f5959974e864a202112164d71b51fc",
+    "admin-name-canonical-r1.log": "23bb31a17996fac6f4ac97a177a38a0685a46879d0e090e8eca148ca18e9628a",
+    "admin-name-focused-r1.log": "0dce9d1ff5dd0075af28abd404b7e0010dacc0871fce610e13e7c04253a1e110",
+    "admin-name-publication-r1.log": "ec8b3b599d2e1eb9f06a00d8507140d4e79049931c2fd0d341f35bc43606e9a6",
+    "admin-name-red-r1.log": "e5e5cc8f97583c0cc58ea2d06378aef2faf98c6b4ba02b775b09ba17bec543f1",
+    "bundle-admin-name-r1.json": "3c3b7ae1b48d9737269fc498839e5730a6c43e2efc7d06edc65a704928d8c43c",
+    "guest-prerequisites-prepared-r1.json": "82800a91403085c456b0930fea7eaa8a1f066041aef24d3a9036fd909791bcfc",
+    "installed-guest-audit-r2.json": "beca33d769f893a4b971200afd14181b6489818bcb4acc5b15836620a33a3e69"
+  },
+  "focused_python_tests": 51,
+  "installed_ssh_admin_audit": "PASS",
+  "local_link_targets": 150,
+  "prerequisite_guard_tests": 4,
+  "remote_urls_and_fragments": "NOT_CHECKED_IN_THIS_PASS",
+  "repair_guard_tests": 6,
+  "shellspec_examples": 140,
+  "source_hashes": {
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "0a6f22b22797660990ec155d7afa8889e8257d600ef46874b14bb0431d763105",
+    "scripts/hermes/production/kickstart.py": "09524976daa12ce26873b12eb54864828e4e1eea9827dd11c51de5d6cc14b3ad",
+    "tests/test_hermes_production.py": "4afaf6ef975283046f2b95747a08161756ecef26e2d8df3c9bd06c36fc6a0df0",
+    "vm/hermes-production-fixture.py": "95d2ddcb08c35a06707ae2b98980065487c75db32b34a9d9130cefd9a95c6ada",
+    "vm/kickstart/fedora-server-production.ks.in": "a12a8c41e5a565ae5db0846adfac852b1cce561f16d847fee0577400a8751bc8"
+  },
+  "status": "PASS_WITHIN_REPOSITORY_AND_ADMIN_REPAIR_SCOPE"
+}

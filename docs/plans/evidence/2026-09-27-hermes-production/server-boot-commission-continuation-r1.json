@@ -1,0 +1,21 @@
+{
+  "boot_id": "87e1d398-7465-4586-a77d-4eaf03245b73",
+  "checked_at_utc": "2026-09-28T14:28:56.576053+00:00",
+  "processes": [],
+  "report": {
+    "cold_start": "NOT_RUN",
+    "error": "crypttab-target-row-count",
+    "firmware_power_on": "OPERATOR_CONFIRMED",
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "luks_uuid": "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6",
+    "passphrase_test_after": "PASS",
+    "passphrase_test_before": "PASS",
+    "reboot": "NOT_RUN",
+    "recovery_boot": "NOT_RUN",
+    "scope": "TPM enrollment and current-kernel boot configuration",
+    "script_sha256": "7bb3791ac872f42a8e94a7ee9d0e1c193bdd70b8dc711c0042a8694fa060bfe9",
+    "status": "FAIL",
+    "timestamp_utc": "2026-09-28T14:28:44.965088+00:00",
+    "tpm_enrollment": "ADDED"
+  }
+}

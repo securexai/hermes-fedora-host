@@ -1,0 +1,29 @@
+{
+  "administrator_status": "P",
+  "audit_mode": "0644",
+  "audit_owner": "0:0",
+  "audit_sha256": "ed58d3d4b58af13434bc405945121135a35360d823006df8a5c839d816620f4a",
+  "checked_at_utc": "2026-09-29T01:41:33.151985+00:00",
+  "extra_argument": "DENIED_PASSWORD_REQUIRED",
+  "install_exit": 0,
+  "installed_runtime_audit": "NOT_RUN",
+  "installer_sha256": "c6f260c14a8539d4a298b4345586bc415e03f8fa56748a05c4a78ef40b68293a",
+  "notes": [
+    "Rescue image lacks stty; optional echo control failed without changing terminal state. Public-code transport and installation succeeded.",
+    "No private input or password hash was read."
+  ],
+  "other_command": "DENIED_PASSWORD_REQUIRED",
+  "password_value_inspected": false,
+  "persistent_xml": "BASELINE_MATCH_EXCEPT_READONLY_RESCUE_DVD",
+  "production_deployment": "NOT_RUN",
+  "real_visudo": "PASS",
+  "rerun": "PASS_UNCHANGED_CONTENT_MODE_OWNER_INODE_MTIME",
+  "rescue_boot_id": "8bf7238e-59fe-4cd7-88f3-3da532cde9e8",
+  "scope": "Private administrator setup verification and exact read-only audit grant in mounted qualification VM",
+  "status": "PASS",
+  "sudoers_mode": "0440",
+  "sudoers_owner": "0:0",
+  "sudoers_sha256": "204e47734e16654963a249af326a68f48da5b41702e9d7124aa6cdf936dc012b",
+  "tpm_enrollment": "NOT_RUN",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

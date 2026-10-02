@@ -1,0 +1,20 @@
+{
+  "status": "PRIVATE_PROMPT_READY",
+  "scope": "Observed corrected installer boot and private console handoff only",
+  "checked_at_utc": "2026-09-28T22:13:35.252466+00:00",
+  "domain": "hermes-production-qualification",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "anaconda": "44.30-2.fc44",
+  "initial_passphrase_prompt_observed": true,
+  "agent_guest_input_sent": false,
+  "agent_detached_with": "Ctrl+]",
+  "agent_console_session_exit": 0,
+  "fresh_prompt_package_warning_observed": false,
+  "vm_power_state_after_detach": "running",
+  "kickstart_sha256": "b9387f78909f5286d0c3e06fe1d548ca4eeb31eb7934df7ef9abeb6c45837908",
+  "required_retention_boot_option": "inst.nosave=all_ks",
+  "operator_private_input": "PENDING",
+  "live_package_installation": "NOT_RUN",
+  "installation_acceptance": "NOT_RUN",
+  "production_deployment": "NOT_RUN"
+}

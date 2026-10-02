@@ -1,0 +1,8 @@
+{
+  "openssl": "OpenSSL 3.5.8 25 Aug 2026 (Library: OpenSSL 3.5.8 25 Aug 2026)",
+  "plaintext_workstation_header": "NOT_CREATED",
+  "private_key_mode": "0o600",
+  "public_certificate_sha256": "6446c3506a759740ba8340a1bd055b99d2d4aadbf1023390333178414c5628ea",
+  "scope": "synthetic OpenSSL CMS roundtrip and wrong-key/tampered-tag rejection",
+  "status": "PASS"
+}

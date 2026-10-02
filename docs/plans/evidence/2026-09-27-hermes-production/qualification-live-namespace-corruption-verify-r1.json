@@ -1,0 +1,13 @@
+{
+  "apply": false,
+  "checked_at_utc": "2026-09-29T20:52:41.782248+00:00",
+  "exit": 0,
+  "operation": "verify",
+  "report": {
+    "scope": "credential-free-runtime",
+    "status": "PASS"
+  },
+  "scope": "Named productionctl operation on pinned synthetic qualification VM using dedicated deployment key",
+  "ssh_policy": "BatchMode, IdentitiesOnly, IdentityAgent=none, strict pinned known-hosts, ForwardAgent=no, no password or keyboard-interactive fallback",
+  "started_at_utc": "2026-09-29T20:52:38.210721+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "guard_tests": 8,
+  "helper_sha256": "509fd4a228769cf80260d4ef9e15040551a6b5f068555396a241e1643f7f7c5a",
+  "launcher": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-validation/synthetic-stage/qualification-application/run-private-interruption-r1.sh",
+  "remote_path": "/home/hermesadmin/hermes-qualification-interrupt-509fd4a228769cf8.py",
+  "root_execution": "NOT_RUN",
+  "scope": "Exact first prepared synthetic operation interruption; namespace recovery NOT_RUN",
+  "status": "STAGED_AWAITING_PRIVATE_SUDO"
+}

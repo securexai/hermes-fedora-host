@@ -1,0 +1,37 @@
+{
+  "application_tpm_reboot_backup_provider_telegram_physical_git_operations": "NOT_RUN",
+  "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+  "changes": "Only public helper staged as commissioning user mode0600; no persistent sudo grant; root phase only reads existing installation/logs and creates one sanitized public receipt",
+  "checked_at_utc": "2026-09-29T23:50:24.184800+00:00",
+  "current_memory_baseline_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "expected_public_receipt": "/var/lib/hermes-production-restore-public/installer-hygiene-r1.json",
+  "guest_root_execution": "NOT_RUN",
+  "logs_copied_modified_deleted": "NONE",
+  "memory_gib": 9,
+  "prior_actual_boot_index_sha256": "81ca4dc5f50459e7701f138ba83c98c043fd3b5e1f0f24f3b52cc0098835d004",
+  "private_command": "bash .toolbox/hermes-production-restore/installer-hygiene-r1/run-private-installer-hygiene.sh",
+  "private_log_and_secret_values": "NOT_READ_DURING_PREPARATION_OR_STAGING",
+  "remote_path": "/home/hermesadmin/hermes-restore-private-installer-hygiene-r1.py",
+  "scope": "Restore-only saved-Kickstart absence, in-memory known recovery-value comparison, read-only recovery test and private operator inspection of retained Anaconda logs; only sanitized root-owned receipt is published",
+  "source_sha256": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/host-guard.py": "4503f9a8aa4e2ad6d59a62bd6d24a388d213a9d01479a9c7ce9094e07a25d9c8",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-hygiene.py": "46df3a07be7e613de77adc1cef7559a8f50a0977a6d306d3983121f109aec31a",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-staged-r1.json": "5e864edaa2415acb2edd06b3d3e3e2ac98c46146557280c390aace2e56991951",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-staging-r1.log": "054acb15dde70ab622cd2f08bfa649d670a7a8a3ed3187e18ad93f191b70929e",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/run-private-installer-hygiene.sh": "317011f19345a41430cf225e069f4ef448801f22282b0582b13e27c6992193b6",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/stage-public-helper-r1.py": "a8f770d30b7c5f52819855da75c628cd971568e7f56d245d3d015a0bc992acd3",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/test-private-hygiene.py": "3718b2830256b99e730ee2e9cc77ea8979a3e29bc0a82c07fd044bdcdb31fcbd"
+  },
+  "status": "PREPARED_AND_PUBLICLY_STAGED_PRIVATE_EXECUTION_NOT_RUN",
+  "validation": {
+    "focused_toolbox_tests": 9,
+    "guard_and_publisher_tests": "Wrong VM with optimization, non-private terminal refusal, serialized secret positive controls, secret only on recovery subprocess stdin with safe failure, saved-Kickstart refusal, secure pager and manual-confirmation refusal, symlink/hardlink refusal, no-op receipt rerun, log change during review refusal",
+    "helper_host_remote_shell_syntax": "PASS",
+    "private_launcher_non_tty": "EXIT_1_BEFORE_SSH_AS_EXPECTED",
+    "private_pager": "LESSSECURE=1; no inherited LESSOPEN/LESSSECURE_ALLOW; shell/editor/history/logfile features disabled per installed less manual",
+    "root_ownership_and_privileged_commands": "MOCKED",
+    "status": "PASS_SYNTHETIC_GUARDS_ONLY"
+  },
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53705293824
+}

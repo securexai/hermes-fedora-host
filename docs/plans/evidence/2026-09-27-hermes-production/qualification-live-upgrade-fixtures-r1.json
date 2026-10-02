@@ -1,0 +1,23 @@
+{
+  "baseline_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "changed_fields": [
+    "files.evidence/synthetic-upgrade-marker-r1.json",
+    "qualification.artifact_sha256"
+  ],
+  "checked_at_utc": "2026-09-29T20:57:46.840964+00:00",
+  "corrupt_payload_archive": ".toolbox/hermes-production-validation/synthetic-stage/candidate-corrupt-payload-r1.tar",
+  "corrupt_payload_archive_bytes": 1148764160,
+  "corrupt_payload_archive_sha256": "274bd4e3802be915034ba7fcfef2db41de08c47f2aaf9df85e93ef7c61e2817b",
+  "corrupt_payload_local_refusal": "artifact-hash-mismatch",
+  "original_payload_and_images": "UNCHANGED",
+  "production_refusal": "release-not-qualified",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "scope": "Synthetic upgrade and payload-corruption fixtures; no runtime operation claimed",
+  "status": "PREPARED_AND_AUTHENTICATED_TEST_FIXTURES",
+  "tampered_member": "source/PRODUCTION_RUNBOOK.md",
+  "upgrade_archive": ".toolbox/hermes-production-validation/synthetic-stage/candidate-synthetic-upgrade-marker-r1.tar",
+  "upgrade_archive_bytes": 1148764160,
+  "upgrade_archive_sha256": "9710dcb206492a62ad12d9781d6dff089ed21e82140ecb847fad3b1b0086be23",
+  "upgrade_candidate": "b158afd97686a96977d2eafa819f0d58adc7286d13f95b30ad9df9b77ad8cc40",
+  "workstation_free_bytes": 57712631808
+}

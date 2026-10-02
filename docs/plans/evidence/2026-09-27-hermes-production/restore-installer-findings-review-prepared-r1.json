@@ -1,0 +1,36 @@
+{
+  "G03": "OPEN",
+  "G04_G05_G06": "OPEN",
+  "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+  "checked_at_utc": "2026-09-30T02:59:29.606519+00:00",
+  "next_action": "Operator runs the prepared private viewer and sends only final status/counts; validate its public report before interpreting the result",
+  "prior_live_index_sha256": "c67e7c8736fee197e0e32cdbca5c507cec1d850902df11af5fb0f727d950c930",
+  "privacy": "No raw private logs, excerpts or operator inputs collected by agent; quotes shown only on private TTY; public report only fixed status/identity/count fields",
+  "private_command": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/installer-findings-review-r1/run-private-findings-review.sh",
+  "production_acceptance": "OPEN",
+  "recovery_secret_prompt": "NOT_REQUIRED_WHILE_PRIOR_SCREENING_AND_LOG_SET_MATCH",
+  "scope": "Private complete classification of the 25 actual potential locations; not a full manual log review",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/check-public-review.py": "e9b4fd23ca3181fa2e7de050c0daefe2f62c4c23d441469808a7203e8792c052",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/expected-screening-receipt.json": "70b4b3944b2f42dbf8e71701580fb29d4af190c8f5ef3119bf8924ed9e98fd2d",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/focused-validation-r1.log": "f196bef0973ff999dcbcf679ca035393cbb4be84e582dd7f9d09005e1f656ac4",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/private-findings-review.py": "99aaa703c1affeea63e9f213a6f90e32b785f2830280001220f2bce59b2a05d7",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/public-review-observation-r1.json": "fe21d4604ef51e936dc070d11aa5bb5b6535519d62df33bff6b73deadb83e7e9",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/public-review-observation-r1.log": "fe21d4604ef51e936dc070d11aa5bb5b6535519d62df33bff6b73deadb83e7e9",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/public-staging-r1.log": "3d1172f1e7bed4c924737c6fd406d5f3b58a3353061f929f1c209ab3de04ecd8",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/public-staging-r2.log": "739371a76758a89cb64ab760fbd6e4530eec22bd5088a18d904b50b60676c49e",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/run-private-findings-review.sh": "9fb087b0a81bfdbdf8114f65815598499d1aa9949a436e1fb9836d660a1acc4d",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/stage-public-inputs-r1.py": "99a3161d0bead79b6bbc58b98dea131498d7634cf85c21718be88b2f294205a4",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/test-private-findings-review.py": "19e979abb97ce19dbafdbab8007cda9abad78f1d0860597bbee83243402053af"
+  },
+  "status": "PASS_TARGETED_REVIEW_PREPARATION_ONLY",
+  "validation": {
+    "coverage": "All 25 including last five; exact duplicate context accounting; differing context separation; missing/duplicate/bad location refusal; no long-excerpt truncation; explicit clear/secret/unsure/stop; terminal control escaping; no-TTY refusal; log/receipt drift refusal; strict receipt accounting; unchanged rerun",
+    "focused_tests": 14,
+    "launcher_non_tty_guard": "PASS_BEFORE_SSH",
+    "live_private_classification": "NOT_RUN",
+    "public_staging_rerun": "UNCHANGED",
+    "status": "PASS_SYNTHETIC_CLASSIFICATION_AND_GUARD_TESTS"
+  },
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+}

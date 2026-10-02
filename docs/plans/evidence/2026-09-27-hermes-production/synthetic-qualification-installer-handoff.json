@@ -1,0 +1,39 @@
+{
+  "status": "INSTALLER_WAITING_FOR_PRIVATE_INPUT",
+  "scope": "Approved qualification guest startup and installer handoff",
+  "checked_at_utc": "2026-09-28T21:38:33.282280+00:00",
+  "name": "hermes-production-qualification",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "state": "running",
+  "memory": "8388608",
+  "memory_unit": "KiB",
+  "vcpus": "2",
+  "disks": [
+    {
+      "source": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-fixture/system.qcow2",
+      "serial": "HERMES_PROD_TEST"
+    },
+    {
+      "source": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-fixture/unrelated.raw",
+      "serial": "HERMES_UNRELATED"
+    }
+  ],
+  "firmware_features": [
+    {
+      "enabled": "yes",
+      "name": "enrolled-keys"
+    },
+    {
+      "enabled": "yes",
+      "name": "secure-boot"
+    }
+  ],
+  "tpm": "<tpm model=\"tpm-crb\">\n      <backend type=\"emulator\" version=\"2.0\" />\n      <alias name=\"tpm0\" />\n    </tpm>\n    ",
+  "forwarding": [
+    "<portForward proto=\"tcp\" address=\"127.0.0.1\">\n        <range start=\"22224\" to=\"22\" />\n      </portForward>\n      "
+  ],
+  "console_observation": "Passphrase (confirm):",
+  "console_action": "A single newline requested console output; it supplied a blank first entry. No nonempty passphrase entered. Console detached before operator input.",
+  "installation_acceptance": "NOT_RUN",
+  "restore_guest": "NOT_CREATED"
+}

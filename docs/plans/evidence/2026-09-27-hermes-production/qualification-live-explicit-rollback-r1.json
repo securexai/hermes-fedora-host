@@ -1,0 +1,25 @@
+{
+  "attempt": "ab3fdeabf3574cf4a740ed83aaf84b5b",
+  "checked_at_utc": "2026-09-29T21:00:10.491321+00:00",
+  "evidence_sha256": {
+    "qualification-live-namespace-explicit-rollback-r1.json": "f5301fe64476e2100ecac21847f248cbf18fe1a95e66f041925f821be69a1404",
+    "qualification-live-namespace-explicit-rollback-verify-r1.json": "7b66434b061a70fbde13306e93711292685d54a7025520f6d353d1ece30e2d71",
+    "qualification-live-namespace-marker-verify-r1.json": "8d38a003de2e9be22783548adb26077a7d31561bd63c1f75ee290703c28c8550",
+    "qualification-live-namespace-payload-corruption-verify-r1.json": "345890d450e23dc079e01a300084e587e503773b8f9b2722fdf1adaa600a4003",
+    "qualification-live-namespace-status-explicit-rollback-r1.json": "a121565f12b591034e98d32c2875572fca2e5cbba9171a92ee305f72c2290cd4",
+    "qualification-live-namespace-status-marker-committed-r1.json": "edf902a276de788a69d59c10d1f551db610cae193e789d34a6a3d5dde1906946",
+    "qualification-live-namespace-status-payload-corruption-r1.json": "45ebc78de66a191c4e02fe9a5df714fead6a7dbcbb0a93384023bb5dbc6ac948",
+    "qualification-live-namespace-upgrade-marker-r1.json": "7cc4cb83b152b1e847a0743d35a9ef1f84469d3ee822186feed99b3f1c9c60ad",
+    "qualification-live-payload-corruption-r1.json": "6d597a8cca659df65964dc1dc9c9b2a47f387d06eac4b06023a0a5b2f8fa48e7",
+    "qualification-live-upgrade-fixtures-r1.json": "39f265f5f11168adfd3acf42331a67a98b5438e8711cfa1c17fb16d501c92855"
+  },
+  "explicit_rollback": "ROLLED_BACK",
+  "final_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "final_runtime_verification": "PASS",
+  "fixture_scope": "Upgrade adds one public qualification marker; original images/application/controller payload unchanged",
+  "provider_telegram_external_backup": "NOT_RUN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "status": "PASS_WITHIN_ACTUAL_SUCCESSFUL_UPDATE_EXPLICIT_ROLLBACK_AND_PAYLOAD_REJECTION_SCOPE",
+  "tampered_payload": "artifact-hash-mismatch; current and journal unchanged",
+  "upgrade_candidate": "b158afd97686a96977d2eafa819f0d58adc7286d13f95b30ad9df9b77ad8cc40"
+}

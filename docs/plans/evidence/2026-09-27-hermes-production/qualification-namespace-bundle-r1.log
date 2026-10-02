@@ -1,0 +1,18 @@
+{
+  "archive_bytes": 1148764160,
+  "archive_sha256": "d2f206c87e4adc6373969f2720dc68b3e9d2e67ecf3525d0e9eebb9026a1d074",
+  "artifact_sha256": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "changed_packaged_files": [
+    "source/PRODUCTION_RUNBOOK.md",
+    "source/production/host.py",
+    "source/production/runtime.py"
+  ],
+  "checked_at_utc": "2026-09-29T19:55:53.158840+00:00",
+  "previous_artifact_sha256": "6b3e4e7f141a114e428b56f885c9b47b3231f4043aad93b4e66f3d1d3e916ed5",
+  "previous_live_qualification": "FIRST_DEPLOYMENT_STALLED_AT_PREPARED",
+  "production_candidate_rejected": true,
+  "receiver_sha256": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "scope": "Namespace correction test-signed candidate signature/extraction and unqualified-production rejection; live qualification incomplete",
+  "status": "PASS",
+  "workstation_free_bytes_after": 70509756416
+}

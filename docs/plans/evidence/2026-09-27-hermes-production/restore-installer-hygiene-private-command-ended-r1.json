@@ -1,0 +1,59 @@
+{
+  "G03": "BLOCKED_RESULT_DIAGNOSIS_REQUIRED_NO_HYGIENE_PASS",
+  "application_tpm_reboot_external_backup_provider_telegram_physical_git_delegation": "NOT_RUN",
+  "checked_at_utc": "2026-09-30T01:53:05.170028+00:00",
+  "completion": {
+    "exit_code": 1,
+    "guest_receipt": "INDEPENDENT_PINNED_VALIDATION_REQUIRED",
+    "host_boot_id": "1cf31da3-bcc8-4e0c-9cce-bf4810756aa6",
+    "phase": "PRIVATE_COMMAND_ENDED",
+    "pid": 187748,
+    "private_input_output": "NOT_CAPTURED",
+    "start_ticks": "2959944"
+  },
+  "diagnostic_request": "Only the final non-secret status/error shown in the private Konsole window; never password/passphrase/log text",
+  "failure_reason": "UNKNOWN_NOT_INFERRED_FROM_EXIT_CODE",
+  "live_window_is_not_live_review": "The command is authoritatively ended. The GUI/wrapper remains open for the operator to see its result and press Enter; do not treat that as a running hygiene job or verified wait.",
+  "native_goal_observed": "ACTIVE_RESUMED_AUDIT_FIRST_USER_TURN",
+  "next_action": "Inspect that safe error, correct only its demonstrated cause within existing authorization, then prepare an explicitly identified retry if appropriate. Do not relaunch the same attempt or broaden sudo.",
+  "prior_live_handoff_sha256": "983fc123aa7cb2f394acbe06f04e066b4748e4e28465bee50ed6e7ce460416b2",
+  "production_acceptance": "OPEN",
+  "public_receipt_observation": {
+    "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+    "checked_at_utc": "2026-09-30T01:50:42.299596+00:00",
+    "scope": "Pinned public receipt observation only; no private logs/input read",
+    "status": "INSTALLER_HYGIENE_REPORT_ABSENT"
+  },
+  "raw_private_values_logs_or_terminal": "NOT_COLLECTED",
+  "remaining_G04_G05_G06": "OPEN_WITH_ORIGINAL_PRIVATE_AUTHORIZATION_AND_INPUT_BOUNDARIES",
+  "scope": "Actual private command termination metadata and independent pinned public receipt observation; no terminal/log/input capture",
+  "service_observation": {
+    "checked_at_utc": "2026-09-30T01:49:00.897133+00:00",
+    "completion_present": true,
+    "private_command_exit_code": 1,
+    "private_terminal_capture": "NONE",
+    "service": {
+      "ActiveState": "active",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "LoadState": "loaded",
+      "MainPID": "187668",
+      "StandardError": "null",
+      "StandardInput": "null",
+      "StandardOutput": "null",
+      "SubState": "running"
+    },
+    "unit": "hermes-restore-installer-review-r2.service",
+    "wrapper_handle_present": true,
+    "wrapper_pid": 187748,
+    "wrapper_same_process_live": true
+  },
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r5.py": "b2705c35a49994a70579d5a8aa80b5b4dea55c9cefd5873d9e960c1c49fa7679",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-observation-r3.json": "d65847188796673923b759b0c0b2820aa32f74254eb07da503d1a5b2ac8aabe0",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-result.json": "f59dd53a72327bf71f857f7ef08bbd51c7a17e10aadd16e363999b7988e7a2bd",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r5.json": "b2753487d60069d6d236f5865ad6d000144762e254614611ea18d2e283756a17",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r5.log": "b2753487d60069d6d236f5865ad6d000144762e254614611ea18d2e283756a17"
+  },
+  "status": "PRIVATE_COMMAND_EXIT_1_NO_PUBLIC_RECEIPT_NON_SECRET_ERROR_REQUIRED"
+}

@@ -1,0 +1,211 @@
+"""Target-bound encrypted LUKS header backup; no enrollment or device writes."""
+
+import argparse
+import datetime
+import fcntl
+import hashlib
+import json
+import os
+import pwd
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+LUKS_UUID = "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6"
+VAR_UUID = "15a5d3d9-8e39-4fb9-9631-323e7b038a65"
+DEVICE = "/dev/disk/by-uuid/" + LUKS_UUID
+CERTIFICATE = "-----BEGIN CERTIFICATE-----\nMIIEMzCCApugAwIBAgIUOQ06uB3QpBtlWXRq19Lepz7Zq8AwDQYJKoZIhvcNAQEL\nBQAwKTEnMCUGA1UEAwweSGVybWVzIHRlbXBvcmFyeSBMVUtTIHJlY292ZXJ5MB4X\nDTI2MDkyODEzMjkxM1oXDTM2MDkyNTEzMjkxM1owKTEnMCUGA1UEAwweSGVybWVz\nIHRlbXBvcmFyeSBMVUtTIHJlY292ZXJ5MIIBojANBgkqhkiG9w0BAQEFAAOCAY8A\nMIIBigKCAYEAsvoImOZiePa2n5PJdvwymbD4/ua9lgw4bTUPLv1KMOuzqEPbPh3D\nGDPycJEJA/mo9mzkStymAGL3VGB+NjXDBn9ZwdNEnkuMmVHfK9rqcUqBx5gaqsVb\n2S7wjDaA2vA6jL5ig/dAEv2QrE1PNCsHRXntxVuy+V+5CCxhOHi2IoDrQYF0KmjB\nLiwUl1WLWNXO9mxgmj2F235PWVbgrZPrmgNyaoWFX68knY/N6+Q1bIZ1vXvCuVB2\nn0tRc6xkd1JdtLe5c9K9CgYA8uljYd+DFtG8KMu7b1m/70VSqfbUAieHBvp7+52f\n4ECmL0rI29v8HfzvS3RUbMSKf9Hd7TO0erGDJlzpZoAjOWsKYxbLnXfTR7BzqkRy\nrWWrUY8rRrniLjp8qmS0QrxoirXHGj7z3ReP/PCd5t9mybXWHlvZJUWavWyA79vA\n3Nnae1EKjoD5gTh0CF0369rj7rxgeRmaW2SOEu/6tfdLMhM03kVmVAfG2lcqiRv3\n6mLfHwbxnHUfAgMBAAGjUzBRMB0GA1UdDgQWBBTkCWbfylS9nmVYrjWbAn778WyD\nhjAfBgNVHSMEGDAWgBTkCWbfylS9nmVYrjWbAn778WyDhjAPBgNVHRMBAf8EBTAD\nAQH/MA0GCSqGSIb3DQEBCwUAA4IBgQBEwT6xAHSlY7v1Y16OQCUTOMfA+T77zWki\noLJ2n4YknuIzuD0Royvy6FKiQTNHPJ8C8FIvp8kLRNDEJ3PE5zcvO4M8S4ElyW5/\nkJk7vFu6w6Uwv5sDTgUxuP8Di2FFmUI7PwL41tcT4OxR+WwV8f8YbYhVfCYuC6MS\nBVFP9r76PNaRspmUzzk9sfdivCwD2w6OJczwHxt0YzdV1zhzfN4cy9XyYMBiZNGh\n4buIZf1pulqZ2t23uXcYz1y0pnVTtfWM3afsPNHpwHGsqiQGyblQlNnCqvOiUfPX\nC4P9J1whCgA/V2HQpjgfJe+YY7UUr4RSgPFrZtXOxPfHb28FKrtmwYMGGUuSSJsp\n4YFsplHTD1SBOxLEOXRfekqPfDpvUZLgbCxgPaQL2sakn6YSI3uX1Jg6mOhbrLt1\niWNk6Ryj47iWumK6OcRkCmPdmOWGbBzfsJKgcVtE6CtcY5pR9pyZWCP3eYqLUGla\nkrGCOHELQ/W/cAyZiOO/Km3qrf2Z4QY=\n-----END CERTIFICATE-----\n"
+CERT_SHA = hashlib.sha256(CERTIFICATE.encode()).hexdigest()
+BASE = Path("/var/lib/hermes-production-recovery")
+ARTIFACT = BASE / ("header-before-tpm-" + CERT_SHA[:16])
+
+
+def require(value, reason):
+    if not value:
+        raise RuntimeError(reason)
+
+
+def run(args):
+    result = subprocess.run(
+        args,
+        capture_output=True,
+        timeout=120,
+        stdin=subprocess.DEVNULL,
+        env={"PATH": "/usr/sbin:/usr/bin:/sbin:/bin", "LANG": "C.UTF-8"},
+    )
+    require(result.returncode == 0, "command-failed:" + Path(args[0]).name)
+    return result.stdout
+
+
+def target():
+    require(
+        run(["findmnt", "-n", "-o", "UUID", "--target", "/var/lib"]).decode().strip() == VAR_UUID,
+        "wrong-target-filesystem",
+    )
+    for path in (Path("/var"), Path("/var/lib")):
+        info = path.lstat()
+        require(
+            stat.S_ISDIR(info.st_mode) and info.st_uid == 0 and not info.st_mode & 0o022,
+            "unsafe-root-parent",
+        )
+
+
+def owned(path, mode, *, directory=False, gid=None):
+    info = path.lstat()
+    require(
+        (stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode))
+        and info.st_uid == 0
+        and stat.S_IMODE(info.st_mode) == mode
+        and (gid is None or info.st_gid == gid),
+        "unsafe-recovery-path",
+    )
+    if not directory:
+        require(info.st_nlink == 1, "unsafe-recovery-file-links")
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def validate_existing(group):
+    owned(ARTIFACT, 0o750, directory=True, gid=group)
+    owned(ARTIFACT / "report.json", 0o640, gid=group)
+    owned(ARTIFACT / "header.cms", 0o640, gid=group)
+    report = json.loads((ARTIFACT / "report.json").read_text())
+    require(
+        report["luks_uuid"] == LUKS_UUID
+        and report["certificate_sha256"] == CERT_SHA
+        and report["status"] == "ENCRYPTED_ON_SERVER"
+        and report["ciphertext_sha256"] == sha(ARTIFACT / "header.cms"),
+        "existing-recovery-artifact-mismatch",
+    )
+    return report
+
+
+def apply():
+    require(os.geteuid() == 0, "private-sudo-step-required")
+    target()
+    require(
+        run(["cryptsetup", "luksUUID", DEVICE]).decode().strip() == LUKS_UUID,
+        "luks-identity-mismatch",
+    )
+    group = pwd.getpwnam("aicowork").pw_gid
+    if not BASE.exists() and not BASE.is_symlink():
+        BASE.mkdir(mode=0o700)
+        os.chown(BASE, 0, group)
+        BASE.chmod(0o710)
+    owned(BASE, 0o710, directory=True, gid=group)
+    fd = os.open(BASE / ".lock", os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
+    with os.fdopen(fd, "w") as lock:
+        owned(BASE / ".lock", 0o600)
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if ARTIFACT.exists() or ARTIFACT.is_symlink():
+            return validate_existing(group)
+        stage = Path(tempfile.mkdtemp(prefix=".attempt-", dir=BASE))
+        header = stage / "header.bin"
+        try:
+            certificate = stage / "recipient.pem"
+            certificate.write_text(CERTIFICATE)
+            run(["cryptsetup", "luksHeaderBackup", "--header-backup-file", str(header), DEVICE])
+            header.chmod(0o600)
+            owned(header, 0o600)
+            require(
+                run(["cryptsetup", "luksUUID", str(header)]).decode().strip() == LUKS_UUID,
+                "backup-uuid-mismatch",
+            )
+            metadata = json.loads(
+                run(["cryptsetup", "luksDump", "--dump-json-metadata", str(header)])
+            )
+            require(metadata.get("keyslots"), "backup-has-no-keyslots")
+            ciphertext = stage / "header.cms"
+            run(
+                [
+                    "openssl",
+                    "cms",
+                    "-encrypt",
+                    "-binary",
+                    "-aes-256-gcm",
+                    "-recip",
+                    str(certificate),
+                    "-keyopt",
+                    "rsa_padding_mode:oaep",
+                    "-keyopt",
+                    "rsa_oaep_md:sha256",
+                    "-in",
+                    str(header),
+                    "-outform",
+                    "DER",
+                    "-out",
+                    str(ciphertext),
+                ]
+            )
+            report = {
+                "status": "ENCRYPTED_ON_SERVER",
+                "luks_uuid": LUKS_UUID,
+                "certificate_sha256": CERT_SHA,
+                "header_sha256": sha(header),
+                "header_bytes": header.stat().st_size,
+                "ciphertext_sha256": sha(ciphertext),
+                "keyslot_count": len(metadata["keyslots"]),
+                "timestamp_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "script_sha256": sha(Path(__file__)),
+                "artifact_directory": str(ARTIFACT),
+                "offhost_verification": "NOT_RUN",
+                "disk_restore": "NOT_RUN",
+                "tpm_enrollment": "NOT_RUN",
+            }
+            (stage / "report.json").write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
+            header.unlink()
+            certificate.unlink()
+            for path in (ciphertext, stage / "report.json"):
+                os.chown(path, 0, group)
+                path.chmod(0o640)
+            os.chown(stage, 0, group)
+            stage.chmod(0o750)
+            os.rename(stage, ARTIFACT)
+            return validate_existing(group)
+        finally:
+            # The only plaintext copy is on the already encrypted server filesystem.
+            if stage.exists():
+                shutil.rmtree(stage)
+
+
+def main():
+    os.umask(0o077)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--apply", action="store_true")
+    args = parser.parse_args()
+    target()
+    if args.apply:
+        report = apply()
+    else:
+        report = {
+            "status": "PREVIEW",
+            "luks_uuid": LUKS_UUID,
+            "certificate_sha256": CERT_SHA,
+            "artifact_directory": str(ARTIFACT),
+            "openssl": run(["openssl", "version"]).decode().strip(),
+            "changes": ["create encrypted header backup only"],
+        }
+    print(json.dumps(report, sort_keys=True, indent=2))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as error:
+        print(
+            json.dumps(
+                {
+                    "status": "FAIL",
+                    "error": str(error)
+                    if isinstance(error, RuntimeError)
+                    else type(error).__name__,
+                }
+            ),
+            file=sys.stderr,
+        )
+        sys.exit(1)

@@ -1,0 +1,31 @@
+{
+  "actual_guest_ram_boot_preflight": "NOT_RUN_PRIVATE_UNLOCK_PENDING",
+  "checked_at_utc": "2026-09-29T23:33:07.225124+00:00",
+  "current_memory_baseline": ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-applied-r1.xml",
+  "current_memory_baseline_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-approval-r1.json": "ea4070778f55ec981f8fc3911afc3ab594f8131ea6716e9f7b78d0e5d16012c7",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-handoff-r1.json": "3897cc74aeac9b0382c4e4f01f24275e770d0ed783f099f0d106a72fdf28201d",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-prepared-r1.json": "1fbe8ed69aa4935c4bb9e289796d9b1b7053cbce5b104935bd50884dd309e38d",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-preview-r1.json": "9aacfba07da2228b0d5bd6d8d722400480270b942168e606eae948c477686be1",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-rerun-r1.json": "c993746752c11cd9dfb8ef327cf35f4d65bd6f6a7a55b2bee48acefbd78b8cd6"
+  },
+  "idempotent_rerun": "PASS_NO_LIFECYCLE_REPLAY",
+  "local_input_sha256": {
+    ".toolbox/hermes-production-restore/prerequisites-r1/apply-memory-9gib-r1.py": "a24755b9efbeba05c29967374cb96ade034dc3ff94f87765b17112f113f249f9",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-8gib-before-r1.xml": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-8gib-observed-before-r1.xml": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-active-paused-r1.xml": "4e1ed324421f0ab0cbb637d43b7e3d7e9e164216965eea99493374458bf05571",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-applied-r1.xml": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-handoff-r1.json": "3897cc74aeac9b0382c4e4f01f24275e770d0ed783f099f0d106a72fdf28201d",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-prepared-r1.json": "1fbe8ed69aa4935c4bb9e289796d9b1b7053cbce5b104935bd50884dd309e38d",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-proposal-r1.xml": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+    ".toolbox/hermes-production-restore/prerequisites-r1/public-memory-9gib-audit-r1.py": "712bdcd1a317bd77ff1e41e08fed21e5f098ac630e47f0e807759e41c655a208"
+  },
+  "memory_gib": 9,
+  "prior_prerequisites_index_sha256": "8bb39424e86440e00aaa21798168fbf7b8348864c8591b8b57ab449be0ab6075",
+  "production_acceptance": "NOT_ESTABLISHED",
+  "status": "APPROVED_MEMORY_ONLY_DEFINITION_AND_PRESERVATION_PASS_PRIVATE_BOOT_PENDING",
+  "system_disk_inode_preserved": "PASS",
+  "vcpus": 2
+}

@@ -1,0 +1,11 @@
+{
+  "account": {
+    "uid": 1001,
+    "gid": 1001,
+    "home": "/home/hermes",
+    "shell": "/usr/sbin/nologin"
+  },
+  "sudo_list_exit": 0,
+  "sudo_list_stdout": "User hermes is not allowed to run sudo on hermes-qualification.\n",
+  "sudo_list_stderr": ""
+}

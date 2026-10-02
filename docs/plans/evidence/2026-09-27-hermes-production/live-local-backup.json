@@ -1,0 +1,201 @@
+{
+  "checks": {
+    "container_stopped": true,
+    "localhost_port_released": true,
+    "private_files_match_original_identity": true,
+    "same_container": true,
+    "same_snapshot": true,
+    "stop_twice": [
+      "already-stopped",
+      "already-stopped"
+    ],
+    "two_accepted_runs": true
+  },
+  "failed_repository_retained": true,
+  "limits": {
+    "acceptance": "local synthetic file recovery only; off-host recovery unverified",
+    "action": "test",
+    "container": "hermes-preproduction-backup",
+    "cpus": 1,
+    "image": "sha256:4d7b3f8712ed95efeed6e6756ff70859d896ffeb5e7c04da31504b0fe8203e52",
+    "listen": "127.0.0.1:22226",
+    "memory_bytes": 268435456,
+    "minimum_free_bytes": 21474836480,
+    "pids": 64,
+    "retention": "test stops the container; keys, encrypted data and reports retained",
+    "state": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-backup",
+    "status": "PREVIEW"
+  },
+  "not_run": [
+    "independent off-host recovery",
+    "application recovery",
+    "VM lifecycle",
+    "provider calls",
+    "production changes"
+  ],
+  "reports": [
+    {
+      "error": "container-owner-drift",
+      "scope": "local synthetic files only",
+      "status": "FAIL",
+      "stop": "FAILED_REVIEW_REQUIRED"
+    },
+    {
+      "application_recovery": "NOT_RUN",
+      "checks": [
+        "pinned SFTP",
+        "wrong SSH key rejected",
+        "wrong host key rejected",
+        "wrong Restic password rejected",
+        "Restic read-data integrity",
+        "restored content and file modes",
+        "no plaintext marker in repository",
+        "container identity, binding, resources, mounts and security"
+      ],
+      "container_id": "b8e3f1aa966399e10bc91f92ec44f804e13434d75f393cfdef45511f5877ef6d",
+      "offhost_recovery": "NOT_VERIFIED",
+      "restore": "restores/7185cb9f637ff4f6",
+      "scope": "local synthetic files only",
+      "snapshot_count": 1,
+      "snapshot_id": "1754b4e0fb5c384c2d275d89d1d9ffcdcf77daaf35a97de2ed35cdd88ad3b4f1",
+      "source_files": {
+        "empty": {
+          "bytes": 0,
+          "mode": 384,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "executable": {
+          "bytes": 17,
+          "mode": 448,
+          "sha256": "306c6ca7407560340797866e077e053627ad409277d1b9da58106fce4cf717cb"
+        },
+        "marker.txt": {
+          "bytes": 88,
+          "mode": 384,
+          "sha256": "48fec5a5248ae0e9b2b47c47e209c8213a3c99e2a66e6337021cb4433460664f"
+        },
+        "nested": {
+          "directory": true
+        },
+        "nested/binary.dat": {
+          "bytes": 8192,
+          "mode": 384,
+          "sha256": "dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46"
+        }
+      },
+      "status": "PASS",
+      "stop": "stopped",
+      "unchanged_rerun": false
+    },
+    {
+      "error": "snapshot-rerun-duplicated",
+      "scope": "local synthetic files only",
+      "status": "FAIL",
+      "stop": "stopped"
+    },
+    {
+      "container_id": "b8e3f1aa966399e10bc91f92ec44f804e13434d75f393cfdef45511f5877ef6d",
+      "correction": "Back up dot from the synthetic source directory; restore directly into isolated staging.",
+      "reason": "Absolute source path included changing ancestor directory metadata; second unchanged backup created another snapshot. No source files changed.",
+      "repository": "repository-attempt-absolute-path",
+      "snapshot_count": 2,
+      "status": "RETAINED_FAILED_ATTEMPT"
+    },
+    {
+      "application_recovery": "NOT_RUN",
+      "checks": [
+        "pinned SFTP",
+        "wrong SSH key rejected",
+        "wrong host key rejected",
+        "wrong Restic password rejected",
+        "Restic read-data integrity",
+        "restored content and file modes",
+        "no plaintext marker in repository",
+        "container identity, binding, resources, mounts and security"
+      ],
+      "container_id": "b8e3f1aa966399e10bc91f92ec44f804e13434d75f393cfdef45511f5877ef6d",
+      "offhost_recovery": "NOT_VERIFIED",
+      "restore": "restores/b8a3a8b7077cf0a9",
+      "scope": "local synthetic files only",
+      "snapshot_count": 1,
+      "snapshot_id": "9946c64289cd0db03cfd711e91809c51cb009e3f04208d980d87445b78ed2d62",
+      "source_files": {
+        "empty": {
+          "bytes": 0,
+          "mode": 384,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "executable": {
+          "bytes": 17,
+          "mode": 448,
+          "sha256": "306c6ca7407560340797866e077e053627ad409277d1b9da58106fce4cf717cb"
+        },
+        "marker.txt": {
+          "bytes": 88,
+          "mode": 384,
+          "sha256": "48fec5a5248ae0e9b2b47c47e209c8213a3c99e2a66e6337021cb4433460664f"
+        },
+        "nested": {
+          "directory": true
+        },
+        "nested/binary.dat": {
+          "bytes": 8192,
+          "mode": 384,
+          "sha256": "dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46"
+        }
+      },
+      "status": "PASS",
+      "stop": "stopped",
+      "unchanged_rerun": false
+    },
+    {
+      "application_recovery": "NOT_RUN",
+      "checks": [
+        "pinned SFTP",
+        "wrong SSH key rejected",
+        "wrong host key rejected",
+        "wrong Restic password rejected",
+        "Restic read-data integrity",
+        "restored content and file modes",
+        "no plaintext marker in repository",
+        "container identity, binding, resources, mounts and security"
+      ],
+      "container_id": "b8e3f1aa966399e10bc91f92ec44f804e13434d75f393cfdef45511f5877ef6d",
+      "offhost_recovery": "NOT_VERIFIED",
+      "restore": "restores/2285821f91c111ed",
+      "scope": "local synthetic files only",
+      "snapshot_count": 1,
+      "snapshot_id": "9946c64289cd0db03cfd711e91809c51cb009e3f04208d980d87445b78ed2d62",
+      "source_files": {
+        "empty": {
+          "bytes": 0,
+          "mode": 384,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "executable": {
+          "bytes": 17,
+          "mode": 448,
+          "sha256": "306c6ca7407560340797866e077e053627ad409277d1b9da58106fce4cf717cb"
+        },
+        "marker.txt": {
+          "bytes": 88,
+          "mode": 384,
+          "sha256": "48fec5a5248ae0e9b2b47c47e209c8213a3c99e2a66e6337021cb4433460664f"
+        },
+        "nested": {
+          "directory": true
+        },
+        "nested/binary.dat": {
+          "bytes": 8192,
+          "mode": 384,
+          "sha256": "dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46"
+        }
+      },
+      "status": "PASS",
+      "stop": "stopped",
+      "unchanged_rerun": true
+    }
+  ],
+  "scope": "local synthetic encrypted backup and file restore only",
+  "status": "PASS"
+}

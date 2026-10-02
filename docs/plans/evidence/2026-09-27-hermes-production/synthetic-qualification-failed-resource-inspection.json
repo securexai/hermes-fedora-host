@@ -1,0 +1,25 @@
+{
+  "scope": "Retained failed-installation resources; read-only ownership and blankness inspection",
+  "checked_at_utc": "2026-09-28T21:35:14.651158+00:00",
+  "sessions": {
+    "current": [
+      ""
+    ],
+    "prior_stripped": [
+      ""
+    ]
+  },
+  "status": "PASS",
+  "guest_domain": "ABSENT_IN_BOTH_SESSIONS",
+  "image_data": "UNALLOCATED_ZERO",
+  "image_virtual_bytes": 189817421824,
+  "canary": "UNCHANGED",
+  "kickstart": "UNCHANGED",
+  "ownership_sha256": "a9ba92f7bad593ceb67a6a2a28a0e8b99943a167aa69d5a3b95bc13f2eabb829",
+  "image_sha256": "5318de0cf19b996841219dd5f8c44fafe5719a1b8f459be9fbb5f83298780f81",
+  "session_paths": {
+    "HOME": "/var/home/aicloudopspecial",
+    "XDG_RUNTIME_DIR": "/run/user/1000"
+  },
+  "workspace_free_bytes": 90045890560
+}

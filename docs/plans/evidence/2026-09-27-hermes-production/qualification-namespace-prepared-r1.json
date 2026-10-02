@@ -1,0 +1,46 @@
+{
+  "archive_sha256": "d2f206c87e4adc6373969f2720dc68b3e9d2e67ecf3525d0e9eebb9026a1d074",
+  "bootstrap_directory": ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace",
+  "bootstrap_sha256": "31501c3893e12a4f308ed018ddc9959bb11f90b2c3fd329fdddd2265615712a0",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checks": {
+    "candidate_signature_extraction": "PASS",
+    "canonical_python": 623,
+    "check_only_lint": "PASS",
+    "focused_python": 57,
+    "private_bootstrap_guards": 11,
+    "private_interruption_guards": 8,
+    "secret_scan": "PASS",
+    "shellspec": 140,
+    "source_aware_provenance": "PASS_AT_CANONICAL_RUN; refreshed after final records",
+    "unqualified_production_rejection": "PASS"
+  },
+  "corrected_root_bootstrap": "NOT_RUN",
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/bundle-namespace-init-r1.json": "55c693eb097f1165d9f2190dfb4477ebb12a3057d098b06bc8ac196b155bc7a1",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-current-r1.json": "bcb0ca864e884ce52e5f17fd80a7c75b78e65119cf04d4d8d54cf6380a93efee",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-bootstrap-guards-r1.log": "e53bb194f724ff19e5a6bed5afd9c7c8cf9498123ff7da036bcfe767749d4016",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-bundle-r1.log": "230621448170027241ecb10bef6d6b76f47c31d53bb979e5941438fdc2e7fa0a",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-canonical-r1.log": "75c3a8ac8c346c9bbbfb56acd1047bfdeb0e464a5edc4a7558475bb5cb0799c8",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-lint-r1.log": "81382b9e80e58c4b92d4ef835901d90aff03212be4755c939de4cc681b7dc40e",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-staged-r1.json": "85eda54a93d6dd9e4de154b4c52f76970a16c48b2ee428dc82db64402b550b74"
+  },
+  "external_backup": "NOT_RUN_UNCONFIGURED",
+  "installed_receiver": "bad84b56cd7d384e73ff60d3831f866ecff525f409e864699fd3989d8bf2c647",
+  "physical_target_contact": "NOT_RUN",
+  "private_interruption": "NOT_RUN; public report absent at latest pinned check",
+  "production_acceptance": "OPEN",
+  "provider_telegram": "NOT_RUN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "replacement_runtime": "NOT_RUN",
+  "retained_first_attempt": "96cbdc942a0442b8b3ff9912e498c3a6",
+  "scope": "Namespace correction repository verification and exact-candidate private initial-attempt recovery/bootstrap preparation; live replacement runtime NOT_RUN",
+  "source_sha256": {
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "cb486761af396bc8013ef0b39e5382e36d550ce50df5b8204b5da34a14b99a1f",
+    "scripts/hermes/production/host.py": "0f24aab818fed39621875f6d87b7137c73f59c5761dfa46216ceafa7ce981440",
+    "scripts/hermes/production/runtime.py": "8890a57fd2a9544a0de2faeaae0d918c569f06ce6ff299d72e8da3cb88247a96",
+    "tests/fixtures/production_process_driver.py": "441929a6d0b913ca59d95c94d7a6ab23bc307e3b675c84005bde0e470522d26e",
+    "tests/test_hermes_production.py": "4572ec512fdef36ac04d69248b332d38850a53067af32d8592e3b0c6c119ef92"
+  },
+  "status": "PREPARED_AWAITING_PRIVATE_INTERRUPTION_AND_SUDO"
+}

@@ -1,0 +1,72 @@
+{
+  "G03_G04_G05_G06": "OPEN",
+  "application_external_backup_provider_telegram_physical": "NOT_RUN",
+  "checked_at_utc": "2026-09-30T15:23:16.214059+00:00",
+  "handoff": {
+    "active_xml_sha256": "5ee6882d313ee56482350ee10326c5c4ce0f934c616f48a283d721e0f52b31c3",
+    "before_boot_id": "5bd1214c-0518-48fa-b2ff-4985085efe5c",
+    "canary": "UNCHANGED",
+    "console": "NOT_ATTACHED",
+    "console_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/boot-r1/run-private-recovery-console.sh",
+    "memory_gib": 9,
+    "persistent_xml_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+    "private_recovery": "NOT_RUN",
+    "qualification_state": "shut off",
+    "recovery_request_path": ".toolbox/hermes-production-restore/boot-r1/observations/20260930T152052990112-recovery.json",
+    "recovery_request_sha256": "b5164c26561c27929a37bbfc3e3cecabf140e7fd1f0d4dea41cfc6047ac4fe3a",
+    "status": "PAUSED_READY_FOR_OPERATOR_PRIVATE_RECOVERY",
+    "vcpus": 2,
+    "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+    "workstation_free_bytes": 52505391104
+  },
+  "named_recovery_result": {
+    "operation": "recovery",
+    "result": {
+      "before_boot_id": "5bd1214c-0518-48fa-b2ff-4985085efe5c",
+      "grub_cfg_sha256": "98e2d964e10110bdca1d52bdebd0a4d6cedfe7de18c3460e6e7999b5edb5284c",
+      "initramfs_sha256": "004102cd24ab964530393e43100da12aac17effd33d6a1063962131c5503b1a9",
+      "kernel": "6.19.10-300.fc44.x86_64",
+      "luks_metadata_sha256": "96b46f17706214fae9fd667eb4a42519926a5f371ebed2f496ac47a7816718cc",
+      "normal_default": "PRESERVED",
+      "normal_entry": "05fb2148821c45038863777a88beee3c-6.19.10-300.fc44.x86_64",
+      "normal_entry_sha256": "3dcd368ff2906dd712d92c089aac8de99b7f1041163869b5bfa3e80af7bd9ecd",
+      "recovery_boot": "NOT_RUN",
+      "recovery_entry": "05fb2148821c45038863777a88beee3c-6.19.10-300.fc44.x86_64-hermes-recovery-r2",
+      "recovery_entry_sha256": "cd2afa80376e2f887f07b5c805789d1c7eab6030efae48ac8864b93628b32b31",
+      "recovery_slot": "NOT_CHANGED",
+      "scope": "Restore VM separate one-time recovery entry and poweroff before private console attachment",
+      "script_sha256": "a04b373b373c4dda6d0502b67997209062b3c905a43f12e5f9a239283f47f804",
+      "ssh_exit": 255,
+      "status": "READY_FOR_PRIVATE_BOOT",
+      "subsequent_automatic_boot": "NOT_RUN",
+      "temporary_parameters": [
+        "rd.luks.options=3f6f7774-6672-40d9-afc7-d1bd03f9baa1=discard,key-slot=0,password-cache=no,headless=no",
+        "systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0",
+        "hermes.recovery=r2"
+      ],
+      "timestamp_utc": "2026-09-30T15:21:26.420322+00:00",
+      "token_enrollment": "NOT_CHANGED",
+      "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+    },
+    "workstation_observed_at_utc": "2026-09-30T15:20:52.990112+00:00"
+  },
+  "next_action": "Operator runs private console wrapper, enters existing restore LUKS passphrase, waits for login prompt and detaches with Ctrl+Q; reply booted and detached. Then validate recovery root facts and perform named cleanup/reboot plus subsequent automatic boot proof.",
+  "private_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/boot-r1/run-private-recovery-console.sh",
+  "private_console_guard": {
+    "captured_private_input": "NONE",
+    "console_attached": "NO",
+    "status": "PASS_PRIVATE_CONSOLE_NON_TTY_REFUSAL_BEFORE_LIBVIRT"
+  },
+  "scope": "Restore VM one-time recovery entry armed and paused for operator-only console; actual recovery and subsequent automatic boot NOT_RUN",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/boot-r1/check-private-recovery-ready.py": "7828f74e2960ad78c1e68b380a1b44934492b7deb978f5fb3cded2751c0d6e0a",
+    ".toolbox/hermes-production-restore/boot-r1/observations/20260930T152052990112-recovery.json": "b5164c26561c27929a37bbfc3e3cecabf140e7fd1f0d4dea41cfc6047ac4fe3a",
+    ".toolbox/hermes-production-restore/boot-r1/private-console-guard-test-r1.json": "f638c4d79ab92686ad535de2047e9966c38865198404ebafaffc591084adafab",
+    ".toolbox/hermes-production-restore/boot-r1/private-recovery-handoff-r1.json": "5adf13f0c94a8d37947705343597ead6e0dc8ab4df7bdede3a2ccaa4ee686a26",
+    ".toolbox/hermes-production-restore/boot-r1/private-recovery-start-intent-r1.json": "5681e6e1598000916885c89ac7904c4eb1dcb41e680fe69431b167c960d3e8c0",
+    ".toolbox/hermes-production-restore/boot-r1/run-private-recovery-console.sh": "96f5669c0f1acb954b7cead75a16c78a071d385fab8cbeafa724df932b40162a",
+    ".toolbox/hermes-production-restore/boot-r1/start-private-recovery-r1.py": "0ad758827266ceceba08e5235b8490eb44239cfdf6ab1fe4e18f2aa7de849813",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-automatic-boot-live-r1.json": "929416e557bbc13fc64fd69caaf46ba676cd96a1dc8c402b8e1e6d545019f8d3"
+  },
+  "status": "READY_AWAITING_PRIVATE_RECOVERY_UNLOCK_AND_DETACHMENT"
+}

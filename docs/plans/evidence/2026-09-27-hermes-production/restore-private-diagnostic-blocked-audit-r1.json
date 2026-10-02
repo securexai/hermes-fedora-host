@@ -1,0 +1,56 @@
+{
+  "checked_inputs": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r5.py": "b2705c35a49994a70579d5a8aa80b5b4dea55c9cefd5873d9e960c1c49fa7679",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-observation-r4.json": "d17607dcd90cd50fb297a22b8a84c2bcc346d038935d03e59251e0e6ccc4f893",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-result.json": "f59dd53a72327bf71f857f7ef08bbd51c7a17e10aadd16e363999b7988e7a2bd",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r7.json": "c3ba5aa3f1fdce224766aae42a205aab46ae61aea1a84bba6b2b1c40ebfd1c39",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r7.log": "c3ba5aa3f1fdce224766aae42a205aab46ae61aea1a84bba6b2b1c40ebfd1c39",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-private-diagnostic-recheck-r1.json": "05c935ca9c6cbccddbd72025c95ee75f46ed7976bb28c0c576d5bea786970065"
+  },
+  "current_turn_classification": "NO_GATE_PROGRESS_AFTER_REVALIDATION",
+  "diagnostic_error": "NOT_SUPPLIED",
+  "full_objective": "PRESERVED_INCOMPLETE",
+  "latest_public_observation": {
+    "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+    "checked_at_utc": "2026-09-30T02:04:48.362883+00:00",
+    "scope": "Pinned public receipt observation only; no private logs/input read",
+    "status": "INSTALLER_HYGIENE_REPORT_ABSENT"
+  },
+  "native_goal_status": "blocked",
+  "native_goal_transition_updated_at": 1790733864,
+  "next_action": "Obtain only the final non-secret status/error from the existing private terminal; diagnose before retrying",
+  "operational_replay": "NOT_RUN",
+  "previous_turn_classification": "NO_GATE_PROGRESS_AFTER_REVALIDATION",
+  "private_command": "ENDED_EXIT_1_NOT_A_VERIFIED_WAIT",
+  "private_terminal_log_secret_access": "NOT_RUN",
+  "production_acceptance": "OPEN",
+  "public_job_observation": {
+    "checked_at_utc": "2026-09-30T02:04:17.635660+00:00",
+    "completion_present": true,
+    "private_command_exit_code": 1,
+    "private_terminal_capture": "NONE",
+    "service": {
+      "ActiveState": "active",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "LoadState": "loaded",
+      "MainPID": "187668",
+      "StandardError": "null",
+      "StandardInput": "null",
+      "StandardOutput": "null",
+      "SubState": "running"
+    },
+    "unit": "hermes-restore-installer-review-r2.service",
+    "wrapper_handle_present": true,
+    "wrapper_pid": 187748,
+    "wrapper_same_process_live": true
+  },
+  "remaining_mandatory_gates": [
+    "G03 private installer-log hygiene",
+    "G04 current live controlled faults and isolated encrypted application backup/restore/startup",
+    "G05 TPM re-enrollment",
+    "G06 separately authorized exact-candidate provider/Telegram/approval tests"
+  ],
+  "same_blocker_consecutive_resumed_turns": 3,
+  "status": "BLOCKED_AFTER_THREE_RESUMED_GOAL_TURNS"
+}

@@ -1,0 +1,27 @@
+{
+  "checked_at_utc": "2026-09-29T23:25:07.340395+00:00",
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-post-prerequisites-observer-failed-r2.json": "dba617a01fda60a7020e8a311743baf21c77e0bc7c12fba871c97aa5a0463e54",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-post-prerequisites-public-audit-r3.json": "4bdd56cd5f6373ccc611740e4b351ec8def887adaf10f363d48554bf91844a34",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-post-prerequisites-result-r1.json": "0efe56219ad805f93d093ee83c917d6fcc2e19d68c77d3a2a6058719f76e7755",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-prerequisites-operator-result-r1.json": "e32505036da2d8465380d2a4fee97a4e4ea13604f528789e5156f908d9d822f5"
+  },
+  "full_application_preflight": "NOT_RUN",
+  "local_input_sha256": {
+    ".toolbox/hermes-production-restore/hermes-restore-normal-public-audit-r2.py": "22b6780b091a8a99b62da86602126d604598ab1b2c7d1ac8664629d30b63bdc0",
+    ".toolbox/hermes-production-restore/hermes-restore-normal-public-audit-r3.py": "3f1dcc2a566b9db253244b333e3fd0bfac6fac34de8d75e131ae90a6e26b851b",
+    ".toolbox/hermes-production-restore/normal-after-recovery-public-audit-r2.log": "d1049f4146f0e7c24a467186009d533b33216750c46d67c28d730e49928750eb",
+    ".toolbox/hermes-production-restore/normal-after-recovery-public-audit-r3.json": "4bdd56cd5f6373ccc611740e4b351ec8def887adaf10f363d48554bf91844a34",
+    ".toolbox/hermes-production-restore/normal-after-recovery-public-audit-r3.log": "6d038b39cfedc5b882cd02ef3edd731dce44fc87eb24d06ce66d1f123c7b0359",
+    ".toolbox/hermes-production-restore/prerequisites-r1/guest-prerequisites-r1.py": "28afee2c6ef712ba797f24976dc289090315de471867745496eaa7aed60001bb",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-8gib-before-r1.xml": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+    ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-proposal-r1.xml": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+    ".toolbox/hermes-production-restore/prerequisites-r1/run-private-prerequisites-r2.sh": "8dd3bc5665ed62e0556824ce9ab29a1fa112dc5edb640d3a0928524cd654f8db"
+  },
+  "memory_change": "NOT_AUTHORIZED_OR_APPLIED",
+  "prior_readiness_index_sha256": "12c48525df56c33ab0d01e392e650415884dbc7aae93ccf40886e14324eaad3e",
+  "production_preflight_sha256": "642f5f66b13ed284c460fd8e215b1f3f95cb91d68bcff0326583c5247d256460",
+  "qualification_lifecycle": "REMAINS_SHUT_OFF",
+  "restore_memory_gib": 8,
+  "status": "PACKAGE_SERVICE_POSTCONDITIONS_VERIFIED_RAM_BLOCKED"
+}

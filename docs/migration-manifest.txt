@@ -21,12 +21,12 @@
 # identity	version	3
 # identity	base_commit	de8fb8ba1ef8729e895e340ff6244232d3d2193e
 # identity	payload_algorithm	sha256-lines(path NUL dest_sha256 NUL dest_mode LF, path-sorted)
-# identity	payload_fingerprint	294f267262bd7bc903cdce6ee12611706a09dd173724e7d590a70e7891ebda7c
-# identity	payload_rows	411
+# identity	payload_fingerprint	65636faebdef8bf6aaba3bf5c42533c975f1f43c29a2f7a461e2d6c9f2519572
+# identity	payload_rows	839
 # identity	payload_excludes	docs/migration-manifest.txt
 # identity	inventory_algorithm	sha256(json object path -> {sha256, mode}, path-sorted, sort_keys, indent 2, trailing LF)
-# identity	inventory_fingerprint	c3c9a23b24db830964c05bdb89ee239b4b6f492760d342b29fad274561339299
-# identity	inventory_rows	411
+# identity	inventory_fingerprint	cf73f2b580e69df9cbf8e6791cc86cfacfd55041b1f54ef5f9332e8851744577
+# identity	inventory_rows	839
 # identity	inventory_excludes	docs/migration-manifest.txt
 # identity	source_root	/var/home/aicloudopspecial/code/repos/mikrotik
 # identity	source_head	130bf8f2dbdc95e0db25407d5b3b155b627d1473
@@ -58,13 +58,13 @@
 # identity	destination_index_mode_mismatches	0
 # --- end identity ---
 #
-# Payload identity (manifest-excluding): 294f267262bd7bc903cdce6ee12611706a09dd173724e7d590a70e7891ebda7c
+# Payload identity (manifest-excluding): 65636faebdef8bf6aaba3bf5c42533c975f1f43c29a2f7a461e2d6c9f2519572
 #   SHA-256 over sorted 'path\0dest_sha256\0dest_mode\n' for every row
 #   below. This deliberately EXCLUDES this manifest file, so it identifies
 #   the payload and is not a hash binding this file. The manifest's own
 #   SHA-256 is recorded separately in the handoff, not here.
 #
-# Inventory identity (manifest-excluding): c3c9a23b24db830964c05bdb89ee239b4b6f492760d342b29fad274561339299
+# Inventory identity (manifest-excluding): cf73f2b580e69df9cbf8e6791cc86cfacfd55041b1f54ef5f9332e8851744577
 #   Reproducible inventory of the whole destination: SHA-256 over a
 #   path-sorted JSON object mapping every path to its sha256 and mode,
 #   serialized with sort_keys, indent 2 and a trailing LF. Reproduce it with
@@ -86,14 +86,14 @@
 #   skipped deletions and collapsed untracked directories) are retained in
 #   the identity block so earlier recorded values are not redefined.
 #
-# Rows: 411; excluded candidates: 13
+# Rows: 839; excluded candidates: 13
 # This manifest does not list a row for itself (a file cannot record its own
 # hash); it is identified by the payload fingerprint above.
 #
 # Counts by origin/state:
-#   AUTHORED/ADDED: 61
-#   FOUNDATION/MODIFIED: 37
-#   FOUNDATION/UNCHANGED: 132
+#   AUTHORED/ADDED: 489
+#   FOUNDATION/MODIFIED: 39
+#   FOUNDATION/UNCHANGED: 130
 #   SOURCE/ADAPTED: 50
 #   SOURCE/IDENTICAL: 131
 #
@@ -170,9 +170,9 @@ a876e0b10411037a012498b9fe18d9bc1df32ed8b722a13564dc944ddcfd9135 100644 - - FOUN
 0fd5c76baf0e51f56d9a1216f32837858ae7beb92ac0fee0c90e59e60f553877 100644 0fd5c76baf0e51f56d9a1216f32837858ae7beb92ac0fee0c90e59e60f553877 100644 SOURCE IDENTICAL .shellspec
 c64fcf30a98e411b8bd6a780067567bbc236bcc09a7264e31ba44969c95bc649 100644 b1c0cf31c4e755739ec079083231b5d143ed2da633dc27b0f3030800eab4f0e9 100644 SOURCE ADAPTED AGENTS.md
 97d2213a819a7738d4f08d995d377176582afbea077c6abf0d66d242a7c37fe5 100644 - - FOUNDATION MODIFIED PROVENANCE.md
-7f48cb554c9e3aa081c94c6e0d127d9b3717a0cf809e5ed6b088e0ab29e1c403 100644 - - FOUNDATION MODIFIED README.md
+958ea8152cfb123d6acd01ee573687c85873270ef275d697a904bb57bf53d4d5 100644 - - FOUNDATION MODIFIED README.md
 c4dd919f9f66fe3082d0a29a1741aa91d33bdd85be8036c83645472a70af5f5d 100644 - - FOUNDATION UNCHANGED commitlint.config.js
-5b1e4372910f02b0a35de441ea365dea9526fad9b00f6311bdfca8de3637d614 100644 - - FOUNDATION MODIFIED docs/CONTRIBUTING.md
+a6204b25d492238ed13916a07bf8a693c6ce9709244fab456b6b432597924599 100644 - - FOUNDATION MODIFIED docs/CONTRIBUTING.md
 9227473832f41cb7dd835896ef125a14668ae49841ecb54e83884f7b65bdc2df 100644 - - AUTHORED ADDED docs/ENVIRONMENT.md
 8f2bf8db4cc25a814853da53f514386f0d76455866e86153f85ad6d77fd85818 100644 - - FOUNDATION UNCHANGED docs/HERMES_B6_CLEAN_INSTALL_HANDOFF.md
 5df3b517c24593c0f4d77fe8687bf8a8a1e6c3dd971825c3a24ade26e838704d 100644 - - FOUNDATION UNCHANGED docs/HERMES_BOOT_AUTOMATION.md
@@ -180,12 +180,14 @@ c4dd919f9f66fe3082d0a29a1741aa91d33bdd85be8036c83645472a70af5f5d 100644 - - FOUN
 59982a51b0839e2ddf5212b7a2d4474816f47c6c6283bec573300beb4c407a77 100644 59982a51b0839e2ddf5212b7a2d4474816f47c6c6283bec573300beb4c407a77 100644 SOURCE IDENTICAL docs/HERMES_DEPLOYMENT_PLAN.md
 f88529959e0b6e1ad0769897f54ac19930e4f3430469edfce075388a05cc7841 100644 - - AUTHORED ADDED docs/HERMES_DISPOSABLE_LAB.md
 84a609a9230b99d7743eb98d82f6e77bed2dd6df6ff62a510d7799ce64edcfdd 100644 df8398700225fe6158f798bd52d879959466789ed2aea5985a90c1519aaa2b6d 100644 SOURCE ADAPTED docs/HERMES_INSTALLATION_VERIFICATION.md
+1837f9023dd77a0e22eba8901878f03283a5fa3df2033e2ba24c072c584c5a56 100644 - - AUTHORED ADDED docs/HERMES_LOCAL_BACKUP_FIXTURE.md
 3d9eb7e926bb7743cd0863e758e4e8a1c186fd81fdc00c08fdf1d9e3aa30a712 100644 3d9eb7e926bb7743cd0863e758e4e8a1c186fd81fdc00c08fdf1d9e3aa30a712 100644 SOURCE IDENTICAL docs/HERMES_LOCAL_VM.md
 2cd43c5863c797183b937c17489a1452f4456a52b7e9d901878c8e754ab108dc 100644 - - FOUNDATION MODIFIED docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md
 3b9fa6364e6e3227d6481898821c65ed4ab34bd869f9bd3d4a39f749bf6af7bf 100644 - - FOUNDATION UNCHANGED docs/HERMES_MANUAL_HANDOFF.md
 80d6c6612d89557b3dbf1d1b3f46686776a81379a677d9df05f091b39c0d9bc7 100644 - - FOUNDATION MODIFIED docs/HERMES_MANUAL_PROFILE_CONTRACT.md
 7805e12b97e2c64f4cab82ef8e41f93fbda3f9faf621fba1ba95ccec3b583714 100644 - - FOUNDATION UNCHANGED docs/HERMES_MEMORY_APPROVAL.md
 f82900729a1616c1ca9b38a7cf9519e7f9a85ea7744f40f4bc3dc920806f99f2 100644 f82900729a1616c1ca9b38a7cf9519e7f9a85ea7744f40f4bc3dc920806f99f2 100644 SOURCE IDENTICAL docs/HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md
+5e301d7ef4c989b3f606e393a754d99a19ebcfad409eabcd1a169d285439e531 100644 - - AUTHORED ADDED docs/HERMES_PRODUCTION_DEPLOYMENT.md
 dacd1cc0cc02742c65ed2cfc8a198bf364478630b9745585d54bba4de93bf34a 100644 dacd1cc0cc02742c65ed2cfc8a198bf364478630b9745585d54bba4de93bf34a 100644 SOURCE IDENTICAL docs/HERMES_REMAINING_LAB_TESTS.md
 22af4503c1b625fb47bd1a8f4126ee7c1878f3080a7e93adaaebd7419e24eb02 100644 22af4503c1b625fb47bd1a8f4126ee7c1878f3080a7e93adaaebd7419e24eb02 100644 SOURCE IDENTICAL docs/HERMES_SELINUX_TPM_REPAIR.md
 053cc5b82c815d4dbd009f0981d4fdb68ccda9975e6cdd943ee45047ed994dd0 100644 053cc5b82c815d4dbd009f0981d4fdb68ccda9975e6cdd943ee45047ed994dd0 100644 SOURCE IDENTICAL docs/HERMES_TELEGRAM_BOT_GUIDE.md
@@ -199,7 +201,7 @@ fe1570367fc750a7ef43b962092084b0fdc9034c6d0994e10f6c90ea80e3b751 100644 fe157036
 14b6b956b36c058d606bd955aaa2e2aa5cea95fccf2c61ab9d82ba8c02a521a8 100644 - - FOUNDATION UNCHANGED docs/extraction-manifest.txt
 7e32a920f80f96a4c754d1764b4d9e9a533f0f5409a042319ee247c0c7094a53 100644 33659aa611228968b7e782aee6338192edf3e5fa23f8676c485f5bec206eeb15 100644 SOURCE ADAPTED docs/hermes-fedora-server-install-guide.html
 0325a0387b39b5c97399d09a5e66df2a10b636fe382b646e0c9082011b39544e 100644 - - FOUNDATION MODIFIED docs/hook-parity.md
-c775031796e4232dabf102aac5f6a9e023e893af96069194415e7b88ddbcf4e5 100644 - - AUTHORED ADDED docs/migration-adaptations.txt
+dda019598bb4d96635368c953e3736c3beafb612487ff17b744f28c6bd5436ce 100644 - - AUTHORED ADDED docs/migration-adaptations.txt
 61a350611dcae0138606c3ffb1c9903a4c5b75360336a335f45e9611856e6e35 100644 61a350611dcae0138606c3ffb1c9903a4c5b75360336a335f45e9611856e6e35 100644 SOURCE IDENTICAL docs/plans/2026-09-07-hermes-unattended.md
 ffc3afcf52b5a13155e56f1d1807feaabacb84603e3c4c69d03319238fa3798e 100644 ffc3afcf52b5a13155e56f1d1807feaabacb84603e3c4c69d03319238fa3798e 100644 SOURCE IDENTICAL docs/plans/2026-09-12-fedora-44-hermes-preparation-guide.md
 201b564424f02667f7373b76b1d069b8f1fb883e906b4ff20e886b7b14dad62a 100644 201b564424f02667f7373b76b1d069b8f1fb883e906b4ff20e886b7b14dad62a 100644 SOURCE IDENTICAL docs/plans/2026-09-12-fedora-ssh-key-only.md
@@ -217,6 +219,7 @@ c59b1d06f75947db07c8365ae401d70246eb9bbcd7107cf67aaf75b1f8065796 100644 - - AUTH
 efd219826eb00c3c1b6bb59771bfd3d4deebfd285864af8c51f600d77916ff92 100644 - - AUTHORED ADDED docs/plans/2026-09-26-incremental-repository-organization.md
 75b02d18d4630f80534d513a560fed62c97c140939ec046936e41d8b00de61d7 100644 - - AUTHORED ADDED docs/plans/2026-09-26-repository-hygiene.md
 ab1e2a7228f8f89b5615d729a7ae270f2615a126b7f929a67db7bee90954017b 100644 - - AUTHORED ADDED docs/plans/2026-09-26-root-entrypoint-organization.md
+0288eecd45f04a0184049332834adb0a1452e8aef71cfbfc982fe8a73bfe6267 100644 - - AUTHORED ADDED docs/plans/2026-09-27-hermes-production-bundle.md
 2f5d494aee702aae03a3a2ce78bb1a96e8584d78669bdcbacea946f98a4afcdf 100644 2f5d494aee702aae03a3a2ce78bb1a96e8584d78669bdcbacea946f98a4afcdf 100644 SOURCE IDENTICAL docs/plans/evidence/2026-09-07-advisory-policy.json
 8cbb097ecfc7b207b33b255caf1937e0641cf0f17ddbed02ec964e2537183a6e 100644 8cbb097ecfc7b207b33b255caf1937e0641cf0f17ddbed02ec964e2537183a6e 100644 SOURCE IDENTICAL docs/plans/evidence/2026-09-07-guest-candidate.json
 69fdad065ac688fda74eb30e95d1d891bc4108aa6b0eaa1d11a7d002396c9f65 100644 - - FOUNDATION UNCHANGED docs/plans/evidence/2026-09-07-hermes-api-acceptance.json
@@ -296,6 +299,405 @@ e3ac8dbe4627f34dd79a42ae1fe71b72a989a543dd51a6b8d07b42ff7f1f591b 100644 - - FOUN
 a79bb19cf2b52b2f177dfb32cd9dc3765245808b40b2428d1f8bcd0466c75a36 100644 - - FOUNDATION UNCHANGED docs/plans/evidence/2026-09-14-hermes-b6-change-ledger.md
 0e7bffb88aa6a93ed672c691f88b83c9ddb606ad50f52a63476cd137aab4c62e 100644 - - FOUNDATION UNCHANGED docs/plans/evidence/2026-09-18-hermes-memory-approval.json
 743e52c4d7b60e5902a4223ee4f6807940eae9439a346b681365a6243b51f175 100644 - - FOUNDATION UNCHANGED docs/plans/evidence/2026-09-20-hermes-manual-gate2-phase0-media.json
+e6d9c867e6017ef12937ae327ac1b9348cce4fb4cdbdae297eea289e35b07c98 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-access-installed-r2.json
+77a044fe7a6db64ac195ccc3b85702dbb6f5959974e864a202112164d71b51fc 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-collision-repaired-r1.json
+ae02c651b9dc50c6e78ec98e7c907793e71ea22baa5221d8ceb115755d4e240f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-collision-rescue-started-r1.json
+23bb31a17996fac6f4ac97a177a38a0685a46879d0e090e8eca148ca18e9628a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-name-canonical-r1.log
+0dce9d1ff5dd0075af28abd404b7e0010dacc0871fce610e13e7c04253a1e110 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-name-focused-r1.log
+ec8b3b599d2e1eb9f06a00d8507140d4e79049931c2fd0d341f35bc43606e9a6 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-name-publication-r1.log
+e5e5cc8f97583c0cc58ea2d06378aef2faf98c6b4ba02b775b09ba17bec543f1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-name-red-r1.log
+d2f65b925ef869367384b0fecd1576f6dcbf45308ed57fb46172891a0c4927e0 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-normal-boot-handoff-r1.json
+b7441fda57c93dc1483775b9e187055f998110391979c8496fede6086e5a98e2 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-normal-boot-prepared-r1.json
+9f382533800b1bd47eec4ca5d885a462f84787656a3622d10a8521ddefb6aaed 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-repair-boot-handoff-r1.json
+65378dcad145da2497120819bebfc3c46534dce9714ce064b3d809a56654aca2 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-repair-tests-r1.log
+735e23345af1ee6aeba4aba76d8d9c38d456d724ee4661f52b5acd9f24403d55 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-rescue-boot-r1-failure.json
+d6a2b518b8580596340c4a3949716d28cbe9c4eb24b1f24cd9c6aa7c9487c9fe 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-rescue-boot-r1-verified.json
+b59038ba7f48254b04298e1271aa2090ea8864ab8b9f56ea297c45df8d6ae5d0 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-rescue-discovery-r1.json
+7b1fa3c323e7afc9f716f89d621ca370be6dd8cf7ab016f31f1bdad2fcbd5f02 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-rescue-mounted-r1.json
+2bd1f6c0ea66fb82de8fa7d9352eed2575019c44d2daa9b1ddbd6baabdf81596 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-rescue-shutdown-r1.json
+44abd1c2d13f4c96c0533762576f87b8f9792cc3d36a001d20ce29be731caa3a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/admin-ssh-rejection-r1.json
+8cae00c7e8530ecfc779d85f1ccb9e009f43ea373a846071993e61fd01f1fea3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/audit-installer-preparation-r2.json
+ff074f9e659edf89dbe240d7a89dd3630b046303de238131cd845db8f0a9e875 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/audit-installer-tests-r1.log
+d8788fb668ab485288228ba408880db88f6bc1e91fecb5466716ec0bebc051a5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/audit-installer-tests-r2.log
+bcfb56f896d82e26ae13fdf94beeed2f613bafb74b8d30f076ae1f699eacee38 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/audit-sudoers-parse-r1.log
+3c3b7ae1b48d9737269fc498839e5730a6c43e2efc7d06edc65a704928d8c43c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-admin-name-r1.json
+059f09a4051d949954eed5ed44b24f4425c5919458ba0997fabbc653f7725754 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-before-final-ssh-check.json
+6e082ef305f759e7a66229a3c251efc492466b157073d87426d5c483d0806529 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-console-r1.json
+01da0da47b193e34266f8af1eb11b908e528d7a6b05f89737cff19b6c483c4b7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-console-shortcut-r1.json
+9020dad6af5e146dd5a574b52c4bd920c477a975159c8c67b2d223ed59191d9e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-console-shortcut-r2.json
+9de35981618859e69a3c6bbafcfd5cad2137ff1e77dcb563a2a6e2a910d1a774 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-console-shortcut-r3.json
+f5b3556a126362aad7322f130926f3dd49320ee73343760af59ccd2ee9051c20 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-final.json
+00646fb8d17dc345717c9c79bfb008d7cc5308294d49d6df5ac306888d968a29 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-fixture-session-r1.json
+1949b926dfaf2e569ed8b67fcdfe6df4eb4b9202cad50eb3a40490f92d01f637 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-fixture-setup.json
+9ac951725803a4084903b257158c9dd81289d11e66573d8e05de126971f420f2 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-initial.json
+8eec06f0e8f3588414ff1f32db726bfbd6f11c989b4614c1c7ca3495ba51525f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-installer-inputs-r1.json
+0803d2fd9c18435b22d818bfcfeddb8dadbb719ded7b3eabcd691b4ea9f115da 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-kernel-selection-runbook.json
+55c693eb097f1165d9f2190dfb4477ebb12a3057d098b06bc8ac196b155bc7a1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-namespace-init-r1.json
+e5d45d7834be4863d16cd793ea98869dbd0f49ed43375f67471b07c36161ae7e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-review-r1.json
+8745fbcea37120b9126092eb25838258c42e20e8cac1e71fc7e667a77123e5ef 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-review-r2-accepted.json
+1668c66d038c52eb4afcbb50fc94379798e5195ba1c945ec9be849ba92a9a047 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-review-r2-final.json
+bc000fd6e8c8543c31e17165b82b94c0fed666fa02658d33017ef965bf0b3ab1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-review-r2.json
+d7cf23ea80d27c017c988c16760f00c366edd8667513c75c0dfac467c63ef6be 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/bundle-sudo-check-r1.json
+b00e23b18e97149f22413e5aff852a7d707d09d09ebe2ed3a0e5447bdcc8eee1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/candidate-identity-goal.json
+ee4c720d113878f9681b3177f0d63ba26bccbc3534097e4f751b26b0dcecd4aa 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/console-shortcut-live-r1.json
+30e155df6288ea66705ee290d1d13712e673cd3eee00188c45b42350019f31fc 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/fedora-release-prerequisites-r1.json
+516ff6f1d45a2f00e005f2bc28a4b786c1cc11f57fed83d670591d3854de9671 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/fixture-preview-goal.json
+5add5a4a42f43fe93499538aec6562b97170e569450e9fd07c4998f07f46a023 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/fixture-preview.json
+e63cc371b3ff4fa9d14358904c3ab58f69fdd1324b3855b949c819fce5042447 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/fixture-previews-after-physical-boot.json
+1e52ce7ed08b32df4b27fca907235825efa0281d33548bc906053cb57863c8e7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/fixture-setup-previews.json
+81a0ee7e0580fc2940f4b43a0bd88257f55874ace1004908a87c34b43255fc5f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-console-r1.log
+58b933c8dbebeb635362b949979ee3363c5a8019075b153e6f52c947e676fa02 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-console-r2.log
+de4756830893db1db948d86ccf60ffd4cb9b206f8afac868ed1e1c6ce2ac48f8 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-console-shortcut-r1.log
+4cc1395f155c9516ff0bbe4c49a560e9bfce2298a008348e4b4a74e9f6a10abf 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-fixture-setup.log
+8736338c134cc96ed299e21c61f809c9507930aeb3e53221baf29254386e6eef 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-local-backup.log
+ba2b40389c7e4ecf1a33104296ac1d1d3c377bafb762014e847e5e5f048e9844 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-review-r2-accepted.log
+fc7b638063ed967f50eee722979a94c65fbc5212ff3a2fb9e93be825ca8ef0c3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-review-r2-final.log
+02723261e4d7cdde59acab169e14f8cfc34348c13a166ef7adeedd98589f3477 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/focused-review-r2-initial.log
+82800a91403085c456b0930fea7eaa8a1f066041aef24d3a9036fd909791bcfc 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/guest-prerequisites-prepared-r1.json
+3507c401ca0f2e48cd5434bc28e55ec8269b0a728ef5baf8440ea37722d0c2ab 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/installed-boot-handoff-r1.json
+e8593f8a0a0764c16978b8956aea13a5823a377363e8279b969532ec8bed4b1b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/installed-boot-r1.json
+d6a4d398d60626e2f66fb01d3eeb9a80994ef881554ba77b171c045dcae01bc0 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/installed-boot-readiness-r1.json
+9a5c2c0e6a4df2642527c9e4d95c041c1664ee902125e6be2f3ea9f84019ff97 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/installed-boot-readiness-r2.json
+beca33d769f893a4b971200afd14181b6489818bcb4acc5b15836620a33a3e69 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/installed-guest-audit-r2.json
+4e2e54589735adb730332da1dbdac9c23af50ba314808c83161a78d219d16096 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/installed-guest-audit-r3.json
+ce1d703c39c013b593e9f34f0a26f127bf8c24eae882a698a0d21f7f3f5d32a1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/installed-guest-audit-r4.json
+7f67f1606faf072aa4ac27475faf600ade5dec110efa525c6674544a6bd83de4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/links-local-backup.json
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-before-final-ssh-check.log
+afa20b27dacc9bf0aba3c1d265964c21e04ab42f6e39e2dd4769718ceded003a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-console-shortcut-r1.log
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-final.log
+81382b9e80e58c4b92d4ef835901d90aff03212be4755c939de4cc681b7dc40e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-fixture-session-r2.log
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-fixture-setup.log
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-goal.log
+419648e89fbb8316fa718ad418d9471e9af618c4c3af7135a242f431be0008be 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-initial.log
+81382b9e80e58c4b92d4ef835901d90aff03212be4755c939de4cc681b7dc40e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-installer-inputs-r1.log
+8b117e75b13f23febfda4602a4fae6b73879e8b446b69575de87a7feb6114161 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-local-backup.log
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-review-r1.log
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-review-r2-accepted.log
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-review-r2-final.log
+27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/lint-review-r2.log
+e0a4cd54f123ac5b038fc97184f4920d6158301d5c20cd2fc4753f247257fd1f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/live-local-backup.json
+b39c1bcf1fb35c90a4cd6a96aa894d8229e329980eeeeb5dac03c76b8e3c1a61 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/local-links-goal.json
+37a01cd664b3fc74dc6190bfa36baeebec02e7a4b072cbf5f6eb3f9b37ef91e9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/media.json
+432b0ea0c6ded58fbe7ebcf96889593b6fb77445bca3fa9c91e94b0b90936a8b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/menu-report-disk-inspection-r1.json
+f4bba68002602577ad0008d0b5ca7a0700817ffd8f6e35c0d9a43356e353d355 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/menu-report-luks-magic-r1.json
+45c4d673b869995eefe97a8ca4f2c94eae87aa1be7727dc7029e069bc88fe803 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-before-final-ssh-check.log
+7e48c1057a299e93be872a39d4964dbbe599c23e2ba876ff721edcd39c5f5ef1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-console-r1.log
+c7cf815dfd7c970200b43023db3643caaeef2df2ec5a0745d2a54e20e209006d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-console-shortcut-r1.log
+b2ab846ca6f1640821c0833148fc2d4df4e39a2be969a85e34693b015fda14e5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-final.log
+30eaf53f0116d5d31bdc81432166003e5973815865701b1d536543e43afc1796 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-fixture-session-r1.log
+df994319a37d3e202f26fd05470e8a6fee2cce6d7b494f3347fdd312ee4bc349 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-fixture-session-r2.log
+a44a51841f586642fc76999619b445c9715646e73b92d6706a2e66a7ec860b97 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-fixture-setup.log
+aad0af7726b8390258abedf732a316d00c460d68398179410b90d1456122ddec 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-goal-default-umask.log
+a796037b8c38ebbfb70a4f974150e6e73040f4c78417ded62e0fb68e53038597 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-goal-initial.log
+f762a6addcb3adc4e7eb4a4ca98e7069ced6312a635b4a915dd67925086d692f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-initial.log
+30dce8cffc6ab36cc34ccd5bf560851ec683a759bafb2526b39bf3ad735757d6 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-installer-inputs-r1.log
+6fc49ec661e82cc0d2e2a6d8a9b8fce0f81a6b5f8d0c3a218ec8c0309f2c45ef 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-local-backup.log
+5e46b6bda05ebf30ba1cf66d8646219e3b3a716c2e9b735f1956c21b22e14d28 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-review-r1.log
+f11d489adf9d9f2ff25ed1444d619e3ee7f0432105a9b9e4ec5c2d29bbe16eb7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-review-r2-accepted.log
+e76bd67067dcf026e8a1a0393a7f2d870b10125b176008402a39e49f79d6e4aa 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-review-r2-final.log
+c02ca41a65a793bd3847ba1800ceaad1892e1a7687d972a005991983bb3664ce 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/offline-review-r2.log
+e9d28c0f04b2f0851a923d569187216bb30e4a0964eb1096e17dcc38fa3bedf3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/package-inputs-local-backup.json
+97f8ee018d5aab0f09c87667bd6dcdd0290562692b56ac8e0efe7433899e77a6 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/preproduction-private-input-blocked-audit-r1.json
+e64aaa079b2971bc1ad799b090c7b1281125b93e5068a9f2670f941e177c0373 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/private-admin-blocked-r1.json
+d4b07467719b22c89d5384d3a6c60f5b3d28dfffefe169624dfbb63ad20c7af9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/publication-console-shortcut-r1.log
+4c6206db50e822d1759779ac0ba20eed94c9fa047e0f2de7a595a426d9394b9c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-build-r1.log
+156777d24e4e3135cbc1cd50de1f73b8220aeaeb7fa3bba7ebf6028088e429c8 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-build-r2.log
+2d683e6d3a16e2106d3c78461827b1dbb28ed5269a1556ac3f484de84ceb2668 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-platform-r1.json
+249f58cc26ee8c7aaea65e8480105b6863c340983a30f0ad33a1fdcf5650bd06 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-prepared-r1.json
+763e276d49b5930f4e2b20f7ce7d0109c9dfd0dfd37346c69c2ef1ac2eaa2c24 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-prepared-r2.json
+1438c42593110b6a0eaf3d3fc39740e82534314d7b7786be5800d8dfc31efd84 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-prepared-r3.json
+0633212c96dcef15f8518e6545e8f7035bb75911d39a2d0efc0f2949d8e7b1c1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-staged-r2.json
+74df8ab1133e24c2cbdf57bd43b33a1a523a04bddb596b5f513d523ba156585f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-staged-r3.json
+3ca36a4f170313676579534947cab2b9ac15454b510934899c12ed59ad304ecc 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-staging-report.json
+c4fd6e0db702f183d5ad602f9a5220b9a5879ee9faf4b9f05be0d77f37168a94 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-application-tests-r1.log
+fecc2d7b1dfc8a56a9af0d7e3bc177e4c76bbcd87906e807f8939f80f9238eed 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180128332209-check-grant.json
+8d0c1497642923001030dcb70d95e43ec5e6248f4642004078493671b8a1cd67 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180206343598-reboot.json
+dc8b1edd62b3c8181f08d93f8ed3b9d605aeaffba069e0f66b3ef4a6b67b9afd 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180223995115-facts.json
+c1030b36a14da10ba9fc6c97a291cc28a1dd3b117758ce5f35353337350ead28 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180235916765-poweroff.json
+a99320b5c4d19e05e691308bcfb06514a7e6b63ba7a31f6a4d8283c75db32a27 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180309469317-facts.json
+a3d04f759d89de6c6d2ea591b3ba4b0be9f0d1c6142da7c70b876bfd3ba78133 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180328852986-recovery.json
+e7813557831dd77861ae8c4873e80d3d56934b84d67d097938eeccbe467e2a94 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180537428949-facts.json
+f696d9247047bbb73aea36a0c8a2f2006f02689ce2d4ae26d6d21897505d010f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180651916711-finish-recovery.json
+8f850fca550a94b08bf38dba80193d2d3224bfbffbf0520e57a251573add484b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-20260929T180704632856-facts.json
+1d887017ae086b079586beaf82c68aa10b9baac47b5d8f26a88305802e5b4570 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-cold-start-r1.json
+fa17417cb449839f75524dda0f75be42e17339e0c24fca8b18eb9e350ddb5e4f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-final-tests-r1.log
+908a54ebbcec2f99914ff831dd158653fe6f67bfc62ca3339fdd0619236a9697 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-live-r1.json
+c42eba4e188062a44ead74db5e743b3ee4eb5cd1d5727b89abc0481746204760 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-live-r2.json
+cd6766a16057ca26b4c3ed4dfc07b43cf6045003311aaa610c9657148daa6933 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-memory-r1.json
+33353a2ae201392637993c12f21e5775f640fc85fb41ec9dd4fc4f1c076ef5ad 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-prepared-r1.json
+11cb77d6e5d3b5c6e5665ada0f01d7574575dc5393b056c0483a8f0972f498e5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-publication-failure-r1.log
+06ef37a9e41a89c7804a7a9e1293931df59b6da055163aa9f97081df68e17838 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-publication-r2.log
+d4ee18ff524685f2df15d2e2b604ba24e749a671e1aed3f3f8661eecf980b79b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-recovery-handoff-r1.json
+0aaa6c62b20e9ab450446a9d0f787efa929f43ca3d9082215cef54fb15be0b4f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-boot-tests-r2.log
+047aba72935646f8ef463b6abc13a23d507de65542af3ef63d2546d8e42c9e0c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-bootstrap-lint-failure-r1.log
+0bcc0c0d304624ccdaba715a6ebc9e08fd33d4a89bba9fa1cd422d10399d0f2d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-bootstrap-staged-r1.json
+0d4838f775f00db312c8f87fa319a8478f835f18f7d6f97a499167e7ec25e643 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-bootstrap-tests-r2.log
+9751fffb692bf2dfcfe407465d8398cc644a2ed248de0c8ef5216dd60d3b3585 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-bootstrap-validated-r1.json
+778d51d340d7275bc643eb0719f904884f45e19ee5e443b055960391c881c851 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-final-vm-preservation-r1.json
+da9b1b53b6b4084c11a5d6902c02a164d124b911c02d788219ac8efa166cdc2b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-goal-public-state-r1.json
+7408574744045e406b364d1be4c83b053cdb18592be265343ecb6cc254d011a2 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-header-offhost-r1.json
+4a48bf56e801a4c5e1a1713592ea7fd4b4c68db86051049c727edf59f1ad840e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-header-server-r1.json
+9cc51833dcfc7061dc0df84420f81d379e18b8c9a454b2d836d14b26fb9abae5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-header-tests-r2.log
+bcb0ca864e884ce52e5f17fd80a7c75b78e65119cf04d4d8d54cf6380a93efee 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-current-r1.json
+e1878cc767f821352efc601db7ac956db23e1829b308fc11656c1bd917a19cb6 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-guards-r1.log
+8584b35e664b607adeae4713252b74170379a5309d6e0cb6aec88e1623325156 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-guards-r2.log
+ff370279cc401a3336bb3bd33d8f62d4a2ca3f6b494b02b93597f8628bfc0419 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-prepared-r1.json
+b8d14607a35f1958d1591b476b8300e50adc12e7ec7cf2aa736901364aeb2cfa 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-prepared-r2.json
+1df43b0fda30523db3a2b53d75a2c7601507c4458ba593cbc65dcb85d7e3d21f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-publication-r2.log
+744d2fda5e14339360372396ad1a4e5b348c247717548c85823561a2e6f58dfa 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-refusal-diagnostic-r1.json
+5ede1f50ffd631a0fa79d987dfe12629e5ed35b60e20ca814e0382d18f24de51 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-refusal-status-r1.json
+1bee57ef2fa07344fad179a780290f91c7299e3d42d918da9f5699781f3b545a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-resume-r2.json
+c7fa17e873002639db32257a47eb4259679e830c5cbd159cf7f344e298ad0f74 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-validated-r2.json
+350fc98e76d217a247a0c618ace6b9216c6d0a12f5e900fc041d0e5eaa2279ac 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-verified-r2.json
+5e2ed818bfdf3f801636c8102d8209922b441d10ed9944bd76b60f9a79ede5c9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-vm-r2.json
+20cd2c126fba0188189d7f947194941b69373ab58d0f800e8c60030800745a4d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-writer-blocked-audit-r2.json
+281755f0260b6ca9acc950948248edc8903e4d185ba5899cb85ffe67b862fde5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-writer-prepared-r1.json
+9da9766ed61990d9aad065220417952d643092ea2cd7b5c82b15d364fba2b255 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-writer-staged-r2.json
+4002b1313b835c702c6b956035890d084c09a0d20a4d16b9be898bbf2459e953 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-application-boot-r1.json
+7b353b7a6f520254149566430a70322a6910f20822c0c502bf04cfbee9341ba1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-cold-start-premature-status-r1.json
+2c231d34a568c0701da1fc12de62fadfeb91f06e1675bcdb0a94eb9490c63dee 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-cold-start-readiness-r1.json
+ab2d93e4dd45080d98e2a171beb04cca115ea61c586028b5023c8b25e6a16c98 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-corrupt-signature-r1.json
+3f3c485eb7a0c51656509d0e17e6477cf45b5a7aa80a62f5663e636e88a5c35c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-current-candidate-handoff-r1.json
+57da52dcff552895c26cf585e6acad34a40e72dc04d1951b1984a8cc48efd208 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-deploy-interrupted-r1.json
+b8e8e153275d0c12b2a06ca129122bac6cb22122f9bc7507a87a87d5bd82fff8 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-deploy-preview-r1.json
+3585b88a4ab4ea06580030aa4e13dcfcd0b021332716e049bb70ddeafdec732e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-deploy-stalled-r1.json
+69eb29985e2e5557343a1b3379ab99699ab40dbebe2facd93a075b023e700445 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-dispatch-rejection-r1.json
+f0e0ff9a9424be392eeee0e336c1d584f6644014bbd250b908544565a641bf46 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-dispatch-rejection-r2.json
+259d8aca04e9e2ee85e8b9a17680a5068cc07793106c9017b5316291f06583e4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-explicit-rollback-r1.json
+a03a8300d32cd27dc8e1aa103a7f71dab6327ac0f83d3b3416d9ef36bfdd95cd 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-failed-import-observer-r1.json
+8bb7bdf4fbed7851ec5089e35cbec88107cc365caff15d670a40982e47bc4c79 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-failed-import-r2.json
+4d1df8ab82fd1870e195347bc000bab85054948f6cf6e4241031b3ecef1e97b4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-failed-update-recovery-r2.json
+ec7056e1359e3df579c6eed456b39f617c4952e480fe1617f8e89a9ae806d209 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-index-reader-correction-r1.json
+457b9d52573519e73b9fd463cae37cfc582784f21fb78ca201ee9c0107db9f92 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-after-application-cold-start-ready-r1.json
+09a47119f565608811ab45f0cef721199f0b489ca5fad2aed1a8a6cf66d42b05 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-after-application-cold-start-ready-status.json
+99d82d78cbfd94919406f3ea645312f5f7e2489937d3cc65d726685e1f99cf90 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-after-application-cold-start-ready-verify.json
+9e5ac94ea236cd6c4b6725add0c0e3d3a8b5710c380a8389b76f1f8621e4887b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-after-application-warm-reboot-r1.json
+4f4d26482d7551794eb79706b69dcb07bd0cc3055cba5edf1ae87cb26bdcad09 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-after-application-warm-reboot-status.json
+18aeae873a619872a62200c407cbcb60a887cba4747e7c236bffcd3c1b173f24 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-after-application-warm-reboot-verify.json
+561257453bda1a927e8a6a90d884989e9c62255b4c30d040d10a1befd8d58099 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-application-cold-poweroff-r1.json
+d4b259d05b083c6455642127470b55e26545d2ca841d9de8ab6f1d9e6a3ea4cf 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-application-cold-poweroff-status.json
+869eadff05716677a2b0534147959d322ed7ba20d827fc7a3f52cec962658529 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-application-cold-poweroff-verify.json
+1c0bd4308b7ee64937002e4b92bd193c5151e5e9c1ed5b46bc55d8c5d20ebf4a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-application-cold-start-r1.json
+d449a17eebfaa7d458f900fa8a09b0444d11c035d74776e81e226713955fd35c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-application-warm-reboot-r1.json
+aba9a0e4f008176e398f7449c234c27aba0209820dddb063a3582a10b5f32d1e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-application-warm-reboot-status.json
+c3667cf7a62b244ffece3150cd16282ab9828000dbd1ff3c0cafc03331fc5041 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-application-warm-reboot-verify.json
+6ab48b4e0d79290f0a90b108e1dae747cee4128cd2407c94a03a5da5f65083ab 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-restore-preparation-qualification-poweroff-status.json
+af931fe0fa15adbfb01a40de38d0e1960ab7645e888a84b3bb0a42b7fbd35043 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-lifecycle-restore-preparation-qualification-poweroff-verify.json
+1cca245a64cfae6159f0d04ad2da4d65fc179ea2928d70c232788535d7b0c6b3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-corruption-verify-r1.json
+13df84fb12760df6a4a14f8639d4c537193f20812b6a9d04eab9f733f57cf516 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-deploy-apply-r1.json
+f588fd2453b7aa050fffab9a9425bb7b0346d22f690d9dcd486fa2dd6f70cbd3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-deploy-preview-r1.json
+1ccdb33907183a9129672e183cac73c1d2ce83d28578f4066a4b9ad6c22da750 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-deploy-rerun-r1.json
+f5301fe64476e2100ecac21847f248cbf18fe1a95e66f041925f821be69a1404 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-explicit-rollback-r1.json
+7b66434b061a70fbde13306e93711292685d54a7025520f6d353d1ece30e2d71 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-explicit-rollback-verify-r1.json
+1845a9227fc0c686f7af4b47dedca9b036062d426f0d2701c0ea66bbd6d0e325 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-failed-update-verify-r1.json
+eccada3073e605a3570a25f21c8247ae7248420668a6814740721d22ddda8bd9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-failed-update-verify-r2.json
+8d38a003de2e9be22783548adb26077a7d31561bd63c1f75ee290703c28c8550 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-marker-verify-r1.json
+345890d450e23dc079e01a300084e587e503773b8f9b2722fdf1adaa600a4003 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-payload-corruption-verify-r1.json
+1645254200da1b998a7addb91549a6e30d3abb75136594e07bccb43ece58a596 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-recovered-rollback-r1.json
+e72ccda3768fd0a422e08231468e5f2d3c985f4e7321bc12dbe0fd796fdf6d72 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-runtime-r1.json
+d061e45a89f4a217ae8c69f60d221984d7f2e84a94a24da7c2758f1439d5f4d5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-runtime-verify-r1.json
+e9f6554f76d842fe47bbd54efe4cb68c4024253ec866618d97dd295512048f19 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-committed-r1.json
+29b2ff04608ee2bbb553c3ffeabbc76f659558b6e2c5ec2046ffa967d93fdc16 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-corruption-r1.json
+a121565f12b591034e98d32c2875572fca2e5cbba9171a92ee305f72c2290cd4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-explicit-rollback-r1.json
+c772b31e51d26049f35daf6ac43f20be677abde8c4c55baad0b9f6685fb23e47 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-failed-update-r1.json
+e69988eb65b6f9c8117696a81b1e14083ff815b2d31dfddfb47db4760a44fa0d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-failed-update-r2.json
+edf902a276de788a69d59c10d1f551db610cae193e789d34a6a3d5dde1906946 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-marker-committed-r1.json
+45ebc78de66a191c4e02fe9a5df714fead6a7dbcbb0a93384023bb5dbc6ac948 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-payload-corruption-r1.json
+fb9be29df4aafb534662a18b005c55f3e27e7365e88d2b90fae0e04c3025ac98 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-recovered-rollback-r1.json
+14881cc2d86fa1ce9b49ef8ef55124460b3afbe01f307f5ef30fb7086bd9366f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-status-rerun-r1.json
+7cc4cb83b152b1e847a0743d35a9ef1f84469d3ee822186feed99b3f1c9c60ad 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-namespace-upgrade-marker-r1.json
+f9e76b915b9a90b269eb9b3eee45782e9a041b592343ec49ab5466e755571668 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-negative-prepared-r1.json
+6d597a8cca659df65964dc1dc9c9b2a47f387d06eac4b06023a0a5b2f8fa48e7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-payload-corruption-r1.json
+ae01b09e5ee1887c38f1cce4ba8637b3339fad1120f69d7f30de9ca0ba9fa2ee 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-preflight-r1.json
+c86281ec133e995fcb44b72b55e904e453b73203e26f86824a185af7e7214464 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-restore-preparation-poweroff-r1.json
+1c11c76f90327b8351a6f9272c1dbc8c0c4d3a616ab471afeec36c95ab29c66c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-runtime-after-recovery-r1.json
+db1d79ffee13d03f750029ca52a06709e2508511af138ee9895e88d5910b3427 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-runtime-after-rerun-r1.json
+ad1bcfec4114022b170c9e3e0131aea5e2e5232b0905330bb0842cf3baf30beb 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-runtime-before-rerun-r1.json
+b6fb51a7fd2a084d2a17fe98059122ea0f3ca600db5cd52da13a6b67b484dc23 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-runtime-closure-r2.log
+9dfc829b61ae2f7c8b89708c082a6fa4b3a4fc521e8d4e75a0a9b12b90cee92c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-runtime-publication-r1.log
+647f1a2fe4afaadd8ed12f35eac162daae3546b5cba5ea713edee1312862e2fd 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-status-before-r1.json
+a5b3f6887251a5f4b67cff5140e27696c2ddd301b2b2ca1c506f7412779565d5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-status-handoff-r1.json
+39f265f5f11168adfd3acf42331a67a98b5438e8711cfa1c17fb16d501c92855 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-live-upgrade-fixtures-r1.json
+09908967da3067f020f0d5cfb4cb2896abef7ef6a6871fce842c56986e19963d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-memory-applied-r1.json
+335fc9710a792eacd2fe6e444a4fe460b054bd2bed30c698a0c477cb907e402c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-memory-boot-facts-r1.json
+185967d6e820f549c810ff6fc09e56b7a89082e7a59b1e2e65cc2fa00c3f6d6e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-memory-bootstrap-tests-r1.log
+c9e6bf34bbfc4d810d4d4b1c950575b78c477c79c046a4b76a9276b207a5c4ec 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-memory-proposal-r1.json
+ca36e07c64b09c8dbb498dfa456c1936650c6e74f47a2850c8eec5495dde6e2c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-memory-verified-r1.json
+e53bb194f724ff19e5a6bed5afd9c7c8cf9498123ff7da036bcfe767749d4016 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-bootstrap-guards-r1.log
+6c74122394efbb1484ad9f4cc1fd965d8c2e7eef2e8940f0e0fc98c7e3d799e9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-bootstrap-validated-r1.json
+230621448170027241ecb10bef6d6b76f47c31d53bb979e5941438fdc2e7fa0a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-bundle-r1.log
+75c3a8ac8c346c9bbbfb56acd1047bfdeb0e464a5edc4a7558475bb5cb0799c8 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-canonical-r1.log
+6d15c07e3ce27031c65ac6bb0c3ebe6b5811979c3079545c975e327f18c6820f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-focused-r1.log
+3951c933d80678103499d08179e38ba1527be868234581c011dc6ea998aa64b9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-focused-r2.log
+ed0935774340b423981b0779b6a9da7c87d61f933b0a835c8ca7e4e626de6c39 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-handoff-r2.json
+81382b9e80e58c4b92d4ef835901d90aff03212be4755c939de4cc681b7dc40e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-lint-r1.log
+55d11e3cc8e2c683daa708b6fabf635568722386d433f51646e7a591ec6f1ba8 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-live-preflight-r1.json
+c948af4ab33c6fffb8eb9f198f088eabff8cfb70a346d5cadd75436ed788825a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-live-status-before-r1.json
+29fe082b7f089b11b116d8c9f79faab27a272d17f8f9875f3c2ec73fa17427b7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-prepared-r1.json
+514b1e0e37178dc58fc64a40394085399ae27cce93bb924b72bebdfd1be21d28 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-publication-r1.log
+7652f939876acf594577d910e9ff6a5349345c4bc7098201f3e6a4ecd111cd6a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-red-r1.log
+bdafcc118daa65596d4b26963ba2cb7f59ddc7bd20cf01d72c6a8f363d1c22e4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-red-r2.log
+85eda54a93d6dd9e4de154b4c52f76970a16c48b2ee428dc82db64402b550b74 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-staged-r1.json
+b45dcb9bb73d97259b3a1b6a266c0114705a61b9f4f743231ad0bd1eacbfc547 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-namespace-validator-correction-r1.json
+b6fb7b02053cb94f2f53849167bfbc0fe7ab3c4e26d02386d0155341dd19c7d9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-password-recovery-prepared-r1.json
+bb833556f0bd3fa0b491630926c93be9f3a984a7a05db55d98766ce0d5ac4574 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-pause-executable-r1.json
+2a0727eb5b2e849c8193527cdf935f458f82a0f573e9acca045a50f2aed9bff3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-restore-created-r1.json
+e37921e31ef0f75a466e79c67a9a567cbd50ab93f59b0d282a7d0da18f03ada1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-resume-application-r1.json
+fcd77fdce2a80c4e57bf77dfe319bd67a6dd6abdb519bd75d4f320eff7d95a1f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-resumed-after-restore-r1.json
+ce719870d1ab8ffaa9f231ea7f6522712b6666e083b70152267d7fed6d77eb72 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-bootstrap-tests-r1.log
+0646e3b02508d1feca59621b3902973993082f85147d6d7394f3f1837fc446e9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-canonical-r1.log
+84681eb140ebe2669dd4775c5dccbf9f9389512bb116a2f68c01c45cd612a661 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-diagnostic-r1.json
+e97543b6bc921abee2f2db899dd8b40296c86f1983cd6f478d8c2bec5499a538 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-focused-r1.log
+ae6e79705f57d5eca4ed75e9d4d02ef7385bb33b417ec69194996605b1fb00cb 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-red-r1.log
+f664c69b37f03e8bab9e6915fd5b62b30e39574cbff7a9e50d79349f60f343e1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-application-blocked-audit-r1.json
+ec7747906342823772aba87a7b7def6912d82eaae02a9bcaf7aa4dea49d7a54a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-application-bootstrap-live-r1.json
+c273fa79589ffbc3ce44584817bb9c2cbd906445163d819e7e3a97e6f3ae7ffc 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-application-prepared-r1.json
+8bf6284f308e22a581f090dfd3ae467bfc4fc84f0342bcd41f4ca9aa3c13cc9c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-application-receipt-status-r1.json
+59369233527198e7957de1694fe1a85ff51e3139ec5fa7b145c9d524ad40e9b5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-first-boot-handoff-r1.json
+071eddbd1bf4da2c9bef3fa9fb13c51c6fcfde64ac2f4f0711430f4cddcf9a05 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-first-boot-publication-r1.log
+16ea068d6a6f558f15fdc166da30820a2567509300ded3a0321818a20125339e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-findings-review-live-r2.json
+103417d08f1ec91ff7a37938834e470c33f7e6225391894c232a552d7d858cdb 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-findings-review-prepared-r1.json
+7f296959d3998d9d19029f076859c2276c5d64d3ab0f2d773fe30628334f20e5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-findings-review-prompt-r2.json
+315d3d036f770126226a38fc534adbb138485c6855d89357f1a6fe54b75d3826 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-hygiene-live-r1.json
+dc3f56ca4c3172148f00a6844a11f60a1f42a59d76419de801fd64e2763b3af5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-hygiene-prepared-r1.json
+4a75d5c1d37d1c183751188cb7e255cb8dcd3dd0bb6e6a2035202f97d2181045 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-hygiene-private-command-ended-r1.json
+983fc123aa7cb2f394acbe06f04e066b4748e4e28465bee50ed6e7ce460416b2 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-hygiene-private-terminal-r2.json
+84ef74f59a0ca2db1eae44c4ce0c0b97307f5b7e9d5b4133d0829a7968a8690f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-hygiene-receipt-status-r1.json
+c67e7c8736fee197e0e32cdbca5c507cec1d850902df11af5fb0f727d950c930 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-screening-live-r1.json
+7bc382a948174b8327be89a45bf5e2fd597c141f00b1aecf09289d5f46a3c3d7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-installer-screening-prepared-r1.json
+d762ef80acdc32a4caf5813eba34a049c53a5dcccf859f7da5dc7a8f825fa952 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-login-prompt-observed-r1.json
+ea4070778f55ec981f8fc3911afc3ab594f8131ea6716e9f7b78d0e5d16012c7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-approval-r1.json
+3897cc74aeac9b0382c4e4f01f24275e770d0ed783f099f0d106a72fdf28201d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-handoff-r1.json
+9481515fa2e10ba93bc7388667e624af1f8a1e481fa454b3f35970dbc410fcc7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-index-r1.json
+81ca4dc5f50459e7701f138ba83c98c043fd3b5e1f0f24f3b52cc0098835d004 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-live-index-r1.json
+7d8fe3763009c9a4d287460b3cbc32497b8562e74b7570562186d19990f51e01 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-live-result-r1.json
+1fbe8ed69aa4935c4bb9e289796d9b1b7053cbce5b104935bd50884dd309e38d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-prepared-r1.json
+9aacfba07da2228b0d5bd6d8d722400480270b942168e606eae948c477686be1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-preview-r1.json
+a0e1bd810088e933e188c8ef25d82c6ea7015986776c4b66984c750c21fb4840 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-public-audit-r1.json
+c993746752c11cd9dfb8ef327cf35f4d65bd6f6a7a55b2bee48acefbd78b8cd6 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-rerun-r1.json
+45c7558967102f512aad75c75190aaad6ef3dcb764bf2c00fdfb42f69839e29a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-normal-after-recovery-handoff-r1.json
+304ba03d8f57e69c3613f4c197033b5e4ceb6ca9f4c71f918b6905b0b05195be 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-normal-after-recovery-index-r1.json
+b81a3a8cd87e31b43fe9d3aeaa1dfd7f8ae8d36de26f3bc6dd240290fa1c9b4b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-normal-after-recovery-prepared-r1.json
+6eec23606cea86c196299056a983311c1cfaa0c3e5b00f2dd6b205f29ec8f610 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-normal-platform-predicate-r1.json
+ec822394636a92792cfc11b35f98327e7ecb6fcc33a0de59e504b7505c62da86 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-normal-prerequisite-binding-r1.json
+0e23a3215737c47893b626d3c43be930e120e51ea08e363b04ab49ba3db3f300 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-normal-public-audit-r1.json
+12c48525df56c33ab0d01e392e650415884dbc7aae93ccf40886e14324eaad3e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-normal-readiness-index-r1.json
+c811223c69b8ed3336a19886ef7a4686062c1888ba7ff0f63209f3c08b11f24c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-recovery-handoff-r1.json
+3f0576efe5d6df6ce1cec0137525ef030c0ee272e2d60f320682b94d7fb32b99 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-recovery-publication-r1.log
+cee6003d4b135b24e0f0b92086bb66cfebc041b056bffbe1dc502268e2d4d39d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-recovery-shutdown-r1.json
+47d4a7678299db2f796bb5606d0d444f0a6ab522ba0c104bde1b35811bc3d4af 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-rescue-observed-r3.json
+549988d243b033200ad3d04e6f9db0182d82ac1227e73e90a6e5bc582ddb936e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-rescue-observer-failed-r2.json
+b572e3c87dd183834d8dee73fdd64c229451a2894386987887a649bac77e2e53 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-rescue-preview-failed-r1.json
+9958b5e3180803808dd06c9968a07c75f006ff84e33cb781134895a9c4f723ad 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-rescue-preview-r2.json
+60a49dc5109a048755983b1cb0c40ac72b9116f6a3da09d061ccc622c39f81de 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-rescue-start-observer-failed-r1.json
+6c748174a44c3f751b5145901c8c495b8c430ded68743cff617c0a3adcf2a274 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-password-reset-public-identities-r1.json
+8bb39424e86440e00aaa21798168fbf7b8348864c8591b8b57ab449be0ab6075 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-post-prerequisites-index-r1.json
+dba617a01fda60a7020e8a311743baf21c77e0bc7c12fba871c97aa5a0463e54 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-post-prerequisites-observer-failed-r2.json
+4bdd56cd5f6373ccc611740e4b351ec8def887adaf10f363d48554bf91844a34 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-post-prerequisites-public-audit-r3.json
+0efe56219ad805f93d093ee83c917d6fcc2e19d68c77d3a2a6058719f76e7755 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-post-prerequisites-result-r1.json
+aa498127249b7ca89f5b02372b02f001a2a34d9a60413bda9dcbae2f33980a3b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-postinstall-inspected-r1.json
+f78e96c9c7460c782c9c1a06af7915ef6d69b7a80c6485c40fd08f83e5edb07b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-prerequisites-memory-prepared-r2.json
+e32505036da2d8465380d2a4fee97a4e4ea13604f528789e5156f908d9d822f5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-prerequisites-operator-result-r1.json
+7af6e59dfbaa5dfa4233ba66a1df84437f07ac004c956f5b161dd54369f8dbe5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-preview-session-r1.json
+1c981370dfd3beb0c68c016ff8351f104550b989905eb9f04fbd8b331c37b45f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-private-diagnostic-blocked-audit-r1.json
+05c935ca9c6cbccddbd72025c95ee75f46ed7976bb28c0c576d5bea786970065 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-private-diagnostic-recheck-r1.json
+1e8304616748212fd3beb1b2555e8a13dc4e2ffc296272ed3f19099b72435b05 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-qualification-preservation-r2.json
+5bad3195932f118c9e670fc76c4be8e2125b3a21d9261af9801f1653b2792cd4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-recovery-auto-review-boundaries-r1.json
+d62d64f93ab55d9eaed4a2abc4314a504e98c31cca8f180b9fd427a83407488d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-recovery-header-live-r1.json
+c5a5c53c687b37d9865e56b94f46e1ae5a26696f027e7a1199a1c7f8a56d1562 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-recovery-header-prepared-r1.json
+486b91e87027617065017acd8716cd8e29d02c11db1e39ef43a670a9a65071e5 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-rescue-public-package-context-r1.json
+929416e557bbc13fc64fd69caaf46ba676cd96a1dc8c402b8e1e6d545019f8d3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-automatic-boot-live-r1.json
+dbc9b8be230753f06d56f020bb31364a4bd03c2425a1d4ece827ce17ff47a70c 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-bootstrap-prepared-r1.json
+50586b30a26be1af30b80223c281c98a863a8a2bbfacbe5fb142891dbc120278 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-private-recovery-handoff-r1.json
+cdb8bbb179cb8049c2a5f4619bb7adfbb2e84c5d44a21e1777be871eb3f5a5e4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/restore-tpm-recovery-live-r1.json
+9f86d79d7f85b19a6a0e4da3dfe273b3a941aab202a5281a6c18e5d8e79fe9cf 100755 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-attended-reboot-r1-launcher.txt
+fc0733265e293d5161ba038f743a04949d58069ce345e69f7180a089be43c2c0 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-attended-reboot-r1-preparation.json
+22210a2310366a9b9d6ba5394d3d44c1baf093afec9d634a5ae6e945cf4d3952 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-attended-reboot-r1-refusal.json
+3f403c355734681ce363e74d0d233fe9db70f51ddc5960f902d64a9a37d0ffa4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-attended-reboot-r1-script.txt
+d684eab1dd848f08f3d8600aa1ce5a92f465c6e0e65d523b5a7c0fbf01800454 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-attended-reboot-r1-tests.txt
+93b67ad2b6433cbb72bc83cee003950a391bf292eafa768210b76a472e5be01e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-automatic-reboot-r1.json
+80bcf11972d35c73bc7e5b85f64227ea916958f4a974eb2f8b5c058a7a93d7bf 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-continuation-r1.json
+40d77895b2a78ef444388c26dfe9aad8a092a8ea9449e709eecc4f62bd35d5b1 100755 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r1-launcher.txt
+084e0a90fdb3e162aaedd0a0476ed6a23495f623327342b1561af8e4f9c9a8cb 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r1-preparation.json
+7bb3791ac872f42a8e94a7ee9d0e1c193bdd70b8dc711c0042a8694fa060bfe9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r1-script.txt
+7d77260395c2032656459912a5454775a09e08ce47360bd1c8424f9f3e4602e1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r1-tests.txt
+bc656369f4a4f825aff6d75a1ff3f273df93f749671aa9c003e80a51b61b1380 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r1-validation.json
+ecf2cf80b8925d9296efa5d96a8fa4541067614cfa4181e9d681aca67253f215 100755 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r2-launcher.txt
+b3b33cab0bd13bf7f301293f8f79b9239f3f503f7487cb13b07f55d105f219b1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r2-live.json
+d4f0f43a37c8c854085ae2ef75f90744916ed0e5d2a3604021be4958c4fa39a0 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r2-preparation.json
+9a4c0ff7d97b202c49d2bfce39b2834fdf1becc45b4e8bb322c3665035891e0d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r2-script.txt
+4e79000cc93c831e28f89140b65d38abfdc1f90c21f01c8a7ee36326cb946436 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r2-tests.txt
+5949014832bf2b7dc112ff648ca8c4a2ec46a63e830d1b17353512b2eccada14 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-boot-commission-r2-validation.json
+cfe9003c53a5850e48a71f2f7e79db6f52dee07fa0b82c472028ebd02cb90324 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-clock-and-enrollment-intake-r1.json
+c71cd9fa2a83e6933a330d64fceb48257787ce0d4e939898a15ec199c1cd52aa 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-cold-power-r1.json
+614ad9adb5cee8e89e808f91d664266b65a1cb98fbfdf4d7cdc7c693758c969e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-encryption-r1.json
+11928a5ccb02f7a5012ee81a97ab50478125b0bce6cbc08ab91dd04835bccd31 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-r1-client.txt
+8a684f3a0283dee98449c6cfab8ceeaa415c220102120a304dc91a2d0b34a60a 100755 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-r1-launcher.txt
+14c2fbc562628a9e2661b0010c4793a4e02566da5655a88a00097e83031f6212 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-r1-live.json
+ea5fab4df66579985a5fd52b62011a4bb1c7bb1cb8336d8d9a49558453800743 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-r1-preparation.json
+db2ceeae744d230d2f7186a080bb8f83dd4a9e561df11e3aac3a03d9dae15ba7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-r1-script.txt
+51963c3629c7f9104277b1082c91c5158047c46b0f349292caed61c7bcbdcfe4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-r1-tests.txt
+db9920140cc7f12a6e3953a0959b3762d0dc3fb679f961e89d7c13d91cef5fbe 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-header-backup-r1-validation.json
+c6f7fa7cd76693e3666ef5b7ebe0ef923ecd65080849bce9c8ab954889654903 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-intake-10-0-30-10.json
+e7702d2d12340def515a6d02a43750c328a9142efab976bf7d6a90c9a006d8ee 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-apply-failure-r1.json
+1d4848f07d55f9d001bdb44a9bcc0b78e42bd6ade3244d9c0fe17e1dfd495a51 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-initial-preview.json
+bdae547b3a6271e02b5d4c5474a2402fd7a0ac451cfd357c79b5fbe88e98fe5d 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-initial-script.txt
+1b1a6295e9f723f5ecc4a815ec99f3adf6aba4a550d663a10be4c07d32bf6467 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-preparation.json
+a45bcdaa39a2eecd740d8ce5dea61da78b2ead8a4a9abcafc144f1816e1988ac 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-recovery-r1-diagnosis.json
+cb0201c55227807880945e7e39a2303d9a297f4aa1937895dbb5671021e825a0 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-recovery-r1-live.json
+2c8610c156741c697a64a81a58cc1e032f742f62f95b1fb8017c8394f9cd0145 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-recovery-r1-preparation.json
+8ae885cbe870e5795e8e4049cefb47ead1fbf74a4bffcbc5a66d283cc998a59f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-recovery-r1-script.txt
+403784f8d6c720e89c7a3f335591e41576054f928a7896ad41cd36a9c3deb517 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-recovery-r1-tests.json
+c237c92f44129bef0d2c335d27ed2c48fd375ed233192425f11d261bf5b694f3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-recovery-r1-tests.txt
+be66c2b6f902dc44de6a852a6cfcf8c03485e51c1222f391c9819c99093e38a7 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-script.txt
+b8eda96128d580a127593828250c080a478662946b47bd71fb7acefa81a5fbd3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-second-preview.json
+6176d488726606e258d13fe0d4810db351f153095ced0523864b6981d38ab244 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-second-script.txt
+24133d43c76d985d0e653469abbaef2237f253198ee60fc82941b397e44ef4dc 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-boot-r1-observation.json
+3c01bf6f73b350ec3c692c75118f1303124cd62af2aa7c911db6cad2139f5c92 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-boot-r1-remote.json
+329a5279044e6f9bb20e5c5077f200a687d4575296cead4e5f6af62ec857103a 100755 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-finish-r1-launcher.txt
+234017f192931fcbf93d6737889f1b87d5a5615a98d1cad36cfa19f7b0b0764a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-finish-r1-postboot.json
+978453e0c81859783dd29af934505f38b65b096cb36925f1610b16085061ae65 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-finish-r1-preparation.json
+85ca63a84613c2b22c453506dff9fb0fb531fcf23ec7a74a105e4ef3c5db4f96 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-finish-r1-script.txt
+4e1c4d077cb435bb238ec0934077e8c19cf93c7674395e33a6af2d3de4cfbec4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-finish-r1-tests.txt
+a8bfa81eea43ffb1eb677fcfeb5b9eb34d4e18894fa3771e25017049688f2bb9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-generator-r1-script.txt
+08f74de0114bcd2688db3ac472c1975c64163f5d9a6a957a5cdbae1d1dec3f58 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-generator-r1.json
+f2db000bda64f869cb26ed5f4c0170c82af4c2ea6451ee7d5acb98149e1dff9b 100755 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-once-r2-launcher.txt
+8d1ef5739df6b8fe2cc48305aa1441a555d44ae70292ace356fc001066a67bc2 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-once-r2-operator-apply.json
+14d1e32b5d3c94ead734b172f9cd4de246d0091146da84e2edc3fa0a6d271725 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-once-r2-postboot.json
+fe7e24fdb79772958b58effd50be8e11288ccc45b595fa9c501bd76bc3dbe9e3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-once-r2-preparation.json
+8d6ccdaef18f5f0a5b59d55646a8fb69e2575a34ba49cf9129802fd1e3098740 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-once-r2-script.txt
+777534fdf451acb6a61568badfa0c2dd4e1229aa79b257adeb96c5e8993000b1 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-recovery-once-r2-tests.txt
+24710199b49083c2e969fbe9a9c58b342745d205af35a34d937638f906e5cf41 100755 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-selected-kernel-r1-launcher.txt
+8fd6396fa595f4b18249af75073013264afc1c16788db2e3fa4d8d730af9ded6 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-selected-kernel-r1-post-reboot.json
+18b1aabf353c3a7019644575f2b7ed29c69a34ca6ab4b208daa57437cde69cf9 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-selected-kernel-r1-preparation.json
+d688d44d0bdae66bbadd4b596c9c573715c32197146d605847ccb160d1691c83 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-selected-kernel-r1-script.txt
+1fe0e66dd3fdf36921330918dd69c4d3feb866cf78f84148df458c9077f95a0f 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-selected-kernel-r1-test-output.txt
+169828dd852d1089e407cc4690c8d68f7f3bfec851f8a97ef3f6a3192ae3c288 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/server-selected-kernel-r1-tests.txt
+f9ff97628dc1ccba74f17d738a7bdb5e232ac5e9f9da2720b1479b84f6f68fd3 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-create-r1.json
+dfa8ada57595f63e6cee9d23934452df460fa2598c007026aecb359c6f4a2c22 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-detached-state-r1.json
+2b210ad8d1a41f65d8e1b7d690caf8b63f76819129f06b9fc334224cd9440870 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-encryption-prompt-r1.json
+95150f62b27b419af2440035f9594a030cfc57b127084863fa2cce673b63a910 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-failed-resource-inspection.json
+4526eebce814c32e69d416b145bb8ef251ea69ea5b46ac50bc0de406d31b735a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-inputs-handoff-r1.json
+d8ad284334ae8c10ba94e38a1b0e083189e8512ea255d8d5811f3fcc37c0fc40 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-inputs-reboot-r1.json
+442a93f946530503ba060dbac846a508537f12834c81dd585d7f6bd19797832b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-installer-findings-r1.json
+f3d28b1f98a7aec5900e52b7b873cb5a3bbfc5eba58175a799aa16004b28da95 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-installer-handoff.json
+0ff7cbe7d2a9b2112162713d78063c2774c8d73c51c01a8a900613f560598e29 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-installer-reboot-r1.json
+6023de722e7be9919630ddf19dd1705a9a9aee86ab2dbd854e6f38fb1ecd2a8a 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-qualification-resume-r1.json
+95e326f900ba40c1d4de54839e3ba177ac7edfc9db4e17768872a80ccb960bcf 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/synthetic-stage-private-preparation.json
+496ecf1661ab2f0a5d79e6d254e21559b0e716dfc81dadbf82adea8f43236bae 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/unlocked-access-r1.json
+386aa8eaa33ce7212d9767b4a74980e927267dd00ce2a72ade3e8740d51a87fa 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-admin-repair-r1.json
+22cf820cb3d0e95e3773233b80396bec0e9cbdef46cb9cfa8da9566daa814bae 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-console-r1.json
+2a099584fcd6395a6420bb56119fcfd044ca4c2c77ab7e47f84fd045168864ed 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-console-shortcut-r1.json
+b482db94353121198032bce0d58f1cf26a496704346de8934fd0411e5d8aa49e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-console-shortcut-r2.json
+1e063d7d6dfe74692ef244250cc9b331da9799d3a64ca15bd87a8d1542191466 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-fixture-session-r1.json
+b8d9756e0cee24e41d106a5aa2838861f5d26feb245e5b8ec9551a2d514de365 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-fixture-setup.json
+a5168e325cfc41a1a117ca6a4cf1807072ae7a0f535a7e79313c27345705b90b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-goal-resumption.json
+866c4f7ddb010aa3aef761ee77e5b15b8db080fb5216a12121dc0dc3d523c8b4 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-installer-inputs-r1.json
+88195ebff526fb7f75b40d665438acdcc9820bb9378450bedf2b6ff83817fc8b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-local-backup.json
+33cc3a6035df22ef599ff963b0b7a68970cd7c662928260164dfe406d200b10e 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-review-r1.json
+124d673d1ca41e31fbe700f28cf5d94490d54e4b9bb8e439c731c7463fd444cb 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-review-r2-accepted.json
+86b8ba70fc8f7226b7cf84310ac7799fb15ee3991613c0754f3f967fdcbff58b 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification-review-r2.json
+dccdad75934b284dcbb6c54730fcaadcd14e7541b73dd3d2479179811a1fdd39 100644 - - AUTHORED ADDED docs/plans/evidence/2026-09-27-hermes-production/verification.json
 871b196059a8154faf35a4721e1ea4f75b8f20a62485d8b32348943ded64a62f 100644 871b196059a8154faf35a4721e1ea4f75b8f20a62485d8b32348943ded64a62f 100644 SOURCE IDENTICAL docs/reviews/HERMES_FEDORA44_REVIEW_PROMPT.md
 47b8e05eb7553fb73e8d2f6e8660af335e6d4741db9af091089e1004b6e31f96 100755 47b8e05eb7553fb73e8d2f6e8660af335e6d4741db9af091089e1004b6e31f96 100644 SOURCE ADAPTED docs/reviews/HERMES_MANUAL_CORRECTION_REPRO.py
 3c3c0ea0ddb56689e6f2d3090bd20c76dbfdacc47e94f81c9d2d64a35d95293d 100644 3c3c0ea0ddb56689e6f2d3090bd20c76dbfdacc47e94f81c9d2d64a35d95293d 100644 SOURCE IDENTICAL docs/reviews/HERMES_MANUAL_CORRECTION_REVIEW.md
@@ -307,11 +709,12 @@ f75ac4558b4f5c26cdd5445d24315d7633bb499746bd1e48241745878f5e5971 100755 6125127c
 1174a73a42d043eeee89a637bd19ea2b55a720e02b6c965ba9384d1d453fb589 100644 33659aa611228968b7e782aee6338192edf3e5fa23f8676c485f5bec206eeb15 100644 SOURCE ADAPTED hermes-fedora-server-install-guide.html
 4080826e90ed79318f6bae8d0ee1f9e3382dce6cc5d524f081c8ee06afeb7ce3 100755 c7afa2ccf690fe805b3b8234ec437637375206e15dd5d10a7bbd3e0c0167e8f5 100755 SOURCE ADAPTED hermes-remediation-wizard.sh
 6587cde8cb1d4491f3581c73ec236e5ef8fad8961edeb3e7e2cff3bc3658752b 100755 bbfe8e63e56be3806555644089b7dbf3d80f429f006a245a892ddf1cd88205f0 100755 SOURCE ADAPTED hermes-simple-deploy.sh
-4b69ee66fd3cd30b604672cbc5eb3bdccf16f00deab66b18eba78a1ca0524d6e 100644 - - FOUNDATION UNCHANGED pyproject.toml
+5664a20e1cf8ad0f2d4c1a0780efd90a537621c866ef26539759101a8d6c0815 100644 - - FOUNDATION MODIFIED pyproject.toml
 84613d65e403db0530690ea962b6a7e41d65fc3dc37953d6b3dc4ece34eca5c5 100755 84613d65e403db0530690ea962b6a7e41d65fc3dc37953d6b3dc4ece34eca5c5 100644 SOURCE ADAPTED scripts/hermes-wizard-lib.sh
 b1643018f528844a64f64c54e74c59313dd2d821d21cce8e8585a61650f81d56 100644 b1643018f528844a64f64c54e74c59313dd2d821d21cce8e8585a61650f81d56 100644 SOURCE IDENTICAL scripts/hermes/60-hermes-runtime.conf
 6b1c89c80f5e557a95995a0775de54e7a638230b33b2098c51eff1f52f63666e 100644 6b1c89c80f5e557a95995a0775de54e7a638230b33b2098c51eff1f52f63666e 100644 SOURCE IDENTICAL scripts/hermes/70-hermes-volume-label.conf
 9495714fb740c7a7aed40abb98d108b41eadf3cf2f1d2d12f66e99272c2cb3a1 100755 9495714fb740c7a7aed40abb98d108b41eadf3cf2f1d2d12f66e99272c2cb3a1 100755 SOURCE IDENTICAL scripts/hermes/acceptance.sh
+5957ad3b84877e81f51e7191229598227bc15f97539624328786b772f9dfc3a4 100755 - - AUTHORED ADDED scripts/hermes/backup-fixture.py
 ed3739b5b68ab43ed6930b263950e8090671ffe37c615ba3192226163d7b8b16 100755 ed3739b5b68ab43ed6930b263950e8090671ffe37c615ba3192226163d7b8b16 100644 SOURCE ADAPTED scripts/hermes/certification-evidence.sh
 7720c0bc7b735b8efee0796d7a81f4e8be1417cef9e30f17de505010660e8776 100755 - - FOUNDATION UNCHANGED scripts/hermes/deploy-lib.sh
 a94ef76b9f485b0b1beb23cc79c16be5a680c6b6f7d5dc22cf69aac4b8a83025 100755 6125127cc51e0ac18684a0c151be236df9b90097b11605dba73c5f8cc48d740c 100755 SOURCE ADAPTED scripts/hermes/deploy.sh
@@ -396,7 +799,26 @@ b493df535c26749130a7206c1e3e4f3eb59bb1e56c66ef7df7c9a904e7f60ece 100644 - - FOUN
 cf3ea6ac3350a1cfad3322ced3c50a1ae28c26b493a20206e239225e57a274da 100755 - - FOUNDATION UNCHANGED scripts/hermes/manual/worker/worker-entrypoint
 43e222b055258e5bd1dc1d17051936199a91f973bd3a4c8fe3fac046e5cf3865 100755 - - FOUNDATION UNCHANGED scripts/hermes/manual/worker/worker-socket-adapter
 3d2ee084b31ddacebc5273baf2ad6f4feb3904fc804f48d3c6bf72477958056f 100755 - - FOUNDATION UNCHANGED scripts/hermes/manual/worker/worker-sshd-inetd
-4e41cd4a665f134204a4a08340f52d80a01c9684bd1c940c188e1bd361e4edc7 100755 - - AUTHORED ADDED scripts/hermes/profile-deploy.py
+8f97c53b5831be995dfead260d678dda9a5e6359ef1ad3833e4aad7bc87f19c6 100755 - - AUTHORED ADDED scripts/hermes/production-launcher.py
+933e4494220c9cb65088dece7d4e088a3f3ee8204a046cab78853ca00db21a64 100644 - - AUTHORED ADDED scripts/hermes/production/__init__.py
+1655c23f60c6b3e5c00ce5de8d88ad03dffa7d4beb37c5d4d42a4d4d8cc1b92a 100644 - - AUTHORED ADDED scripts/hermes/production/bundle.py
+f11bb72d7be53da9a248a209664d76037a300ea417bf27c8279a5f657b971574 100644 - - AUTHORED ADDED scripts/hermes/production/client.py
+1c48704f7355672becea3bca3eddf3099f2ce12fdcbdb0098682ee93e4667e5d 100644 - - AUTHORED ADDED scripts/hermes/production/commission.py
+36d4b368204b116c9af85aa3d7fe5670cb1c6d97bb11aa13544f02c1ae4d2347 100644 - - AUTHORED ADDED scripts/hermes/production/escrow.py
+5825211a3c8192d46d55fe92f2234c80aad8737a5daa3dcbe55390e11eb1c8d8 100644 - - AUTHORED ADDED scripts/hermes/production/host.py
+198aec7f9576445bdac9504ebd489bbc27f7e3f86132edec59debef822349384 100644 - - AUTHORED ADDED scripts/hermes/production/install.py
+51950d84a8a765b41fd2f80478fa261e04aa0cddb9a52772010bb87db4c3330a 100644 - - AUTHORED ADDED scripts/hermes/production/kickstart.py
+5b90fd9ccc69040bf1017db793176c028b2020bbc0e5ba7e6e81f87348b3b9c2 100644 - - AUTHORED ADDED scripts/hermes/production/media.py
+41e867cd929ab350a255b9397f858729f42e4f37d21c77cd4251e47c24fdfc69 100644 - - AUTHORED ADDED scripts/hermes/production/operations.py
+541bbb2a6282e0d3b3e195fd5b8549232ede557aa9cd9af5081d66993f2263d4 100644 - - AUTHORED ADDED scripts/hermes/production/preflight.py
+1a098525e83f4e1787657b45866d26a0b4559891a3c9c47074ab24df4604d804 100644 - - AUTHORED ADDED scripts/hermes/production/primitives.py
+3bdde599640f1fcbabe6149c669c3dbd39780d9191aee0825eb1aa34c7ea73ca 100644 - - AUTHORED ADDED scripts/hermes/production/receivers.py
+834a84d31e21e191e2975d7bbc5c740ff41d103da345353e4c2e8884b7a93d58 100644 - - AUTHORED ADDED scripts/hermes/production/restore.py
+147ee457b0aeb20e17414ca6a15ee99781149caa315c9e3ec81c553c5827083f 100644 - - AUTHORED ADDED scripts/hermes/production/runtime.py
+81488c88fce98e3acd1901844334d629607311e1c63714f089ebd2db31b6b417 100644 - - AUTHORED ADDED scripts/hermes/production/startup.py
+c3026823730d10d86d45ecaa2a55c99cad7b35094d09e8a34cf5e78946b554e3 100644 - - AUTHORED ADDED scripts/hermes/production/writer_guard.py
+fb1d9421ad0983adc21d09b239b5a8092bf58a510d8e1f88b624fb9bd201e5f8 100755 - - AUTHORED ADDED scripts/hermes/productionctl.py
+d48eb1adddd179182219095e4993664dddb71afd52f240e8944bb624dfa7a3f4 100755 - - AUTHORED ADDED scripts/hermes/profile-deploy.py
 c4fde7ad996e8d41d357966b634c4cf4701199cd2e9fba4d96c5fed5d0526ad0 100755 b97abb0cdd78951d305dc0c910eca920537afd8ca9012a26398a6b743a62b78b 100755 SOURCE ADAPTED scripts/hermes/promotion-record.sh
 0f33c2bf6257d06f8ba98eb95cba9d50d56dbbcebe3ff28e181649af9696dcc0 100755 0f33c2bf6257d06f8ba98eb95cba9d50d56dbbcebe3ff28e181649af9696dcc0 100755 SOURCE IDENTICAL scripts/hermes/provider-auth-status.sh
 6afa6eb5d237590ca4f1b02e3b63caedbf449d12b3d73d7f2026b5f458a5ab92 100755 c7afa2ccf690fe805b3b8234ec437637375206e15dd5d10a7bbd3e0c0167e8f5 100755 SOURCE ADAPTED scripts/hermes/remediation-wizard.sh
@@ -500,11 +922,12 @@ fb795d14c0b1fed8f9c1ebc03b695a6f221f3d8a960b7c2e9878c12fc0513dee 100644 c619aa7d
 4d6c8d1afed1ba5c6c45327e3984326464a23c26b72bbd3aa3cc290d95fc066e 100644 17b36731e76fa106aade7c732f6c0fb0daee91a903cab53835679e84f83efbc7 100644 SOURCE ADAPTED tests/Containerfile.sshd
 6f24ec5a47992306196ca31008fc58aed4d923a28a12273a823e23430ba86cec 100755 - - AUTHORED ADDED tests/check_hook_wiring.py
 d9200fa99f8f97809fa05d01d5476315d419be65de30af6c1517907c52a2f002 100644 1d2ae941506987246ae35dd27be05e0f308cfb40b6b12b4dfd3b9c948b9d7d35 100644 SOURCE ADAPTED tests/check_ssh_key_only_docs.py
+441929a6d0b913ca59d95c94d7a6ab23bc307e3b675c84005bde0e470522d26e 100644 - - AUTHORED ADDED tests/fixtures/production_process_driver.py
 d8b2c72382c51af0feca57cd7a30b940233c0e6d51550b161eef6f37f47b181e 100755 - - AUTHORED ADDED tests/hermes-synthetic-smoke.py
 ed8f69ab08bc6dec11e461ea59888374b165ae502d8d108025a008385e867b2e 100644 - - AUTHORED ADDED tests/integration_allowlist.txt
 409ae3d41bb76d16ba84f216d11dfe9728a74252f6064f7c69ea5afac99395d0 100644 - - AUTHORED ADDED tests/integration_gate.py
 b6639ee697b3ed963c91d71be9db8587f83fb9c2fab85e9e4455a967b6c7e87d 100755 - - FOUNDATION UNCHANGED tests/lib-test-helpers.sh
-1ea5ff5d8104e26a972b8e3f353b2f237182be84e27e20da3d8472b51df35710 100644 - - AUTHORED ADDED tests/offline_allowlist.txt
+beb7f8254c006cb1c95b23b9a62b393474627eabc3604f67b06dad8c45df0369 100644 - - AUTHORED ADDED tests/offline_allowlist.txt
 42e524367180b53c83d5ba9865450f078c3b8b0bd1269bae21c3029eb1c6f25b 100755 - - AUTHORED ADDED tests/run-reviewed-suites.py
 21c879e5daed734a19ec57be7e0ee6d71935b11e4e40c74c01b59258ea17a8c7 100755 21c879e5daed734a19ec57be7e0ee6d71935b11e4e40c74c01b59258ea17a8c7 100755 SOURCE IDENTICAL tests/test-hermes-e2e-vm.sh
 13c84cff3915ecdc523ef4f03040bcff2754af28411aa76ccde0de5af4bf50ac 100755 - - FOUNDATION MODIFIED tests/test-hermes-guide.sh
@@ -520,6 +943,7 @@ a95dee375766efa5d0a98a0b21acf8637cfee049c7cc94dd3943083ba7b80980 100755 - - FOUN
 698274dae401822110c982da4d0ece86a4af6446e5a4b2bd7e207b6b6dc586fa 100644 - - AUTHORED ADDED tests/test_deepseek_guest_permission_inspect.py
 a3359da6a52837298cb4ab31c366a0418544489beaa29a75408ec907715480b5 100644 - - AUTHORED ADDED tests/test_deepseek_host_grant_finalize.py
 c40a9caae909ed53725877ff93aa42b60af3aeb6adcc138c0cf7b0a5dbbee150 100644 - - AUTHORED ADDED tests/test_deepseek_test_grant.py
+56bab5aa47d85c3d7b534f7b859f40fa89cda49cadc865c5c9a1410782680daa 100644 - - AUTHORED ADDED tests/test_hermes_backup_fixture.py
 34a0fdfad06e7469596343b5730f2c0b6a72f44b92615d5e275d0efa16aa6c17 100644 34a0fdfad06e7469596343b5730f2c0b6a72f44b92615d5e275d0efa16aa6c17 100644 SOURCE IDENTICAL tests/test_hermes_certify.py
 abb486fe45a7ba5cdc9b412bae3020a6ac5ba79984d7704304f507e5fc8583ee 100644 - - AUTHORED ADDED tests/test_hermes_disposable.py
 2e71b32ac090c84b83b8b65a5c41d08daf9764e7153ad11f1f09677c23492d97 100644 - - AUTHORED ADDED tests/test_hermes_lab.py
@@ -530,6 +954,7 @@ d7c5c1023635d32867561d9c1792ef7ea4e90b51493b033b95b3a4faee63ac16 100644 d7c5c102
 fea6eae295a6d71fc43178b463371bf60eb0f597ce11efc3141647bcb6a79d43 100644 - - AUTHORED ADDED tests/test_hermes_live_smoke.py
 55bdff8366843fc25b4bf09714756065b5097b4faf42a5872d428b3aa8f7cd9b 100644 - - FOUNDATION UNCHANGED tests/test_hermes_manual_hardening.py
 5b55fa79679f83108f4d83772667b4a7dcaf6332eb1d83123418ee1a635f6163 100644 5b55fa79679f83108f4d83772667b4a7dcaf6332eb1d83123418ee1a635f6163 100644 SOURCE IDENTICAL tests/test_hermes_offline.py
+f345458fe10b8f619399b82e5664e3638fa976f7b90154e6964bd0ebe03b45f7 100644 - - AUTHORED ADDED tests/test_hermes_production.py
 a2304f5e0bb880c2e2f75a6af4ee5bed683f1ffab7bb8fc036f0251f2b7e0902 100644 a2304f5e0bb880c2e2f75a6af4ee5bed683f1ffab7bb8fc036f0251f2b7e0902 100644 SOURCE IDENTICAL tests/test_hermes_remaining_lab.py
 e9f033760c162a308180801f0dc16bd9bbe2d1a873f81f676d847dc850170222 100644 e9f033760c162a308180801f0dc16bd9bbe2d1a873f81f676d847dc850170222 100644 SOURCE IDENTICAL tests/test_hermes_schedule.py
 545b1bd00dc0d7045ce360bdd06a7d25e44a7f89bf9252db209d9e45f5fc5cfd 100644 545b1bd00dc0d7045ce360bdd06a7d25e44a7f89bf9252db209d9e45f5fc5cfd 100644 SOURCE IDENTICAL tests/test_hermes_selinux_audit_v2.py
@@ -555,7 +980,7 @@ fb2f735b112d130336b634fd60ebeeb78c41a20f684e855fa9a280305dfc9568 100755 - - AUTH
 c7a922739be233da49a6aa6d86206d0c3754811d40b0503cca52bc2f4f7c00c8 100755 - - FOUNDATION MODIFIED toolbox/run-offline-checks.sh
 6031a1698715cfe59078469404ecd9fbfbba5b6efeaa072d47e2faf2ed3458fb 100755 - - AUTHORED ADDED toolbox/scan-secrets.sh
 e409b0f6bdd06cd5ce6f8f6afb84b5a19fadf24feda3fd88eabc6566e17d9113 100755 - - FOUNDATION MODIFIED toolbox/verify-extensions.sh
-04a51ccb4ac8099b347c69869ae7021c852c0618a03970b03ee9819bd75b1e11 100644 - - FOUNDATION UNCHANGED uv.lock
+32cca16dfff913c73f03fded31c6d70900a76196dca527ebeaf41776c6121e32 100644 - - FOUNDATION MODIFIED uv.lock
 34880c9175b4956dde59d8740bdae9ec3faa4be2f8e588c51e7c8ee1e2d22f3b 100644 f4d7f6fa85e1406720ebfa1f3f749bb5364d49ae42b14c950df78142bc10b0a6 100644 SOURCE ADAPTED vm/DEPLOYMENT_TASKS.md
 149c131a97eb3234a55a1cb4c1071c3549fea91faf3e4985b9369059d2a560f4 100644 149c131a97eb3234a55a1cb4c1071c3549fea91faf3e4985b9369059d2a560f4 100644 SOURCE IDENTICAL vm/cloud-init/fedora-user-data.yaml
 8ab812e762ffd72bd0f397b9de29419e0ea7376b772d8ebfc84192114ce9e7e5 100755 7836054a2c173bf3e1db7913c59c97b34cacbf70eb8b37517ce5ceedaff1c51e 100755 SOURCE ADAPTED vm/create-fedora-vm.sh
@@ -563,6 +988,9 @@ e409b0f6bdd06cd5ce6f8f6afb84b5a19fadf24feda3fd88eabc6566e17d9113 100755 - - FOUN
 205a25ba0a39ce759295c49acc035c68ba9f1159728bb2232594649d02e7fc94 100755 9e08ec3b950faf38a1b9a22e191e43aef2d4dbf9e91d8edc204f7ae556c3a730 100755 SOURCE ADAPTED vm/hermes-certify-vm.sh
 c19ac1a1d8ea6780514b879848f54dd20e5d020c14f6ff820543b4412a1b4543 100755 - - AUTHORED ADDED vm/hermes-disposable.py
 897ded098034b8caab707c99b8eda63366d5d410867b8e7ac473d15beeb3d3f3 100755 897ded098034b8caab707c99b8eda63366d5d410867b8e7ac473d15beeb3d3f3 100644 SOURCE ADAPTED vm/hermes-luks-console.py
+762752626993ab5d8d32fd9bdb8e8194f2c600a10adfb96f01f44e128f3edbd4 100755 - - AUTHORED ADDED vm/hermes-production-fixture.py
+e54bb95b7e64903f88159823585e82547c945272a46ed8ca80ea212e810c9007 100755 - - AUTHORED ADDED vm/hermes-production-qualify.py
+4409a010fedd6157258eb4f1b803817cdc5c9699eb41147d5e9039e5f393bcbd 100644 - - AUTHORED ADDED vm/kickstart/fedora-server-production.ks.in
 bedec065918d8d1812b76f0d0e2265557efceea92abfb203746c29190c3aee87 100644 bedec065918d8d1812b76f0d0e2265557efceea92abfb203746c29190c3aee87 100644 SOURCE IDENTICAL vm/kickstart/fedora-server.ks
 7b4aaec2cce96d8172d0ed97dd98e4d43a369b8b64e92d6808cc50afad3a8b1e 100644 7b4aaec2cce96d8172d0ed97dd98e4d43a369b8b64e92d6808cc50afad3a8b1e 100644 SOURCE IDENTICAL vm/kickstart/hermes-tpm-enroll.ks
 9404666886a477f302caf9257b2ecffd399e0f4fc825bae53ea88ebbd44b6628 100644 9404666886a477f302caf9257b2ecffd399e0f4fc825bae53ea88ebbd44b6628 100644 SOURCE IDENTICAL vm/lib-hermes-luks-console.sh

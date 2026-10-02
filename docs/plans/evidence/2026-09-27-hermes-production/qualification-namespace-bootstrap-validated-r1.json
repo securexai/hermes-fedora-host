@@ -1,0 +1,97 @@
+{
+  "application_runtime": "NOT_RUN",
+  "archive_sha256": "d2f206c87e4adc6373969f2720dc68b3e9d2e67ecf3525d0e9eebb9026a1d074",
+  "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+  "bootstrap_sha256": "31501c3893e12a4f308ed018ddc9959bb11f90b2c3fd329fdddd2265615712a0",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T20:46:18.718167+00:00",
+  "configuration": "CURRENT_9_GIB_TWO_CPU_BASELINE_MATCH",
+  "current_application": null,
+  "installed_file_checks": {
+    "lab_profile.py": true,
+    "production-launcher.py": true,
+    "production/__init__.py": true,
+    "production/bundle.py": true,
+    "production/host.py": true,
+    "production/kickstart.py": true,
+    "production/operations.py": true,
+    "production/preflight.py": true,
+    "production/primitives.py": true,
+    "production/receivers.py": true,
+    "production/restore.py": true,
+    "production/runtime.py": true,
+    "production/startup.py": true,
+    "production/writer_guard.py": true,
+    "productionctl.py": true
+  },
+  "kernel": "6.19.10-300.fc44.x86_64",
+  "production_acceptance": "OPEN",
+  "receipt": {
+    "application_deployment": "NOT_RUN",
+    "application_mode": "synthetic",
+    "backup_service": "NOT_CONFIGURED_NOT_CONTACTED",
+    "bootstrap_sha256": "31501c3893e12a4f308ed018ddc9959bb11f90b2c3fd329fdddd2265615712a0",
+    "commissioning": {
+      "boot_sha256": "23be275faa10978e7f66085a803cd0eaadef8bb20aea01ae81765ffaaddcfad4",
+      "evidence": {
+        "automatic_cold_start": "cd6766a16057ca26b4c3ed4dfc07b43cf6045003311aaa610c9657148daa6933",
+        "automatic_reboot": "cd6766a16057ca26b4c3ed4dfc07b43cf6045003311aaa610c9657148daa6933",
+        "console_access": "cd6766a16057ca26b4c3ed4dfc07b43cf6045003311aaa610c9657148daa6933",
+        "encrypted_offhost_recovery": "7408574744045e406b364d1be4c83b053cdb18592be265343ecb6cc254d011a2",
+        "firmware_power_restoration": "f70120e24abbc28aed36a38c5b14d9675975c401a2c52186495b7d1f40e01c2e",
+        "isolated_restore": "811dbed148c03ca28e38d59e286202c8500850aa163408c1eb7e31f7fb387103",
+        "recovery_then_automatic_boot": "cd6766a16057ca26b4c3ed4dfc07b43cf6045003311aaa610c9657148daa6933",
+        "recovery_unlock": "cd6766a16057ca26b4c3ed4dfc07b43cf6045003311aaa610c9657148daa6933"
+      },
+      "gates": {
+        "automatic_cold_start": "PASS",
+        "automatic_reboot": "PASS",
+        "console_access": "PASS",
+        "encrypted_offhost_recovery": "PASS",
+        "firmware_power_restoration": "NOT_RUN",
+        "isolated_restore": "NOT_RUN",
+        "recovery_then_automatic_boot": "PASS",
+        "recovery_unlock": "PASS"
+      },
+      "host_sha256": "39c0a8d4d5ae6f2b87d319ae654efe30b576f334fe07d89a8c538d897e1260bb",
+      "packages_sha256": "fdb1635a8f2216059831a8c77de105e5e3c0ca30b2d8dc223f070e6139f8c610"
+    },
+    "initial_prepared_recovery": {
+      "after_sha256": "d932020271a3886f8f4e06a89713403184b9cad138f5f45576d72a8979d92771",
+      "application_changes": "NONE",
+      "attempt": "96cbdc942a0442b8b3ff9912e498c3a6",
+      "before_sha256": "7c1ca8194834c2cba4ecb26dc990910fc30b7346a55c2446eb4d0c9d19f1b98b",
+      "named_rollback": "NO_MATCHING_SNAPSHOT_AFTER_SUCCESSFUL_PREPARED_RECOVERY",
+      "status": "ABORTED_INITIAL_PREPARED_ATTEMPT"
+    },
+    "preflight_checks": {
+      "commissioning": "PASS",
+      "conflicts": "PASS",
+      "packages": "PASS",
+      "platform": "PASS",
+      "runtime_account": "PASS",
+      "ssh_policy": "PASS",
+      "storage_boot": "PASS"
+    },
+    "provider_calls": "NOT_RUN",
+    "reboot": "NOT_RUN",
+    "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+    "scope": "Qualification VM synthetic receiver and bounded dispatcher bootstrap",
+    "status": "PASS",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "receipt_sha256": "53e3ef01e7a81a025228e193e80092a040f820f8749f66c83c5479ace6308a00",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "scope": "Independent actual corrected bootstrap receipt, installed receiver hashes/ownership, named preflight and aborted initial journal; no application runtime acceptance",
+  "status": "PASS",
+  "transaction": {
+    "candidate": "6b3e4e7f141a114e428b56f885c9b47b3231f4043aad93b4e66f3d1d3e916ed5",
+    "id": "96cbdc942a0442b8b3ff9912e498c3a6",
+    "previous": null,
+    "protocol": 1,
+    "snapshot": null,
+    "stage": "aborted",
+    "timings": {}
+  },
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

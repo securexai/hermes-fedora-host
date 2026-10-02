@@ -1,0 +1,33 @@
+{
+  "actual_runtime_after_recovery": "PASS",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T20:57:12.313172+00:00",
+  "committed_upgrade_explicit_restore": "NOT_RUN",
+  "evidence_sha256": {
+    "qualification-live-failed-import-observer-r1.json": "a03a8300d32cd27dc8e1aa103a7f71dab6327ac0f83d3b3416d9ef36bfdd95cd",
+    "qualification-live-failed-import-r2.json": "8bb7bdf4fbed7851ec5089e35cbec88107cc365caff15d670a40982e47bc4c79",
+    "qualification-live-namespace-failed-update-verify-r1.json": "1845a9227fc0c686f7af4b47dedca9b036062d426f0d2701c0ea66bbd6d0e325",
+    "qualification-live-namespace-failed-update-verify-r2.json": "eccada3073e605a3570a25f21c8247ae7248420668a6814740721d22ddda8bd9",
+    "qualification-live-namespace-recovered-rollback-r1.json": "1645254200da1b998a7addb91549a6e30d3abb75136594e07bccb43ece58a596",
+    "qualification-live-namespace-status-failed-update-r1.json": "c772b31e51d26049f35daf6ac43f20be677abde8c4c55baad0b9f6685fb23e47",
+    "qualification-live-namespace-status-failed-update-r2.json": "e69988eb65b6f9c8117696a81b1e14083ff815b2d31dfddfb47db4760a44fa0d",
+    "qualification-live-namespace-status-recovered-rollback-r1.json": "fb9be29df4aafb534662a18b005c55f3e27e7365e88d2b90fae0e04c3025ac98",
+    "qualification-live-runtime-after-recovery-r1.json": "1c11c76f90327b8351a6f9272c1dbc8c0c4d3a616ab471afeec36c95ab29c66c"
+  },
+  "explicit_rollback_after_recovery": "UNCHANGED",
+  "external_backup_provider_telegram": "NOT_RUN",
+  "observer_correction": "Actual supervised command reports runuser, its first argv entry; initial mismatched observer retained; corrected live retry matched exact refusal",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "status": "PASS_WITHIN_FAILED_UPDATE_RECOVERY_AND_ROLLBACK_RERUN_SCOPE",
+  "transaction": {
+    "candidate": "a7a12989e363152f6e92174659a06164a7396ac3333b6ab69c572a92b4042a4a",
+    "id": "72a322befaef4c36a574af98a7aed3c8",
+    "previous": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+    "protocol": 1,
+    "snapshot": "72a322befaef4c36a574af98a7aed3c8",
+    "stage": "recovered",
+    "timings": {
+      "stopped_backup": 3.5361328429989953
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "boot_id": "084890b8-d1ce-4eb4-977d-d3c15774b649",
+  "observations": [
+    {
+      "checked_at_utc": "2026-09-29T21:01:47.962233+00:00",
+      "ready": true,
+      "ssh_exit": 0
+    }
+  ],
+  "previous_boot_id": "24de6c28-b52d-4941-8c6c-d74e2602a722",
+  "scope": "Bounded pinned SSH readiness after approved cold start; no console input or lifecycle replay",
+  "status": "PINNED_SSH_READY_APPLICATION_HEALTH_NOT_YET_VERIFIED"
+}

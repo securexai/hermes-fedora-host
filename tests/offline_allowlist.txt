@@ -123,3 +123,18 @@ test_hermes_lab.ProfileTests
 test_hermes_lab.LabTests
 test_hermes_lab.DeploymentTests
 test_hermes_lab.RestoreTests
+
+# Synthetic production policy/transaction/archive fixtures; local temporary SSH keys only.
+test_hermes_production.ProductionPolicyTests
+test_hermes_production.ProductionBundleTests
+test_hermes_production.ProductionTransactionTests
+test_hermes_production.ProductionReceiverTests
+# Fixture creation commands, port probes and capacity are mocked; no VM operations.
+test_hermes_production.ProductionFixtureTests
+# Unattended install/escrow/commissioning/media: throwaway local OpenSSL and SSH keys,
+# temporary directories, mocked cryptsetup/TPM/libvirt/mkksiso; no host or guest changes.
+test_hermes_production.ProductionUnattendedTests
+# Pipeline gate/candidate/ownership logic with temporary signed bundles; no VM or libvirt.
+test_hermes_production.ProductionQualifyPipelineTests
+# Local-backup runner safety tests: all external commands mocked, no container/network actions.
+test_hermes_backup_fixture.LocalBackupFixtureTests

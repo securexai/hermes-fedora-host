@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "scope": "retained-OCI-package-signature-roundtrip-only",
+  "build_seconds": 2.674924902999919,
+  "verify_seconds": 1.740933369999766,
+  "archive_bytes": 1148723200,
+  "artifact_sha256": "e162118e30c77c782e8b33bdb9ace1952da2df8c4dd5052f06e9023f476d5c4c",
+  "archive_sha256": "ceb175decb4f4d302cb7b098dc93ee3958f78ef5ad1ed35100de28f0e17ec014",
+  "production_candidate_rejected": true,
+  "images": {
+    "gateway": "sha256:0ba99c713250dbc2e80a5806cd3eb6b3e6c39ee2f251627efaecce384da436fc",
+    "worker": "sha256:4d7b3f8712ed95efeed6e6756ff70859d896ffeb5e7c04da31504b0fe8203e52"
+  },
+  "file_count": 35
+}

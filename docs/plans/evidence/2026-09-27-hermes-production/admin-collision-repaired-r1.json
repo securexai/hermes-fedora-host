@@ -1,0 +1,44 @@
+{
+  "admin": {
+    "gid": 1000,
+    "groups": [
+      "hermesadmin",
+      "wheel"
+    ],
+    "home": "/home/hermesadmin",
+    "name": "hermesadmin",
+    "password_preserved": "IN_GUEST_MEMORY_TRANSFER_ONLY",
+    "password_status": "P",
+    "shell": "/bin/bash",
+    "uid": 1000
+  },
+  "before_account": "operator:x:11:0:operator:/root:/usr/sbin/nologin",
+  "before_key_location": "/root/.ssh/authorized_keys",
+  "before_key_uid": 11,
+  "checked_at_utc": "2026-09-29T02:05:06.384811+00:00",
+  "files": {
+    "admin-repair-tests-r1.log": "65378dcad145da2497120819bebfc3c46534dce9714ce064b3d809a56654aca2",
+    "installed-guest-audit-r2.py": "2e71629121c84402ac6e97b901650374d0be0eb2ed0457c01ef39e893c6c2886",
+    "repair-admin-rescue-r1.py": "2ac6585ee8ddb7963e90ff5cb1a6148b1bab91b11be15464076ddacd20342dc2"
+  },
+  "installed_runtime_audit": "NOT_RUN",
+  "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "misdirected_public_key": "EXACT_FIXTURE_KEY_REMOVED",
+  "production_changes": "NOT_RUN",
+  "public_key_fingerprint": "SHA256:JzhGuldy7SI0F2s3RFR9e1ZQg4IB6UyHLzwnN7QIg3M",
+  "repair_tests": 6,
+  "rerun": "NO_CHANGE_TO_INODE_MTIME_MODE_OWNER_SIZE_OF_ACCOUNT_KEY_AUDIT_FILES",
+  "reserved_operator": {
+    "identity": "PRESERVED",
+    "password_status": "L"
+  },
+  "scope": "Qualification VM administrator repair only; installed runtime audit pending",
+  "selinux_labels": "PASS",
+  "status": "REPAIRED_IN_RESCUE",
+  "sudo_negative_checks": {
+    "audit_extra_argument_exit": 1,
+    "other_command_exit": 1
+  },
+  "visudo": "PASS",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

@@ -1,0 +1,34 @@
+{
+  "generated_swap_unit_exists": true,
+  "override": {
+    "exists": true,
+    "is_symlink": true,
+    "link": "/dev/null"
+  },
+  "raw_setup_state": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "failed"
+  },
+  "report": {
+    "error": "zram-setup-state-needs-review",
+    "restic": "restic 0.19.1 compiled with go1.26.5-X:nodwarf5 on linux/amd64",
+    "scope": "Restic/zram prerequisites only",
+    "script_sha256": "be66c2b6f902dc44de6a852a6cfcf8c03485e51c1222f391c9819c99093e38a7",
+    "stage": "zram",
+    "status": "FAIL",
+    "timestamp_utc": "2026-09-28T13:11:24.102525+00:00"
+  },
+  "restic": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "restic 0.19.1 compiled with go1.26.5-X:nodwarf5 on linux/amd64"
+  },
+  "services": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "Id=dev-zram0.swap\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nResult=success\n\nId=systemd-zram-setup@zram0.service\nLoadState=loaded\nActiveState=failed\nSubState=failed\nResult=exit-code\nExecMainCode=1\nExecMainStatus=1"
+  },
+  "swap": "Filename\t\t\t\tType\t\tSize\t\tUsed\t\tPriority\n",
+  "zram_sysfs_exists": true
+}

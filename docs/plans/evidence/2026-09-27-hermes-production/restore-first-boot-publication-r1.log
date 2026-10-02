@@ -1,0 +1,8 @@
+PASS: prepared candidate source/evidence unchanged; 201 local documentation targets/fragments valid
+markdownlint-cli2........................................................Passed
+Secret scan: 770 tracked/untracked files (validation disabled)
+PASS: scanner positive control reported a redacted github-pat finding for the synthetic file
+PASS: no findings in the full reviewed working tree
+wrote docs/migration-manifest.txt: 769 rows, 13 excluded candidates, payload fingerprint 783a77cfd14d5eb49960142f0ce113f59c5a56a5a69453fcd873fdfa0740901a
+VERIFY MODE: source-aware (source, toolbox and companion checkouts present)
+PASS: docs/migration-manifest.txt matches the working tree (769 rows)

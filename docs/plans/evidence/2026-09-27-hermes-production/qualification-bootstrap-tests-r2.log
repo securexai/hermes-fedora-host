@@ -1,0 +1,23 @@
+All checks passed!
+3 files reformatted, 7 files left unchanged
+{
+  "bootstrap_sha256": "d05c0b23ee8676b77cd91bbbca1867bc7630a406578acd1fee7bd506c21d60d8",
+  "helpers": {
+    "commission-boot.py": "2191c36a9046b766e3514282f534f54c00ae6007b9050c6d77a56ed76abe69ff",
+    "recovery-once.py": "26a5b9366ac321c7f8e51bb0f6161eb29c7c45a51c7e2af6b5ef42b6bdc7ea78",
+    "finish-recovery.py": "fd53880412f8baac0e9f81b808f5621aba04c0ee5e30a9c5788f55824373504b"
+  }
+}
+test_symlink_refused (test_bootstrap.IdentityTests.test_symlink_refused) ... ok
+test_wrong_vm_refused_before_commands_or_writes (test_bootstrap.IdentityTests.test_wrong_vm_refused_before_commands_or_writes) ... ok
+test_conflicting_helper_or_sudoers_refused_before_private_setup (test_bootstrap.InstallTests.test_conflicting_helper_or_sudoers_refused_before_private_setup) ... ok
+test_corrupted_or_extra_payload_never_installed (test_bootstrap.InstallTests.test_corrupted_or_extra_payload_never_installed) ... ok
+test_exact_rerun_preserves_installed_files_and_skips_private_apply (test_bootstrap.InstallTests.test_exact_rerun_preserves_installed_files_and_skips_private_apply) ... ok
+test_failed_private_setup_never_grants_passwordless_access (test_bootstrap.InstallTests.test_failed_private_setup_never_grants_passwordless_access) ... ok
+test_post_install_sudo_validation_failure_removes_only_new_grant (test_bootstrap.InstallTests.test_post_install_sudo_validation_failure_removes_only_new_grant) ... ok
+test_rule_grants_only_exact_named_commands (test_bootstrap.InstallTests.test_rule_grants_only_exact_named_commands) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+OK

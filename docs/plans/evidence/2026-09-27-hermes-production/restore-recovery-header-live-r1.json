@@ -1,0 +1,64 @@
+{
+  "G03_G04_G05_G06": "OPEN",
+  "checked_at_utc": "2026-09-30T15:00:36.485433+00:00",
+  "clock_observation": {
+    "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+    "guest_minus_host_midpoint_seconds": 31.485,
+    "guest_time_utc": "2026-09-30T14:59:48.958553+00:00",
+    "host_after_utc": "2026-09-30T14:59:17.569211+00:00",
+    "host_before_utc": "2026-09-30T14:59:17.378155+00:00",
+    "mounts": {
+      "/": "f17513b9-f895-4648-b138-73920ef2d06b",
+      "/boot": "fa398b72-e482-4081-8334-0d7623fa350d",
+      "/boot/efi": "CDF7-DAFA",
+      "/home/hermes": "82d2a1bf-2786-4ace-ac5d-9eb582861b3a",
+      "/var": "8ac22696-7754-4948-bb78-e3d0f7ef1484"
+    },
+    "ntp_synchronized": "yes",
+    "round_trip_seconds": 0.1911,
+    "scope": "Public clock and mounted UUID observations; clocks unchanged"
+  },
+  "clocks_changed": false,
+  "next_action": "Prepare the restore-specific bounded private TPM/bootstrap workflow against this exact recovery copy and current identities; preserve keyslot and retained baseline",
+  "ordering_evidence": "Pinned transfer and authenticated byte/hash identity; host/guest wall timestamps are not synchronized ordering proof",
+  "scope": "Restore VM encrypted header copied to the local workstation; authenticated decryption, hash, size and LUKS2 magic verified; same physical failure domain, not application restoration or independent disaster recovery",
+  "server_report": {
+    "artifact_directory": "/var/lib/hermes-production-recovery/header-before-tpm-21fbc7b53a0b39a6",
+    "certificate_sha256": "21fbc7b53a0b39a672d199f8e77b670df10643e8963e528502ce504d37e532d3",
+    "ciphertext_sha256": "47c3392c5803f8dddb682382ffbc062f3d9181662b8144ef16c97d88f3e848a9",
+    "disk_restore": "NOT_RUN",
+    "header_bytes": 16777216,
+    "header_sha256": "af8a73eb1e346b75c915fd048fbc92def603f0ce7dd5f9986b76b10837110236",
+    "keyslot_count": 1,
+    "luks_uuid": "3f6f7774-6672-40d9-afc7-d1bd03f9baa1",
+    "offhost_verification": "NOT_RUN",
+    "script_sha256": "681b54f7790ef86903edf8c4410bfd0f0741708f209081bc5c1f978bce8e8c72",
+    "status": "ENCRYPTED_ON_SERVER",
+    "timestamp_utc": "2026-09-30T14:58:19.586144+00:00",
+    "tpm_enrollment": "NOT_RUN",
+    "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+  },
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/recovery-r1/backup/header.cms": "47c3392c5803f8dddb682382ffbc062f3d9181662b8144ef16c97d88f3e848a9",
+    ".toolbox/hermes-production-restore/recovery-r1/backup/server-report.json": "f8cc3233a739271c94461486da4b497cc97e58f78a61ff9a27966a6728712c91",
+    ".toolbox/hermes-production-restore/recovery-r1/backup/verification.json": "bb00e123b3291edea6707c6135c2a196abd0f5685dcf4cb61d4de3fd5dc39241",
+    ".toolbox/hermes-production-restore/recovery-r1/clock-mount-observation-r1.json": "46057c6fbd306b958a6cde5093f3a31d697f665cbfed9ce3db0c2a250c9e2dd5",
+    ".toolbox/hermes-production-restore/recovery-r1/live-verification-r1.json": "00e6127d0caf6f068bf6fa2d7f6a02de460e1b62348b1ab18b0547fbc8b3c6a5",
+    ".toolbox/hermes-production-restore/recovery-r1/live-verification-r1.log": "00e6127d0caf6f068bf6fa2d7f6a02de460e1b62348b1ab18b0547fbc8b3c6a5",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-recovery-header-prepared-r1.json": "c5a5c53c687b37d9865e56b94f46e1ae5a26696f027e7a1199a1c7f8a56d1562"
+  },
+  "status": "PASS_RESTORE_ENCRYPTED_HEADER_COPY_AND_IN_MEMORY_VERIFICATION",
+  "verification": {
+    "certificate_sha256": "21fbc7b53a0b39a672d199f8e77b670df10643e8963e528502ce504d37e532d3",
+    "checked_at_utc": "2026-09-30T14:59:17.372028+00:00",
+    "ciphertext_sha256": "47c3392c5803f8dddb682382ffbc062f3d9181662b8144ef16c97d88f3e848a9",
+    "disk_restore": "NOT_RUN",
+    "header_bytes": 16777216,
+    "header_sha256": "af8a73eb1e346b75c915fd048fbc92def603f0ce7dd5f9986b76b10837110236",
+    "luks_uuid": "3f6f7774-6672-40d9-afc7-d1bd03f9baa1",
+    "passphrase_test": "NOT_RUN",
+    "scope": "encrypted off-host LUKS header copy and in-memory verification",
+    "status": "PASS",
+    "tpm_enrollment": "NOT_RUN"
+  }
+}

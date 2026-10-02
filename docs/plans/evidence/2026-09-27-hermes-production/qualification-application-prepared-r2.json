@@ -1,0 +1,18 @@
+{
+  "bootstrap_sha256": "9c2c5e9e641c0fdc10bc6ffb5613bcc39ae617170ab4c38d97d7515af68139ab",
+  "exposed_memory_bytes": 9288417280,
+  "guard_tests": "7 PASS",
+  "memory_gib": 9,
+  "platform_minimum_bytes": 8321499136,
+  "prior_source_retained_at": ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/prepared-r1",
+  "reason": "Explicit 9 GiB approval and new verified cold boot",
+  "root_execution": "NOT_RUN",
+  "source_sha256": {
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/bootstrap.py": "9c2c5e9e641c0fdc10bc6ffb5613bcc39ae617170ab4c38d97d7515af68139ab",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py": "476dfceaf8423b17f9f61206481fb8214d976289ce8750892de17b474886bb8f",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/private-bootstrap.py": "40bef1aaa1b3d3b27250d079dc735430d804b4c729f3ac83c61c9ada6cf5ea76",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/run-private-bootstrap.sh": "1deb154a9112bf50131f2f2db70b07bc3d05f6659cde7f16cfed0306fa2a0d6f"
+  },
+  "status": "PREPARED_AWAITING_PRIVATE_SUDO",
+  "supersedes": "qualification-application-prepared-r1.json"
+}

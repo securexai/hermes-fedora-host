@@ -1,0 +1,108 @@
+{
+  "base_commit": "3debb5ae22f91eb47c61daa30f1543d20456fec2",
+  "branch": "codex/hermes-production-bundle",
+  "bundle_artifact_sha256": "9299238f053dcabc03f1017dc631ac557713a57d7d8fd1edc9f1a8929af0470b",
+  "closure": "Canonical record, index and migration manifest are published after gate logs; subsequent documentation/secret/provenance checks cover closure edits. This index excludes its own hash and the mutable record/manifest.",
+  "commands": {
+    "bundle": "python3 -B .toolbox/hermes-production-validation/refresh-review-r2-final-bundle.py",
+    "focused": "python3 -B -m unittest discover -s tests -p test_hermes_production.py",
+    "lint": "UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never bash toolbox/run-check-only-lint.sh",
+    "manifest": "python3 -B toolbox/generate-migration-manifest.py --verify",
+    "offline": "UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never bash toolbox/run-offline-checks.sh"
+  },
+  "deployment_targets": "NOT_CONTACTED",
+  "environment": "dev-infra-hermes Toolbox; local temporary processes, synthetic host/services, signed test releases and retained local OCI archives",
+  "evidence_sha256": {
+    "bundle-before-final-ssh-check.json": "059f09a4051d949954eed5ed44b24f4425c5919458ba0997fabbc653f7725754",
+    "bundle-final.json": "f5b3556a126362aad7322f130926f3dd49320ee73343760af59ccd2ee9051c20",
+    "bundle-initial.json": "9ac951725803a4084903b257158c9dd81289d11e66573d8e05de126971f420f2",
+    "bundle-review-r1.json": "e5d45d7834be4863d16cd793ea98869dbd0f49ed43375f67471b07c36161ae7e",
+    "bundle-review-r2-final.json": "1668c66d038c52eb4afcbb50fc94379798e5195ba1c945ec9be849ba92a9a047",
+    "bundle-review-r2.json": "bc000fd6e8c8543c31e17165b82b94c0fed666fa02658d33017ef965bf0b3ab1",
+    "fixture-preview.json": "5add5a4a42f43fe93499538aec6562b97170e569450e9fd07c4998f07f46a023",
+    "focused-review-r2-final.log": "fc7b638063ed967f50eee722979a94c65fbc5212ff3a2fb9e93be825ca8ef0c3",
+    "focused-review-r2-initial.log": "02723261e4d7cdde59acab169e14f8cfc34348c13a166ef7adeedd98589f3477",
+    "lint-before-final-ssh-check.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "lint-final.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "lint-initial.log": "419648e89fbb8316fa718ad418d9471e9af618c4c3af7135a242f431be0008be",
+    "lint-review-r1.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "lint-review-r2-final.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "lint-review-r2.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "media.json": "37a01cd664b3fc74dc6190bfa36baeebec02e7a4b072cbf5f6eb3f9b37ef91e9",
+    "offline-before-final-ssh-check.log": "45c4d673b869995eefe97a8ca4f2c94eae87aa1be7727dc7029e069bc88fe803",
+    "offline-final.log": "b2ab846ca6f1640821c0833148fc2d4df4e39a2be969a85e34693b015fda14e5",
+    "offline-initial.log": "f762a6addcb3adc4e7eb4a4ca98e7069ced6312a635b4a915dd67925086d692f",
+    "offline-review-r1.log": "5e46b6bda05ebf30ba1cf66d8646219e3b3a716c2e9b735f1956c21b22e14d28",
+    "offline-review-r2-final.log": "e76bd67067dcf026e8a1a0393a7f2d870b10125b176008402a39e49f79d6e4aa",
+    "offline-review-r2.log": "c02ca41a65a793bd3847ba1800ceaad1892e1a7687d972a005991983bb3664ce",
+    "verification-review-r1.json": "33cc3a6035df22ef599ff963b0b7a68970cd7c662928260164dfe406d200b10e",
+    "verification.json": "dccdad75934b284dcbb6c54730fcaadcd14e7541b73dd3d2479179811a1fdd39"
+  },
+  "git_delivery": "NOT_RUN",
+  "mocked_boundaries": [
+    "root identity, host preflight and accounts",
+    "systemd/container commands",
+    "release lookup only in subprocess fixture; signed releases and tar restoration remain real in receiver tests"
+  ],
+  "operational_credentials": "NOT_PROVISIONED",
+  "production_qualification": "NOT_RUN; G03-G06/G08 remain open",
+  "real_process_regressions": [
+    "SIGKILL dispatcher during configuration; recovery refused until receiver exits",
+    "SIGKILL dispatcher then receiver; detached descendant with close_fds=True remains serialized",
+    "timeout waits for detached descendant with live or already-exited receiver"
+  ],
+  "recovery_regressions": [
+    "activation, verification, current pointer, attempt evidence, and journal finalization failure; all with successful and failed service stop",
+    "both service stops attempted, unfinished journal retained, unique failure evidence retained through successful retry",
+    "gateway load-state query failure still attempts both service stops"
+  ],
+  "results": {
+    "check_only_lint": "PASS",
+    "focused_tests": 36,
+    "offline": "PASS",
+    "offline_python_tests": 585,
+    "prior_evidence_preservation": "PASS",
+    "secret_scan": "PASS",
+    "shellspec_examples": 140,
+    "source_aware_provenance": "PASS"
+  },
+  "source_sha256": {
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "af581033a35bf3cc32fdf8a025d23e6c36cf968bd74ef5915fabc24102033bba",
+    "docs/migration-adaptations.txt": "6908d21326863636f706e5de9130337bec35d5a6b4bf62310420f1bfc740c6cd",
+    "scripts/hermes/production-launcher.py": "8f97c53b5831be995dfead260d678dda9a5e6359ef1ad3833e4aad7bc87f19c6",
+    "scripts/hermes/production/__init__.py": "933e4494220c9cb65088dece7d4e088a3f3ee8204a046cab78853ca00db21a64",
+    "scripts/hermes/production/bundle.py": "1655c23f60c6b3e5c00ce5de8d88ad03dffa7d4beb37c5d4d42a4d4d8cc1b92a",
+    "scripts/hermes/production/host.py": "5aa14d5a8ed3f9a0be1e8194f9c1169778109aa38391d0a310ec5318a28f118b",
+    "scripts/hermes/production/kickstart.py": "52fe55d6aa43f0af8207d5c0f5f51abf15a3e4b3aa3600c8982a3b56b764f895",
+    "scripts/hermes/production/operations.py": "41e867cd929ab350a255b9397f858729f42e4f37d21c77cd4251e47c24fdfc69",
+    "scripts/hermes/production/preflight.py": "1bf7daa0cb9d70c0b11c03fd5f049eb78f82b6d07c96e7e8c20a459160f5c5f1",
+    "scripts/hermes/production/primitives.py": "1a098525e83f4e1787657b45866d26a0b4559891a3c9c47074ab24df4604d804",
+    "scripts/hermes/production/receivers.py": "3bdde599640f1fcbabe6149c669c3dbd39780d9191aee0825eb1aa34c7ea73ca",
+    "scripts/hermes/production/restore.py": "ce01e114dc650e01f7f4d17edb186074f196abe7b09de562450bdf4d9f110bcf",
+    "scripts/hermes/production/runtime.py": "ec7c79d8be28a7dc59f43a0b8d3b4ed8eaba5dd39ecdb2916a9eab41ad693b6a",
+    "scripts/hermes/production/startup.py": "81488c88fce98e3acd1901844334d629607311e1c63714f089ebd2db31b6b417",
+    "scripts/hermes/production/writer_guard.py": "c3026823730d10d86d45ecaa2a55c99cad7b35094d09e8a34cf5e78946b554e3",
+    "scripts/hermes/productionctl.py": "2bdd94a815cbbb667c931d4beba2010e0c0809ae1cd3a57364b09e775f8cf056",
+    "scripts/hermes/profile-deploy.py": "18c55c5c824a67cca24b2d00d63d769392f5327c2f7c8f087115440e13e3d44a",
+    "tests/fixtures/production_process_driver.py": "e0498755ef53fb5426fe6494c7c14ff1e00b07079c23776c850b5e0173e91e6c",
+    "tests/offline_allowlist.txt": "58b7ee1e9897eb47ee49a8cb7d350c1559b9ce1e7456897e464788696b1a70e0",
+    "tests/test_hermes_production.py": "8daa7d33949478338716a09ad810887183ab27a70121fb2ac29aff7946b379d4"
+  },
+  "superseded": {
+    "bundle-review-r1.json": "STALE for R2 source",
+    "bundle-review-r2.json": "STALE for R2 source",
+    "lint-review-r1.log": "STALE for R2 source",
+    "lint-review-r2.log": "STALE for R2 source",
+    "offline-review-r1.log": "STALE for R2 source",
+    "offline-review-r2.log": "STALE for R2 source",
+    "verification-review-r1.json": "STALE for R2 source"
+  },
+  "timestamp_utc": "2026-09-27T20:55:28.874210+00:00",
+  "versions": {
+    "pre-commit": "4.6.2",
+    "python": "3.14.7",
+    "ruff": "0.16.8",
+    "shellcheck": "0.11.0"
+  },
+  "working_tree": "uncommitted, including pre-existing dirty and untracked production implementation; no Git writes"
+}

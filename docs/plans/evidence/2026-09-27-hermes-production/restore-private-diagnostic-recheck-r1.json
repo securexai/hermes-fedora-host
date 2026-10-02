@@ -1,0 +1,25 @@
+{
+  "checked_inputs": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r5.py": "b2705c35a49994a70579d5a8aa80b5b4dea55c9cefd5873d9e960c1c49fa7679",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-result.json": "f59dd53a72327bf71f857f7ef08bbd51c7a17e10aadd16e363999b7988e7a2bd",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r6.json": "0237113989892e31896ae08b960a4f1cfdf31678f8d025896dad67ce5864a476",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r6.log": "0237113989892e31896ae08b960a4f1cfdf31678f8d025896dad67ce5864a476"
+  },
+  "current_turn_classification": "NO_GATE_PROGRESS_AFTER_REVALIDATION",
+  "diagnostic_error": "NOT_SUPPLIED",
+  "native_goal": "ACTIVE_BLOCKED_THRESHOLD_NOT_YET_MET",
+  "next_action": "Obtain only the final non-secret error from the existing private window; diagnose before retrying",
+  "operational_replay": "NOT_RUN",
+  "previous_turn_classification": "PROGRESS_PRIVATE_JOB_STARTED_THEN_AUTHORITATIVELY_ENDED",
+  "private_command": "ENDED_EXIT_1_NOT_A_VERIFIED_WAIT",
+  "private_stream_log_secret_access": "NOT_RUN",
+  "production_acceptance": "OPEN",
+  "public_observation": {
+    "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+    "checked_at_utc": "2026-09-30T01:58:53.885385+00:00",
+    "scope": "Pinned public receipt observation only; no private logs/input read",
+    "status": "INSTALLER_HYGIENE_REPORT_ABSENT"
+  },
+  "resumed_goal_turn": 2,
+  "status": "UNCHANGED_PRIVATE_DIAGNOSTIC_BLOCKER"
+}

@@ -1,0 +1,98 @@
+{
+  "active_swap": false,
+  "boot_id": "e1f41858-8315-4fd6-8949-50ee69e75daa",
+  "checked_at_utc": "2026-09-28T21:03:29.587116+00:00",
+  "checks": {
+    "boot_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "1947d07c-1b67-4341-b196-65dbdce0fddc"
+    },
+    "cryptsetup_unit": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "LoadState=loaded\nActiveState=active\nSubState=exited"
+    },
+    "failed_units": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "hermes_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "eb129d35-1f52-4577-99e5-25daa322febc"
+    },
+    "kernel": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "7.2.7-200.fc44.x86_64"
+    },
+    "root_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "b69e7182-5b5c-4212-a024-968fec581441"
+    },
+    "secure_boot": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "SecureBoot enabled"
+    },
+    "selinux": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "Enforcing"
+    },
+    "system_state": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "running"
+    },
+    "var_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "15a5d3d9-8e39-4fb9-9631-323e7b038a65"
+    }
+  },
+  "cleanup": "NOT_RUN",
+  "failures": [],
+  "operator_passphrase_success": "PASS",
+  "operator_prompt": "PASS",
+  "operator_reply": "Yes \u2014 the prompt appeared and my passphrase worked",
+  "recovery_boot": "PASS",
+  "recovery_parameters": [
+    "rd.luks.options=8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6=discard,key-slot=0,password-cache=no,headless=no",
+    "systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0",
+    "hermes.recovery=r2"
+  ],
+  "root_report": {
+    "before_boot_id": "4cea93af-9409-42b1-a5c2-ad4c8d8cfd60",
+    "grub_cfg_sha256": "de36bbf6b41024d7fe337a371e01e19949ba110b2e4960524adb23958f77ceb6",
+    "initramfs_sha256": "f8a7bfe4ce5c15cc1896cfdcc8f81405f3fd2c3377f6ea9b1ee9a8e150a0f44e",
+    "kernel": "7.2.7-200.fc44.x86_64",
+    "luks_metadata_sha256": "c9df696e798da101b12c6ba99726561af5d3e4896ca0469f21fba1c26c090b92",
+    "normal_default": "PRESERVED",
+    "normal_entry": "2e6a125765004b0ebfafbe4c0a05f609-7.2.7-200.fc44.x86_64",
+    "normal_entry_sha256": "99347e330a29f538c721708bb9fee2e8658fff80338b2d6a553482e7fdad46cb",
+    "recovery_boot": "NOT_RUN",
+    "recovery_entry": "2e6a125765004b0ebfafbe4c0a05f609-7.2.7-200.fc44.x86_64-hermes-recovery-r2",
+    "recovery_entry_sha256": "6d24b0c8912a33480406275f60dad32528095a6ae2a9c5c8effec23ed14c6012",
+    "recovery_slot": "NOT_CHANGED",
+    "scope": "Separate BLS entry and one-time GRUB selection for attended passphrase recovery",
+    "script_sha256": "8d6ccdaef18f5f0a5b59d55646a8fb69e2575a34ba49cf9129802fd1e3098740",
+    "status": "READY_TO_REBOOT",
+    "subsequent_automatic_boot": "NOT_RUN",
+    "temporary_parameters": [
+      "rd.luks.options=8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6=discard,key-slot=0,password-cache=no,headless=no",
+      "systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0",
+      "hermes.recovery=r2"
+    ],
+    "timestamp_utc": "2026-09-28T21:00:37.102993+00:00",
+    "token_enrollment": "NOT_CHANGED"
+  },
+  "root_report_sha256": "e0b536aa641f377cceeac892121b7aab821b07cc0fac520074a2c28046e43c8d",
+  "scope": "BC-D3 physical passphrase recovery: operator prompt/passphrase confirmation plus pinned SSH boot/storage/security/health verification",
+  "server_checked_at_utc": "2026-09-28T21:03:57.766113+00:00",
+  "status": "PASS",
+  "subsequent_automatic_boot": "NOT_RUN"
+}

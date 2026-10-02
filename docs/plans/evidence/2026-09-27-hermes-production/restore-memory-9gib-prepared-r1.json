@@ -1,0 +1,23 @@
+{
+  "checked_at_utc": "2026-09-29T23:31:33.571150+00:00",
+  "disk_check": {
+    "allocated-clusters": 59240,
+    "check-errors": 0,
+    "filename": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/system.qcow2",
+    "format": "qcow2",
+    "fragmented-clusters": 5872,
+    "image-end-offset": 3884187648,
+    "total-clusters": 2896384
+  },
+  "disk_inode": 1416976,
+  "disk_virtual_bytes": 189817421824,
+  "persistent_before_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "private_console": "NOT_ATTACHED",
+  "proposal_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "qualification_state": "shut off",
+  "shutdown": "ACPI_OR_ALREADY_STOPPED_NO_FORCE_OFF",
+  "status": "STOPPED_CONFIG_CANARY_QCOW2_GUARDS_PASS",
+  "unrelated_sha256": "5419b4c0655822bb292a539bed080d6b0c97dc8710a9a7bb26c58d3e33fbb0e7",
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53719232512
+}

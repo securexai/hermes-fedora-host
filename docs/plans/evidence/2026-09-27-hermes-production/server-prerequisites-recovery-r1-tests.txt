@@ -1,0 +1,250 @@
+"""Isolated regressions for the bounded server prerequisite recovery helper."""
+
+import importlib.machinery
+import importlib.util
+import os
+import stat
+import subprocess
+import sys
+import tempfile
+import textwrap
+import types
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+source = Path(sys.argv.pop(1))
+spec = importlib.util.spec_from_file_location(
+    "prerequisites",
+    source,
+    loader=importlib.machinery.SourceFileLoader("prerequisites", str(source)),
+)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+if not hasattr(m, "disable_zram"):
+    # Exercise the original transaction block directly for the red regression.
+    original = source.read_text()
+    start = original.index("            # Recheck memory pressure")
+    end = original.index('            report.update(stage="inspection"', start)
+    block = textwrap.dedent(original[start:end])
+    exec("def disable_zram():\n" + textwrap.indent(block, "    "), m.__dict__)
+    m.SETUP_UNIT = "systemd-zram-setup@zram0.service"
+    m.SWAP_UNIT = "dev-zram0.swap"
+    m.GENERATOR_DIRS = ()
+    m.PROC_SWAPS = m.ZRAM_SYSFS = m.ZRAM_DEVICE = m.MOUNTINFO = None
+
+HEADER = "Filename\tType\tSize\tUsed\tPriority\n"
+
+
+class RecoveryTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        root = Path(self.tmp.name)
+        self.root = root
+        for key, relative in {
+            "ZRAM_SYSFS": "sys/zram0",
+            "ZRAM_DEVICE": "dev/zram0",
+            "PROC_SWAPS": "swaps",
+            "MOUNTINFO": "mountinfo",
+            "MASK": "zram-generator.conf",
+        }.items():
+            self.enterContext(patch.object(m, key, root / relative))
+        self.enterContext(patch.object(m, "GENERATOR_DIRS", (root / "generator",)))
+        m.ZRAM_SYSFS.mkdir(parents=True)
+        m.ZRAM_DEVICE.parent.mkdir()
+        m.ZRAM_DEVICE.touch()
+        (m.ZRAM_SYSFS / "holders").mkdir()
+        for name, content in {
+            "dev": "252:0",
+            "backing_dev": "none",
+            "initstate": "1",
+            "disksize": "8589934592",
+        }.items():
+            (m.ZRAM_SYSFS / name).write_text(content)
+        m.MOUNTINFO.write_text("1 0 8:1 / / rw - xfs /dev/example rw\n")
+        m.PROC_SWAPS.write_text(HEADER)
+        m.MASK.symlink_to("/dev/null")
+        self.states = {m.SWAP_UNIT: "inactive", m.SETUP_UNIT: "failed"}
+        self.commands = []
+        self.reset_error = False
+        self.reset_ineffective = False
+        self.swapoff_ineffective = False
+        self.stop_ineffective = False
+        self.stop_error = False
+        self.regenerate = False
+        self.regular_device = False
+        self.bad_identity = False
+        original_lstat = Path.lstat
+
+        def lstat(path, *args, **kwargs):
+            if path == m.ZRAM_DEVICE:
+                return types.SimpleNamespace(
+                    st_mode=stat.S_IFREG if self.regular_device else stat.S_IFBLK,
+                    st_rdev=os.makedev(252, 1 if self.bad_identity else 0),
+                )
+            return original_lstat(path, *args, **kwargs)
+
+        self.enterContext(patch.object(Path, "lstat", lstat))
+        self.inspect = self.enterContext(
+            patch.object(
+                m, "inspect_inputs", side_effect=lambda: m.swap_inventory(m.PROC_SWAPS.read_text())
+            )
+        )
+        self.enterContext(patch.object(m, "run", self.run_command))
+
+    def run_command(self, args, **kwargs):
+        self.commands.append(tuple(args))
+        output = ""
+        if args[:2] == ["systemctl", "show"]:
+            state = self.states[args[-1]]
+            output = state if "--value" in args else "LoadState=loaded\nActiveState=" + state
+        elif args[0] == "swapoff":
+            if not self.swapoff_ineffective:
+                m.PROC_SWAPS.write_text(HEADER)
+        elif args[:2] == ["systemctl", "stop"]:
+            if self.stop_error:
+                raise RuntimeError("command-failed:systemctl")
+            if not self.stop_ineffective:
+                self.states[m.SWAP_UNIT] = "inactive"
+                # Reproduce a setup unit that remains failed and initialized.
+                if self.states[m.SETUP_UNIT] != "inactive":
+                    self.states[m.SETUP_UNIT] = "failed"
+        elif args[0] == "zramctl":
+            self.assertFalse(m.swap_inventory(m.PROC_SWAPS.read_text()))
+            if self.reset_error:
+                raise RuntimeError("command-failed:zramctl")
+            if not self.reset_ineffective:
+                (m.ZRAM_SYSFS / "initstate").write_text("0")
+                (m.ZRAM_SYSFS / "disksize").write_text("0")
+        elif args[:2] == ["systemctl", "reset-failed"]:
+            self.assertEqual((m.ZRAM_SYSFS / "disksize").read_text(), "0")
+            for unit in args[2:]:
+                self.states[unit] = "inactive"
+        elif args[:2] == ["systemctl", "daemon-reload"]:
+            self.assertTrue(m.MASK.is_symlink())
+            if self.regenerate:
+                m.GENERATOR_DIRS[0].mkdir(exist_ok=True)
+                (m.GENERATOR_DIRS[0] / m.SWAP_UNIT).touch()
+        elif args[:2] == ["swapon", "--show"]:
+            output = ""
+        else:
+            self.fail("Unexpected command: " + repr(args))
+        return subprocess.CompletedProcess(args, 0, output, "")
+
+    def test_recovers_reported_failed_setup_and_initialized_device(self):
+        report = m.disable_zram()
+        self.assertEqual(report["after"]["size_bytes"], 0)
+        self.assertEqual(report["cleared_failed_units"], [m.SETUP_UNIT])
+        self.assertTrue(report["explicit_device_reset"])
+        self.assertEqual(self.states[m.SETUP_UNIT], "inactive")
+
+    def test_active_swap_is_off_before_service_stop(self):
+        m.PROC_SWAPS.write_text(HEADER + "/dev/zram0 partition 8388608 0 100\n")
+        self.states = dict.fromkeys(self.states, "active")
+        m.MASK.unlink()
+        m.disable_zram()
+        off = next(i for i, cmd in enumerate(self.commands) if cmd[0] == "swapoff")
+        stop = next(i for i, cmd in enumerate(self.commands) if cmd[:2] == ("systemctl", "stop"))
+        self.assertLess(off, stop)
+        self.assertEqual(os.readlink(m.MASK), "/dev/null")
+
+    def test_rerun_does_not_repeat_swapoff_or_device_reset(self):
+        m.disable_zram()
+        self.commands.clear()
+        report = m.disable_zram()
+        self.assertFalse(report["explicit_device_reset"])
+        self.assertEqual(report["cleared_failed_units"], [])
+        self.assertFalse(any(cmd[0] in ("swapoff", "zramctl") for cmd in self.commands))
+
+    def test_mount_refused_before_mutation(self):
+        m.MOUNTINFO.write_text("1 0 252:0 / /mnt rw - ext4 /dev/zram0 rw\n")
+        self.assert_refuses_without_commands("zram-device-mounted")
+
+    def test_holders_refused_before_mutation(self):
+        (m.ZRAM_SYSFS / "holders/dm-0").touch()
+        self.assert_refuses_without_commands("zram-device-has-holders")
+
+    def test_backing_device_refused_before_mutation(self):
+        (m.ZRAM_SYSFS / "backing_dev").write_text("/dev/sdb")
+        self.assert_refuses_without_commands("zram-has-backing-device")
+
+    def test_partitions_refused_before_mutation(self):
+        (m.ZRAM_SYSFS / "zram0p1").mkdir()
+        self.assert_refuses_without_commands("zram-device-has-partitions")
+
+    def test_regular_device_refused(self):
+        self.regular_device = True
+        self.assert_refuses_without_commands("unexpected-zram-device-type")
+
+    def test_wrong_device_identity_refused(self):
+        self.bad_identity = True
+        self.assert_refuses_without_commands("zram-device-identity-mismatch")
+
+    def test_wrong_target_refused_before_device_operations(self):
+        self.inspect.side_effect = RuntimeError("wrong-target-filesystem")
+        self.assert_refuses_without_commands("wrong-target-filesystem")
+
+    def assert_refuses_without_commands(self, reason):
+        with self.assertRaisesRegex(RuntimeError, reason):
+            m.disable_zram()
+        self.assertEqual(self.commands, [])
+
+    def assert_no_clear_or_reload(self):
+        self.assertFalse(
+            any(
+                cmd[:2] in (("systemctl", "reset-failed"), ("systemctl", "daemon-reload"))
+                for cmd in self.commands
+            )
+        )
+
+    def test_busy_reset_failure_is_not_suppressed(self):
+        self.reset_error = True
+        with self.assertRaisesRegex(RuntimeError, "command-failed:zramctl"):
+            m.disable_zram()
+        self.assert_no_clear_or_reload()
+        self.assertEqual(self.states[m.SETUP_UNIT], "failed")
+
+    def test_ineffective_reset_does_not_clear_failure(self):
+        self.reset_ineffective = True
+        with self.assertRaisesRegex(RuntimeError, "zram-device-not-reset"):
+            m.disable_zram()
+        self.assert_no_clear_or_reload()
+
+    def test_failed_swapoff_does_not_reset(self):
+        m.PROC_SWAPS.write_text(HEADER + "/dev/zram0 partition 8388608 0 100\n")
+        self.swapoff_ineffective = True
+        with self.assertRaisesRegex(RuntimeError, "swap-still-active"):
+            m.disable_zram()
+        self.assertFalse(any(cmd[0] == "zramctl" for cmd in self.commands))
+
+    def test_active_unit_after_stop_does_not_reset(self):
+        self.states[m.SETUP_UNIT] = "active"
+        self.stop_ineffective = True
+        with self.assertRaisesRegex(RuntimeError, "zram-units-not-stopped"):
+            m.disable_zram()
+        self.assert_no_clear_or_reload()
+
+    def test_stop_error_is_not_suppressed(self):
+        self.stop_error = True
+        with self.assertRaisesRegex(RuntimeError, "command-failed:systemctl"):
+            m.disable_zram()
+        self.assert_no_clear_or_reload()
+
+    def test_regenerated_unit_fails_verification(self):
+        self.regenerate = True
+        with self.assertRaisesRegex(RuntimeError, "zram-unit-regenerated"):
+            m.disable_zram()
+
+    def test_kernel_swap_units_and_empty_input(self):
+        self.assertEqual(m.swap_inventory(HEADER), [])
+        self.assertEqual(
+            m.swap_inventory(HEADER + "/dev/zram0 partition 8388608 1024 100\n")[0]["used"], 1048576
+        )
+        for bad in ("", "Wrong header\n", HEADER + "/dev/zram0 broken\n"):
+            with self.assertRaises(RuntimeError):
+                m.swap_inventory(bad)
+
+
+if __name__ == "__main__":
+    unittest.main()

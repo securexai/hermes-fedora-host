@@ -1,0 +1,11 @@
+{
+  "actual_validation": "PASS",
+  "cause": "Staged EXPECTED_BOOT uses running_kernel; validator incorrectly referenced kernel",
+  "checked_at_utc": "2026-09-29T20:47:03.540358+00:00",
+  "correction": "Compare actual uname release with running_kernel",
+  "failed_validator_sha256": "ef903b60c18b778e8d84a648fddd140eda0629368bdc14bb30c616d6d1e00d9b",
+  "guest_mutations": "NONE",
+  "initial_error": "KeyError: kernel",
+  "status": "CORRECTED_LOCAL_VALIDATOR_FIELD",
+  "validated_validator_sha256": "f907bb5c6667ad2a9208b159f89d815340ca638ae9c4619abb9ffec1053f5064"
+}

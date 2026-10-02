@@ -35,6 +35,7 @@ GATEWAY_STATE = HOME / "gateway-state"
 GATEWAY_SSH = HOME / "gateway-ssh"
 WORKER_STATE = HOME / "worker-state"
 TRANSPORT = HOME / "transport"
+QUADLET_USERS = pathlib.Path("/etc/containers/systemd/users")
 WORKER_IMAGE = "localhost/hermes-worker:1"
 PACKAGES = ("podman", "container-selinux", "passt", "openssh-clients", "policycoreutils")
 SYNTHETIC_KEY = "synthetic-hermes-lab-only"
@@ -42,6 +43,7 @@ PROFILE = None
 WORKER_ID = None
 GATEWAY_ID = None
 MODEL = "deepseek-flash"
+PRODUCTION = False  # Set only by the authenticated production receiver.
 
 
 class DeployError(RuntimeError):
@@ -71,9 +73,12 @@ def command(
             f"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/{uid}/bus",
             *argv,
         ]
-    result = subprocess.run(
-        argv, capture_output=True, text=True, check=False, cwd=HOME if user else None
-    )
+    runner = subprocess.run
+    if PRODUCTION:
+        from production.primitives import supervised_run
+
+        runner = supervised_run
+    result = runner(argv, capture_output=True, text=True, check=False, cwd=HOME if user else None)
     if check and result.returncode:
         # Command output can include application data. Do not copy it into the
         # terminal, journal, or a report while credentials may be provisioned.
@@ -199,6 +204,11 @@ def worker_source_hash() -> str:
 
 
 def ensure_user() -> tuple[int, int]:
+    if PRODUCTION:
+        from production.preflight import account
+
+        runtime = account(required=True)
+        return runtime.pw_uid, runtime.pw_gid
     try:
         account = pwd.getpwnam("hermes")
     except KeyError:
@@ -226,6 +236,16 @@ def ensure_user() -> tuple[int, int]:
 
 
 def prepare() -> bool:
+    if PRODUCTION:
+        # Bootstrap owns host prerequisites; production never installs packages,
+        # builds a worker, or falls back to a registry pull.
+        ensure_user()
+        if not GATEWAY_ID or not WORKER_ID:
+            raise DeployError("production image identities are missing")
+        for image in (GATEWAY_ID, WORKER_ID):
+            if podman("image", "exists", image, check=False).returncode:
+                raise DeployError("production retained image has not been imported")
+        return False
     missing = [
         name for name in PACKAGES if command(["/usr/bin/rpm", "-q", name], check=False).returncode
     ]
@@ -338,6 +358,13 @@ def ensure_instance(uid: int, gid: int, mode: str) -> bool:
                 env_file, f"DEEPSEEK_API_KEY={SYNTHETIC_KEY}\n".encode(), 0o600, uid, gid
             )
             map_gateway_uid(env_file)
+    elif mode == "production":
+        if not PRODUCTION:
+            raise DeployError("production mode requires the authenticated receiver")
+        from production.runtime import credentials
+
+        credentials(GATEWAY_STATE / ".env")
+        map_gateway_uid(GATEWAY_STATE / ".env")
     else:
         filesystem = command(
             ["/usr/bin/findmnt", "-n", "-o", "FSTYPE", "--target", str(GATEWAY_STATE)]
@@ -440,7 +467,11 @@ def configure(gateway: str):
 
 
 def install_quadlets(uid: int, mode: str) -> bool:
-    target = pathlib.Path(f"/etc/containers/systemd/users/{uid}")
+    target = QUADLET_USERS / str(uid)
+    if PRODUCTION:
+        from production.primitives import public_directory
+
+        public_directory(target)
     ensure_directory(target, 0o755, 0, 0)
     changed = False
     for name in ("hermes-worker.container", "hermes-gateway.container"):
@@ -451,6 +482,12 @@ def install_quadlets(uid: int, mode: str) -> bool:
                 content = content.replace(PROFILE["gateway_image"], GATEWAY_ID)
         if name == "hermes-gateway.container" and mode == "synthetic":
             content = content.replace("[Container]\n", "[Container]\nNetwork=none\n", 1)
+        if PRODUCTION:
+            content = content.replace(
+                "[Service]\n",
+                "[Service]\nExecStartPre=/usr/local/libexec/hermes-production/productionctl.py mount-check\n",
+                1,
+            )
         changed |= write_file(target / name, content.encode(), 0o644, 0, 0)
     if changed:
         command(["/usr/sbin/restorecon", "-R", str(target)])

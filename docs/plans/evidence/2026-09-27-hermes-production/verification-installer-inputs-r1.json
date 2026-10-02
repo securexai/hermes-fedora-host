@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "scope": "Installer input correction repository and candidate verification only; installation remains pending private input",
+  "checked_at_utc": "2026-09-28T22:13:35.252537+00:00",
+  "branch": "codex/hermes-production-bundle",
+  "dirty_worktree": true,
+  "sources": {
+    "vm/kickstart/fedora-server-production.ks.in": "bd6a3a385a9bc5e50706c8fbbcb2b8a6c7e3d027e9b40290ab08ef7aa04468f8",
+    "vm/hermes-production-fixture.py": "2c5d1971035eec4efca473df870e3e9e53a05070413ac949485efd5b25858267",
+    "tests/test_hermes_production.py": "b7eceb483f6febd0b1d353cbd5556545d85b0d7e284dd6a22614fb1985917f25",
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "cd1a9d7c964ebb701daa2983f956e3bb325fcf7d5fe6686d30db73ab05ec21f0"
+  },
+  "evidence": {
+    "fedora-release-prerequisites-r1.json": "30e155df6288ea66705ee290d1d13712e673cd3eee00188c45b42350019f31fc",
+    "synthetic-qualification-detached-state-r1.json": "dfa8ada57595f63e6cee9d23934452df460fa2598c007026aecb359c6f4a2c22",
+    "synthetic-qualification-installer-reboot-r1.json": "0ff7cbe7d2a9b2112162713d78063c2774c8d73c51c01a8a900613f560598e29",
+    "synthetic-qualification-installer-findings-r1.json": "442a93f946530503ba060dbac846a508537f12834c81dd585d7f6bd19797832b",
+    "synthetic-qualification-inputs-reboot-r1.json": "d8ad284334ae8c10ba94e38a1b0e083189e8512ea255d8d5811f3fcc37c0fc40",
+    "synthetic-qualification-inputs-handoff-r1.json": "4526eebce814c32e69d416b145bb8ef251ea69ea5b46ac50bc0de406d31b735a",
+    "offline-installer-inputs-r1.log": "30dce8cffc6ab36cc34ccd5bf560851ec683a759bafb2526b39bf3ad735757d6",
+    "lint-installer-inputs-r1.log": "81382b9e80e58c4b92d4ef835901d90aff03212be4755c939de4cc681b7dc40e",
+    "bundle-installer-inputs-r1.json": "8eec06f0e8f3588414ff1f32db726bfbd6f11c989b4614c1c7ca3495ba51525f"
+  },
+  "checks": {
+    "focused_tests": "46 PASS",
+    "selected_ruff_check_format": "PASS",
+    "both_rendered_kickstarts_F44": "PASS",
+    "canonical_offline": "PASS, 612 Python cases and 140 ShellSpec examples",
+    "check_only_lint": "PASS",
+    "signature_extraction_production_rejection": "PASS"
+  },
+  "candidate_artifact_sha256": "d9e514e98060423b8f09db3739d672c416161b241d614f8bf719bec6f7f8f44d",
+  "live_installation": "INCOMPLETE_PRIVATE_ENCRYPTION_INPUT",
+  "live_post_install_packages": "NOT_RUN",
+  "production_deployment": "NOT_RUN",
+  "provider_telegram": "NOT_RUN"
+}

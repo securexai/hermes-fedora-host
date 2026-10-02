@@ -1,0 +1,14 @@
+1 file reformatted
+All checks passed!
+test_changed_receiver_refused_even_when_individual_file_hashes_match (__main__.BootstrapTests.test_changed_receiver_refused_even_when_individual_file_hashes_match) ... ok
+test_corrupt_source_and_unknown_path_refused (__main__.BootstrapTests.test_corrupt_source_and_unknown_path_refused) ... ok
+test_deferred_proofs_are_not_falsely_passed (__main__.BootstrapTests.test_deferred_proofs_are_not_falsely_passed) ... ok
+test_keep_exact_file_preserves_inode_and_modified_file_is_refused (__main__.BootstrapTests.test_keep_exact_file_preserves_inode_and_modified_file_is_refused) ... ok
+test_payload_matches_verified_receiver (__main__.BootstrapTests.test_payload_matches_verified_receiver) ... ok
+test_production_mode_refused (__main__.BootstrapTests.test_production_mode_refused) ... ok
+test_wrong_vm_recovery_and_stale_boot_refused_before_writes (__main__.BootstrapTests.test_wrong_vm_recovery_and_stale_boot_refused_before_writes) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.057s
+
+OK

@@ -1,0 +1,57 @@
+{
+  "checked_at_utc": "2026-09-29T20:51:00.839404+00:00",
+  "label": "after-rerun",
+  "result": {
+    "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+    "public_unit_sha256": {
+      "hermes-gateway.container": "7fd538736ed21c082810d031b3ecbe16d8cabe35a32d52eb8cbe3e78f94feb51",
+      "hermes-worker.container": "337dcd6c6e08e58e656eeff45efb7c64f9ef668c23a2232e6e91240438141475"
+    },
+    "recognized_runtime_processes": [
+      {
+        "comm": "systemd",
+        "pid": 3567,
+        "ppid": 1,
+        "start_ticks": "392292",
+        "uid": 1001
+      },
+      {
+        "comm": "dbus-broker-lau",
+        "pid": 4305,
+        "ppid": 3567,
+        "start_ticks": "448621",
+        "uid": 1001
+      },
+      {
+        "comm": "dbus-broker",
+        "pid": 4306,
+        "ppid": 4305,
+        "start_ticks": "448622",
+        "uid": 1001
+      },
+      {
+        "comm": "catatonit",
+        "pid": 6321,
+        "ppid": 3567,
+        "recognized_namespace_pause": true,
+        "start_ticks": "813584",
+        "uid": 1001
+      },
+      {
+        "comm": "conmon",
+        "pid": 8638,
+        "ppid": 3567,
+        "start_ticks": "836039",
+        "uid": 1001
+      },
+      {
+        "comm": "conmon",
+        "pid": 8670,
+        "ppid": 3567,
+        "start_ticks": "836061",
+        "uid": 1001
+      }
+    ]
+  },
+  "scope": "Fixed safe public unit hashes and runtime process UID/PID/parent/start metadata only; no process arguments or environment emitted"
+}

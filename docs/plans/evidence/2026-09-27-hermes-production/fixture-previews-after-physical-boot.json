@@ -1,0 +1,54 @@
+{
+  "scope": "Read-only encrypted qualification and restore fixture previews; no VM creation",
+  "checked_at_utc": "2026-09-28T21:25:12.277124+00:00",
+  "earlier_attempt": {
+    "environment": "dev-infra-hermes",
+    "status": "FAIL",
+    "reason": "virsh executable unavailable; command-unavailable-or-timeout",
+    "vm_creation": "NOT_RUN"
+  },
+  "workspace_free_bytes": 90087018496,
+  "roles": [
+    {
+      "status": "PREVIEW",
+      "name": "hermes-production-qualification",
+      "role": "qualification",
+      "directory": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-fixture",
+      "ssh": {
+        "host": "127.0.0.1",
+        "port": 22224
+      },
+      "guest_definition": "fedora43",
+      "media_sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+      "boot": "UEFI Secure Boot with enrolled keys and TPM2 emulator",
+      "memory_mb": 8192,
+      "vcpus": 2,
+      "disk_virtual_mib": 181024,
+      "disk_to_erase": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+      "minimum_host_free_bytes": 21474836480,
+      "installation": "BLOCKED until private console supplies encryption and administrator secrets"
+    },
+    {
+      "status": "PREVIEW",
+      "name": "hermes-production-restore",
+      "role": "restore",
+      "directory": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore",
+      "ssh": {
+        "host": "127.0.0.1",
+        "port": 22225
+      },
+      "guest_definition": "fedora43",
+      "media_sha256": "85837793bfa36db6bc709b4cecd2ec116951b87d9c53c3d95eb2fac8dcf7cf1f",
+      "boot": "UEFI Secure Boot with enrolled keys and TPM2 emulator",
+      "memory_mb": 8192,
+      "vcpus": 2,
+      "disk_virtual_mib": 181024,
+      "disk_to_erase": "/dev/disk/by-id/virtio-HERMES_PROD_TEST",
+      "minimum_host_free_bytes": 21474836480,
+      "installation": "BLOCKED until private console supplies encryption and administrator secrets"
+    }
+  ],
+  "status": "PASS",
+  "vm_creation": "NOT_RUN",
+  "private_keys_created": false
+}

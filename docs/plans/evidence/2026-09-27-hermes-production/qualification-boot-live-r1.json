@@ -1,0 +1,20 @@
+{
+  "automatic_cold_start": "PASS",
+  "automatic_warm_boot": "PASS",
+  "bounded_grant": "PASS",
+  "evidence_sha256": {
+    "qualification-boot-20260929T180128332209-check-grant.json": "fecc2d7b1dfc8a56a9af0d7e3bc177e4c76bbcd87906e807f8939f80f9238eed",
+    "qualification-boot-20260929T180206343598-reboot.json": "8d0c1497642923001030dcb70d95e43ec5e6248f4642004078493671b8a1cd67",
+    "qualification-boot-20260929T180223995115-facts.json": "dc8b1edd62b3c8181f08d93f8ed3b9d605aeaffba069e0f66b3ef4a6b67b9afd",
+    "qualification-boot-20260929T180235916765-poweroff.json": "c1030b36a14da10ba9fc6c97a291cc28a1dd3b117758ce5f35353337350ead28",
+    "qualification-boot-20260929T180309469317-facts.json": "a99320b5c4d19e05e691308bcfb06514a7e6b63ba7a31f6a4d8283c75db32a27",
+    "qualification-boot-20260929T180328852986-recovery.json": "a3d04f759d89de6c6d2ea591b3ba4b0be9f0d1c6142da7c70b876bfd3ba78133",
+    "qualification-boot-cold-start-r1.json": "1d887017ae086b079586beaf82c68aa10b9baac47b5d8f26a88305802e5b4570",
+    "qualification-boot-recovery-handoff-r1.json": "d4ee18ff524685f2df15d2e2b604ba24e749a671e1aed3f3f8661eecf980b79b"
+  },
+  "guest_clock": "Initial skew observed; synchronized by cold-start verification; workstation timestamps retained",
+  "recovery_boot": "AWAITING_PRIVATE_CONSOLE",
+  "scope": "Qualification VM boot commissioning",
+  "status": "PARTIAL_PASS",
+  "subsequent_automatic_boot": "NOT_RUN"
+}

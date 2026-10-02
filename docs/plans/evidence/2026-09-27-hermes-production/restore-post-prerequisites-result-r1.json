@@ -1,0 +1,31 @@
+{
+  "approval_for_9gib": "REQUIRED_NOT_RECEIVED",
+  "boot_id": "21cf3b59-d295-47b3-8003-0ec0fefffea9",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "candidate_executable_changes": "NONE",
+  "checked_at_utc": "2026-09-29T23:25:07.340395+00:00",
+  "commissioning_tpm_installer_log_hygiene_application_restore": "NOT_RUN",
+  "current_approved_memory_gib": 8,
+  "expected": "Podman >=5.8.4; no failed units; guarded KVM mcelog skip with original vendor unit; unchanged VM/boot/storage/SELinux/SecureBoot/swap",
+  "full_application_preflight": "NOT_RUN_RECEIVER_NOT_BOOTSTRAPPED",
+  "memory": {
+    "deficit_bytes": 77467648,
+    "exposed_bytes": 8244031488,
+    "minimum_bytes": 8321499136,
+    "predicate": "os.sysconf(SC_PHYS_PAGES)*os.sysconf(SC_PAGE_SIZE)>=8GiB-256MiB",
+    "result": "FAIL"
+  },
+  "memory_change": "NOT_AUTHORIZED_OR_APPLIED",
+  "method": "Strict pinned commissioning-key SSH; exact persistent 8GiB/2CPU XML, qualification stopped and only restore active; public package/binary/unit/mount/security facts",
+  "observed_at_utc": "2026-09-29T23:24:57.948764+00:00",
+  "package_service_checks": "PASS",
+  "persistent_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "podman_version": "5.8.7",
+  "previous_public_package_service_state": "SUPERSEDED_BY_CURRENT_OBSERVATION; historical R1 preserved",
+  "provider_telegram_external_backup_production_operations": "NOT_RUN",
+  "same_boot_as_before_correction": true,
+  "scope": "Actual restore public postconditions after separately executed private prerequisites; no full application preflight or commissioning inferred",
+  "status": "PASS_PACKAGE_SERVICE_CORRECTION_WITH_REMAINING_RAM_BLOCKER",
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53725286400
+}

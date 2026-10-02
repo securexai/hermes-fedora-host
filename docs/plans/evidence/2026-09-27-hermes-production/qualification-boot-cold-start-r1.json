@@ -1,0 +1,9 @@
+{
+  "status": "STARTED",
+  "scope": "Qualification VM clean cold start",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "state": "running",
+  "persistent_xml_sha256": "764cbd31772ef7c9680090eb45f4b6284b27b255c250d513515a89e4da7a329d",
+  "canary": "UNCHANGED",
+  "checked_at_utc": "2026-09-29T18:02:51.953394+00:00"
+}

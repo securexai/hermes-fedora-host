@@ -1,0 +1,19 @@
+{
+  "status": "INSTALLER_STARTED",
+  "scope": "Corrected package prerequisites and final Kickstart-copy suppression on the same approved empty VM",
+  "started_at_utc": "2026-09-28T22:07:12.548211+00:00",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "kickstart_sha256": "b9387f78909f5286d0c3e06fe1d548ca4eeb31eb7934df7ef9abeb6c45837908",
+  "template_sha256": "bd6a3a385a9bc5e50706c8fbbcb2b8a6c7e3d027e9b40290ab08ef7aa04468f8",
+  "fixture_sha256": "2c5d1971035eec4efca473df870e3e9e53a05070413ac949485efd5b25858267",
+  "disk_recreated": false,
+  "canary": "UNCHANGED",
+  "secret_input": "NOT_RUN",
+  "exit_code": 0,
+  "stdout": "\nStarting install...\n\rRetrieving 'vmlinuz'                                        |  18 MB  00:00     \n\rRetrieving 'initrd.img'                                     | 252 MB  00:00     \n\rCreating domain...                                          |         00:00     \n\nDomain is still running. Installation may be in progress.\nYou can reconnect to the console to complete the installation process.\n",
+  "stderr": "WARNING  Treating --wait 0 as --noautoconsole\n",
+  "elapsed_seconds": 1.232,
+  "persistent_xml_unchanged": true,
+  "state": "running",
+  "finished_at_utc": "2026-09-28T22:07:13.790143+00:00"
+}

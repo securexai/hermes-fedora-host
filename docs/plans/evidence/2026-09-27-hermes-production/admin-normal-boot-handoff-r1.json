@@ -1,0 +1,13 @@
+{
+  "administrator_setup": "VERIFIED_P",
+  "audit_grant": "INSTALLED_AND_VERIFIED",
+  "checked_at_utc": "2026-09-29T01:43:18.487027+00:00",
+  "console_attached_by_agent": false,
+  "installed_runtime_audit": "NOT_RUN",
+  "physical_server_changes": "NOT_RUN",
+  "private_unlock": "OPERATOR_STEP_PENDING",
+  "scope": "Normal boot after administrator repair; paused before private-console resume",
+  "state": "paused (user)",
+  "status": "PRIVATE_DISK_UNLOCK_HANDOFF",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

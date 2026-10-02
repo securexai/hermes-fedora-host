@@ -1,0 +1,11 @@
+{
+  "checked_at_utc": "2026-09-28T22:00:53.472277+00:00",
+  "scope": "Fedora44 release repository availability only; no package installation",
+  "exit_code": 0,
+  "packages": [
+    "restic 0.18.1-3.fc44 x86_64",
+    "tpm2-tools 5.7-5.fc44 x86_64"
+  ],
+  "diagnostic": "Updating and loading repositories:\n Fedora 44 - x86_64                     100% |  10.3 MiB/s |  36.4 MiB |  00m04s\nRepositories loaded.\n",
+  "status": "PASS"
+}

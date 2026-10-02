@@ -1,0 +1,67 @@
+{
+  "euid": 1000,
+  "generator_sha256": "5a611ab52e6140dcebebe861128b19370a9acf54fcec9ceab2534bdc8581df9d",
+  "hardware_recovery_boot": "NOT_RUN",
+  "results": [
+    {
+      "alias": "UUID=<synthetic-uuid>",
+      "case": "automatic",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,tpm2-device=auto'",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "alias": "UUID=<synthetic-uuid>",
+      "case": "recovery",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,key-slot=0,password-cache=no,headless=no'",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "alias": "UUID=<synthetic-uuid>",
+      "case": "wrong-uuid",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,tpm2-device=auto'",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "alias": "UUID=<synthetic-uuid>",
+      "case": "host-ignores-initrd-option",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,tpm2-device=auto'",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "alias": "/dev/disk/by-uuid/<synthetic-uuid>",
+      "case": "automatic",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,tpm2-device=auto'",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "alias": "/dev/disk/by-uuid/<synthetic-uuid>",
+      "case": "recovery",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,key-slot=0,password-cache=no,headless=no'",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "alias": "/dev/disk/by-uuid/<synthetic-uuid>",
+      "case": "wrong-uuid",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,tpm2-device=auto'",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "alias": "/dev/disk/by-uuid/<synthetic-uuid>",
+      "case": "host-ignores-initrd-option",
+      "generated_execstart": "ExecStart=/usr/bin/systemd-cryptsetup attach 'luks-00000000-1111-2222-3333-444444444444' '/dev/disk/by-uuid/00000000-1111-2222-3333-444444444444' 'none' 'discard,tpm2-device=auto'",
+      "status": "PASS",
+      "stderr": ""
+    }
+  ],
+  "scope": "Installed generator with synthetic UUID/crypttab/cmdline inputs; temporary unit output only, no unit activation or block-device operation",
+  "server_checked_at_utc": "2026-09-28T16:42:53.834636+00:00",
+  "status": "PASS",
+  "test_script_sha256": "a8bfa81eea43ffb1eb677fcfeb5b9eb34d4e18894fa3771e25017049688f2bb9"
+}

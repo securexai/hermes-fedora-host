@@ -1,0 +1,12 @@
+{
+  "guard_tests": 13,
+  "helper_sha256": "a2c62d0df3add6f2d06d59b11c02afd7f45a5b56bb982b9de8c575e1ad221e2e",
+  "launcher": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-validation/synthetic-stage/qualification-application/run-private-interruption-r2.sh",
+  "pause_executable_resolved_path": "/usr/libexec/catatonit/catatonit",
+  "pause_executable_sha256": "73fddf8122b7a92630bcffccf92c9742f64e49b2f61b067a431bc6280d7f618a",
+  "preserved_r1_sha256": "509fd4a228769cf80260d4ef9e15040551a6b5f068555396a241e1643f7f7c5a",
+  "remote_path": "/home/hermesadmin/hermes-qualification-interrupt-a2c62d0df3add6f2.py",
+  "root_execution": "NOT_RUN",
+  "scope": "Exact first prepared synthetic operation interruption; namespace recovery NOT_RUN",
+  "status": "STAGED_AWAITING_PRIVATE_SUDO"
+}

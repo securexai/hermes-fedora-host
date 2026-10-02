@@ -1,0 +1,23 @@
+{
+  "changes": "NONE",
+  "checked_at_utc": "2026-09-29T22:38:22.741117+00:00",
+  "full_application_preflight": "NOT_RUN_RECEIVER_NOT_BOOTSTRAPPED",
+  "mcelog_journal": {
+    "classification": "UNSUPPORTED_CPU_CONFIRMED",
+    "exit_code": 0,
+    "raw_output": "NOT_PUBLISHED_OR_RETAINED"
+  },
+  "mcelog_unit": {
+    "exit_code": 0,
+    "public_properties": "ActiveState=failed\nSubState=failed\nConditionResult=yes\nResult=exit-code\nExecMainCode=1\nExecMainStatus=1"
+  },
+  "memory": {
+    "deficit_bytes": 77467648,
+    "exposed_bytes": 8244031488,
+    "minimum_bytes": 8321499136,
+    "predicate": "os.sysconf(SC_PHYS_PAGES)*os.sysconf(SC_PAGE_SIZE)>=8GiB-256MiB",
+    "result": "FAIL"
+  },
+  "scope": "Exact unchanged preflight RAM predicate and mcelog unit classification; no root or log contents exposed",
+  "status": "PUBLIC_PLATFORM_PREDICATE_AND_SERVICE_FACTS_OBSERVED"
+}

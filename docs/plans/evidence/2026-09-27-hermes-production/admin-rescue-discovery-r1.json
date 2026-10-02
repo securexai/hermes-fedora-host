@@ -1,0 +1,22 @@
+{
+  "active_encrypted_mapping": false,
+  "administrator_setup": "NOT_RUN",
+  "anaconda_result": "ROOT_NOT_FOUND",
+  "checked_at_utc": "2026-09-29T01:22:01.816268+00:00",
+  "devices": {
+    "vda1": "vfat",
+    "vda2": "xfs",
+    "vda3": "crypto_LUKS",
+    "vdb": "unrelated-canary"
+  },
+  "direct_unlock": "PROMPT_READY_TRIES_1_AGENT_DETACHED",
+  "disk_formatting": "NOT_RUN",
+  "installed_root_mounted": false,
+  "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "next_action": "Operator privately unlocks direct cryptsetup prompt, detaches using Ctrl+Q; then verify and mount installed root.",
+  "private_input_captured": false,
+  "scope": "Approved qualification VM recovery-shell read-only storage inspection",
+  "status": "PRIVATE_UNLOCK_REQUIRED",
+  "visible_logical_volumes": [],
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

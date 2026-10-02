@@ -1,0 +1,406 @@
+wrote docs/migration-manifest.txt: 571 rows, 13 excluded candidates, payload fingerprint 9494172b6b8820ef8c92a6e66d666b28e9ccb82e404c8157b9771d4182a19152
+
+=== manual profile ===
+
+[1m=== Manual-profile artifacts ===[0m
+
+[1m=== Shell and Python syntax ===[0m
+
+[1m=== Shared safety library behaviour ===[0m
+
+[1m=== No predictable temporary executables ===[0m
+
+[1m=== Failure propagation through tee ===[0m
+
+[1m=== Mutation is explicit ===[0m
+
+[1m=== Configuration contract ===[0m
+
+[1m=== Release identity ===[0m
+
+[1m=== Transport trust policy ===[0m
+
+[1m=== Inspection is privilege-free ===[0m
+
+[1m=== Gate ordering ===[0m
+
+[1m=== Destructive lab operations are not automated ===[0m
+
+[1m=== Documentation parity ===[0m
+
+========================================
+Results: [0;32m395[0m passed, [0;31m0[0m failed, [0;33m0[0m skipped (395 total)
+========================================
+PASS: manual profile
+
+=== manual review regressions ===
+
+[1m=== F4 cleanup registration and trap hooks ===[0m
+
+[1m=== C2/C4 state-interpretation primitives ===[0m
+
+[1m=== F5 different helpers contend on one profile lock ===[0m
+
+[1m=== F6 egress-probe classification ===[0m
+
+[1m=== F7 centralized audit-result interpretation ===[0m
+
+[1m=== F9 check kinds and partial acceptance ===[0m
+
+[1m=== F10 convergence primitives ===[0m
+
+[1m=== R4 installation failure propagation and mode reconciliation ===[0m
+install: cannot create regular file '/tmp/tmp.NyaOdQsZN9/readonly-dir/new-file': Permission denied
+
+[1m=== F8 credential-free contract application path ===[0m
+
+[1m=== F1 the privileged wrapper executes no checkout code ===[0m
+
+========================================
+Results: [0;32m142[0m passed, [0;31m0[0m failed, [0;33m0[0m skipped (142 total)
+========================================
+PASS: manual review regressions
+
+=== backup fault injection ===
+
+[1m=== m04-backup happy path ===[0m
+
+[1m=== m04-backup fault injection: stop and writer state ===[0m
+
+[1m=== m04-backup fault injection: archive creation and extraction ===[0m
+
+[1m=== m04-backup credential-free profile ===[0m
+
+[1m=== m04-backup interruption wiring ===[0m
+
+========================================
+Results: [0;32m43[0m passed, [0;31m0[0m failed, [0;33m0[0m skipped (43 total)
+========================================
+PASS: backup fault injection
+
+=== configure drift and convergence ===
+
+[1m=== m03-configure converged profile ===[0m
+
+[1m=== m03-configure converged with an inactive gateway ===[0m
+
+[1m=== m03-configure failed stop ===[0m
+
+[1m=== m03-configure failed application ===[0m
+
+[1m=== m03-configure failed application leaves an inactive gateway inactive ===[0m
+
+[1m=== m03-configure failed probe leaves the gateway inactive ===[0m
+
+[1m=== m03-configure failed application restores an initially active gateway ===[0m
+
+[1m=== m03-configure failed restoration ===[0m
+
+[1m=== m03-configure configuration drift ===[0m
+
+[1m=== m03-configure probe change ordering ===[0m
+
+[1m=== m03-configure unknown unit state with a live container ===[0m
+
+[1m=== m03-configure running container behind an inactive unit ===[0m
+
+[1m=== m03-configure undeterminable prior state ===[0m
+
+[1m=== m03-configure unknown container state ===[0m
+
+[1m=== m03-configure inspection ===[0m
+
+========================================
+Results: [0;32m64[0m passed, [0;31m0[0m failed, [0;33m0[0m skipped (64 total)
+========================================
+PASS: configure drift and convergence
+
+=== contract ownership and mount safety ===
+
+[1m=== m03-contract fresh state ownership ===[0m
+
+[1m=== m03-contract preserved mapped ownership ===[0m
+
+[1m=== m03-contract legacy ownership repair ===[0m
+
+[1m=== m03-contract mode reconciliation ===[0m
+
+[1m=== m03-contract ownership failure propagation ===[0m
+
+[1m=== m03-contract live gateway private-mount safety ===[0m
+
+[1m=== m03-contract unknown container state ===[0m
+
+========================================
+Results: [0;32m30[0m passed, [0;31m0[0m failed, [0;33m0[0m skipped (30 total)
+========================================
+PASS: contract ownership and mount safety
+
+=== m01 temporary state ===
+
+[1m=== m01 cleanup ownership is structural, not incidental ===[0m
+
+[1m=== m01 non-signal completion removes private state ===[0m
+
+[1m=== m01 interruption removes private state ===[0m
+
+========================================
+Results: [0;32m9[0m passed, [0;31m0[0m failed, [0;33m0[0m skipped (9 total)
+========================================
+PASS: m01 temporary state
+
+=== clean-install rehearsal ===
+
+== 1. Artifact inventory (runbook references resolve) ==
+PASS     readable: docs/HERMES_BOOT_CLEAN_INSTALL.md
+PASS     readable: docs/HERMES_BOOT_AUTOMATION.md
+PASS     readable: docs/HERMES_MANUAL_HANDOFF.md
+PASS     readable: scripts/hermes/manual/boot/tpm-enroll.sh
+PASS     readable: scripts/hermes/manual/boot/fallback-wipe.sh
+PASS     readable: scripts/hermes/manual/boot/b4-verify.sh
+PASS     readable: scripts/hermes/manual/boot/lib-luks-identity.sh
+PASS     runbook reference exists: scripts/hermes/manual/boot/rehearse-clean-install.sh
+
+== 2. Runbook ordering constraints ==
+PASS     firmware step precedes enrollment (PCR7 must not move after binding)
+PASS     recovery material recorded before enrollment
+PASS     boot prerequisites precede application deployment
+PASS     acceptance test present: No passphrase prompt
+PASS     acceptance test present: Wall-power cycle
+PASS     acceptance test present: Passphrase still unlocks
+PASS     acceptance test present: Secure Boot remains enabled
+
+== 3. tpm-enroll.sh flag parity (docs vs script) ==
+PASS     every documented flag exists in the script (--apply --enroll --inspect --preflight --revert)
+
+== 4. Enrollment policy claims (PCR, bank, PIN) ==
+PASS     script binds the PCR bank as a suffix (PCRS:sha256)
+PASS     script binds PCR7
+PASS     script enrolls without a PIN
+PASS     no invented --tpm2-pcr-banks option
+PASS     passphrase usability is asserted in both runbook and script
+
+== 5. Fresh-install portability (no hardcoded host identity) ==
+PASS     tpm-enroll.sh has no hardcoded device/mapper constant
+PASS     tpm-enroll.sh does not hardcode the reference-host LUKS UUID
+PASS     tpm-enroll.sh sources the shared identity resolver
+PASS     fallback-wipe.sh has no hardcoded device/mapper constant
+PASS     fallback-wipe.sh does not hardcode the reference-host LUKS UUID
+PASS     fallback-wipe.sh sources the shared identity resolver
+PASS     b4-verify.sh has no hardcoded device/mapper constant
+PASS     b4-verify.sh does not hardcode the reference-host LUKS UUID
+PASS     b4-verify.sh sources the shared identity resolver
+PASS     UUID check is opt-in via HERMES_EXPECT_UUID
+
+== 6. Resolver self-test against a simulated fresh install ==
+PASS     resolver: DEV=/dev/nvme0n1p3
+PASS     resolver: MAPPER=luks-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+PASS     resolver: ROOT_LV=/dev/mapper/fedora_newhost-lv_root
+PASS     resolver: UUID=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+PASS     resolver: HOME=/home/operator
+PASS     resolver: mismatched HERMES_EXPECT_UUID is refused
+PASS     resolver: matching HERMES_EXPECT_UUID is accepted
+
+== 7. Fallback proof (token wiped, crypttab still requesting TPM) ==
+PASS     runbook names fallback-wipe.sh for the fallback proof
+PASS     fallback-wipe.sh wipes the TPM token
+PASS     fallback-wipe.sh leaves crypttab requesting TPM
+PASS     fallback-wipe.sh enforces crypttab_unchanged with an explicit FAIL verdict
+PASS     fallback helper rejects a failed passphrase check after token wipe
+PASS     fallback helper requires completion markers
+PASS     fallback helper accepts a completed proof
+PASS     tpm-enroll.sh enforces the dracut/initramfs verdict
+PASS     --revert remains documented as the abandon-TPM path
+
+== 8. Administrator account contract ==
+PASS     admin account is overridable (HERMES_ADMIN)
+PASS     tpm-enroll.sh resolves admin home instead of hardcoding it
+PASS     fallback-wipe.sh resolves admin home instead of hardcoding it
+PASS     b4-verify.sh resolves admin home instead of hardcoding it
+
+== 9. Privileged-script exit status ==
+PASS     tpm-enroll.sh propagates a failure status through its tee pipeline
+PASS     fallback-wipe.sh propagates a failure status through its tee pipeline
+PASS     b4-verify.sh propagates a failure status through its tee pipeline
+
+== 10. Runtime UID is derived, not hardcoded ==
+PASS     no manual script hardcodes uid 1001
+PASS     m04-backup.sh derives the runtime uid from the account
+PASS     m04-reboot.sh derives the runtime uid from the account
+PASS     m04-postboot.sh derives the runtime uid from the account
+
+== 11. Superseded helpers and their references ==
+PASS     configure-tpm2-auto-unlock.sh is marked SUPERSEDED
+PASS     no dangling docs/tpm2-luks-auto-unlock.md reference
+PASS     every docs/*.md path named inside a manual script exists
+
+== 12. Status claims agree across documents ==
+PASS     no pre-Regime-B status claim survives in the current docs
+PASS     manual/README.md no longer claims M03–M06 are open
+PASS     prep guide's TPM hold carries a forward pointer to the boot automation
+
+== 13. Bundle artifacts referenced by the staged scripts exist ==
+PASS     all 15 bundle references resolve to repo files
+
+== 14. End-to-end deployment guide ==
+PASS     readable: docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md
+PASS     all 25 helper references in the guide exist
+PASS     guide path exists: scripts/hermes/manual/boot/rehearse-clean-install.sh
+PASS     guide path exists: scripts/hermes/manual/lab/deepseek-e2e-create-fixture.sh
+PASS     guide path exists: scripts/hermes/manual/lab/deepseek-guest-password-recovery.py
+PASS     guide path exists: scripts/hermes/manual/lab/deepseek-guest-permission-inspect.py
+PASS     guide path exists: scripts/hermes/manual/lab/deepseek-host-grant-finalize.py
+PASS     guide path exists: scripts/hermes/manual/lab/deepseek-test-grant.py
+PASS     guide path exists: scripts/hermes/manual/setup-ssh-key-only.sh
+
+== 15. Deployment guide completeness ==
+PASS     every deployment helper is named in the guide
+PASS     boot prerequisites precede application deployment in the guide
+PASS     guide uses the honest fallback proof (fallback-wipe.sh)
+PASS     guide tells the operator to rehearse first
+PASS     guide requires the separate /home/hermes filesystem its guard asserts
+PASS     guide documents the accepted storage layout and data LV size
+
+== 16. Worker client key provisioning (guide and helper) ==
+PASS     worker client key helper exists: provision-worker-client-key.sh
+PASS     key helper maps the private key to the gateway UID
+PASS     key helper pins 0600 private / 0644 public modes
+PASS     guide documents worker client key provisioning
+PASS     key provisioning precedes the first M02 reference in the guide
+PASS     guide names the key location M02 expects
+PASS     every guide scp names a remote destination
+PASS     guide requires aicowork for the M02-M05 bundle
+PASS     guide uses the required aicowork account consistently
+PASS     every HERMES_ADMIN mention is scoped to the boot helpers
+PASS     guide binds the application sequence to the reviewed host identity
+PASS     guide forbids blindly deriving the expected identity on the target
+PASS     key helper provisions a fresh keypair
+PASS     fresh run created the private and public key files
+PASS     fresh key modes are 0600 private / 0644 public
+PASS     key helper re-runs cleanly
+PASS     rerun preserves the existing private key
+PASS     rerun preserves the existing public key
+PASS     key helper recovers a missing public key
+PASS     rebuilt public key matches the preserved private key
+PASS     public key recovery leaves the private key untouched
+PASS     key helper prints no private key material
+PASS     key helper runs its privileged ownership sequence
+PASS     helper hands the private key to the runtime account
+PASS     helper maps the private key to the gateway UID
+PASS     runtime-account ownership precedes the rootless mapped chown
+PASS     private key is chowned to the runtime account before mapping
+
+== 17. Duplicate helper identity (no silently divergent copy) ==
+PASS     duplicate helper is a documented intentional variant: host.py
+PASS     duplicate helper is a documented intentional variant: harden-config.py
+PASS     duplicate helper is byte-identical: set-model.py
+PASS     duplicate helper is byte-identical: setup-ssh-key-only.sh
+PASS     duplicate helper is a documented intentional variant: deploy.sh
+PASS     duplicate helper is a documented intentional variant: controller.py
+
+== Summary ==
+failures=0 advisories=0
+REHEARSAL=PASS
+PASS: clean-install rehearsal
+
+=== guide and deployment tree ===
+
+[1m=== Fedora Server source of truth ===[0m
+
+[1m=== Public controller contract ===[0m
+
+[1m=== Remote Server lifecycle ===[0m
+
+[1m=== Authentication and provider safety ===[0m
+
+[1m=== VM certification and cleanup ===[0m
+
+[1m=== Documentation and secret hygiene ===[0m
+
+========================================
+Results: [0;32m226[0m passed, [0;31m0[0m failed, [0;33m0[0m skipped (226 total)
+========================================
+PASS: guide and deployment tree
+
+=== deployment and VM specs ===
+Running: /usr/bin/bash [bash 5.3.9(1)-release]
+............................................................................................................................................
+
+Finished in 11.14 seconds (user 2.42 seconds, sys 1.38 seconds)
+140 examples, 0 failures
+
+PASS: deployment and VM specs
+
+=== python suites (reviewed offline allowlist) ===
+......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 614 tests in 55.898s
+
+OK
+Running 614 reviewed offline test cases from 98 explicit targets
+PASS: python suites (reviewed offline allowlist)
+
+=== secret scan (full working tree) ===
+Secret scan: 572 tracked/untracked files (validation disabled)
+PASS: scanner positive control reported a redacted github-pat finding for the synthetic file
+PASS: no findings in the full reviewed working tree
+PASS: secret scan (full working tree)
+
+=== migration manifest ===
+VERIFY MODE: source-aware (source, toolbox and companion checkouts present)
+PASS: docs/migration-manifest.txt matches the working tree (571 rows)
+PASS: migration manifest
+
+PASS: all offline checks passed
+Check-only lint: 112 shell files, 55 Markdown files
+
+=== shellcheck (certifier reviewed set, default severity) ===
+PASS: shellcheck (certifier reviewed set, default severity)
+
+=== shellcheck (whole working tree, repository error-only gate) ===
+PASS: shellcheck (whole working tree, repository error-only gate)
+
+=== shfmt check-only ===
+PASS: shfmt check-only
+
+=== markdownlint (check-only) ===
+markdownlint-cli2........................................................Passed
+PASS: markdownlint (check-only)
+
+=== pre-commit check-merge-conflict ===
+check for merge conflicts................................................Passed
+PASS: pre-commit check-merge-conflict
+
+=== pre-commit check-case-conflict ===
+check for case conflicts.................................................Passed
+PASS: pre-commit check-case-conflict
+
+=== pre-commit check-executables-have-shebangs ===
+check that executables have shebangs.....................................Passed
+PASS: pre-commit check-executables-have-shebangs
+
+=== pre-commit check-shebang-scripts-are-executable ===
+check that scripts with shebangs are executable..........................Passed
+PASS: pre-commit check-shebang-scripts-are-executable
+
+=== pre-commit check-added-large-files ===
+check for added large files..............................................Passed
+PASS: pre-commit check-added-large-files
+
+=== pre-commit check-yaml ===
+check yaml...............................................................Passed
+PASS: pre-commit check-yaml
+
+=== pre-commit check-json ===
+check json...............................................................Passed
+PASS: pre-commit check-json
+
+=== pre-commit check-toml ===
+check toml...............................................................Passed
+PASS: pre-commit check-toml
+
+=== pre-commit detect-private-key ===
+detect private key.......................................................Passed
+PASS: pre-commit detect-private-key
+
+PASS: check-only lint gate passed

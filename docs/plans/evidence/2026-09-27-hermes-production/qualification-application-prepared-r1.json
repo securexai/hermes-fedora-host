@@ -1,0 +1,36 @@
+{
+  "application_deployment": "NOT_RUN",
+  "approval_review": "Read-only identity query review timed out; single permitted retry succeeded",
+  "backup_configuration": "Explicit unconfigured backup.invalid placeholder; no password provisioned and no endpoint contacted",
+  "candidate_archive_sha256": "1ea64446e0d701d10c334904fb701651d9479b5f872baf6f46fb75d706004e25",
+  "candidate_artifact": "b53ee4899b049b019ee4f0a1155a03545f1ed792520d578cee9174643060a12e",
+  "candidate_signature": "PASS",
+  "checked_at_utc": "2026-09-29T18:13:39.925849+00:00",
+  "evidence_sha256": {
+    "qualification-application-build-r1.log": "4c6206db50e822d1759779ac0ba20eed94c9fa047e0f2de7a595a426d9394b9c",
+    "qualification-application-build-r2.log": "156777d24e4e3135cbc1cd50de1f73b8220aeaeb7fa3bba7ebf6028088e429c8",
+    "qualification-application-staging-report.json": "3ca36a4f170313676579534947cab2b9ac15454b510934899c12ed59ad304ecc",
+    "qualification-application-tests-r1.log": "c4fd6e0db702f183d5ad602f9a5220b9a5879ee9faf4b9f05be0d77f37168a94"
+  },
+  "guard_tests": 7,
+  "independent_restore": "NOT_RUN",
+  "known_failures": "Initial builder style gate failed; corrected formatting and rerun passed",
+  "provider_calls": "NOT_RUN",
+  "receiver": "01770100903218a972d0b5262ff272849d1fba756c54d97aa1d65cddd755ac5c",
+  "root_execution": "NOT_RUN",
+  "scope": "Approved qualification VM synthetic application dispatcher commissioning",
+  "source_sha256": {
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/bootstrap-template.py": "de3144476050b02971a0d74903d79d17d19c2fb0c67baab33d58599831181acf",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/bootstrap.py": "f3586dcaba63f9cb0b5328a80c2f0d0dc3ee0722a7fa69a68eef4c9ae305770a",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/build-bootstrap.py": "7b9e9444b3658fad0618b118e533c807957f537cdab9a83235dbfaeeca3fbeb1",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/host-config.json": "9dde4c4e441eede631ee6fe7df239bdabbd10f5636d59026cdc9fd9577bcf2e9",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/host-identity.json": "a1943b4ebd03b77a49ec6403c29cb27644067fbe6de226899460a4227b4105e7",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/prepare-handoff.py": "f5478594c6664b4d029d3144d4d5456ee694bef5b3f80aacc9a3cc4a5ff55811",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/private-bootstrap.py": "17e3e72eb5a029350b64f746bf984cc4ec2845e49fc0848c671f9fe7d0fcd000",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/receiver.json": "7f9b3c28cfd1c1cd722e50b531a660541b4af6d8cd326042f71826d112c1a059",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/run-private-bootstrap.sh": "1deb154a9112bf50131f2f2db70b07bc3d05f6659cde7f16cfed0306fa2a0d6f",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/test_bootstrap.py": "810497eb09e44fd2a4f91190c8fa249d95dc1aaf3699882e3331c56954d9b3a5"
+  },
+  "status": "PREPARED_AWAITING_PRIVATE_SUDO",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

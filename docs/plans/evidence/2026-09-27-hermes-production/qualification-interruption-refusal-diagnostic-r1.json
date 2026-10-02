@@ -1,0 +1,62 @@
+{
+  "checked_at_utc": "2026-09-29T20:08:58.312075+00:00",
+  "operator_report": "STOP: unexpected-process-tree",
+  "result": {
+    "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+    "interruption_receipt_present": false,
+    "processes": {
+      "4192": {
+        "argv_count": 4,
+        "children": [
+          4280
+        ],
+        "exact_expected_argv": true,
+        "exe_read_error": "PermissionError",
+        "ppid": 4190,
+        "uids": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "zombie": false
+      },
+      "4280": {
+        "argv_count": 19,
+        "children": [
+          4293
+        ],
+        "exact_expected_prefix": true,
+        "exe_read_error": "PermissionError",
+        "expected_podman_suffix": true,
+        "guard_interpreter_usr_bin_python3": true,
+        "guard_interpreter_usr_bin_python314": false,
+        "ppid": 4192,
+        "uids": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "zombie": false
+      },
+      "4293": {
+        "argv_count": 2,
+        "children": [],
+        "exact_expected_pause_argv": true,
+        "exe_read_error": "PermissionError",
+        "pause_flag_P": true,
+        "ppid": 4280,
+        "uids": [
+          1001,
+          1001,
+          1001,
+          1001
+        ],
+        "zombie": false
+      }
+    }
+  },
+  "scope": "Fixed three observed PIDs; metadata and comparison booleans only; no raw arguments or environment; no root or signals",
+  "status": "READ_ONLY_PROCESS_PREDICATE_DIAGNOSTIC"
+}

@@ -1,0 +1,9 @@
+{
+  "status": "SHUTDOWN_REQUESTED",
+  "scope": "Graceful ACPI shutdown for private administrator rescue setup",
+  "requested_at_utc": "2026-09-29T01:08:56.729488+00:00",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "before_xml_sha256": "7e2a1e14ab7983db2bb756dd78eab8b9e1e3cbb1d1fb24a591852afa1eb8c4ab",
+  "command_result": "Domain 'hermes-production-qualification' is being shutdown",
+  "force_stop": "NOT_RUN"
+}

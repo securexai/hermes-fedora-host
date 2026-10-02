@@ -1,0 +1,15 @@
+{
+  "application_and_boot_revalidation": "NOT_RUN",
+  "application_backup_provider_telegram_physical_operations": "NOT_AUTHORIZED_BY_THIS_REPLY",
+  "approval": "User replied yes to the explicit prepared restore-only 8 to 9 GiB increase and restart request",
+  "memory_gib_after": 9,
+  "memory_gib_before": 8,
+  "private_unlock": "OPERATOR_REQUIRED",
+  "proposal_path": ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-proposal-r1.xml",
+  "proposal_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "recorded_at_utc": "2026-09-29T23:29:38.351886+00:00",
+  "scope": "Memory/currentMemory only; graceful shutdown and paused private normal boot; original disks/TPM/NVRAM/other XML and historical evidence preserved",
+  "status": "USER_APPROVED_RESTORE_ONLY_MEMORY_INCREASE_AND_RESTART",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+}

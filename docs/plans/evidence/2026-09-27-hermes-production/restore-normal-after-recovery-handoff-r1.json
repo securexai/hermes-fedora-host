@@ -1,0 +1,18 @@
+{
+  "active_xml_sha256": "253636bfb0f0a30a07be5877cb6f6404020d37d97b1397809c9c976c77d93ab7",
+  "checked_at_utc": "2026-09-29T22:20:31.600922+00:00",
+  "console_capture": "NOT_ATTACHED",
+  "memory_gib": 8,
+  "normal_boot_login_application_restore": "NOT_RUN_PRIVATE_UNLOCK_PENDING",
+  "persistent_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "prepared_sha256": "b81a3a8cd87e31b43fe9d3aeaa1dfd7f8ae8d36de26f3bc6dd240290fa1c9b4b",
+  "private_console": "virsh -c qemu:///session --escape '^q' console hermes-production-restore --safe --resume",
+  "qualification_state": "shut off",
+  "restore_state": "paused",
+  "scope": "One-time private normal disk boot of existing restored administrator account",
+  "status": "NORMAL_DISK_BOOT_PAUSED_AWAITING_PRIVATE_UNLOCK",
+  "unrelated_sha256": "5419b4c0655822bb292a539bed080d6b0c97dc8710a9a7bb26c58d3e33fbb0e7",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53813805056
+}

@@ -1,0 +1,16 @@
+{
+  "status": "INSTALLED_SYSTEM_STARTED",
+  "scope": "Existing qualification VM hard-disk boot; installer DVD eject only",
+  "started_at_utc": "2026-09-28T22:38:06.400146+00:00",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "before_xml_sha256": "059b4bcd73ba9d4fdcc8226cfb4f7c36793490f9b430e3a034db437fd3a5e441",
+  "canary_sha256": "500cd343f8cbc50890577081f32c32105c725ccf10786ef5084f0599af7c750b",
+  "disk_recreated": false,
+  "installation": "NOT_RUN",
+  "secret_input": "NOT_RUN",
+  "dvd_ejected": true,
+  "persistent_change": "ONLY_CDROM_SOURCE_REMOVED",
+  "after_xml_sha256": "7e2a1e14ab7983db2bb756dd78eab8b9e1e3cbb1d1fb24a591852afa1eb8c4ab",
+  "state": "running",
+  "finished_at_utc": "2026-09-28T22:38:06.562244+00:00"
+}

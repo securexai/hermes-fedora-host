@@ -1,0 +1,23 @@
+{
+  "status": "FAIL",
+  "scope": "Operator-reported installation storage validation; private input remains pending",
+  "recorded_at_utc": "2026-09-28T21:45:36.468324+00:00",
+  "error": "Encryption requested for LUKS device vda3 but no encryption key specified for this device.",
+  "operator_disk_selection": {
+    "vda": "selected, 176.78 GiB",
+    "vdb": "not selected, 64 MiB"
+  },
+  "installer_stage": "Installation Destination, Kickstart insufficient",
+  "secrets_received": false,
+  "cause_limit": "The agent submitted one blank first value during console inspection; no claim about the operator subsequent private input.",
+  "recovery_prepared": "Restart only Anaconda and its serial console service after the operator detaches, preserving the same guest and supplied Kickstart; then hand off without sending a newline to the passphrase prompt.",
+  "media_anaconda_version": "44.30-2.fc44",
+  "source_inspection": {
+    "anaconda-storage-from-media.py": "599c539e83ed58d87fd82cb8e7d3d305c46fb2a93e6238c8a5bba681bd2f7558",
+    "anaconda-ui-storage-lib.py": "57044fd3cd713ed51f4b904347be2eb26b6e2260eb2a8fc8b036decff9d536c0",
+    "anaconda.service": "1f4c2770f6ae4a688fbe7bc4707dbff2e09ec391384e430645c4642244ae4fdc",
+    "anaconda-tmux.service": "1c1291a7f4919d668c85a8d1c66aead521dcda55ce4ec1f58a95e173a3143c2b",
+    "anaconda-tmux.conf": "f5793f7466763d7f7eed9368ce51d6e83a5e6575966a683dcfa573e9913a742b"
+  },
+  "installation_acceptance": "NOT_RUN"
+}

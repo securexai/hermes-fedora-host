@@ -1,0 +1,184 @@
+"""Focused recovery-entry parsing, refusal, repeatability and rollback tests."""
+
+import importlib.util
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import Mock
+
+spec = importlib.util.spec_from_file_location(
+    "recovery_once", Path(__file__).with_name("recovery-once.py")
+)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+KERNEL = "7.2.7-200.fc44.x86_64"
+OPTIONS = f"root=UUID=synthetic-root ro rd.lvm.lv=hermes_system/root rd.luks.uuid=luks-{mod.UUID} rhgb quiet"
+SOURCE = f"""title Fedora ({KERNEL})
+version {KERNEL}
+linux /vmlinuz-{KERNEL}
+initrd /initramfs-{KERNEL}.img
+options {OPTIONS}
+grub_users $grub_users
+grub_arg --unrestricted
+grub_class fedora
+"""
+
+
+class EntryTests(unittest.TestCase):
+    def test_preserves_image_and_root_while_enabling_visible_private_prompt(self):
+        result = mod.recovery_entry(SOURCE, KERNEL, "").decode()
+        self.assertIn(f"linux /vmlinuz-{KERNEL}\n", result)
+        self.assertIn(f"initrd /initramfs-{KERNEL}.img\n", result)
+        self.assertIn("root=UUID=synthetic-root ro rd.lvm.lv=hermes_system/root", result)
+        self.assertIn("grub_users $grub_users\ngrub_arg --unrestricted\n", result)
+        options = next(line for line in result.splitlines() if line.startswith("options ")).split()[
+            1:
+        ]
+        self.assertNotIn("quiet", options)
+        self.assertNotIn("rhgb", options)
+        self.assertEqual(options.count(mod.RECOVERY), 1)
+        self.assertEqual(options.count(mod.DISABLE_PLUGINS), 1)
+        self.assertEqual(options.count(mod.MARKER), 1)
+
+    def test_expands_kernelopts_from_explicit_grub_environment(self):
+        self.assertEqual(
+            mod.recovery_entry(SOURCE, KERNEL, ""),
+            mod.recovery_entry(SOURCE.replace(OPTIONS, "$kernelopts"), KERNEL, OPTIONS),
+        )
+
+    def test_refuses_other_kernel_or_image(self):
+        for old, new in [
+            ("version " + KERNEL, "version 0.0"),
+            ("linux /vmlinuz-" + KERNEL, "linux /vmlinuz-other"),
+            ("initrd /initramfs-" + KERNEL, "initrd /initramfs-other"),
+        ]:
+            with self.subTest(old=old), self.assertRaises(RuntimeError):
+                mod.recovery_entry(SOURCE.replace(old, new), KERNEL, "")
+
+    def test_refuses_duplicate_or_missing_fields(self):
+        for raw in [SOURCE + "options foo\n", SOURCE.replace("title Fedora", "# title Fedora")]:
+            with self.subTest(raw=raw), self.assertRaises(RuntimeError):
+                mod.recovery_entry(raw, KERNEL, "")
+
+    def test_refuses_root_selector_ambiguity(self):
+        for token in [f"rd.luks.uuid=luks-{mod.UUID}", "rd.lvm.lv=hermes_system/root"]:
+            with self.subTest(token=token), self.assertRaises(RuntimeError):
+                mod.recovery_entry(SOURCE.replace(token, ""), KERNEL, "")
+
+    def test_refuses_persistent_recovery_conflicts(self):
+        for extra in [mod.RECOVERY, mod.DISABLE_PLUGINS, "hermes.recovery=other"]:
+            with (
+                self.subTest(extra=extra),
+                self.assertRaisesRegex(RuntimeError, "persistent-recovery"),
+            ):
+                mod.recovery_entry(SOURCE.replace(OPTIONS, OPTIONS + " " + extra), KERNEL, "")
+
+    def test_refuses_unexpanded_or_complex_arguments(self):
+        for extra in ["$unexpected", 'arg="a b"', "arg=foo;bar", "`command`"]:
+            with (
+                self.subTest(extra=extra),
+                self.assertRaisesRegex(RuntimeError, "unsupported-boot"),
+            ):
+                mod.recovery_entry(SOURCE.replace(OPTIONS, OPTIONS + " " + extra), KERNEL, "")
+
+    def test_grubby_requires_unique_safe_identity(self):
+        good = f'index=0\nkernel="/boot/vmlinuz-{KERNEL}"\ninitrd="/boot/initramfs-{KERNEL}.img"\nid="machine-{KERNEL}"\n'
+        self.assertEqual(mod.parse_grubby(good)["id"], "machine-" + KERNEL)
+        for raw in [
+            good + 'id="other"\n',
+            good.replace("id=", "ignored="),
+            good.replace("machine-" + KERNEL, "../escape"),
+        ]:
+            with self.subTest(raw=raw), self.assertRaises(RuntimeError):
+                mod.parse_grubby(raw)
+
+    def test_environment_refuses_conflicting_selections(self):
+        for extra in [
+            {"saved_entry": "other"},
+            {"prev_saved_entry": "old"},
+            {"next_entry": "someone-else"},
+            {"blsdir": "elsewhere"},
+        ]:
+            with self.subTest(extra=extra), self.assertRaises(RuntimeError):
+                mod.check_env(dict({"saved_entry": "normal"}, **extra), "normal", "recovery")
+
+    def test_environment_accepts_unchanged_rerun(self):
+        for next_entry in ["", "recovery"]:
+            mod.check_env({"saved_entry": "normal", "next_entry": next_entry}, "normal", "recovery")
+
+    def test_environment_refuses_duplicate_fields(self):
+        with self.assertRaises(RuntimeError):
+            mod.parse_env("saved_entry=a\nsaved_entry=b\n")
+
+
+class ArmTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.entry = Path(self.temp.name) / "recovery.conf"
+        self.data = mod.recovery_entry(SOURCE, KERNEL, "")
+        self.env = {"saved_entry": "normal", "unrelated": "preserve"}
+        self.api = Mock()
+        self.api.atomic.side_effect = lambda path, data, mode: path.write_bytes(data)
+        self.api.command.side_effect = self.command
+        self.verify = Mock()
+        self.fail_arm = False
+
+    def command(self, args):
+        if args[0] == "grub2-reboot":
+            self.env["next_entry"] = args[1]
+            if self.fail_arm:
+                raise RuntimeError("simulated-arm-failure-after-write")
+        if args[-2:] == ["unset", "next_entry"]:
+            self.env.pop("next_entry", None)
+        if args[-1] == "list":
+            return "\n".join(f"{k}={v}" for k, v in self.env.items()).encode()
+        return b""
+
+    def test_arm_and_unchanged_rerun_keep_one_entry_and_normal_default(self):
+        for _ in range(2):
+            mod.arm(self.api, self.entry, self.data, dict(self.env), self.verify)
+            self.assertEqual(
+                self.env,
+                {"saved_entry": "normal", "unrelated": "preserve", "next_entry": "recovery"},
+            )
+            self.assertEqual(self.entry.read_bytes(), self.data)
+        self.assertEqual(self.api.atomic.call_count, 1)
+
+    def test_refuses_existing_unrelated_entry_without_mutation(self):
+        self.entry.write_bytes(b"unrelated")
+        with self.assertRaisesRegex(RuntimeError, "existing-recovery-entry-conflict"):
+            mod.arm(self.api, self.entry, self.data, dict(self.env), self.verify)
+        self.assertEqual(self.entry.read_bytes(), b"unrelated")
+        self.api.command.assert_not_called()
+
+    def test_failure_after_setting_next_entry_restores_normal_selection(self):
+        self.fail_arm = True
+        with self.assertRaisesRegex(RuntimeError, "simulated-arm-failure"):
+            mod.arm(self.api, self.entry, self.data, dict(self.env), self.verify)
+        self.assertEqual(self.env, {"saved_entry": "normal", "unrelated": "preserve"})
+        self.assertFalse(self.entry.exists())
+
+    def test_verify_failure_cleans_only_owned_entry(self):
+        self.verify.side_effect = RuntimeError("changed-image")
+        with self.assertRaisesRegex(RuntimeError, "changed-image"):
+            mod.arm(self.api, self.entry, self.data, dict(self.env), self.verify)
+        self.assertFalse(self.entry.exists())
+        self.assertNotIn("next_entry", self.env)
+
+    def test_disarm_preserves_someone_elses_next_entry(self):
+        self.entry.write_bytes(self.data)
+        self.env["next_entry"] = "unrelated"
+        mod.disarm(self.api, self.entry, self.data)
+        self.assertEqual(self.env["next_entry"], "unrelated")
+        self.assertFalse(self.entry.exists())
+
+    def test_disarm_refuses_to_delete_modified_entry(self):
+        self.entry.write_bytes(b"unrelated")
+        with self.assertRaisesRegex(RuntimeError, "recovery-entry-changed-no-delete"):
+            mod.disarm(self.api, self.entry, self.data)
+        self.assertEqual(self.entry.read_bytes(), b"unrelated")
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

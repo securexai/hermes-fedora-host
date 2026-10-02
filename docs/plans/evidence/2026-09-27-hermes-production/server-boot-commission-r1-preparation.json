@@ -1,0 +1,11 @@
+{
+  "preview": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "{\n  \"status\": \"PREVIEW\",\n  \"luks_uuid\": \"8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6\",\n  \"kernel\": \"6.19.10-300.fc44.x86_64\",\n  \"changes\": [\n    \"private recovery-passphrase tests\",\n    \"one PCR7/SHA256/no-PIN TPM token\",\n    \"matching crypttab row and scoped dracut configuration\",\n    \"validate then replace current-kernel initramfs\"\n  ],\n  \"reboot\": \"NOT_RUN\",\n  \"root_checks\": \"DEFERRED_TO_PRIVATE_APPLY\"\n}\n"
+  },
+  "private_apply": "NOT_RUN",
+  "reboot": "NOT_RUN",
+  "remote_path": "/home/aicowork/hermes-boot-commission-7bb3791ac872f42a.py",
+  "script_sha256": "7bb3791ac872f42a8e94a7ee9d0e1c193bdd70b8dc711c0042a8694fa060bfe9"
+}

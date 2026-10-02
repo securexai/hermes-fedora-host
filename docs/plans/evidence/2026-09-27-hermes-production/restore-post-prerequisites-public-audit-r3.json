@@ -1,0 +1,90 @@
+{
+  "active_swap": {
+    "exit_code": 0,
+    "stdout": ""
+  },
+  "application_restore_tpm_private_installer_log_hygiene": "NOT_RUN",
+  "boot_id": "21cf3b59-d295-47b3-8003-0ec0fefffea9",
+  "checked_at_utc": "2026-09-29T23:24:57.948764+00:00",
+  "failed_units": {
+    "exit_code": 0,
+    "stdout": ""
+  },
+  "host_fingerprint": "SHA256:fxewxdFeEgXZj7iwlzKwTJ0qQ5cUsZSYT9/RQEG+mLE",
+  "host_side_memory_gib": 8,
+  "host_side_vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "hostname": "hermes-restore.test",
+  "kernel": "6.19.10-300.fc44.x86_64",
+  "mcelog_dropin": {
+    "matches_bounded_content": true,
+    "mode": "0644",
+    "owner_uid": 0,
+    "sha256": "7f7cb7f0f5149acf6e2d04ae5b95a29d82ce872b31b7ca17f2f212e6d71312ee"
+  },
+  "mcelog_unit": {
+    "exit_code": 0,
+    "stdout": "ActiveState=inactive\nSubState=dead\nConditionResult=no\nResult=success"
+  },
+  "mcelog_vendor_unit_sha256": "78d3ea288eebc5583a1ad0ea169ba1f41b20b6db89508b1f501ad61c6d01b056",
+  "memory_bytes": {
+    "MemAvailable": 7566659584,
+    "MemTotal": 8244031488
+  },
+  "memory_predicate": {
+    "deficit_bytes": 77467648,
+    "exposed_bytes": 8244031488,
+    "minimum_bytes": 8321499136,
+    "predicate": "os.sysconf(SC_PHYS_PAGES)*os.sysconf(SC_PAGE_SIZE)>=8GiB-256MiB",
+    "result": "FAIL"
+  },
+  "mounts": {
+    "/": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/\",\n         \"source\": \"/dev/mapper/hermes_system-root\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"f17513b9-f895-4648-b138-73920ef2d06b\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    },
+    "/boot": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/boot\",\n         \"source\": \"/dev/vda2\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"fa398b72-e482-4081-8334-0d7623fa350d\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    },
+    "/boot/efi": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/boot/efi\",\n         \"source\": \"/dev/vda1\",\n         \"fstype\": \"vfat\",\n         \"uuid\": \"CDF7-DAFA\",\n         \"options\": \"rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=ascii,shortname=winnt,errors=remount-ro\"\n      }\n   ]\n}"
+    },
+    "/home/hermes": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/home/hermes\",\n         \"source\": \"/dev/mapper/hermes_system-hermes\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"82d2a1bf-2786-4ace-ac5d-9eb582861b3a\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    },
+    "/var": {
+      "exit_code": 0,
+      "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/var\",\n         \"source\": \"/dev/mapper/hermes_system-var\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"8ac22696-7754-4948-bb78-e3d0f7ef1484\",\n         \"options\": \"rw,relatime,seclabel,inode64,logbufs=8,logbsize=32k,noquota\"\n      }\n   ]\n}"
+    }
+  },
+  "os_version": 44,
+  "packages": {
+    "exit_code": 0,
+    "stdout": "podman-5.8.7-1.fc44.x86_64\ncontainer-selinux-2.247.0-1.fc44.noarch\npasst-0^20260120.g386b5f5-1.fc44.x86_64\nopenssh-clients-10.2p1-7.fc44.x86_64\nopenssh-server-10.2p1-7.fc44.x86_64\npolicycoreutils-3.10-1.fc44.x86_64\nshadow-utils-4.19.0-6.fc44.x86_64\nsudo-1.9.17-7.p2.fc44.x86_64\nrestic-0.18.1-3.fc44.x86_64\ncryptsetup-2.8.4-1.fc44.x86_64\nmokutil-0.7.2-3.fc44.x86_64\ntpm2-tools-5.7-5.fc44.x86_64\ntpm2-tss-4.1.3-9.fc44.x86_64\ndracut-108-6.fc44.x86_64\nsystemd-259.5-1.fc44.x86_64\ntar-1.35-8.fc44.x86_64\nutil-linux-2.41.3-12.fc44.x86_64\nlvm2-2.03.38-2.fc44.x86_64"
+  },
+  "persistent_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "podman_binary": {
+    "exit_code": 0,
+    "stdout": "podman version 5.8.7"
+  },
+  "scope": "Pinned commissioning-key public read-only facts; no root/account/machine-id/log/credential reads",
+  "secure_boot": {
+    "exit_code": 0,
+    "stdout": "SecureBoot enabled"
+  },
+  "selinux": {
+    "exit_code": 0,
+    "stdout": "Enforcing"
+  },
+  "status": "PUBLIC_NORMAL_BOOT_FACTS_OBSERVED",
+  "storage_free_bytes": {
+    "/home/hermes": 63091232768,
+    "/var": 83839856640
+  },
+  "system_state": {
+    "exit_code": 0,
+    "stdout": "running"
+  }
+}

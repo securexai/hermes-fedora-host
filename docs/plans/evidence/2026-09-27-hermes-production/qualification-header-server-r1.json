@@ -1,0 +1,16 @@
+{
+  "artifact_directory": "/var/lib/hermes-production-recovery/header-before-tpm-2e801bc6061a4587",
+  "certificate_sha256": "2e801bc6061a4587b2630a102943c2b36caf7bb0545fce278d46d1d0292aca5f",
+  "ciphertext_sha256": "df86ddc62312059f511572252b41eb84d08d835a79ec0756e9228b21453e73d9",
+  "disk_restore": "NOT_RUN",
+  "header_bytes": 16777216,
+  "header_sha256": "7e1dd8c12f5301aa441c04d6d728a4073b59a494fb841fc4e046a0fbb7c3b56c",
+  "keyslot_count": 1,
+  "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "offhost_verification": "NOT_RUN",
+  "script_sha256": "420064c852b36e91b6e21392d78968f71933a731363bccdbd4cd9ab1682e0b18",
+  "status": "ENCRYPTED_ON_SERVER",
+  "timestamp_utc": "2026-09-29T02:27:00.815978+00:00",
+  "tpm_enrollment": "NOT_RUN",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

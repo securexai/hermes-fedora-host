@@ -1,0 +1,8 @@
+{
+  "status": "RESCUE_STARTED_CONFIG_VERIFIED",
+  "checked_at_utc": "2026-09-29T01:57:07.046932+00:00",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "persistent_change": "ONLY_READONLY_DVD_SOURCE_ADDED",
+  "disk_recreation": "NOT_RUN",
+  "private_unlock": "NOT_RUN"
+}

@@ -1,0 +1,12 @@
+{
+  "preview": {
+    "exit": 0,
+    "stderr": "",
+    "stdout": "{\"status\": \"PREVIEW\", \"target_home_uuid\": \"eb129d35-1f52-4577-99e5-25daa322febc\", \"changes\": [\"install missing Restic and required dependencies\", \"disable default zram0 swap persistently\"], \"active_swap_devices\": 0, \"zram_device\": {\"present\": true, \"initialized\": 1, \"size_bytes\": 8589934592}, \"zram_units\": {\"dev-zram0.swap\": {\"LoadState\": \"loaded\", \"ActiveState\": \"inactive\"}, \"systemd-zram-setup@zram0.service\": {\"LoadState\": \"loaded\", \"ActiveState\": \"failed\"}}, \"zramctl\": \"zramctl from util-linux 2.41.5\", \"root_report\": \"/var/lib/hermes-production-prerequisites/report.json\"}\n"
+  },
+  "privileged_apply": "NOT_RUN",
+  "remote_path": "/home/aicowork/hermes-prerequisites-8ae885cbe870e579.py",
+  "script_sha256": "8ae885cbe870e5795e8e4049cefb47ead1fbf74a4bffcbc5a66d283cc998a59f",
+  "timestamp_utc": "2026-09-28T13:21:01.440816+00:00",
+  "upload": "PASS"
+}

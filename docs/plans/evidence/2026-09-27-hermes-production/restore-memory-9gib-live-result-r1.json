@@ -1,0 +1,29 @@
+{
+  "actual_checks": "PASS_WITHIN_PUBLIC_RAM_BOOT_FACTS_SCOPE",
+  "application_backup_provider_telegram_physical_git_operations": "NOT_RUN",
+  "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T23:42:17.239641+00:00",
+  "expected": "New boot identity; exact unchanged RAM minimum PASS; preserved filesystem identities/security/swap; Podman >=5.8.4 and no failed units",
+  "failed_units": [],
+  "full_application_preflight_tpm_installer_log_hygiene_application_restore": "NOT_RUN",
+  "kernel": "6.19.10-300.fc44.x86_64",
+  "memory": {
+    "deficit_bytes": 0,
+    "exposed_bytes": 9288417280,
+    "minimum_bytes": 8321499136,
+    "predicate": "os.sysconf(SC_PHYS_PAGES)*os.sysconf(SC_PAGE_SIZE)>=8GiB-256MiB",
+    "result": "PASS"
+  },
+  "memory_gib_configured": 9,
+  "method": "Strict console-pinned commissioning-key SSH and complete current persistent 9GiB/2CPU XML guard; compare actual RAM predicate and mount/package/security/service facts with retained pre-change facts",
+  "observed_at_utc": "2026-09-29T23:37:46.509201+00:00",
+  "operator_report": "rebooted and detached",
+  "podman": "5.8.7",
+  "previous_boot_id": "21cf3b59-d295-47b3-8003-0ec0fefffea9",
+  "secure_boot": "enabled",
+  "selinux": "Enforcing",
+  "status": "PASS_ACTUAL_RAM_AND_NORMAL_BOOT_PUBLIC_FACTS",
+  "swap": "NONE",
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+}

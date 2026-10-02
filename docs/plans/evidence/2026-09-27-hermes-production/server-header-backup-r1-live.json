@@ -1,0 +1,65 @@
+{
+  "checked_at_utc": "2026-09-28T14:11:45.103763+00:00",
+  "files": {
+    "backup/header.cms": {
+      "bytes": 16777847,
+      "mode": "0o600",
+      "sha256": "4d97171dce96796aa757e64342810a94880917fd40a34f6530ba908c2005478c",
+      "uid": 1000
+    },
+    "backup/server-report.json": {
+      "bytes": 750,
+      "mode": "0o600",
+      "sha256": "405e14360e2090798a196e1c1856f3b805e8001868a869c96603f173df880e1b",
+      "uid": 1000
+    },
+    "backup/verification.json": {
+      "bytes": 545,
+      "mode": "0o600",
+      "sha256": "2364907dc20c522c1a9058663823879beaf46bb7aa13ef89a2516a90e6f982d4",
+      "uid": 1000
+    },
+    "recovery-private.pem": {
+      "bytes": 2484,
+      "mode": "0o600",
+      "uid": 1000
+    },
+    "recovery-public.pem": {
+      "bytes": 1517,
+      "mode": "0o600",
+      "sha256": "6446c3506a759740ba8340a1bd055b99d2d4aadbf1023390333178414c5628ea",
+      "uid": 1000
+    }
+  },
+  "independent_verification": {
+    "certificate_sha256": "6446c3506a759740ba8340a1bd055b99d2d4aadbf1023390333178414c5628ea",
+    "checked_at_utc": "2026-09-28T14:11:45.085545+00:00",
+    "ciphertext_sha256": "4d97171dce96796aa757e64342810a94880917fd40a34f6530ba908c2005478c",
+    "disk_restore": "NOT_RUN",
+    "header_bytes": 16777216,
+    "header_sha256": "c31f7d66d048401b6b03b219b8a05a06e20aef1df5962549ab1ab63499d2b03a",
+    "luks_uuid": "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6",
+    "passphrase_test": "NOT_RUN",
+    "scope": "encrypted off-host LUKS header copy and in-memory verification",
+    "status": "PASS",
+    "tpm_enrollment": "NOT_RUN"
+  },
+  "raw_header_and_private_key": "NOT_INCLUDED",
+  "scope": "actual encrypted off-host LUKS2 header backup; server apply repeated only in mocks; local fetch/verification safely rerun",
+  "server_report": {
+    "artifact_directory": "/var/lib/hermes-production-recovery/header-before-tpm-6446c3506a759740",
+    "certificate_sha256": "6446c3506a759740ba8340a1bd055b99d2d4aadbf1023390333178414c5628ea",
+    "ciphertext_sha256": "4d97171dce96796aa757e64342810a94880917fd40a34f6530ba908c2005478c",
+    "disk_restore": "NOT_RUN",
+    "header_bytes": 16777216,
+    "header_sha256": "c31f7d66d048401b6b03b219b8a05a06e20aef1df5962549ab1ab63499d2b03a",
+    "keyslot_count": 1,
+    "luks_uuid": "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6",
+    "offhost_verification": "NOT_RUN",
+    "script_sha256": "db2ceeae744d230d2f7186a080bb8f83dd4a9e561df11e3aac3a03d9dae15ba7",
+    "status": "ENCRYPTED_ON_SERVER",
+    "timestamp_utc": "2026-09-28T14:10:52.354716+00:00",
+    "tpm_enrollment": "NOT_RUN"
+  },
+  "status": "PASS"
+}

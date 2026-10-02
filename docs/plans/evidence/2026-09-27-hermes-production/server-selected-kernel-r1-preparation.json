@@ -1,0 +1,24 @@
+{
+  "apply_and_reboot": "NOT_RUN",
+  "dependency_sha256": "9a4c0ff7d97b202c49d2bfce39b2834fdf1becc45b4e8bb322c3665035891e0d",
+  "launcher_sha256": "24710199b49083c2e969fbe9a9c58b342745d205af35a34d937638f906e5cf41",
+  "physical_console_readiness": "OPERATOR_CONFIRMED",
+  "preview": {
+    "changes": "preserve/rebuild selected initramfs; request reboot after validation",
+    "reboot": "NOT_RUN",
+    "root_checks": "DEFERRED_TO_PRIVATE_APPLY",
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "DETECT_FROM_GRUB_DEFAULT_UNDER_SUDO",
+    "status": "PREVIEW"
+  },
+  "remote_path": "/home/aicowork/hermes-selected-kernel-d688d44d0bdae66b.py",
+  "reported_default_kernel": "/boot/vmlinuz-7.2.7-200.fc44.x86_64",
+  "reported_default_kernel_source": "operator root command output",
+  "ruff_check": "PASS",
+  "ruff_format": "PASS",
+  "script_sha256": "d688d44d0bdae66bbadd4b596c9c573715c32197146d605847ccb160d1691c83",
+  "status": "PREPARED",
+  "test_scope": "Real temporary file transaction, backup, no-op and rollback; mocked TPM, root ownership, dracut and reboot. Default kernel detection tested independently of running kernel.",
+  "tests_passed": 18,
+  "tests_sha256": "169828dd852d1089e407cc4690c8d68f7f3bfec851f8a97ef3f6a3192ae3c288"
+}

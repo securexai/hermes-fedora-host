@@ -1,0 +1,12 @@
+{
+  "administrator_setup": "NO_OPERATOR_COMPLETION_RECEIVED",
+  "checked_at_utc": "2026-09-29T01:36:47.723438+00:00",
+  "console_capture": false,
+  "console_processes": [],
+  "next_action": "Operator connects to VM console, runs chroot /mnt/sysroot passwd operator at guest bash prompt, detaches with Ctrl+Q and confirms completion.",
+  "restart": "NOT_RUN",
+  "scope": "Read-only approved VM inventory; no console attachment",
+  "state": "running (booted)",
+  "status": "BLOCKED_PRIVATE_SETUP",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

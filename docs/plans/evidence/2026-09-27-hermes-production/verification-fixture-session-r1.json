@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "scope": "Fixture session correction repository and candidate verification only; installation still incomplete",
+  "checked_at_utc": "2026-09-28T21:46:57.118196+00:00",
+  "branch": "codex/hermes-production-bundle",
+  "dirty_worktree": true,
+  "sources": {
+    "vm/hermes-production-fixture.py": "3345c5776343425432eb547c86c4dd08442040a8c7915fd6c45d45acb9e19576",
+    "tests/test_hermes_production.py": "5af3588da3605ed5d3e7978c3ab235629fd2c752b71e02eafb90a1bc205e13d6",
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "8f4b48d6d10475014bad9b7c4901987cd3ef814cd413b4e8ce13628e3b254897"
+  },
+  "evidence": {
+    "synthetic-stage-private-preparation.json": "95e326f900ba40c1d4de54839e3ba177ac7edfc9db4e17768872a80ccb960bcf",
+    "synthetic-qualification-create-r1.json": "f9ff97628dc1ccba74f17d738a7bdb5e232ac5e9f9da2720b1479b84f6f68fd3",
+    "synthetic-qualification-failed-resource-inspection.json": "95150f62b27b419af2440035f9594a030cfc57b127084863fa2cce673b63a910",
+    "synthetic-qualification-resume-r1.json": "6023de722e7be9919630ddf19dd1705a9a9aee86ab2dbd854e6f38fb1ecd2a8a",
+    "synthetic-qualification-installer-handoff.json": "f3d28b1f98a7aec5900e52b7b873cb5a3bbfc5eba58175a799aa16004b28da95",
+    "synthetic-qualification-encryption-prompt-r1.json": "2b210ad8d1a41f65d8e1b7d690caf8b63f76819129f06b9fc334224cd9440870",
+    "restore-preview-session-r1.json": "7af6e59dfbaa5dfa4233ba66a1df84437f07ac004c956f5b161dd54369f8dbe5",
+    "offline-fixture-session-r1.log": "30eaf53f0116d5d31bdc81432166003e5973815865701b1d536543e43afc1796",
+    "offline-fixture-session-r2.log": "df994319a37d3e202f26fd05470e8a6fee2cce6d7b494f3347fdd312ee4bc349",
+    "lint-fixture-session-r2.log": "81382b9e80e58c4b92d4ef835901d90aff03212be4755c939de4cc681b7dc40e",
+    "bundle-fixture-session-r1.json": "00646fb8d17dc345717c9c79bfb008d7cc5308294d49d6df5ac306888d968a29"
+  },
+  "checks": {
+    "new_regressions_before_fix": "2 expected failures",
+    "focused_after_fix": "44 PASS",
+    "final_fixture_subset": "8 PASS",
+    "canonical_offline": "PASS, 610 Python cases and 140 ShellSpec examples",
+    "check_only_lint": "PASS",
+    "local_record_links": 112,
+    "package": "PASS, signature/extraction/production rejection"
+  },
+  "candidate_artifact_sha256": "f9097588d061ef9a1ceab69cf75786bb17837ce45ae6bec596919a0fe097661b",
+  "live_installation": "INCOMPLETE_PRIVATE_ENCRYPTION_INPUT",
+  "production_deployment": "NOT_RUN",
+  "provider_telegram": "NOT_RUN"
+}

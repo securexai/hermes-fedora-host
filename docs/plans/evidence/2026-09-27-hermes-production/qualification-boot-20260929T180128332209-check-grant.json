@@ -1,0 +1,28 @@
+{
+  "operation": "check-grant",
+  "result": {
+    "denial_checks": {
+      "extra_arguments": "DENIED_BY_SUDO",
+      "unrelated_root_command": "DENIED_BY_SUDO"
+    },
+    "facts": {
+      "boot_id": "00442d11-6441-42ce-8594-3dab8700c1c5",
+      "checked_at_utc": "2026-09-29T02:54:11.166554+00:00",
+      "crypttab_sha256": "f1458594a23fe04484815095a915329d2224db2b31552f448dcec2129d019be3",
+      "initramfs_sha256": "2df447c5315532576332f46fa62922051ac4cdc12970d7279cc19e20055ef4ce",
+      "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+      "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+      "recovery_parameters_present": false,
+      "recovery_slot_preserved": true,
+      "running_kernel": "6.19.10-300.fc44.x86_64",
+      "selected_kernel": "6.19.10-300.fc44.x86_64",
+      "status": "OBSERVED",
+      "system_state": "running",
+      "tpm_policy": "PCR7_SHA256_NO_PIN",
+      "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+    },
+    "status": "PASS",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "workstation_observed_at_utc": "2026-09-29T18:01:28.332209+00:00"
+}

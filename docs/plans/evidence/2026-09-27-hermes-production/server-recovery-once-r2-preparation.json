@@ -1,0 +1,41 @@
+{
+  "checked_at_utc": "2026-09-28T20:38:33.262692+00:00",
+  "hardware_passphrase_recovery": "NOT_RUN",
+  "launcher": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-boot/run-recovery-test.sh",
+  "previous_attempt": "NO_PROMPT_RECOVERY_NOT_PROVEN",
+  "remote_upload": {
+    "path": "/home/aicowork/hermes-recovery-once-8d6ccdaef18f5f0a.py",
+    "preview": {
+      "before_boot_id": "4cea93af-9409-42b1-a5c2-ad4c8d8cfd60",
+      "changes": "Add a separate BLS entry, schedule it once, then reboot",
+      "preserved": "Normal default, kernel, initramfs, crypttab and all LUKS keys/tokens",
+      "status": "PREVIEW",
+      "temporary_parameters": [
+        "rd.luks.options=8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6=discard,key-slot=0,password-cache=no,headless=no",
+        "systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0",
+        "hermes.recovery=r2"
+      ]
+    },
+    "production_boot_changes": "NOT_RUN",
+    "reboot": "NOT_RUN",
+    "sha256": "8d6ccdaef18f5f0a5b59d55646a8fb69e2575a34ba49cf9129802fd1e3098740",
+    "status": "UPLOADED_PREVIEW_PASS"
+  },
+  "scope": "One-time passphrase recovery BLS entry; root apply requires private sudo terminal",
+  "script_sha256": "8d6ccdaef18f5f0a5b59d55646a8fb69e2575a34ba49cf9129802fd1e3098740",
+  "source_refs": [
+    "https://github.com/systemd/systemd/blob/v259/src/cryptsetup/cryptsetup.c",
+    "https://github.com/systemd/systemd/blob/v259/man/systemd.xml",
+    "https://fedoraproject.org/wiki/Changes/BootLoaderSpecByDefault"
+  ],
+  "status": "PREPARED_NOT_APPLIED",
+  "tests": {
+    "command": "python3 -B .toolbox/hermes-production-boot/test_recovery_once.py",
+    "count": 17,
+    "coverage": "Entry preservation, explicit root selectors, plugin disable parameter, conflicting defaults/options, unchanged rerun, partial-arm cleanup and preservation of unrelated state",
+    "ruff_check": "PASS",
+    "ruff_format_check": "PASS",
+    "runtime": "dev-infra-hermes",
+    "status": "PASS"
+  }
+}

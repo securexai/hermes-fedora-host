@@ -89,6 +89,15 @@ Two further entrypoints are deliberately separate:
 `test-hermes-manual-profile` is the gate that also checks documentation parity
 between the manual `README.md` and the deployment guide.
 
+Production archive/policy/transaction regressions are explicitly listed in the
+offline allowlist. Fedora 44 Kickstart syntax uses the locked `pykickstart`
+development dependency via `.venv/bin/ksvalidator`; it parses temporary files
+and does not run installation scripts or contact a guest. The unattended-path
+tests generate throwaway OpenSSL and SSH keys in temporary directories and mock
+cryptsetup, TPM, libvirt and `mkksiso`. Live VM qualification is the separate
+`vm/hermes-production-qualify.py` run on the workstation host; it is not part of
+the offline gate.
+
 Declared tool extensions are provisioned with `toolbox/provision-environment.sh`
 (repository-local ShellSpec plus `uv sync --locked`) and validated with
 `toolbox/verify-extensions.sh`; see [ENVIRONMENT.md](ENVIRONMENT.md).

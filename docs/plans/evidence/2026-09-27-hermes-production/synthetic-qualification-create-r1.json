@@ -1,0 +1,12 @@
+{
+  "started_at_utc": "2026-09-28T21:30:19.962053+00:00",
+  "scope": "Approved synthetic qualification guest creation only",
+  "kickstart_f44_validation": "PASS",
+  "secureboot_tpm_capabilities": "PASS",
+  "private_console_input": "NOT_RUN",
+  "status": "FAIL",
+  "error": "command-failed:virt-install",
+  "partial_resources": "PRESERVE_AND_INSPECT",
+  "elapsed_seconds": 5.33,
+  "finished_at_utc": "2026-09-28T21:30:25.291787+00:00"
+}

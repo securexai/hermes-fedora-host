@@ -1,0 +1,325 @@
+"""Real-file transaction regressions with mocked TPM, initramfs and privileged commands."""
+
+import contextlib
+import copy
+import importlib.util
+import io
+import json
+import os
+import stat
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+SOURCE = Path(sys.argv.pop(1)).resolve()
+spec = importlib.util.spec_from_file_location("boot", SOURCE)
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+ORIGINAL = (
+    b"# retained\nother UUID=unrelated none discard\n"
+    + ("  cryptroot\tUUID=" + m.LUKS_UUID + "\tnone\tdiscard # retained comment\n").encode()
+)
+SLOT = {"type": "luks2", "key_size": 64, "kdf": {"type": "argon2id", "salt": "synthetic"}}
+POLICY = {"type": "systemd-tpm2", "tpm2-pcrs": [7], "tpm2-pcr-bank": "sha256", "keyslots": ["1"]}
+
+
+class PolicyTests(unittest.TestCase):
+    def test_exact_row_edit_preserves_comments_and_unrelated_rows(self):
+        actual = m.crypttab_change(ORIGINAL)
+        self.assertEqual(
+            actual, ORIGINAL.replace(b"discard # retained", b"discard,tpm2-device=auto # retained")
+        )
+        self.assertEqual(m.crypttab_change(actual), actual)
+
+    def test_conflicting_rows_keyfiles_and_options_refused(self):
+        for raw in [
+            ORIGINAL + ORIGINAL,
+            ORIGINAL.replace(b"\tnone\t", b"\t/keyfile\t"),
+            ORIGINAL.replace(b"\tdiscard ", b"\ttpm2-device=/dev/tpm0 "),
+            ORIGINAL.replace(b"\tdiscard ", b"\ttpm2-device=auto,tpm2-device=auto "),
+            b"other UUID=unrelated none discard\n",
+        ]:
+            with self.subTest(raw=raw), self.assertRaises(RuntimeError):
+                m.crypttab_change(raw)
+
+    def test_empty_option_placeholder(self):
+        raw = ORIGINAL.replace(b"\tdiscard ", b"\t- ")
+        self.assertIn(b"\ttpm2-device=auto ", m.crypttab_change(raw))
+
+    def test_no_pin_token_and_absent_token_converge(self):
+        recovery = {"0": m.keyslot_identity(SLOT)}
+        self.assertFalse(
+            m.check_tokens({"keyslots": {"0": SLOT}, "tokens": {}}, recovery, allow_absent=True)
+        )
+        self.assertTrue(
+            m.check_tokens({"keyslots": {"0": SLOT, "1": {}}, "tokens": {"0": POLICY}}, recovery)
+        )
+
+    def test_wrong_pcr_pin_extra_slot_and_recovery_change_refused(self):
+        good = {"keyslots": {"0": SLOT, "1": {}}, "tokens": {"0": POLICY}}
+        variants = []
+        for key, value in [
+            ("tpm2-pcrs", [0, 7]),
+            ("tpm2-pin", True),
+            ("tpm2-public-key-pcrs", [11]),
+        ]:
+            data = copy.deepcopy(good)
+            data["tokens"]["0"][key] = value
+            variants.append(data)
+        data = copy.deepcopy(good)
+        data["keyslots"]["2"] = {}
+        variants.append(data)
+        data = copy.deepcopy(good)
+        data["keyslots"]["0"]["key_size"] = 32
+        variants.append(data)
+        data = copy.deepcopy(good)
+        data["tokens"]["0"]["keyslots"] = ["0"]
+        variants.append(data)
+        for data in variants:
+            with self.subTest(data=data), self.assertRaises(RuntimeError):
+                m.check_tokens(data, {"0": m.keyslot_identity(SLOT)})
+
+    def test_wrong_filesystem_refused_by_real_public_check(self):
+        with (
+            patch.object(m.os, "uname", return_value=type("Uname", (), {"release": m.KERNEL})()),
+            patch.object(m, "command", return_value=b"wrong") as run,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "wrong-target-filesystem"):
+                m.public_checks()
+        self.assertEqual(run.call_count, 1)
+
+    def test_embedded_dracut_uuid_path_is_verified_unchanged(self):
+        host = m.crypttab_change(ORIGINAL)
+        embedded = host.replace(("UUID=" + m.LUKS_UUID).encode(), m.DEVICE.encode())
+        self.assertEqual(m.crypttab_change(embedded, embedded=True), embedded)
+        with self.assertRaisesRegex(RuntimeError, "crypttab-target-row-count"):
+            m.crypttab_change(embedded)
+
+    def test_embedded_wrong_device_and_duplicate_aliases_are_refused(self):
+        host = m.crypttab_change(ORIGINAL)
+        embedded = host.replace(("UUID=" + m.LUKS_UUID).encode(), m.DEVICE.encode())
+        for raw in [
+            embedded.replace(m.DEVICE.encode(), (m.DEVICE + "-wrong").encode()),
+            embedded.replace(m.DEVICE.encode(), b"/dev/nvme0n1p3"),
+            host + embedded,
+        ]:
+            with self.assertRaisesRegex(RuntimeError, "crypttab-target-row-count"):
+                m.crypttab_change(raw, embedded=True)
+
+    def test_embedded_alias_retains_keyfile_and_tpm_option_guards(self):
+        embedded = m.crypttab_change(ORIGINAL).replace(
+            ("UUID=" + m.LUKS_UUID).encode(), m.DEVICE.encode()
+        )
+        for raw in [
+            embedded.replace(b"\tnone\t", b"\t/keyfile\t"),
+            embedded.replace(b"tpm2-device=auto", b"tpm2-device=/dev/tpm0"),
+        ]:
+            with self.assertRaises(RuntimeError):
+                m.crypttab_change(raw, embedded=True)
+
+
+class TransactionTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        for name, relative in {
+            "BASE": "var/state",
+            "BACKUPS": "var/state/baseline",
+            "CT": "etc/crypttab",
+            "DC": "etc/dracut.d/hermes.conf",
+            "IMAGE": "boot/initramfs.img",
+            "RECOVERY": "var/header",
+        }.items():
+            self.enterContext(patch.object(m, name, self.root / relative))
+        for directory in [m.BASE.parent, m.CT.parent, m.DC.parent, m.IMAGE.parent, m.RECOVERY]:
+            directory.mkdir(parents=True, exist_ok=True)
+        m.CT.write_bytes(ORIGINAL)
+        m.CT.chmod(0o600)
+        m.IMAGE.write_bytes(b"ORIGINAL-IMAGE")
+        m.IMAGE.chmod(0o600)
+        (m.RECOVERY / "header.cms").write_bytes(b"SYNTHETIC-ENCRYPTED")
+        self.enterContext(patch.object(m, "CIPHER_SHA", m.sha(m.RECOVERY / "header.cms")))
+        (m.RECOVERY / "report.json").write_text(
+            json.dumps({"luks_uuid": m.LUKS_UUID, "ciphertext_sha256": m.CIPHER_SHA})
+        )
+        self.enterContext(patch.object(m, "public_checks"))
+        self.enterContext(
+            patch.object(m, "secure", side_effect=lambda path, **kwargs: path.lstat())
+        )
+        self.enterContext(patch.object(m.os, "geteuid", return_value=0))
+        self.enterContext(patch.object(m.sys.stdin, "isatty", return_value=True))
+        self.enterContext(patch.object(m.sys.stdout, "isatty", return_value=True))
+        self.data = {"keyslots": {"0": copy.deepcopy(SLOT)}, "tokens": {}}
+        self.calls = []
+        self.fail_build = False
+        self.fail_pass = False
+        self.fail_post_image = False
+        self.bad_embedded = False
+        self.enterContext(patch.object(m, "command", self.command))
+        old = os.umask(0o077)
+        self.addCleanup(os.umask, old)
+
+    def command(self, args, **kwargs):
+        self.calls.append(args)
+        if args[:2] == ["cryptsetup", "luksUUID"]:
+            return m.LUKS_UUID.encode()
+        if args[:2] == ["cryptsetup", "luksDump"]:
+            return json.dumps(self.data).encode()
+        if args[:2] == ["cryptsetup", "open"]:
+            self.assertIn("--test-passphrase", args)
+            self.assertIn("--disable-external-tokens", args)
+            if self.fail_pass:
+                raise RuntimeError("command-failed:cryptsetup")
+            return b""
+        if args[0] == "systemd-cryptenroll":
+            self.data["keyslots"]["1"] = {}
+            self.data["tokens"]["0"] = copy.deepcopy(POLICY)
+            return b""
+        if args[0] == "tpm2_pcrread":
+            return b"synthetic-pcr7"
+        if args[0] == "restorecon":
+            return b""
+        if args[0] == "dracut":
+            if self.fail_build:
+                raise RuntimeError("command-failed:dracut")
+            Path(args[-1]).write_bytes(b"CANDIDATE-IMAGE")
+            return b""
+        if args[:2] == ["lsinitrd", "-m"]:
+            if (
+                self.fail_post_image
+                and args[-1] == str(m.IMAGE)
+                and m.IMAGE.read_bytes() == b"CANDIDATE-IMAGE"
+            ):
+                raise RuntimeError("post-publication-check-failed")
+            return b"systemd-cryptsetup\ntpm2-tss\n"
+        if args[:2] == ["lsinitrd", "-f"]:
+            return (
+                ORIGINAL
+                if self.bad_embedded
+                else m.CT.read_bytes().replace(("UUID=" + m.LUKS_UUID).encode(), m.DEVICE.encode())
+            )
+        self.fail("unexpected command: " + repr(args))
+
+    def run_apply(self):
+        # Keep stdout a TTY for the private-input guard while retaining only synthetic output.
+        out = io.StringIO()
+        out.isatty = lambda: True
+        with contextlib.redirect_stdout(out):
+            rc = m.apply()
+        return rc, json.loads((m.BASE / "report.json").read_text())
+
+    def test_success_preserves_slot_and_original_image(self):
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 0)
+        self.assertEqual(report["status"], "PASS")
+        self.assertEqual(self.data["keyslots"]["0"], SLOT)
+        self.assertEqual((m.BACKUPS / "initramfs.before").read_bytes(), b"ORIGINAL-IMAGE")
+        self.assertEqual(m.IMAGE.read_bytes(), b"CANDIDATE-IMAGE")
+        self.assertEqual(stat.S_IMODE(m.BASE.stat().st_mode), 0o755)
+        self.assertEqual(stat.S_IMODE(m.BACKUPS.stat().st_mode), 0o700)
+        self.assertEqual(stat.S_IMODE(m.CT.stat().st_mode), 0o600)
+        self.assertEqual(stat.S_IMODE(m.IMAGE.stat().st_mode), 0o600)
+        tests = [i for i, x in enumerate(self.calls) if x[:2] == ["cryptsetup", "open"]]
+        enrollment = next(i for i, x in enumerate(self.calls) if x[0] == "systemd-cryptenroll")
+        self.assertLess(tests[0], enrollment)
+        self.assertLess(enrollment, tests[1])
+
+    def test_repeat_does_not_reenroll_or_rebuild(self):
+        self.assertEqual(self.run_apply()[0], 0)
+        self.calls.clear()
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 0)
+        self.assertEqual(report["configuration"], "UNCHANGED")
+        self.assertEqual(report["tpm_enrollment"], "UNCHANGED")
+        self.assertFalse(any(x[0] in ("systemd-cryptenroll", "dracut") for x in self.calls))
+
+    def test_wrong_passphrase_stops_before_enrollment_and_config(self):
+        self.fail_pass = True
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "command-failed:cryptsetup")
+        self.assertEqual(self.data["tokens"], {})
+        self.assertEqual(m.CT.read_bytes(), ORIGINAL)
+        self.assertFalse(m.DC.exists())
+
+    def test_failed_build_rolls_back_configuration_and_retries_existing_token(self):
+        self.fail_build = True
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "command-failed:dracut")
+        self.assertEqual(m.CT.read_bytes(), ORIGINAL)
+        self.assertFalse(m.DC.exists())
+        self.assertEqual(m.IMAGE.read_bytes(), b"ORIGINAL-IMAGE")
+        self.assertEqual(len(self.data["tokens"]), 1)
+        self.assertFalse(list(m.IMAGE.parent.glob(".hermes-tpm-*")))
+        self.fail_build = False
+        self.calls.clear()
+        self.assertEqual(self.run_apply()[0], 0)
+        self.assertFalse(any(x[0] == "systemd-cryptenroll" for x in self.calls))
+
+    def test_invalid_candidate_crypttab_leaves_live_image_unchanged(self):
+        self.bad_embedded = True
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "initramfs-crypttab-mismatch")
+        self.assertEqual(m.IMAGE.read_bytes(), b"ORIGINAL-IMAGE")
+        self.assertEqual(m.CT.read_bytes(), ORIGINAL)
+
+    def test_post_publish_failure_restores_original_image(self):
+        self.fail_post_image = True
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "post-publication-check-failed")
+        self.assertEqual(m.IMAGE.read_bytes(), b"ORIGINAL-IMAGE")
+        self.assertEqual(m.CT.read_bytes(), ORIGINAL)
+
+    def test_recovery_copy_tampering_refuses_retry(self):
+        self.assertEqual(self.run_apply()[0], 0)
+        (m.BACKUPS / "initramfs.before").write_bytes(b"changed")
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "recovery-copy-mismatch")
+
+    def test_unrelated_configuration_change_refuses_retry(self):
+        self.assertEqual(self.run_apply()[0], 0)
+        m.CT.write_bytes(m.CT.read_bytes() + b"# external change\n")
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "crypttab-changed-outside-operation")
+
+    def test_rollback_failure_is_reported(self):
+        self.fail_post_image = True
+        with patch.object(m, "restore_image", side_effect=OSError("synthetic")):
+            rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "setup-failed-and-rollback-incomplete:image")
+
+    def test_interrupted_build_restores_configuration(self):
+        original_command = self.command
+
+        def interrupted(args, **kwargs):
+            if args[0] == "dracut":
+                raise KeyboardInterrupt()
+            return original_command(args, **kwargs)
+
+        with patch.object(m, "command", interrupted):
+            rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "KeyboardInterrupt")
+        self.assertEqual(m.CT.read_bytes(), ORIGINAL)
+        self.assertEqual(m.IMAGE.read_bytes(), b"ORIGINAL-IMAGE")
+        self.assertFalse(m.DC.exists())
+
+    def test_baseline_permission_drift_refuses_retry(self):
+        self.assertEqual(self.run_apply()[0], 0)
+        m.BACKUPS.chmod(0o755)
+        rc, report = self.run_apply()
+        self.assertEqual(rc, 1)
+        self.assertEqual(report["error"], "unsafe-baseline-directory-mode")
+
+
+if __name__ == "__main__":
+    unittest.main()

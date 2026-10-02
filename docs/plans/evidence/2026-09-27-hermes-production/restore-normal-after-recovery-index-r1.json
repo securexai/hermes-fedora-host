@@ -1,0 +1,18 @@
+{
+  "application_restore": "NOT_RUN",
+  "checked_at_utc": "2026-09-29T22:21:51.929122+00:00",
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-normal-after-recovery-handoff-r1.json": "45c7558967102f512aad75c75190aaad6ef3dcb764bf2c00fdfb42f69839e29a",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-normal-after-recovery-prepared-r1.json": "b81a3a8cd87e31b43fe9d3aeaa1dfd7f8ae8d36de26f3bc6dd240290fa1c9b4b",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-password-reset-public-identities-r1.json": "6c748174a44c3f751b5145901c8c495b8c430ded68743cff617c0a3adcf2a274",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-recovery-auto-review-boundaries-r1.json": "5bad3195932f118c9e670fc76c4be8e2125b3a21d9261af9801f1653b2792cd4",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-rescue-public-package-context-r1.json": "486b91e87027617065017acd8716cd8e29d02c11db1e39ef43a670a9a65071e5"
+  },
+  "helper_sha256": {
+    ".toolbox/hermes-production-restore/hermes-restore-normal-public-audit-r1.py": "2102dc2ec92e2118086819c7117b3691fd2ba8dacf43f5e3adf707de1557b9ca",
+    ".toolbox/hermes-production-restore/hermes-restore-return-normal-r1.py": "1776e738f2321259fa271a0ea064a6d4e6b32ae0576fd0f3229bc2079ede4339"
+  },
+  "private_boot": "NOT_RUN",
+  "production_acceptance": "NOT_CLAIMED",
+  "status": "RECOVERY_COMPLETED_NORMAL_BOOT_PRIVATE_INPUT_PENDING"
+}

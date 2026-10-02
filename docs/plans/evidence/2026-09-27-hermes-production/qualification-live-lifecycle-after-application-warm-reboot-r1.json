@@ -1,0 +1,56 @@
+{
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T21:00:21.720403+00:00",
+  "configuration": "CURRENT_9_GIB_TWO_CPU_BASELINE_MATCH",
+  "facts": {
+    "boot_id": "24de6c28-b52d-4941-8c6c-d74e2602a722",
+    "checked_at_utc": "2026-09-29T21:00:58.174408+00:00",
+    "crypttab_sha256": "f1458594a23fe04484815095a915329d2224db2b31552f448dcec2129d019be3",
+    "initramfs_sha256": "2df447c5315532576332f46fa62922051ac4cdc12970d7279cc19e20055ef4ce",
+    "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+    "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+    "recovery_parameters_present": false,
+    "recovery_slot_preserved": true,
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "6.19.10-300.fc44.x86_64",
+    "ssh_exit": 0,
+    "status": "OBSERVED",
+    "system_state": "running",
+    "tpm_policy": "PCR7_SHA256_NO_PIN",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "label": "after-application-warm-reboot",
+  "named_checks": {
+    "status": {
+      "path": "/tmp/hermes-production-named-operation-r2/lifecycle-after-application-warm-reboot-status.json",
+      "sha256": "4f4d26482d7551794eb79706b69dcb07bd0cc3055cba5edf1ae87cb26bdcad09"
+    },
+    "verify": {
+      "path": "/tmp/hermes-production-named-operation-r2/lifecycle-after-application-warm-reboot-verify.json",
+      "sha256": "18aeae873a619872a62200c407cbcb60a887cba4747e7c236bffcd3c1b173f24"
+    }
+  },
+  "operation": "facts",
+  "provider_telegram_external_backup": "NOT_RUN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "root_facts_sha256": "2e4d012b953e64d6b0fbee05e47c6c2ecd3a48c83050575cea15a0266ccdf279",
+  "scope": "Approved exact-candidate synthetic qualification VM application boot lifecycle only",
+  "status": "OBSERVED",
+  "transaction": {
+    "candidate": "b158afd97686a96977d2eafa819f0d58adc7286d13f95b30ad9df9b77ad8cc40",
+    "id": "ab3fdeabf3574cf4a740ed83aaf84b5b",
+    "previous": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+    "protocol": 1,
+    "snapshot": "ab3fdeabf3574cf4a740ed83aaf84b5b",
+    "stage": "recovered",
+    "timings": {
+      "configuration": 1.5495534670008055,
+      "import": 0.22724797000046237,
+      "restart": 0.43249980700056767,
+      "stopped_backup": 3.5607258349991753,
+      "verification": 2.752482890000465
+    }
+  },
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "xml_baseline_sha256": "442d12df7ae3d01136d092042d501472fc1aef2e18a796fa2ba395d1121d0031"
+}

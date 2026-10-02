@@ -1,0 +1,20 @@
+{
+  "checked_at_utc": "2026-09-28T21:52:20.241503+00:00",
+  "state_reason": "shut off (shutdown)",
+  "uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "inactive_kernel": null,
+  "inactive_initrd": null,
+  "inactive_cmdline": null,
+  "boot_devices": [
+    {
+      "dev": "hd"
+    }
+  ],
+  "image_virtual_bytes": 189817421824,
+  "image_actual_bytes": 200704,
+  "data_bytes": 0,
+  "unallocated_zero": true,
+  "installation": "NOT_ACCEPTED",
+  "console_clients": "NONE",
+  "agent_start_or_restart": "NOT_RUN"
+}

@@ -1,0 +1,16 @@
+test_application_or_changed_attempt_refused_before_namespace (__main__.BootstrapTests.test_application_or_changed_attempt_refused_before_namespace) ... ok
+test_changed_receiver_refused_even_when_individual_file_hashes_match (__main__.BootstrapTests.test_changed_receiver_refused_even_when_individual_file_hashes_match) ... ok
+test_corrupt_source_and_unknown_path_refused (__main__.BootstrapTests.test_corrupt_source_and_unknown_path_refused) ... ok
+test_deferred_proofs_are_not_falsely_passed (__main__.BootstrapTests.test_deferred_proofs_are_not_falsely_passed) ... ok
+test_keep_exact_file_preserves_inode_and_modified_file_is_refused (__main__.BootstrapTests.test_keep_exact_file_preserves_inode_and_modified_file_is_refused) ... ok
+test_missing_interruption_proof_refused_before_namespace (__main__.BootstrapTests.test_missing_interruption_proof_refused_before_namespace) ... ok
+test_named_recovery_aborts_prepared_once_without_application_changes (__main__.BootstrapTests.test_named_recovery_aborts_prepared_once_without_application_changes) ... ok
+test_payload_matches_verified_receiver (__main__.BootstrapTests.test_payload_matches_verified_receiver) ... ok
+test_production_mode_refused (__main__.BootstrapTests.test_production_mode_refused) ... ok
+test_stable_recovery_is_noop (__main__.BootstrapTests.test_stable_recovery_is_noop) ... ok
+test_wrong_vm_recovery_and_stale_boot_refused_before_writes (__main__.BootstrapTests.test_wrong_vm_recovery_and_stale_boot_refused_before_writes) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.059s
+
+OK

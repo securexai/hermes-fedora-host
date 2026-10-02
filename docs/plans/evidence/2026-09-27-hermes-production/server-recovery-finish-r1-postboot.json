@@ -1,0 +1,81 @@
+{
+  "server_checked_at_utc": "2026-09-28T21:18:30.222311+00:00",
+  "boot_id": "12c3478f-14c2-45d3-9bb8-f1badbc3b3f6",
+  "recovery_parameters": [],
+  "active_swap": false,
+  "root_report": {
+    "before_boot_id": "e1f41858-8315-4fd6-8949-50ee69e75daa",
+    "kernel": "7.2.7-200.fc44.x86_64",
+    "luks_metadata": "UNCHANGED",
+    "normal_default": "PRESERVED",
+    "operator_passphrase_observation": "REQUIRED_SEPARATE_EVIDENCE",
+    "retained_entry_sha256": "6d24b0c8912a33480406275f60dad32528095a6ae2a9c5c8effec23ed14c6012",
+    "script_sha256": "85ca63a84613c2b22c453506dff9fb0fb531fcf23ec7a74a105e4ef3c5db4f96",
+    "status": "READY_FOR_NORMAL_REBOOT",
+    "subsequent_automatic_boot": "NOT_RUN",
+    "temporary_entry": "REMOVED",
+    "timestamp_utc": "2026-09-28T21:16:46.303468+00:00"
+  },
+  "root_report_sha256": "6db99de5e86e99812e68548bb5104d75b93fe6eaaad29d6e588c0695e7fe3eaa",
+  "checks": {
+    "kernel": {
+      "exit": 0,
+      "stdout": "7.2.7-200.fc44.x86_64",
+      "stderr": ""
+    },
+    "system_state": {
+      "exit": 0,
+      "stdout": "running",
+      "stderr": ""
+    },
+    "failed_units": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "secure_boot": {
+      "exit": 0,
+      "stdout": "SecureBoot enabled",
+      "stderr": ""
+    },
+    "selinux": {
+      "exit": 0,
+      "stdout": "Enforcing",
+      "stderr": ""
+    },
+    "cryptsetup_unit": {
+      "exit": 0,
+      "stdout": "LoadState=loaded\nActiveState=active\nSubState=exited",
+      "stderr": ""
+    },
+    "root_uuid": {
+      "exit": 0,
+      "stdout": "b69e7182-5b5c-4212-a024-968fec581441",
+      "stderr": ""
+    },
+    "var_uuid": {
+      "exit": 0,
+      "stdout": "15a5d3d9-8e39-4fb9-9631-323e7b038a65",
+      "stderr": ""
+    },
+    "hermes_uuid": {
+      "exit": 0,
+      "stdout": "eb129d35-1f52-4577-99e5-25daa322febc",
+      "stderr": ""
+    },
+    "boot_uuid": {
+      "exit": 0,
+      "stdout": "1947d07c-1b67-4341-b196-65dbdce0fddc",
+      "stderr": ""
+    }
+  },
+  "status": "PASS",
+  "scope": "BC-D4 automatic boot after physical passphrase recovery and exact temporary-entry cleanup; operator observation plus pinned SSH verification",
+  "operator_reply": "no LUKS pathphrase requested the server is online",
+  "operator_no_passphrase": "PASS",
+  "cleanup": "PASS",
+  "subsequent_automatic_boot": "PASS",
+  "failures": [],
+  "production_application_deployment": "NOT_RUN",
+  "full_preproduction_qualification": "INCOMPLETE"
+}

@@ -1,0 +1,61 @@
+{
+  "application_tpm_reboot_external_backup_provider_telegram_physical_git_delegation": "NOT_RUN_IN_AUDIT",
+  "archive_sha256": "d2f206c87e4adc6373969f2720dc68b3e9d2e67ecf3525d0e9eebb9026a1d074",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-30T00:15:46.734874+00:00",
+  "exact_next_action": "Operator privately completes the already staged restore installer-log review and shares only its final non-secret status; after that result, resume the same full goal",
+  "latest_public_receipt_observation": {
+    "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+    "checked_at_utc": "2026-09-30T00:15:08.916573+00:00",
+    "scope": "Pinned public receipt observation only; no private logs/input read",
+    "status": "INSTALLER_HYGIENE_REPORT_ABSENT"
+  },
+  "live_handle_wait": "NONE_CONFIRMED; private operator process state is unknown; no process is inferred from conversation or receipt absence and no live work is stopped",
+  "native_goal_observed_before_transition": "ACTIVE",
+  "objective": "Complete every mandatory Hermes preproduction gate with fresh exact-candidate evidence; preserve all authorization boundaries; no production acceptance",
+  "prior_evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-interruption-writer-prepared-r1.json": "281755f0260b6ca9acc950948248edc8903e4d185ba5899cb85ffe67b862fde5",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-installer-hygiene-prepared-r1.json": "dc3f56ca4c3172148f00a6844a11f60a1f42a59d76419de801fd64e2763b3af5",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-installer-hygiene-receipt-status-r1.json": "84ef74f59a0ca2db1eae44c4ce0c0b97307f5b7e9d5b4133d0829a7968a8690f",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-memory-9gib-live-index-r1.json": "81ca4dc5f50459e7701f138ba83c98c043fd3b5e1f0f24f3b52cc0098835d004"
+  },
+  "private_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/installer-hygiene-r1/run-private-installer-hygiene.sh",
+  "production_acceptance": "OPEN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "remaining_mandatory_gates": {
+    "G03": "Private saved-Kickstart/log hygiene review with actual recovery comparison; restore receipt absent and qualification needs its own identity-bound private observation",
+    "G04": "Actual current-candidate controlled interruption/missing mount and independently commissioned isolated encrypted application backup/restore/startup; local watcher preparation is not live proof",
+    "G05": "Private TPM re-enrollment and its boot/recovery proof; existing basic qualification boot evidence does not prove this gate",
+    "G06": "Separately authorized exact-candidate provider/Telegram/approval tests and protected inputs; no spending/messaging authority or inputs received"
+  },
+  "same_blocker_consecutive_goal_turns": 3,
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r3.py": "3222e0f6d0196e5bfcc0818dd659c2d63acc5f96dac70c2716ea51e9d4a49836",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r3.json": "40dcc4a2d93b40782556d2d814cdf8ab0f66992971954571875880fc071d1b54",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r3.log": "40dcc4a2d93b40782556d2d814cdf8ab0f66992971954571875880fc071d1b54"
+  },
+  "status": "BLOCKED_AUDIT_PASSED_NATIVE_TRANSITION_PENDING",
+  "turn_audit": [
+    {
+      "classification": "PROGRESS",
+      "result": "Actual restore 9 GiB RAM/boot evidence PASS; tested private installer hygiene helper staged; actual private review missing",
+      "turn": "Original user-triggered restore reboot/resumption"
+    },
+    {
+      "classification": "PROGRESS",
+      "result": "Eleven tested current-candidate interruption-watcher guards and publication evidence retained; actual private hygiene receipt still absent",
+      "turn": "First automatic continuation"
+    },
+    {
+      "classification": "NO_MANDATORY_GATE_PROGRESS",
+      "result": "Authoritative VM states/current 9 GiB XML/pin/boot/reserve and third pinned public receipt check reconfirm the same missing private review",
+      "turn": "Second automatic continuation/current audit"
+    }
+  ],
+  "vm_states": {
+    "hermes-production-qualification": "SHUT_OFF",
+    "hermes-production-restore": "RUNNING_APPROVED_9_GIB"
+  },
+  "why_no_independent_authorized_gate_action": "Current-candidate source gates and material local watcher preparation are finished. Restore private phase is pending; do not shut it down or start qualification without that phase completing. Remaining root/encryption/application commissioning needs operator-private input. Application backup endpoint is explicitly unconfigured with no Restic password; external backup/provider/Telegram actions remain separately gated.",
+  "workstation_free_bytes": 53706596352
+}

@@ -1,0 +1,15 @@
+{
+  "memory_gib_after": 9,
+  "memory_gib_before": 8,
+  "only_changed_fields": [
+    "memory",
+    "currentMemory"
+  ],
+  "proposal_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "qualification_state": "shut off",
+  "shutdown_define_start": "NOT_RUN",
+  "status": "PREVIEW_PASS",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53718507520
+}

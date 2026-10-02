@@ -1,0 +1,27 @@
+...F.F
+======================================================================
+FAIL: test_symlinked_privilege_directory_refuses (__main__.AuditInstallerTests.test_symlinked_privilege_directory_refuses)
+----------------------------------------------------------------------
+AssertionError: unsafe-root-path
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-validation/synthetic-stage/test-audit-installer-r1.py", line 86, in test_symlinked_privilege_directory_refuses
+    with self.assertRaisesRegex((RuntimeError, AssertionError), 'unsafe-path-kind'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "unsafe-path-kind" does not match "unsafe-root-path"
+
+======================================================================
+FAIL: test_wrong_vm_refuses_even_with_python_optimization (__main__.AuditInstallerTests.test_wrong_vm_refuses_even_with_python_optimization) (optimize=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-validation/synthetic-stage/test-audit-installer-r1.py", line 70, in test_wrong_vm_refuses_even_with_python_optimization
+    with self.assertRaisesRegex((RuntimeError, AssertionError), 'wrong-vm'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (<class 'RuntimeError'>, <class 'AssertionError'>) not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+FAILED (failures=2)

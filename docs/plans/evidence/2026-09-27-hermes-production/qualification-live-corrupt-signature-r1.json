@@ -1,0 +1,20 @@
+{
+  "apply": true,
+  "archive_sha256": "5f2ed35f05aab9abf18145fb5b0e76f1c1a0540c3ad7a8283d31b4aee4ead493",
+  "baseline_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "case": "corrupt-signature",
+  "checked_at_utc": "2026-09-29T20:51:52.211388+00:00",
+  "expected_refusal": "STOP: command-failed:ssh-keygen",
+  "operation": "upgrade",
+  "provider_telegram_external_backup": "NOT_RUN",
+  "raw_error_output": "NOT_RETAINED",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "refusal_matches": true,
+  "scope": "Actual bounded named upgrade on authorized synthetic fixture only; transaction/current/runtime postconditions require independent verification",
+  "ssh_exit": 1,
+  "started_at_utc": "2026-09-29T20:51:51.096305+00:00",
+  "status": "EXPECTED_REFUSAL_OBSERVED",
+  "stderr_bytes": 32,
+  "stdout_bytes": 0,
+  "test_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295"
+}

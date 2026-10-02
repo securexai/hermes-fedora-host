@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "method": "Markdown local file target existence; no remote URLs or fragment validation",
+  "checked": 52,
+  "documents": [
+    "README.md",
+    "docs/CONTRIBUTING.md",
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md",
+    "docs/plans/2026-09-27-hermes-production-bundle.md"
+  ],
+  "missing": []
+}

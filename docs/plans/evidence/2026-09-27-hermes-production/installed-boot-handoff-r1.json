@@ -1,0 +1,19 @@
+{
+  "status": "PRIVATE_UNLOCK_PENDING",
+  "scope": "Installed qualification VM normal-boot console handoff",
+  "checked_at_utc": "2026-09-28T22:41:39.736265+00:00",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "kernel_observed": "6.19.10-300.fc44.x86_64",
+  "secure_boot_kernel_message": "enabled",
+  "root_kernel_argument": "/dev/mapper/hermes_system-root",
+  "luks_uuid_observed": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "prompt": "Please enter passphrase for disk luks-bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "agent_guest_input_sent": false,
+  "agent_console_detached": true,
+  "private_unlock": "PENDING",
+  "administrator_password_state": "UNKNOWN",
+  "guest_agent_probe": "NOT_CONNECTED",
+  "read_only_audit": "PREPARED_NOT_RUN",
+  "audit_script_sha256": "ed58d3d4b58af13434bc405945121135a35360d823006df8a5c839d816620f4a",
+  "production_deployment": "NOT_RUN"
+}

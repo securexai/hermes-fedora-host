@@ -1,0 +1,23 @@
+{
+  "checks": {
+    "bash_syntax": "PASS",
+    "private_key_git_ignored": "PASS",
+    "ruff_check": "PASS",
+    "ruff_format_check": "PASS",
+    "shellcheck": "PASS",
+    "shfmt": "PASS"
+  },
+  "live_backup": "NOT_RUN",
+  "source_sha256": {
+    "create-header-backup.py": "db2ceeae744d230d2f7186a080bb8f83dd4a9e561df11e3aac3a03d9dae15ba7",
+    "fetch-and-verify.py": "11928a5ccb02f7a5012ee81a97ab50478125b0bce6cbc08ab91dd04835bccd31",
+    "test_header_backup.py": "51963c3629c7f9104277b1082c91c5158047c46b0f349292caed61c7bcbdcfe4"
+  },
+  "status": "PASS",
+  "tests": {
+    "command": "python3 -B .toolbox/hermes-production-recovery/test_header_backup.py .toolbox/hermes-production-recovery/create-header-backup.py -v",
+    "environment": "dev-infra-hermes",
+    "passed": 12,
+    "scope": "synthetic headers with actual OpenSSL CMS encryption/decryption; root ownership, cryptsetup, target identity and network fetch mocked"
+  }
+}

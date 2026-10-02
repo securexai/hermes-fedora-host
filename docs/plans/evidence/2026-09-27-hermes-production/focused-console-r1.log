@@ -1,0 +1,13 @@
+All checks passed!
+unformatted: File would be reformatted
+    --> tests/test_hermes_production.py:1542:35
+     |
+1541 |             for redirected in (0, 1, 2):
+     -                 with patch.object(self.fixture.os, "isatty", side_effect=lambda fd: fd != redirected):
+1542 +                 with patch.object(
+1543 +                     self.fixture.os, "isatty", side_effect=lambda fd: fd != redirected
+1544 +                 ):
+1545 |                     with self.assertRaisesRegex(Refused, "private-interactive-terminal-required"):
+     |
+
+1 file would be reformatted, 1 file already formatted

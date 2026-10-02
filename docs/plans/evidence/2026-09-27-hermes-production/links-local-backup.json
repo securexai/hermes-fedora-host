@@ -1,0 +1,242 @@
+{
+  "checks": [
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_DISPOSABLE_LAB.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_PRODUCTION_DEPLOYMENT.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_LOCAL_BACKUP_FIXTURE.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/hermes-fedora-server-install-guide.html"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/ENVIRONMENT.md"
+    },
+    {
+      "document": "README.md",
+      "target": "scripts/hermes/manual/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_UNATTENDED_DEPLOYMENT.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/VM_TESTING_GUIDE.md"
+    },
+    {
+      "document": "README.md",
+      "target": "vm/DEPLOYMENT_TASKS.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_INSTALLATION_VERIFICATION.md"
+    },
+    {
+      "document": "README.md",
+      "target": "PROVENANCE.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/migration-manifest.txt"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/CONTRIBUTING.md"
+    },
+    {
+      "document": "README.md",
+      "target": "AGENTS.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_DISPOSABLE_LAB.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/HERMES_PRODUCTION_DEPLOYMENT.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/plans/2026-09-27-hermes-production-bundle.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/plans/2026-09-21-hermes-repository-migration.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/plans/2026-09-20-hermes-fedora-host-toolbox-migration.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/plans/2026-09-26-incremental-repository-organization.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/ENVIRONMENT.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/CONTRIBUTING.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/ENVIRONMENT.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/hermes-fedora-server-install-guide.html"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/secure-hermes-installation-plan.html"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/setup-ssh-key-only.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/plans/2026-09-26-root-entrypoint-organization.md"
+    },
+    {
+      "document": "docs/HERMES_LOCAL_BACKUP_FIXTURE.md",
+      "target": "plans/2026-09-27-hermes-production-bundle.md"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "../HERMES_PRODUCTION_DEPLOYMENT.md"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/verification.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/offline-review-r1.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/lint-review-r1.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/bundle-review-r1.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/verification-review-r1.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/offline-review-r2-final.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/lint-review-r2-final.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/verification-review-r2.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/bundle-review-r2-final.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/focused-review-r2-accepted.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/offline-review-r2-accepted.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/lint-review-r2-accepted.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/verification-review-r2-accepted.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/bundle-review-r2-accepted.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/verification-goal-resumption.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/offline-goal-default-umask.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/offline-goal-initial.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/lint-goal.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/fixture-preview-goal.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/candidate-identity-goal.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "../HERMES_PRODUCTION_DEPLOYMENT.md#existing-server-preparation-and-private-commissioning"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/verification-fixture-setup.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/offline-fixture-setup.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/focused-fixture-setup.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/lint-fixture-setup.log"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/fixture-setup-previews.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "evidence/2026-09-27-hermes-production/bundle-fixture-setup.json"
+    },
+    {
+      "document": "docs/plans/2026-09-27-hermes-production-bundle.md",
+      "target": "../HERMES_LOCAL_BACKUP_FIXTURE.md"
+    }
+  ],
+  "local_targets": 59,
+  "status": "PASS"
+}

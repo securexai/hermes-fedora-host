@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "scope": "Console correction repository checks and nonsecret stopped-VM metadata; live UI acceptance pending",
+  "checked_at_utc": "2026-09-28T22:32:09.518215+00:00",
+  "branch": "codex/hermes-production-bundle",
+  "dirty_worktree": true,
+  "sources": {
+    "vm/hermes-production-fixture.py": "37b57834f3fe8a62d912641cbfe9d2368f7cd3fcd02e0cb80e4f6658affd3846",
+    "tests/test_hermes_production.py": "1d331de5fbda9cd697ad3a38681a3206919b8c3488dc09d08ccd605016256a3f",
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "03d57504fe9a746c45de630ef76eda9f1f3ee2c6e4c6f2acebb2919c99d0cd12"
+  },
+  "evidence": {
+    "focused-console-r1.log": "81a0ee7e0580fc2940f4b43a0bd88257f55874ace1004908a87c34b43255fc5f",
+    "focused-console-r2.log": "58b933c8dbebeb635362b949979ee3363c5a8019075b153e6f52c947e676fa02",
+    "offline-console-r1.log": "7e48c1057a299e93be872a39d4964dbbe599c23e2ba876ff721edcd39c5f5ef1",
+    "bundle-console-r1.json": "6e082ef305f759e7a66229a3c251efc492466b157073d87426d5c483d0806529",
+    "menu-report-disk-inspection-r1.json": "432b0ea0c6ded58fbe7ebcf96889593b6fb77445bca3fa9c91e94b0b90936a8b",
+    "menu-report-luks-magic-r1.json": "f4bba68002602577ad0008d0b5ca7a0700817ffd8f6e35c0d9a43356e353d355"
+  },
+  "operator_report": {
+    "installation": "worked",
+    "passphrase_requests": "about six",
+    "visualization": "incorrect",
+    "exact_validation_message": "NOT_PROVIDED",
+    "shutdown_attachment_sha256": "a71cad369a26ebea7f07c6b016da2f1537d75effb036a3fcdf9d6817fbf0b152"
+  },
+  "checks": {
+    "focused_production_tests": "48 PASS",
+    "ruff_check_format": "PASS after initial formatting correction",
+    "canonical_offline": "614 Python cases and 140 ShellSpec examples PASS",
+    "check_only_lint": "PASS",
+    "non_tty_console": "REFUSED as expected before guest access",
+    "local_link_targets": 126,
+    "package_signature_extraction_production_rejection": "PASS"
+  },
+  "candidate_artifact_sha256": "4bbe1e57f13880f94f64a758f29f737a50ba2503609d6a2c2f9fa664d2ee8ad8",
+  "live_console_visual_acceptance": "NOT_RUN",
+  "six_prompt_cause": "UNCONFIRMED",
+  "installed_guest_reinstall": "NOT_RUN",
+  "production_deployment": "NOT_RUN",
+  "provider_telegram": "NOT_RUN"
+}

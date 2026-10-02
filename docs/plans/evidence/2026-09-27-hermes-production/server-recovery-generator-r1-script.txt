@@ -1,0 +1,87 @@
+"""Exercise installed generator with synthetic files; never execute generated units."""
+
+import datetime
+import hashlib
+import json
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+
+GENERATOR = Path("/usr/lib/systemd/system-generators/systemd-cryptsetup-generator")
+UUID = "00000000-1111-2222-3333-444444444444"
+OTHER = "00000000-1111-2222-3333-555555555555"
+RECOVERY = "discard,key-slot=0,password-cache=no,headless=no"
+results = []
+with tempfile.TemporaryDirectory(prefix=".hermes-generator-test-", dir=Path.home()) as scratch:
+    root = Path(scratch)
+    for alias in [f"UUID={UUID}", f"/dev/disk/by-uuid/{UUID}"]:
+        for case in ["automatic", "recovery", "wrong-uuid", "host-ignores-initrd-option"]:
+            dest = root / str(len(results))
+            dest.mkdir()
+            for name in ["normal", "early", "late", "runtime"]:
+                (dest / name).mkdir()
+            crypttab = dest / "crypttab"
+            original = f"luks-{UUID} {alias} none discard,tpm2-device=auto\n"
+            crypttab.write_text(original)
+            cmdline = f"rd.luks.uuid=luks-{UUID}"
+            if case in ("recovery", "host-ignores-initrd-option"):
+                cmdline += f" rd.luks.options={UUID}={RECOVERY}"
+            if case == "wrong-uuid":
+                cmdline += f" rd.luks.options={OTHER}={RECOVERY}"
+            env = {
+                "PATH": "/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG": "C.UTF-8",
+                "SYSTEMD_CRYPTTAB": str(crypttab),
+                "RUNTIME_DIRECTORY": str(dest / "runtime"),
+                "SYSTEMD_PROC_CMDLINE": cmdline,
+                "SYSTEMD_IN_INITRD": "0" if case == "host-ignores-initrd-option" else "1",
+                "SYSTEMD_LOG_TARGET": "console",
+            }
+            run = subprocess.run(
+                [str(GENERATOR), str(dest / "normal"), str(dest / "early"), str(dest / "late")],
+                env=env,
+                text=True,
+                capture_output=True,
+                timeout=30,
+            )
+            assert run.returncode == 0, {"case": case, "stderr": run.stderr}
+            units = [
+                p
+                for p in (dest / "normal").glob("systemd-cryptsetup@*.service")
+                if UUID in p.read_text()
+            ]
+            assert len(units) == 1, {"case": case, "count": len(units), "stderr": run.stderr}
+            command = [
+                line for line in units[0].read_text().splitlines() if line.startswith("ExecStart=")
+            ]
+            assert len(command) == 1
+            if case == "recovery":
+                assert "tpm2-device" not in command[0] and RECOVERY in command[0], command
+            else:
+                assert "tpm2-device=auto" in command[0] and "key-slot=0" not in command[0], command
+            assert crypttab.read_text() == original
+            results.append(
+                {
+                    "case": case,
+                    "alias": alias.split(UUID)[0] + "<synthetic-uuid>",
+                    "status": "PASS",
+                    "generated_execstart": command[0],
+                    "stderr": run.stderr.strip(),
+                }
+            )
+print(
+    json.dumps(
+        {
+            "status": "PASS",
+            "scope": "Installed generator with synthetic UUID/crypttab/cmdline inputs; temporary unit output only, no unit activation or block-device operation",
+            "results": results,
+            "generator_sha256": hashlib.sha256(GENERATOR.read_bytes()).hexdigest(),
+            "euid": os.geteuid(),
+            "server_checked_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "hardware_recovery_boot": "NOT_RUN",
+        },
+        indent=2,
+        sort_keys=True,
+    )
+)

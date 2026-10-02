@@ -1,0 +1,173 @@
+{
+  "G03_G04_G05_G06": "OPEN",
+  "actual_preflight": {
+    "checks": {
+      "commissioning": "PASS",
+      "conflicts": "PASS",
+      "packages": "PASS",
+      "platform": "PASS",
+      "runtime_account": "PASS",
+      "ssh_policy": "PASS",
+      "storage_boot": "PASS"
+    },
+    "commissioning_identity": {
+      "boot_sha256": "47c8ac550322b1a8a54fd06df972033c62f9dc08f70167f88dfa924fd60e7314",
+      "host_sha256": "29c4f8c117c6111ffe9a23f3f942ace45385be8c75297b1a7611ee36ea1b4a2e",
+      "packages_sha256": "fdb1635a8f2216059831a8c77de105e5e3c0ca30b2d8dc223f070e6139f8c610"
+    },
+    "facts": {
+      "commissioning": "operator-attested-evidence-current",
+      "conflicts": "no-conflicts",
+      "packages": [
+        "container-selinux-2.247.0-1.fc44.noarch",
+        "cryptsetup-2.8.4-1.fc44.x86_64",
+        "dracut-108-6.fc44.x86_64",
+        "lvm2-2.03.38-2.fc44.x86_64",
+        "mokutil-0.7.2-3.fc44.x86_64",
+        "openssh-clients-10.2p1-7.fc44.x86_64",
+        "openssh-server-10.2p1-7.fc44.x86_64",
+        "passt-0^20260120.g386b5f5-1.fc44.x86_64",
+        "podman-5.8.7-1.fc44.x86_64",
+        "policycoreutils-3.10-1.fc44.x86_64",
+        "restic-0.18.1-3.fc44.x86_64",
+        "shadow-utils-4.19.0-6.fc44.x86_64",
+        "sudo-1.9.17-7.p2.fc44.x86_64",
+        "systemd-259.5-1.fc44.x86_64",
+        "tar-1.35-8.fc44.x86_64",
+        "tpm2-tools-5.7-5.fc44.x86_64",
+        "tpm2-tss-4.1.3-9.fc44.x86_64",
+        "util-linux-2.41.3-12.fc44.x86_64"
+      ],
+      "platform": "fedora44-x86_64-enforcing",
+      "runtime_account": "compatible",
+      "ssh_policy": "PAM-and-public-key-enabled",
+      "storage_boot": {
+        "boot_sha256": "47c8ac550322b1a8a54fd06df972033c62f9dc08f70167f88dfa924fd60e7314",
+        "device": "/dev/vda3"
+      }
+    },
+    "host_sha256": "29c4f8c117c6111ffe9a23f3f942ace45385be8c75297b1a7611ee36ea1b4a2e",
+    "status": "PASS"
+  },
+  "actual_status": {
+    "current": null,
+    "preflight": {
+      "checks": {
+        "commissioning": "PASS",
+        "conflicts": "PASS",
+        "packages": "PASS",
+        "platform": "PASS",
+        "runtime_account": "PASS",
+        "ssh_policy": "PASS",
+        "storage_boot": "PASS"
+      },
+      "commissioning_identity": {
+        "boot_sha256": "47c8ac550322b1a8a54fd06df972033c62f9dc08f70167f88dfa924fd60e7314",
+        "host_sha256": "29c4f8c117c6111ffe9a23f3f942ace45385be8c75297b1a7611ee36ea1b4a2e",
+        "packages_sha256": "fdb1635a8f2216059831a8c77de105e5e3c0ca30b2d8dc223f070e6139f8c610"
+      },
+      "facts": {
+        "commissioning": "operator-attested-evidence-current",
+        "conflicts": "no-conflicts",
+        "packages": [
+          "container-selinux-2.247.0-1.fc44.noarch",
+          "cryptsetup-2.8.4-1.fc44.x86_64",
+          "dracut-108-6.fc44.x86_64",
+          "lvm2-2.03.38-2.fc44.x86_64",
+          "mokutil-0.7.2-3.fc44.x86_64",
+          "openssh-clients-10.2p1-7.fc44.x86_64",
+          "openssh-server-10.2p1-7.fc44.x86_64",
+          "passt-0^20260120.g386b5f5-1.fc44.x86_64",
+          "podman-5.8.7-1.fc44.x86_64",
+          "policycoreutils-3.10-1.fc44.x86_64",
+          "restic-0.18.1-3.fc44.x86_64",
+          "shadow-utils-4.19.0-6.fc44.x86_64",
+          "sudo-1.9.17-7.p2.fc44.x86_64",
+          "systemd-259.5-1.fc44.x86_64",
+          "tar-1.35-8.fc44.x86_64",
+          "tpm2-tools-5.7-5.fc44.x86_64",
+          "tpm2-tss-4.1.3-9.fc44.x86_64",
+          "util-linux-2.41.3-12.fc44.x86_64"
+        ],
+        "platform": "fedora44-x86_64-enforcing",
+        "runtime_account": "compatible",
+        "ssh_policy": "PAM-and-public-key-enabled",
+        "storage_boot": {
+          "boot_sha256": "47c8ac550322b1a8a54fd06df972033c62f9dc08f70167f88dfa924fd60e7314",
+          "device": "/dev/vda3"
+        }
+      },
+      "host_sha256": "29c4f8c117c6111ffe9a23f3f942ace45385be8c75297b1a7611ee36ea1b4a2e",
+      "status": "PASS"
+    },
+    "status": "PASS",
+    "transaction": null
+  },
+  "application_backup_restore": "NOT_RUN",
+  "application_deployment": "NOT_RUN",
+  "checked_at_utc": "2026-09-30T16:29:31.347655+00:00",
+  "next_action": "Preserve empty restore fixture, cleanly power it off using its named boot operation, then start only the exact qualification VM behind both current 9 GiB/canary/reserve guards",
+  "operator_report": "USER_REPORTED_PASS_INDEPENDENTLY_VALIDATED",
+  "receipt": {
+    "application_deployment": "NOT_RUN",
+    "application_mode": "synthetic",
+    "application_state": "EMPTY",
+    "backup_service": "NOT_CONFIGURED_NOT_CONTACTED",
+    "bootstrap_sha256": "1d93bbc35f961b023ea1b75676290f0c5126871eed1c7606b0a549e9c3ffd996",
+    "commissioning": {
+      "boot_sha256": "47c8ac550322b1a8a54fd06df972033c62f9dc08f70167f88dfa924fd60e7314",
+      "evidence": {
+        "automatic_cold_start": "929416e557bbc13fc64fd69caaf46ba676cd96a1dc8c402b8e1e6d545019f8d3",
+        "automatic_reboot": "929416e557bbc13fc64fd69caaf46ba676cd96a1dc8c402b8e1e6d545019f8d3",
+        "console_access": "cdb8bbb179cb8049c2a5f4619bb7adfbb2e84c5d44a21e1777be871eb3f5a5e4",
+        "encrypted_offhost_recovery": "d62d64f93ab55d9eaed4a2abc4314a504e98c31cca8f180b9fd427a83407488d",
+        "firmware_power_restoration": "f70120e24abbc28aed36a38c5b14d9675975c401a2c52186495b7d1f40e01c2e",
+        "isolated_restore": "811dbed148c03ca28e38d59e286202c8500850aa163408c1eb7e31f7fb387103",
+        "recovery_then_automatic_boot": "cdb8bbb179cb8049c2a5f4619bb7adfbb2e84c5d44a21e1777be871eb3f5a5e4",
+        "recovery_unlock": "cdb8bbb179cb8049c2a5f4619bb7adfbb2e84c5d44a21e1777be871eb3f5a5e4"
+      },
+      "gates": {
+        "automatic_cold_start": "PASS",
+        "automatic_reboot": "PASS",
+        "console_access": "PASS",
+        "encrypted_offhost_recovery": "PASS",
+        "firmware_power_restoration": "NOT_RUN",
+        "isolated_restore": "NOT_RUN",
+        "recovery_then_automatic_boot": "PASS",
+        "recovery_unlock": "PASS"
+      },
+      "host_sha256": "29c4f8c117c6111ffe9a23f3f942ace45385be8c75297b1a7611ee36ea1b4a2e",
+      "packages_sha256": "fdb1635a8f2216059831a8c77de105e5e3c0ca30b2d8dc223f070e6139f8c610"
+    },
+    "preflight_checks": {
+      "commissioning": "PASS",
+      "conflicts": "PASS",
+      "packages": "PASS",
+      "platform": "PASS",
+      "runtime_account": "PASS",
+      "ssh_policy": "PASS",
+      "storage_boot": "PASS"
+    },
+    "provider_calls": "NOT_RUN",
+    "reboot": "NOT_RUN",
+    "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+    "scope": "Restore VM synthetic receiver and bounded dispatcher bootstrap",
+    "status": "PASS",
+    "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+  },
+  "scope": "Restore VM private synthetic dispatcher completion and independent deployment-key preflight/status only; application remains empty",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/application-r1/bootstrap.py": "1d93bbc35f961b023ea1b75676290f0c5126871eed1c7606b0a549e9c3ffd996",
+    ".toolbox/hermes-production-restore/application-r1/host-config.json": "cd898d849b3afa787c04d3802fcc6bd22e211b4f22c3a78477159cffdf948e5f",
+    ".toolbox/hermes-production-restore/application-r1/named-preflight-r6.json": "9f161f34f281fec9e41a3d76ec409bc7db051db619cf2fd75cc480f4837f2643",
+    ".toolbox/hermes-production-restore/application-r1/named-status-r7.json": "7dd145b4ed44fc6e90cf0d37364a7a8249bea70d045516efcf9f9ee08eb5eb5c",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r6.json": "ebe53538afbc35fb5193bbc11f6d5c7487a975d683a3d00ec1ac22ee94ab8df4",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r6.log": "ebe53538afbc35fb5193bbc11f6d5c7487a975d683a3d00ec1ac22ee94ab8df4",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r7.json": "e212fd642bd630b8e6bd7b9a2c6d9792db034d7ac7f8d1d92069bf0d1453fda1",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r7.log": "e212fd642bd630b8e6bd7b9a2c6d9792db034d7ac7f8d1d92069bf0d1453fda1",
+    ".toolbox/hermes-production-restore/application-r1/run-named-inspection.py": "78b25b2004eeebd5d06b4f380130e712aa20bb1bbb62841d0a6435d51b8a1377",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-application-prepared-r1.json": "c273fa79589ffbc3ce44584817bb9c2cbd906445163d819e7e3a97e6f3ae7ffc"
+  },
+  "status": "PASS",
+  "unconfigured_backup_endpoint": "NOT_CONTACTED"
+}

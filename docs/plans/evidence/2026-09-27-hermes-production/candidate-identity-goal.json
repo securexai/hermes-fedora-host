@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "artifact_sha256": "f43a98ade04eb94cbc927d9c69d79241c216e2c4eb65b7194e68ee4ca424f0a0",
+  "expected_artifact_sha256": "f43a98ade04eb94cbc927d9c69d79241c216e2c4eb65b7194e68ee4ca424f0a0",
+  "checked_files": 38,
+  "scope": "all recorded package bytes, executable modes, package inventory, image identities and current profile; no signing or deployment"
+}

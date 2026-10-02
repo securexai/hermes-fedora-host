@@ -1,0 +1,20 @@
+{
+  "checked_at_utc": "2026-09-29T20:11:22.435424+00:00",
+  "files": {
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/interrupt-prepared-r1.py": "509fd4a228769cf80260d4ef9e15040551a6b5f068555396a241e1643f7f7c5a",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/interrupt-prepared-r2.py": "a2c62d0df3add6f2d06d59b11c02afd7f45a5b56bb982b9de8c575e1ad221e2e",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/private-interruption-r2.py": "412e52c340454f7b82f30e44f3a1b7edc3e58453268fa294e64562aca2d1530f",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/run-private-interruption-r2.sh": "26267d832b57c566fd73d408929ad279db66287e3c8742bed6eeddd154149260",
+    ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/test_interrupt_prepared_r2.py": "88b59a45ec51db368ad2b737f2cb7c127fe60483f9a5b33b2d069673c3311912"
+  },
+  "operator_result": "STOP: unexpected-process-tree",
+  "r1_application": "NONE_SELECTED",
+  "r1_journal": "UNCHANGED_PREPARED",
+  "r1_result": "REFUSED_BEFORE_SIGNALS",
+  "r2_root_execution": "NOT_RUN",
+  "replacement_bootstrap_sha256": "31501c3893e12a4f308ed018ddc9959bb11f90b2c3fd329fdddd2265615712a0",
+  "replacement_candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "replacement_receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "scope": "Synthetic qualification only; no live application PASS claimed",
+  "status": "BLOCKED_AWAITING_PRIVATE_INTERRUPTION_R2"
+}

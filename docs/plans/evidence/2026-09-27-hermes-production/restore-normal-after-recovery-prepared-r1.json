@@ -1,0 +1,30 @@
+{
+  "checked_at_utc": "2026-09-29T22:20:31.462861+00:00",
+  "disk_actual_bytes": 3796832256,
+  "disk_check": {
+    "allocated-clusters": 57908,
+    "check-errors": 0,
+    "filename": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/system.qcow2",
+    "format": "qcow2",
+    "fragmented-clusters": 5845,
+    "image-end-offset": 3796893696,
+    "total-clusters": 2896384
+  },
+  "disk_format": "qcow2",
+  "disk_recreation_tpm_enrollment_provider_backup": "NOT_RUN",
+  "disk_virtual_bytes": 189817421824,
+  "guest_clean_unmount": "HERMES_RESTORE_CLEAN_UNMOUNT_PASS_OBSERVED",
+  "guest_poweroff": "GRACEFUL_POWEROFF_AND_AUTHORITATIVE_SHUTOFF",
+  "helper_sha256": "1776e738f2321259fa271a0ea064a6d4e6b32ae0576fd0f3229bc2079ede4339",
+  "memory_gib": 8,
+  "persistent_change": "ONLY_KNOWN_READONLY_DVD_EJECTED_ORIGINAL_BASELINE_EXACT",
+  "persistent_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "qualification_state": "shut off",
+  "restore_state": "shut off",
+  "scope": "Existing restore password recovery return to normal disk boot",
+  "status": "CLEAN_RESCUE_POWEROFF_EJECTION_BASELINE_AND_DISKS_VERIFIED",
+  "unrelated_sha256": "5419b4c0655822bb292a539bed080d6b0c97dc8710a9a7bb26c58d3e33fbb0e7",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53813805056
+}

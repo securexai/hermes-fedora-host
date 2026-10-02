@@ -1,0 +1,29 @@
+{
+  "checked_at_utc": "2026-09-29T01:33:35.274674+00:00",
+  "checked_files": {
+    "audit-installer-tests-r1.log": "ff074f9e659edf89dbe240d7a89dd3630b046303de238131cd845db8f0a9e875",
+    "audit-installer-tests-r2.log": "d8788fb668ab485288228ba408880db88f6bc1e91fecb5466716ec0bebc051a5",
+    "audit-sudoers-parse-r1.log": "bcfb56f896d82e26ae13fdf94beeed2f613bafb74b8d30f076ae1f699eacee38",
+    "install-audit-access-rescue-r2.py": "c6f260c14a8539d4a298b4345586bc415e03f8fa56748a05c4a78ef40b68293a",
+    "install-audit-console-r2.txt": "48230c1ffb0ceb64ad06d955715f5f08934f3673968954f66b8c7e90f7c9b07a",
+    "installed-guest-audit-r1.py": "ed58d3d4b58af13434bc405945121135a35360d823006df8a5c839d816620f4a",
+    "test-audit-installer-r2.py": "383c083887c086cdcb814801e8fb421b0f05d6efe50e00edfc3acd8097cce51e"
+  },
+  "covers": [
+    "wrong VM refusal with Python optimization",
+    "wrong mount and corrupted payload refusal before writes",
+    "symlinked privilege-directory refusal",
+    "conflicting existing audit preservation",
+    "no sudo grant on rule-validation failure",
+    "unchanged-rerun content/mode/inode preservation"
+  ],
+  "fixture_root_ownership": "MOCKED",
+  "guest_account_setup": "AWAITING_OPERATOR_COMPLETION",
+  "privileged_subprocesses": "MOCKED",
+  "scope": "Synthetic audit-installer rejection, partial-failure and idempotence checks; real temporary-file sudoers syntax parse only",
+  "status": "PASS",
+  "sudoers_syntax": "REAL_VISUDO_TEMPORARY_FILE",
+  "test_cases": 6,
+  "unchanged_candidate": "f23b0fa47c86c9e303743e5dc76ba78b11c2376cf225fcf663571c10c588ace8",
+  "vm_installation": "NOT_RUN"
+}

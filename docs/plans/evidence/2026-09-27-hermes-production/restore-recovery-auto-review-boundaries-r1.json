@@ -1,0 +1,16 @@
+{
+  "checked_at_utc": "2026-09-29T22:17:53.117355+00:00",
+  "first": {
+    "action": "Safe interactive console attachment before explicit detachment confirmation",
+    "reason": "May expose or interfere with private password input",
+    "resolution": "Operator explicitly confirmed detached and all password prompts finished; subsequent safe exclusive attachment approved"
+  },
+  "force_attach_or_private_read_workaround": "NOT_RUN",
+  "scope": "Restore private recovery safeguards",
+  "second": {
+    "action": "Bundled public probe including raw installed machine-id and administrator account metadata",
+    "reason": "Private machine-id/account metadata beyond specifically authorized public-key and bounded identity checks",
+    "resolution": "Removed both reads completely; no workaround/indirect read. Only public key and storage checks executed. Reported password status remains operator evidence; no independent account metadata claimed"
+  },
+  "status": "AUTO_REVIEW_REJECTIONS_PRESERVED_WITH_SAFE_ALTERNATIVES"
+}

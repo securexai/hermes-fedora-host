@@ -1,0 +1,13 @@
+test_changed_attempt_and_any_application_mutation_refused (__main__.InterruptionGuards.test_changed_attempt_and_any_application_mutation_refused) ... ok
+test_exact_pause_tree (__main__.InterruptionGuards.test_exact_pause_tree) ... ok
+test_exact_prepared_attempt (__main__.InterruptionGuards.test_exact_prepared_attempt) ... ok
+test_foreign_receiver_and_guard_refused (__main__.InterruptionGuards.test_foreign_receiver_and_guard_refused) ... ok
+test_nonprivate_invocation_refused_before_process_inspection_or_signals (__main__.InterruptionGuards.test_nonprivate_invocation_refused_before_process_inspection_or_signals) ... ok
+test_root_file_symlink_refused (__main__.InterruptionGuards.test_root_file_symlink_refused) ... ok
+test_root_without_terminal_refused (__main__.InterruptionGuards.test_root_without_terminal_refused) ... ok
+test_writing_or_foreign_pause_refused (__main__.InterruptionGuards.test_writing_or_foreign_pause_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK

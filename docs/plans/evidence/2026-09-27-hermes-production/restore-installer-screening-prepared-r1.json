@@ -1,0 +1,47 @@
+{
+  "G03": "OPEN",
+  "G04_G05_G06": "OPEN",
+  "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+  "checked_at_utc": "2026-09-30T02:50:57.877365+00:00",
+  "current_memory_gib": 9,
+  "diagnostic_limits": "Rule coverage and known recovery value only; no full manual review and no guarantee that arbitrary unknown secrets are absent",
+  "next_action": "Operator runs the staged private screening launcher and shares only status and counts; independently validate its public report before continuing",
+  "operator_current_pager": "STOPPED_CONFIRMED_BY_USER",
+  "privacy": "Existing recovery input solely in guest memory/subprocess stdin; all scanner input/output guest memory only; only fixed report fields/counts/hashes public; no raw log excerpts published",
+  "private_command": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/installer-screening-r1/run-private-screening.sh",
+  "production_acceptance": "OPEN",
+  "qualification_state": "SHUT_OFF",
+  "scanner": {
+    "config": "Default rules plus low-entropy installer password assignment rule; no repository configuration/allowlist; inline suppressions ignored",
+    "guest_network": "unshare --net required; guest execution still NOT_RUN",
+    "origin": "Existing dev-infra-hermes Toolbox installation",
+    "provider_validation": false,
+    "version": "1.1.2"
+  },
+  "scope": "Short private whole-log diagnostic; original manual-review attestation and mandatory gates preserved",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-screening-r1/betterleaks": "7730d2ebf7ad1a83c9eb934c5eb50663b61db8b63b95f3a7f8c10a5f707ded54",
+    ".toolbox/hermes-production-restore/installer-screening-r1/check-public-screening-r1.py": "5a3e6688a87147e8111943c45f28a2d1860ca814f68c26c25a165116d2861108",
+    ".toolbox/hermes-production-restore/installer-screening-r1/focused-validation-r1.log": "813fcad672780e2172b6d9bf68284d562ae409a8c8fbb6dd194780ee9510cecf",
+    ".toolbox/hermes-production-restore/installer-screening-r1/prior-hygiene-public-receipt-r1.log": "1701ae95e7221d4a9674a43dc12e8f5a25aa852811fca6482802e50b548d7acc",
+    ".toolbox/hermes-production-restore/installer-screening-r1/private-screening.py": "351dbc00aedd685a345aa149225d725065660d0aa93895ff3d26713a17a2c0a1",
+    ".toolbox/hermes-production-restore/installer-screening-r1/public-screening-observation-r1.json": "3a9f0a8fea62f9e9194c18ed1dca94d3e5e2a9ba4fa1b46e316443fae1e4d068",
+    ".toolbox/hermes-production-restore/installer-screening-r1/public-screening-observation-r1.log": "3a9f0a8fea62f9e9194c18ed1dca94d3e5e2a9ba4fa1b46e316443fae1e4d068",
+    ".toolbox/hermes-production-restore/installer-screening-r1/public-staging-r1.log": "a1f532c3ca825ec36ec84d6559e2cf9ef29b218add150b877d3bac04eb6ad817",
+    ".toolbox/hermes-production-restore/installer-screening-r1/run-private-screening.sh": "5ac4db89d63a130472e8c046eb754881123f340ecd12262f694ae3c5debd68a5",
+    ".toolbox/hermes-production-restore/installer-screening-r1/stage-public-inputs-r1.py": "630a4df00b67297a8782a83ac95d03a49dfeb8026b8564e3d2f9b302f5e952c7",
+    ".toolbox/hermes-production-restore/installer-screening-r1/test-private-screening.py": "09e3fa457f9929318092ec61a53f3eba50ba3c1d7e9d33c89c33e64be96d66bf"
+  },
+  "status": "PASS_PREPARATION_ONLY_PRIVATE_EXECUTION_NOT_RUN",
+  "validation": {
+    "actual_root_network_namespace_and_private_scan": "NOT_RUN",
+    "coverage": "Clean and empty inputs, simple assignments and inline ignore refusal, both ends and middle of large input, sealed executable/config, malformed/unredacted/missing controls, positions-only output, binary/encoding refusal, network isolation arguments, private TTY guard, every file, changed-log refusal, G03/manual-review non-promotion and matching rerun",
+    "focused_tests": 15,
+    "initial_failures_preserved_in_tool_transcript": [
+      "Public TOML quoting fixed before staging",
+      "Synthetic report fixture parent mode corrected before retained passing run"
+    ],
+    "status": "PASS_SYNTHETIC_AND_REAL_LOCAL_SCANNER_CONTROLS_ONLY"
+  },
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+}

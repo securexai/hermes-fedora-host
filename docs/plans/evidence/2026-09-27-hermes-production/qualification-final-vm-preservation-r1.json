@@ -1,0 +1,21 @@
+{
+  "backup_provider_telegram": "NOT_RUN",
+  "checked_at_utc": "2026-09-29T21:06:42.697597+00:00",
+  "no_guest_console_or_input_captured": true,
+  "persistent_xml": "CURRENT_APPROVED_BASELINES_UNCHANGED",
+  "qualification_memory_gib": 9,
+  "qualification_state": "shut off",
+  "qualification_unrelated_disk_preserved": true,
+  "qualification_unrelated_disk_sha256": "500cd343f8cbc50890577081f32c32105c725ccf10786ef5084f0599af7c750b",
+  "qualification_vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "restore_installation_and_canary_preservation": "NOT_YET_QUALIFIED",
+  "restore_memory_gib": 8,
+  "restore_state": "running",
+  "restore_vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "running_domains": [
+    "hermes-production-restore"
+  ],
+  "status": "PASS_WITHIN_VM_IDENTITY_LIFECYCLE_AND_QUALIFICATION_CANARY_PRESERVATION_SCOPE",
+  "vcpus_each": 2,
+  "workstation_free_bytes": 57557180416
+}

@@ -1,0 +1,38 @@
+{
+  "G03": "OPEN",
+  "next_action": "Prepare a private bounded review of every reproduced finding, without repeating recovery input or substituting targeted review for a full manual attestation",
+  "public_observation": {
+    "G03": "OPEN",
+    "receipt": {
+      "G03": "OPEN",
+      "application_tpm_reboot_backup_provider_telegram": "NOT_RUN",
+      "base_helper_sha256": "46df3a07be7e613de77adc1cef7559a8f50a0977a6d306d3983121f109aec31a",
+      "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+      "checked_at_utc": "2026-09-30T02:53:38.935675+00:00",
+      "config_sha256": "3558ca9db12e8f1410e332fcb708805fa3ded1fb36be243fd4252e1ee293ebe9",
+      "finding_location_count": 25,
+      "helper_sha256": "351dbc00aedd685a345aa149225d725065660d0aa93895ff3d26713a17a2c0a1",
+      "log_bytes": 6980807,
+      "log_file_count": 12,
+      "log_set_sha256": "d5c3ed0b4dca53744e181b88e3ec5b02eb4724fc21457d05955b120780dac2ac",
+      "logs_copied_modified_deleted": "NONE",
+      "luks_uuid": "3f6f7774-6672-40d9-afc7-d1bd03f9baa1",
+      "manual_full_review": "NOT_RUN",
+      "positive_control_count": 12,
+      "scanner_network": "ISOLATED_UNSHARE_NET_VALIDATION_DISABLED",
+      "scanner_sha256": "7730d2ebf7ad1a83c9eb934c5eb50663b61db8b63b95f3a7f8c10a5f707ded54",
+      "scope": "Private offline full-input diagnostic with known recovery-value comparison; not a full manual hygiene attestation",
+      "status": "POTENTIAL_FINDINGS_PRIVATE_REVIEW_REQUIRED",
+      "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+    },
+    "status": "VALIDATED_PUBLIC_SCREENING_DIAGNOSTIC"
+  },
+  "receipt_canonical_sha256": "11666a8764bba401bbd28b2474529af1030fae587b85dc0c2287bbc060565cbd",
+  "scope": "Actual restore VM whole-log screening only; no raw logs inspected by the agent",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-screening-r1/check-public-screening-r2.py": "97780c190afd0323338748f4cedfeb2cdee712a3152d0f2c22e665fd4a7c6d3d",
+    ".toolbox/hermes-production-restore/installer-screening-r1/public-screening-observation-r2.json": "0001177827d609fc8b0fbe4431023fe0410a3e4e2e48f921ea27d007c597927c",
+    ".toolbox/hermes-production-restore/installer-screening-r1/public-screening-observation-r2.log": "0001177827d609fc8b0fbe4431023fe0410a3e4e2e48f921ea27d007c597927c"
+  },
+  "status": "VALIDATED_LIVE_PRIVATE_SCREENING_FINDINGS_REQUIRE_REVIEW"
+}

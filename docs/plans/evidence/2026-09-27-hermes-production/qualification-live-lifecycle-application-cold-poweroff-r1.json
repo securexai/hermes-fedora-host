@@ -1,0 +1,76 @@
+{
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T21:00:55.402608+00:00",
+  "configuration": "CURRENT_9_GIB_TWO_CPU_BASELINE_MATCH",
+  "facts": {
+    "boot_id": "24de6c28-b52d-4941-8c6c-d74e2602a722",
+    "checked_at_utc": "2026-09-29T21:01:31.143411+00:00",
+    "crypttab_sha256": "f1458594a23fe04484815095a915329d2224db2b31552f448dcec2129d019be3",
+    "initramfs_sha256": "2df447c5315532576332f46fa62922051ac4cdc12970d7279cc19e20055ef4ce",
+    "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+    "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+    "recovery_parameters_present": false,
+    "recovery_slot_preserved": true,
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "6.19.10-300.fc44.x86_64",
+    "ssh_exit": 0,
+    "status": "OBSERVED",
+    "system_state": "running",
+    "tpm_policy": "PCR7_SHA256_NO_PIN",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "label": "application-cold-poweroff",
+  "named_checks": {
+    "status": {
+      "path": "/tmp/hermes-production-named-operation-r2/lifecycle-application-cold-poweroff-status.json",
+      "sha256": "d4b259d05b083c6455642127470b55e26545d2ca841d9de8ab6f1d9e6a3ea4cf"
+    },
+    "verify": {
+      "path": "/tmp/hermes-production-named-operation-r2/lifecycle-application-cold-poweroff-verify.json",
+      "sha256": "869eadff05716677a2b0534147959d322ed7ba20d827fc7a3f52cec962658529"
+    }
+  },
+  "operation": "poweroff",
+  "provider_telegram_external_backup": "NOT_RUN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "root_facts_sha256": "d24fe24479438926c89066751371c9478707cffca99309ffd6918666bfe16423",
+  "scope": "Approved exact-candidate synthetic qualification VM application boot lifecycle only",
+  "status": "REQUESTED",
+  "transaction": {
+    "candidate": "b158afd97686a96977d2eafa819f0d58adc7286d13f95b30ad9df9b77ad8cc40",
+    "id": "ab3fdeabf3574cf4a740ed83aaf84b5b",
+    "previous": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+    "protocol": 1,
+    "snapshot": "ab3fdeabf3574cf4a740ed83aaf84b5b",
+    "stage": "recovered",
+    "timings": {
+      "configuration": 1.5495534670008055,
+      "import": 0.22724797000046237,
+      "restart": 0.43249980700056767,
+      "stopped_backup": 3.5607258349991753,
+      "verification": 2.752482890000465
+    }
+  },
+  "transition": {
+    "action": "poweroff",
+    "before_boot_id": "24de6c28-b52d-4941-8c6c-d74e2602a722",
+    "boot_id": "24de6c28-b52d-4941-8c6c-d74e2602a722",
+    "checked_at_utc": "2026-09-29T21:01:32.163131+00:00",
+    "crypttab_sha256": "f1458594a23fe04484815095a915329d2224db2b31552f448dcec2129d019be3",
+    "initramfs_sha256": "2df447c5315532576332f46fa62922051ac4cdc12970d7279cc19e20055ef4ce",
+    "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+    "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+    "recovery_parameters_present": false,
+    "recovery_slot_preserved": true,
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "6.19.10-300.fc44.x86_64",
+    "ssh_exit": 255,
+    "status": "REQUESTED",
+    "system_state": "running",
+    "tpm_policy": "PCR7_SHA256_NO_PIN",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "transition_sha256": "dcb3c4ad48171ee4c45d328209fd43037387a7dc7f6eb6791bbc0c53281b7a1c",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "xml_baseline_sha256": "442d12df7ae3d01136d092042d501472fc1aef2e18a796fa2ba395d1121d0031"
+}

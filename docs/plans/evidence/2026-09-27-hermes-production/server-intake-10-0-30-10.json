@@ -1,0 +1,191 @@
+{
+  "facts": {
+    "arch": "x86_64",
+    "block_devices": {
+      "exit": 0,
+      "stdout": "{\n   \"blockdevices\": [\n      {\n         \"name\": \"sda\",\n         \"type\": \"disk\",\n         \"fstype\": null,\n         \"size\": 512110190592,\n         \"mountpoints\": [],\n         \"uuid\": null,\n         \"children\": [\n            {\n               \"name\": \"sda1\",\n               \"type\": \"part\",\n               \"fstype\": \"exfat\",\n               \"size\": 512075587584,\n               \"mountpoints\": [],\n               \"uuid\": \"4E21-0000\"\n            },{\n               \"name\": \"sda2\",\n               \"type\": \"part\",\n               \"fstype\": \"vfat\",\n               \"size\": 33554432,\n               \"mountpoints\": [],\n               \"uuid\": \"E039-AD96\"\n            }\n         ]\n      },{\n         \"name\": \"zram0\",\n         \"type\": \"disk\",\n         \"fstype\": \"swap\",\n         \"size\": 8589934592,\n         \"mountpoints\": [\n             \"[SWAP]\"\n         ],\n         \"uuid\": \"73aa3386-1c22-43f5-abac-480015167057\"\n      },{\n         \"name\": \"nvme0n1\",\n         \"type\": \"disk\",\n         \"fstype\": null,\n         \"size\": 512110190592,\n         \"mountpoints\": [],\n         \"uuid\": null,\n         \"children\": [\n            {\n               \"name\": \"nvme0n1p1\",\n               \"type\": \"part\",\n               \"fstype\": \"vfat\",\n               \"size\": 1072711680,\n               \"mountpoints\": [\n                   \"/boot/efi\"\n               ],\n               \"uuid\": \"4700-72C6\"\n            },{\n               \"name\": \"nvme0n1p2\",\n               \"type\": \"part\",\n               \"fstype\": \"ext4\",\n               \"size\": 2147483648,\n               \"mountpoints\": [\n                   \"/boot\"\n               ],\n               \"uuid\": \"1947d07c-1b67-4341-b196-65dbdce0fddc\"\n            },{\n               \"name\": \"nvme0n1p3\",\n               \"type\": \"part\",\n               \"fstype\": \"crypto_LUKS\",\n               \"size\": 508887564288,\n               \"mountpoints\": [],\n               \"uuid\": \"8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6\",\n               \"children\": [\n                  {\n                     \"name\": \"luks-8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6\",\n                     \"type\": \"crypt\",\n                     \"fstype\": \"LVM2_member\",\n                     \"size\": 508870787072,\n                     \"mountpoints\": [],\n                     \"uuid\": \"9etWUT-NIs9-QULb-rwVi-n2TF-a4tg-27f0Up\",\n                     \"children\": [\n                        {\n                           \"name\": \"hermes_system-root\",\n                           \"type\": \"lvm\",\n                           \"fstype\": \"xfs\",\n                           \"size\": 32212254720,\n                           \"mountpoints\": [\n                               \"/\"\n                           ],\n                           \"uuid\": \"b69e7182-5b5c-4212-a024-968fec581441\"\n                        },{\n                           \"name\": \"hermes_system-hermes\",\n                           \"type\": \"lvm\",\n                           \"fstype\": \"xfs\",\n                           \"size\": 85899345920,\n                           \"mountpoints\": [\n                               \"/home/hermes\"\n                           ],\n                           \"uuid\": \"eb129d35-1f52-4577-99e5-25daa322febc\"\n                        },{\n                           \"name\": \"hermes_system-var\",\n                           \"type\": \"lvm\",\n                           \"fstype\": \"xfs\",\n                           \"size\": 64424509440,\n                           \"mountpoints\": [\n                               \"/var\"\n                           ],\n                           \"uuid\": \"15a5d3d9-8e39-4fb9-9631-323e7b038a65\"\n                        }\n                     ]\n                  }\n               ]\n            }\n         ]\n      }\n   ]\n}"
+    },
+    "capacity": {
+      "/": {
+        "available_bytes": 29272743936,
+        "total_bytes": 32145145856
+      },
+      "/boot": {
+        "available_bytes": 1447931904,
+        "total_bytes": 2040373248
+      },
+      "/boot/efi": {
+        "available_bytes": 1062338560,
+        "total_bytes": 1070596096
+      },
+      "/home/hermes": {
+        "available_bytes": 84154880000,
+        "total_bytes": 85832237056
+      },
+      "/var": {
+        "available_bytes": 62688755712,
+        "total_bytes": 64357400576
+      }
+    },
+    "cgroup_v2": true,
+    "groups": {
+      "exit": 0,
+      "stdout": "aicowork wheel"
+    },
+    "hermes_account": {
+      "exit": 2,
+      "stdout": ""
+    },
+    "mounts": {
+      "/": {
+        "exit": 0,
+        "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/\",\n         \"source\": \"/dev/mapper/hermes_system-root\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"b69e7182-5b5c-4212-a024-968fec581441\"\n      }\n   ]\n}"
+      },
+      "/boot": {
+        "exit": 0,
+        "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/boot\",\n         \"source\": \"/dev/nvme0n1p2\",\n         \"fstype\": \"ext4\",\n         \"uuid\": \"1947d07c-1b67-4341-b196-65dbdce0fddc\"\n      }\n   ]\n}"
+      },
+      "/boot/efi": {
+        "exit": 0,
+        "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/boot/efi\",\n         \"source\": \"/dev/nvme0n1p1\",\n         \"fstype\": \"vfat\",\n         \"uuid\": \"4700-72C6\"\n      }\n   ]\n}"
+      },
+      "/home/hermes": {
+        "exit": 0,
+        "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/home/hermes\",\n         \"source\": \"/dev/mapper/hermes_system-hermes\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"eb129d35-1f52-4577-99e5-25daa322febc\"\n      }\n   ]\n}"
+      },
+      "/var": {
+        "exit": 0,
+        "stdout": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/var\",\n         \"source\": \"/dev/mapper/hermes_system-var\",\n         \"fstype\": \"xfs\",\n         \"uuid\": \"15a5d3d9-8e39-4fb9-9631-323e7b038a65\"\n      }\n   ]\n}"
+      }
+    },
+    "os": {
+      "ANSI_COLOR": "0;38;2;60;110;180",
+      "BUG_REPORT_URL": "https://bugzilla.redhat.com/",
+      "CPE_NAME": "cpe:/o:fedoraproject:fedora:44",
+      "DOCUMENTATION_URL": "https://docs.fedoraproject.org/en-US/fedora/f44/",
+      "HOME_URL": "https://fedoraproject.org/",
+      "ID": "fedora",
+      "LOGO": "fedora-logo-icon",
+      "NAME": "Fedora Linux",
+      "PRETTY_NAME": "Fedora Linux 44 (Server Edition)",
+      "REDHAT_BUGZILLA_PRODUCT": "Fedora",
+      "REDHAT_BUGZILLA_PRODUCT_VERSION": "44",
+      "REDHAT_SUPPORT_PRODUCT": "Fedora",
+      "REDHAT_SUPPORT_PRODUCT_VERSION": "44",
+      "RELEASE_TYPE": "stable",
+      "SUPPORT_END": "2027-05-19",
+      "SUPPORT_URL": "https://ask.fedoraproject.org/",
+      "VARIANT": "Server Edition",
+      "VARIANT_ID": "server",
+      "VERSION": "44 (Server Edition)",
+      "VERSION_CODENAME": "",
+      "VERSION_ID": "44"
+    },
+    "packages": {
+      "container-selinux": {
+        "exit": 0,
+        "stdout": "container-selinux-2.251.0-1.fc44.noarch"
+      },
+      "cryptsetup": {
+        "exit": 0,
+        "stdout": "cryptsetup-2.8.8-1.fc44.x86_64"
+      },
+      "dracut": {
+        "exit": 0,
+        "stdout": "dracut-108-8.fc44.x86_64"
+      },
+      "lvm2": {
+        "exit": 0,
+        "stdout": "lvm2-2.03.38-2.fc44.x86_64"
+      },
+      "mokutil": {
+        "exit": 0,
+        "stdout": "mokutil-0.7.2-3.fc44.x86_64"
+      },
+      "openssh-clients": {
+        "exit": 0,
+        "stdout": "openssh-clients-10.2p1-14.fc44.x86_64"
+      },
+      "openssh-server": {
+        "exit": 0,
+        "stdout": "openssh-server-10.2p1-14.fc44.x86_64"
+      },
+      "passt": {
+        "exit": 0,
+        "stdout": "passt-0^20260728.gf8df3f1-2.fc44.x86_64"
+      },
+      "podman": {
+        "exit": 0,
+        "stdout": "podman-5.8.7-1.fc44.x86_64"
+      },
+      "policycoreutils": {
+        "exit": 0,
+        "stdout": "policycoreutils-3.11-2.fc44.x86_64"
+      },
+      "python3": {
+        "exit": 0,
+        "stdout": "python3-3.14.7-1.fc44.x86_64"
+      },
+      "restic": {
+        "exit": 1,
+        "stdout": "package restic is not installed"
+      },
+      "shadow-utils": {
+        "exit": 0,
+        "stdout": "shadow-utils-4.19.0-7.fc44.x86_64"
+      },
+      "sudo": {
+        "exit": 0,
+        "stdout": "sudo-1.9.17-8.p2.fc44.x86_64"
+      },
+      "systemd": {
+        "exit": 0,
+        "stdout": "systemd-259.9-1.fc44.x86_64"
+      },
+      "tar": {
+        "exit": 0,
+        "stdout": "tar-1.35-9.fc44.x86_64"
+      },
+      "tpm2-tools": {
+        "exit": 0,
+        "stdout": "tpm2-tools-5.7-5.fc44.x86_64"
+      },
+      "tpm2-tss": {
+        "exit": 0,
+        "stdout": "tpm2-tss-4.1.3-9.fc44.x86_64"
+      },
+      "util-linux": {
+        "exit": 0,
+        "stdout": "util-linux-2.41.5-1.fc44.x86_64"
+      }
+    },
+    "ram_bytes": 14579171328,
+    "root_checks": "NOT_RUN: LVM segment type, LUKS2 keyslots/TPM enrollment, effective SSH policy, commissioning proofs",
+    "secure_boot": {
+      "exit": 0,
+      "stdout": "SecureBoot enabled"
+    },
+    "selinux": {
+      "exit": 0,
+      "stdout": "Enforcing"
+    },
+    "swap": {
+      "exit": 0,
+      "stdout": "/dev/zram0 partition 8589930496 0 100"
+    },
+    "tpm_resource_manager": true,
+    "uefi": true,
+    "user": {
+      "exit": 0,
+      "stdout": "aicowork"
+    },
+    "zram_defaults_package": {
+      "exit": 0,
+      "stdout": "zram-generator-defaults-1.2.1-5.fc44.noarch"
+    }
+  },
+  "host_fingerprint": "SHA256:CO3LNHAD0V3xvhZlQfSZK3phrdJ9TuENjSKxyvz/sd8",
+  "scope": "unprivileged read-only inventory; no server configuration changes",
+  "target": "aicowork@10.0.30.10",
+  "timestamp_utc": "2026-09-28T04:24:43.666071+00:00"
+}

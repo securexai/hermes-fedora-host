@@ -1,0 +1,66 @@
+{
+  "approval": "User selected Temporary local backup after bounded localhost proposal",
+  "base_commit": "3debb5ae22f91eb47c61daa30f1543d20456fec2",
+  "branch": "codex/hermes-production-bundle",
+  "candidate_artifact_sha256": "834adb288d5ebdec3a700426fdd054801be3dfa10010534731b8e32939851df8",
+  "candidate_evidence": "All 38 entries, modes and current profile reconstruct prior artifact identity. Prior signature roundtrip retained; no package source changed. Earlier whole-tree results are stale for the new fixture sources.",
+  "commands": {
+    "focused": "python3 -B -m unittest discover -s tests -p test_hermes_backup_fixture.py -v",
+    "lint": "UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never bash toolbox/run-check-only-lint.sh",
+    "live": "python3 -B scripts/hermes/backup-fixture.py test --apply",
+    "offline": "UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never bash toolbox/run-offline-checks.sh",
+    "stop": "python3 -B scripts/hermes/backup-fixture.py stop --apply (twice)"
+  },
+  "environment": "Host rootless Podman; Restic 0.19.1 and repository tests in existing dev-infra-hermes; no package install/image pull/provider calls",
+  "evidence_sha256": {
+    "focused-local-backup.log": "8736338c134cc96ed299e21c61f809c9507930aeb3e53221baf29254386e6eef",
+    "links-local-backup.json": "7f67f1606faf072aa4ac27475faf600ade5dec110efa525c6674544a6bd83de4",
+    "lint-local-backup.log": "8b117e75b13f23febfda4602a4fae6b73879e8b446b69575de87a7feb6114161",
+    "live-local-backup.json": "e0a4cd54f123ac5b038fc97184f4920d6158301d5c20cd2fc4753f247257fd1f",
+    "offline-local-backup.log": "6fc49ec661e82cc0d2e2a6d8a9b8fce0f81a6b5f8d0c3a218ec8c0309f2c45ef",
+    "package-inputs-local-backup.json": "e9d28c0f04b2f0851a923d569187216bb30e4a0964eb1096e17dcc38fa3bedf3"
+  },
+  "failure_retention": "First identity-validation attempt and absolute-path snapshot duplication are preserved; corrected final run passed without deleting their repository/evidence",
+  "publication_closure": "Mutable canonical record and this index publish after gates; targeted documentation, links, secret scan and manifest verification follow.",
+  "remaining": {
+    "G03_G06_and_overall_qualification": "INCOMPLETE",
+    "application_restore": "NOT_RUN",
+    "full_G04": "BLOCKED",
+    "independent_offhost_recovery": "NOT_VERIFIED"
+  },
+  "results": {
+    "canonical_offline": "PASS",
+    "check_only_lint": "PASS",
+    "focused_mocked_tests": 17,
+    "full_tree_secrets": "PASS",
+    "idempotent_stop_and_port_release": "PASS",
+    "local_link_targets_before_publication": 59,
+    "local_transport_backup_restore": "PASS",
+    "prior_evidence_integrity": "PASS",
+    "reviewed_python_tests": 608,
+    "ruff_check_and_format": "PASS",
+    "shellspec_examples": 140,
+    "source_aware_manifest": "PASS",
+    "unchanged_package_input_entries": 38,
+    "unchanged_rerun": "PASS"
+  },
+  "retention": "Container stopped; private keys and password, active encrypted repository, failed encrypted repository and synthetic restores retained under ignored task state. No Git delivery.",
+  "scope": "Approved temporary local synthetic backup fixture only; original preproduction goal remains incomplete",
+  "source_modes": {
+    "README.md": "0o644",
+    "docs/HERMES_LOCAL_BACKUP_FIXTURE.md": "0o644",
+    "docs/migration-adaptations.txt": "0o644",
+    "scripts/hermes/backup-fixture.py": "0o755",
+    "tests/offline_allowlist.txt": "0o644",
+    "tests/test_hermes_backup_fixture.py": "0o644"
+  },
+  "source_sha256": {
+    "README.md": "dd9fe5d2c27dc85f5467209da21b5216434893553ba746f1a1648e83d8236da8",
+    "docs/HERMES_LOCAL_BACKUP_FIXTURE.md": "1837f9023dd77a0e22eba8901878f03283a5fa3df2033e2ba24c072c584c5a56",
+    "docs/migration-adaptations.txt": "dda019598bb4d96635368c953e3736c3beafb612487ff17b744f28c6bd5436ce",
+    "scripts/hermes/backup-fixture.py": "5957ad3b84877e81f51e7191229598227bc15f97539624328786b772f9dfc3a4",
+    "tests/offline_allowlist.txt": "7ba78b20e44ff1e42f87f6c882e52f1d84bca2a0dfe4bdf25239485309755d7d",
+    "tests/test_hermes_backup_fixture.py": "56bab5aa47d85c3d7b534f7b859f40fa89cda49cadc865c5c9a1410782680daa"
+  },
+  "timestamp_utc": "2026-09-28T02:44:34.858297+00:00"
+}

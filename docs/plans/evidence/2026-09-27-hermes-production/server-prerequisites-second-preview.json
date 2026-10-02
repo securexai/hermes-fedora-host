@@ -1,0 +1,9 @@
+{
+  "status": "FAIL",
+  "stage": "unprivileged preview",
+  "reason": "Requested raw NAME,USED output returned all five swap columns; parser refused it",
+  "remote_script": "/home/aicowork/hermes-prerequisites-6176d488726606e2.py",
+  "sha256": "6176d488726606e258d13fe0d4810db351f153095ced0523864b6981d38ab244",
+  "configuration_changes": false,
+  "next": "Use inspected kernel /proc/swaps format and test its parser"
+}

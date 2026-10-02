@@ -1,0 +1,84 @@
+{
+  "artifact_sha256": "834adb288d5ebdec3a700426fdd054801be3dfa10010534731b8e32939851df8",
+  "authorization": "Setup proposal prepared; live-resource approval and off-host SFTP target still required; no secret contents inspected",
+  "base_commit": "3debb5ae22f91eb47c61daa30f1543d20456fec2",
+  "branch": "codex/hermes-production-bundle",
+  "closure": "Mutable record, this index and provenance manifest publish after gate execution; targeted documentation/evidence closure checks follow.",
+  "commands": {
+    "bundle": "python3 -B .toolbox/hermes-production-validation/setup-proposal/refresh-bundle.py",
+    "focused": "python3 -B -m unittest discover -s tests -p test_hermes_production.py",
+    "lint": "UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never bash toolbox/run-check-only-lint.sh",
+    "offline": "UV_NO_SYNC=1 UV_PYTHON_DOWNLOADS=never bash toolbox/run-offline-checks.sh",
+    "provenance": "python3 -B toolbox/generate-migration-manifest.py --verify"
+  },
+  "environment": "dev-infra-hermes Toolbox for tests/lint; host qemu:///session and signed media only for nonmutating two-role previews",
+  "evidence_sha256": {
+    "bundle-fixture-setup.json": "1949b926dfaf2e569ed8b67fcdfe6df4eb4b9202cad50eb3a40490f92d01f637",
+    "fixture-setup-previews.json": "1e52ce7ed08b32df4b27fca907235825efa0281d33548bc906053cb57863c8e7",
+    "focused-fixture-setup.log": "4cc1395f155c9516ff0bbe4c49a560e9bfce2298a008348e4b4a74e9f6a10abf",
+    "lint-fixture-setup.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "offline-fixture-setup.log": "a44a51841f586642fc76999619b445c9715646e73b92d6706a2e66a7ec860b97"
+  },
+  "preview_scope": "Fedora signed ISO, available guest metadata, current local domain inventory, free space and localhost bind probes; ephemeral nonoperational public key; no VM or operational key created",
+  "previous_index_sha256": {
+    "verification-goal-resumption.json": "a5168e325cfc41a1a117ca6a4cf1807072ae7a0f535a7e79313c27345705b90b",
+    "verification-review-r2-accepted.json": "124d673d1ca41e31fbe700f28cf5d94490d54e4b9bb8e439c731c7463fd444cb"
+  },
+  "remaining_gates": {
+    "application": "BLOCKED",
+    "boot": "BLOCKED",
+    "installation": "BLOCKED",
+    "physical_target": "outside preproduction goal; not waived for production",
+    "repeatability_live": "BLOCKED",
+    "restore": "BLOCKED",
+    "runtime": "BLOCKED"
+  },
+  "results": {
+    "check_only_lint": "PASS",
+    "focused_tests": 42,
+    "full_tree_secret_scan": "PASS",
+    "local_link_targets_before_publication": 59,
+    "new_commissioning_fragment": "PASS",
+    "offline": "PASS",
+    "offline_python_tests": 591,
+    "preserved_evidence_indices": "PASS",
+    "production_candidate_rejection": "PASS",
+    "retained_oci_bundle_roundtrip": "PASS",
+    "selected_ruff_check": "PASS",
+    "shellspec_examples": 140,
+    "source_aware_manifest": "PASS",
+    "two_role_read_only_previews": "PASS"
+  },
+  "source_sha256": {
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "9f915265c61c0d1a8697623afadf57a30f3400af64f5a502d1ab793f1e6c8dda",
+    "docs/migration-adaptations.txt": "6908d21326863636f706e5de9130337bec35d5a6b4bf62310420f1bfc740c6cd",
+    "scripts/hermes/production-launcher.py": "8f97c53b5831be995dfead260d678dda9a5e6359ef1ad3833e4aad7bc87f19c6",
+    "scripts/hermes/production/__init__.py": "933e4494220c9cb65088dece7d4e088a3f3ee8204a046cab78853ca00db21a64",
+    "scripts/hermes/production/bundle.py": "1655c23f60c6b3e5c00ce5de8d88ad03dffa7d4beb37c5d4d42a4d4d8cc1b92a",
+    "scripts/hermes/production/host.py": "5aa14d5a8ed3f9a0be1e8194f9c1169778109aa38391d0a310ec5318a28f118b",
+    "scripts/hermes/production/kickstart.py": "52fe55d6aa43f0af8207d5c0f5f51abf15a3e4b3aa3600c8982a3b56b764f895",
+    "scripts/hermes/production/operations.py": "41e867cd929ab350a255b9397f858729f42e4f37d21c77cd4251e47c24fdfc69",
+    "scripts/hermes/production/preflight.py": "1bf7daa0cb9d70c0b11c03fd5f049eb78f82b6d07c96e7e8c20a459160f5c5f1",
+    "scripts/hermes/production/primitives.py": "1a098525e83f4e1787657b45866d26a0b4559891a3c9c47074ab24df4604d804",
+    "scripts/hermes/production/receivers.py": "3bdde599640f1fcbabe6149c669c3dbd39780d9191aee0825eb1aa34c7ea73ca",
+    "scripts/hermes/production/restore.py": "ce01e114dc650e01f7f4d17edb186074f196abe7b09de562450bdf4d9f110bcf",
+    "scripts/hermes/production/runtime.py": "ec7c79d8be28a7dc59f43a0b8d3b4ed8eaba5dd39ecdb2916a9eab41ad693b6a",
+    "scripts/hermes/production/startup.py": "81488c88fce98e3acd1901844334d629607311e1c63714f089ebd2db31b6b417",
+    "scripts/hermes/production/writer_guard.py": "c3026823730d10d86d45ecaa2a55c99cad7b35094d09e8a34cf5e78946b554e3",
+    "scripts/hermes/productionctl.py": "2bdd94a815cbbb667c931d4beba2010e0c0809ae1cd3a57364b09e775f8cf056",
+    "scripts/hermes/profile-deploy.py": "d48eb1adddd179182219095e4993664dddb71afd52f240e8944bb624dfa7a3f4",
+    "tests/fixtures/production_process_driver.py": "e0498755ef53fb5426fe6494c7c14ff1e00b07079c23776c850b5e0173e91e6c",
+    "tests/offline_allowlist.txt": "64bad92e382a4f9cb20bbdad6a344bb9e3c921d85892191f89ef4108fe6f933b",
+    "tests/test_hermes_production.py": "404697cffb7396cbd962c738134bff38a26f410da807ba733afe3ec28ca62ae4",
+    "vm/hermes-production-fixture.py": "5646df594b4695a134397ed5f8c46dd278957dce998ac987ea8b0feeeb90bb71",
+    "vm/kickstart/fedora-server-production.ks.in": "380ecd79d74c6cd8b49613e5c2a54a78243a02b9e7d793b6e41e81ab746acfcd"
+  },
+  "superseded": {
+    "old_evidence": "retained byte-for-byte; valid only for its original input and scope",
+    "prior_candidate": "f43a98ade04eb94cbc927d9c69d79241c216e2c4eb65b7194e68ee4ca424f0a0",
+    "reason": "Packaged runbook changed; new fixture/test/allowlist coverage invalidates prior whole-repository gate results for current tree"
+  },
+  "timestamp_utc": "2026-09-28T02:05:52.993143+00:00",
+  "unit_scope": "All virtualization, signature commands, capacity and port probes in six new tests are mocked; temporary files and retained failure evidence are real",
+  "working_tree": "Existing dirty feature branch preserved; changes uncommitted; no Git delivery"
+}

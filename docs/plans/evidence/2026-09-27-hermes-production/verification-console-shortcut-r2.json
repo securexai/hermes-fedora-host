@@ -1,0 +1,35 @@
+{
+  "canonical_check_only_lint": "PASS",
+  "canonical_offline": "PASS",
+  "canonical_python_tests": 614,
+  "checked_at_utc": "2026-09-29T01:29:34.342655+00:00",
+  "direct_ruff_check_and_format": "PASS",
+  "evidence": {
+    "admin-rescue-boot-r1-failure.json": "735e23345af1ee6aeba4aba76d8d9c38d456d724ee4661f52b5acd9f24403d55",
+    "admin-rescue-boot-r1-verified.json": "d6a2b518b8580596340c4a3949716d28cbe9c4eb24b1f24cd9c6aa7c9487c9fe",
+    "admin-rescue-discovery-r1.json": "b59038ba7f48254b04298e1271aa2090ea8864ab8b9f56ea297c45df8d6ae5d0",
+    "admin-rescue-mounted-r1.json": "7b1fa3c323e7afc9f716f89d621ca370be6dd8cf7ab016f31f1bdad2fcbd5f02",
+    "admin-rescue-shutdown-r1.json": "2bd1f6c0ea66fb82de8fa7d9352eed2575019c44d2daa9b1ddbd6baabdf81596",
+    "bundle-console-shortcut-r1.json": "01da0da47b193e34266f8af1eb11b908e528d7a6b05f89737cff19b6c483c4b7",
+    "bundle-console-shortcut-r2.json": "9020dad6af5e146dd5a574b52c4bd920c477a975159c8c67b2d223ed59191d9e",
+    "bundle-console-shortcut-r3.json": "9de35981618859e69a3c6bbafcfd5cad2137ff1e77dcb563a2a6e2a910d1a774",
+    "console-shortcut-live-r1.json": "ee4c720d113878f9681b3177f0d63ba26bccbc3534097e4f751b26b0dcecd4aa",
+    "focused-console-shortcut-r1.log": "de4756830893db1db948d86ccf60ffd4cb9b206f8afac868ed1e1c6ce2ac48f8",
+    "lint-console-shortcut-r1.log": "afa20b27dacc9bf0aba3c1d265964c21e04ab42f6e39e2dd4769718ceded003a",
+    "offline-console-shortcut-r1.log": "c7cf815dfd7c970200b43023db3643caaeef2df2ec5a0745d2a54e20e209006d",
+    "publication-console-shortcut-r1.log": "d4b07467719b22c89d5384d3a6c60f5b3d28dfffefe169624dfbb63ad20c7af9",
+    "unlocked-access-r1.json": "496ecf1661ab2f0a5d79e6d254e21559b0e716dfc81dadbf82adea8f43236bae"
+  },
+  "extra_nonexistent_hook_invocation": "FAIL_RETAINED",
+  "focused_tests": 48,
+  "guest_recovery": "ROOT_MOUNT_AND_SSH_IDENTITY_VERIFIED_ADMIN_SETUP_PENDING",
+  "production_deployment": "NOT_RUN",
+  "scope": "Final console source and runbook, preserved offline evidence, live safe detach and mounted rescue root; installed-runtime audit pending",
+  "shellspec_examples": 140,
+  "sources": {
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "78576deb34b80e60140d294fb79821df7c98116fd1511c521712d9f5adb9e926",
+    "tests/test_hermes_production.py": "6f6592c6ac4875415c4065d2fb6be989426f9991ccdad3f393d64d8c357f88af",
+    "vm/hermes-production-fixture.py": "95d2ddcb08c35a06707ae2b98980065487c75db32b34a9d9130cefd9a95c6ada"
+  },
+  "status": "PASS"
+}

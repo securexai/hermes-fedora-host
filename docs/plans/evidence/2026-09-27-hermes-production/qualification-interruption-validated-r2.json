@@ -1,0 +1,33 @@
+{
+  "actual_lock_available": "CONFIRMED_BY_NAMED_VERIFY_UNFINISHED_TRANSACTION_REFUSAL",
+  "checked_at_utc": "2026-09-29T20:41:55.784756+00:00",
+  "helper_sha256": "a2c62d0df3add6f2d06d59b11c02afd7f45a5b56bb982b9de8c575e1ad221e2e",
+  "old_processes_absent": true,
+  "production_acceptance": "OPEN",
+  "receipt": {
+    "attempt": "96cbdc942a0442b8b3ff9912e498c3a6",
+    "boot_id": "d83a7442-a50f-4274-95da-0519e6779d15",
+    "candidate": "6b3e4e7f141a114e428b56f885c9b47b3231f4043aad93b4e66f3d1d3e916ed5",
+    "checked_at_utc": "2026-09-29T20:35:21.171457+00:00",
+    "current_application": null,
+    "guard_signals": "NONE",
+    "interruption_helper_revision": "r2",
+    "journal_sha256": "7c1ca8194834c2cba4ecb26dc990910fc30b7346a55c2446eb4d0c9d19f1b98b",
+    "journal_stage": "prepared",
+    "namespace_initialization": "NOT_RUN",
+    "operation_lock": "RETAINED_AND_ACQUIRED_AFTER_GUARD_EXIT",
+    "pause_executable_identity": "PINNED_RESOLVED_PACKAGE_EXECUTABLE",
+    "receiver": "bad84b56cd7d384e73ff60d3831f866ecff525f409e864699fd3989d8bf2c647",
+    "recovery": "NOT_RUN",
+    "scope": "Only exact first prepared synthetic dispatcher and verified adopted Podman pause terminated; no application recovery or deployment",
+    "status": "INTERRUPTED_SAFELY_JOURNAL_RETAINED",
+    "verified_pause_executable_sha256": "73fddf8122b7a92630bcffccf92c9742f64e49b2f61b067a431bc6280d7f618a",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "receipt_sha256": "69d918fc9044259f80988c3d6b8bc6c1f0020623b00e6e7ab436aceee8cb98e5",
+  "replacement_bootstrap": "NOT_RUN",
+  "replacement_runtime": "NOT_RUN",
+  "scope": "Independent pinned receipt/schema/hash/identity validation and actual bounded unfinished-journal refusal after acquiring the retained lock; no recovery or application deployment",
+  "status": "PASS_WITHIN_EXACT_FIRST_PREPARED_INTERRUPTION_SCOPE",
+  "unchanged_journal_sha256": "7c1ca8194834c2cba4ecb26dc990910fc30b7346a55c2446eb4d0c9d19f1b98b"
+}

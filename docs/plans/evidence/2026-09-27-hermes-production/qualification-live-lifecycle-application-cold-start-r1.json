@@ -1,0 +1,14 @@
+{
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T21:01:14.527696+00:00",
+  "configuration": "CURRENT_9_GIB_TWO_CPU_BASELINE_MATCH",
+  "domain_start_confirmed": true,
+  "label": "application-cold-start",
+  "operation": "start",
+  "provider_telegram_external_backup": "NOT_RUN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "scope": "Approved exact-candidate synthetic qualification VM application boot lifecycle only",
+  "status": "START_REQUESTED",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "xml_baseline_sha256": "442d12df7ae3d01136d092042d501472fc1aef2e18a796fa2ba395d1121d0031"
+}

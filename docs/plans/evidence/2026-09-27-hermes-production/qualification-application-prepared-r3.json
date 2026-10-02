@@ -1,0 +1,33 @@
+{
+  "bootstrap_sha256": "7d93bb6f2a13f00cc65afdf1d9e68d86e585fd91bccb07df12357374f2f5f60d",
+  "candidate": "6b3e4e7f141a114e428b56f885c9b47b3231f4043aad93b4e66f3d1d3e916ed5",
+  "checks": {
+    "canonical_python": 621,
+    "check_only_lint": "PASS",
+    "focused_python": 55,
+    "private_bootstrap_guards": 7,
+    "provenance": "PASS",
+    "secret_scan": "PASS",
+    "shellspec": 140
+  },
+  "evidence_sha256": {
+    "docs/plans/evidence/2026-09-27-hermes-production/bundle-sudo-check-r1.json": "d7cf23ea80d27c017c988c16760f00c366edd8667513c75c0dfac467c63ef6be",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-application-staged-r3.json": "74df8ab1133e24c2cbdf57bd43b33a1a523a04bddb596b5f513d523ba156585f",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-bootstrap-tests-r1.log": "ce719870d1ab8ffaa9f231ea7f6522712b6666e083b70152267d7fed6d77eb72",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-canonical-r1.log": "0646e3b02508d1feca59621b3902973993082f85147d6d7394f3f1837fc446e9",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-diagnostic-r1.json": "84681eb140ebe2669dd4775c5dccbf9f9389512bb116a2f68c01c45cd612a661",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-focused-r1.log": "e97543b6bc921abee2f2db899dd8b40296c86f1983cd6f478d8c2bec5499a538",
+    "docs/plans/evidence/2026-09-27-hermes-production/qualification-sudo-red-r1.log": "ae6e79705f57d5eca4ed75e9d4d02ef7385bb33b417ec69194996605b1fb00cb"
+  },
+  "prior_bootstrap_sources": ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/prepared-r2",
+  "reason": "Observed sudo denial listing exits 0; partial bootstrap receiver correction",
+  "root_retry": "NOT_RUN",
+  "runtime_deployment": "NOT_RUN",
+  "source_sha256": {
+    "docs/HERMES_PRODUCTION_DEPLOYMENT.md": "5e2117f7956b3d447a77d0f9e3f708aa06e604988eb843f1b01909b5343c7eab",
+    "scripts/hermes/production/host.py": "0cb67af1d32695b33395698a1c6b850386ba0d3d42202310747afc5ec3ac31b0",
+    "scripts/hermes/production/preflight.py": "642f5f66b13ed284c460fd8e215b1f3f95cb91d68bcff0326583c5247d256460",
+    "tests/test_hermes_production.py": "a583737bba4b866c38d69a62d28189b2ed62dcb12b60582f6342b2424fd6240b"
+  },
+  "status": "PREPARED_AWAITING_PRIVATE_SUDO"
+}

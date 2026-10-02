@@ -1,0 +1,21 @@
+{
+  "launcher_sha256": "9f86d79d7f85b19a6a0e4da3dfe273b3a941aab202a5281a6c18e5d8e79fe9cf",
+  "physical_console_readiness": "OPERATOR_CONFIRMED",
+  "preview": {
+    "before_boot_id": "87e1d398-7465-4586-a77d-4eaf03245b73",
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "reboot": "NOT_RUN",
+    "requires": "private sudo and ready physical console",
+    "status": "PREVIEW"
+  },
+  "reboot": "NOT_RUN",
+  "remote_path": "/home/aicowork/hermes-attended-reboot-3f403c355734681c.py",
+  "ruff_check": "PASS",
+  "ruff_format": "PASS",
+  "script_sha256": "3f403c355734681ce363e74d0d233fe9db70f51ddc5960f902d64a9a37d0ffa4",
+  "status": "PREPARED",
+  "test_scope": "isolated and mocked privileged commands; no real reboot",
+  "test_subcases": "changed boot ID, file hash, default kernel, default initramfs, one-shot selection rejected; matching state accepted",
+  "tests_passed": 8,
+  "tests_sha256": "d684eab1dd848f08f3d8600aa1ce5a92f465c6e0e65d523b5a7c0fbf01800454"
+}

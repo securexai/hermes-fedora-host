@@ -1,0 +1,38 @@
+{
+  "G03": "OPEN",
+  "G04_G05_G06": "OPEN",
+  "changes": "R2 reprompts without counting/echoing/persisting invalid input; exact words are case-insensitive; stop/EOF/interrupt cancel; public certificate identifiers distinguished from private credentials; no default or automatic clearance",
+  "checked_at_utc": "2026-09-30T03:17:28.045693+00:00",
+  "failure_basis": "Operator-reported ended session, matching source and reproduced synthetic regression; no R1 receipt found",
+  "guidance_source": "https://docs.kernel.org/admin-guide/module-signing.html#public-keys-in-the-kernel",
+  "next_action": "Run the R2 private viewer; respond only with exact classifications; share final status/counts; validate the R2 public receipt",
+  "preserved_r1_preparation_sha256": "103417d08f1ec91ff7a37938834e470c33f7e6225391894c232a552d7d858cdb",
+  "private_command": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/installer-findings-review-r2/run-private-findings-review.sh",
+  "production_acceptance": "OPEN",
+  "reported_failure": "classification-not-recognized-no-receipt",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/public-review-observation-r4.json": "817b581f4ed996f952cb0c278982d48a2b6aa6f8d28a7d074dc2941236d0670f",
+    ".toolbox/hermes-production-restore/installer-findings-review-r1/public-review-observation-r4.log": "817b581f4ed996f952cb0c278982d48a2b6aa6f8d28a7d074dc2941236d0670f",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/check-public-review.py": "d4e2171fd3ee17b6188f76c089612b1500e13876897541805e4a5a87c3a29af5",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/focused-green-r1.log": "edecde55c6deed9a44f005853dbf1b80bb79f5daf63b49aa23fa401cf6e41cc0",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/focused-red-r1.log": "9cd01905c83020503ee09e30112726919000172949e2297b1b8a811f4e570677",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/private-findings-review.py": "02b0c7bdd89c66fab98dee8bcb5c2ed662e7cf99aac59fcd92574ca7f8f8f504",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/public-review-observation-r1.json": "e2eda2abd279738722cc09eafb9131c67ddda32c52494945dee86375d82fe42c",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/public-review-observation-r1.log": "e2eda2abd279738722cc09eafb9131c67ddda32c52494945dee86375d82fe42c",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/public-staging-r1.log": "578f2576cdbf34d2ca4bee404c1f373994566d94db24d6266e9cba2c483dd21a",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/public-staging-r2.log": "ff5fab11be9be75a7646741dbabe75f8eec7f355122168f77f44261e82e59fcf",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/run-private-findings-review.sh": "892e7bad02eb94ee90700d91a22f5cb3e2e5bfe37a1b9307e94ac49120ffb083",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/stage-public-inputs-r1.py": "032e633d1979e3e6812cc31f2347d5f47e0efd64230b26b78c844ee2930b46aa",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/test-private-findings-review.py": "ee9a2eaee44fb20ab09de5769aee5a8d3e0752fd1b02cdc00838db5f9930dca3"
+  },
+  "status": "PASS_PROMPT_CORRECTION_PREPARATION_ONLY",
+  "validation": {
+    "focused_status": "PASS",
+    "focused_tests": 15,
+    "launcher_non_tty": "PASS_BEFORE_SSH",
+    "private_execution": "NOT_RUN",
+    "public_staging_rerun": "UNCHANGED",
+    "red_regression": "REPRODUCED_REPORTED_FAILURE",
+    "remaining_live_scope": "All 25 locations still require explicit private classification; no partial R1 answers imported"
+  }
+}

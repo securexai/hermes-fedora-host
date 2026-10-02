@@ -1,0 +1,19 @@
+{
+  "operation": "finish-recovery",
+  "result": {
+    "before_boot_id": "1bb5e067-397b-4283-babb-16e8bf492539",
+    "kernel": "6.19.10-300.fc44.x86_64",
+    "luks_metadata": "UNCHANGED",
+    "normal_default": "PRESERVED",
+    "operator_passphrase_observation": "REQUIRED_SEPARATE_EVIDENCE",
+    "retained_entry_sha256": "3529450194143424a286c5ccd397972d1edd127fda5fcaaf97444184e78ba399",
+    "script_sha256": "fd53880412f8baac0e9f81b808f5621aba04c0ee5e30a9c5788f55824373504b",
+    "ssh_exit": 255,
+    "status": "READY_FOR_NORMAL_REBOOT",
+    "subsequent_automatic_boot": "NOT_RUN",
+    "temporary_entry": "REMOVED",
+    "timestamp_utc": "2026-09-29T18:07:23.076435+00:00",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "workstation_observed_at_utc": "2026-09-29T18:06:51.916711+00:00"
+}

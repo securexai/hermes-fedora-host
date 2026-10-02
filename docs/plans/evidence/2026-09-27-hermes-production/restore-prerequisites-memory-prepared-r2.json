@@ -1,0 +1,32 @@
+{
+  "approval_for_9gib": "REQUIRED_NOT_RECEIVED",
+  "checked_at_utc": "2026-09-29T22:43:49.269454+00:00",
+  "current_approved_memory_gib": 8,
+  "current_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "guard_tests": {
+    "count": 4,
+    "one_vm_at_a_time": "EXPLICIT_RESTORE_RUNNING_QUALIFICATION_SHUTOFF_BEFORE_SSH",
+    "private_terminal_refusal": "PASS_BEFORE_SSH",
+    "shell_syntax": "PASS",
+    "status": "PASS"
+  },
+  "guest_prerequisite_remote_path": "/home/hermesadmin/hermes-restore-prerequisites-r1.py",
+  "guest_prerequisite_script_sha256": "28afee2c6ef712ba797f24976dc289090315de471867745496eaa7aed60001bb",
+  "guest_prerequisite_staging": "STAGED_PUBLIC_PREREQUISITE_HELPER_NOT_EXECUTED",
+  "guest_prerequisite_test_sha256": "5998d65a9b9057b2ad24969d3ac23ef7ffa577a9442d8229c011bcce0798105c",
+  "guest_root_execution_memory_change_package_update_service_change": "NOT_RUN",
+  "memory_xml_only_changed_fields": [
+    "memory",
+    "currentMemory"
+  ],
+  "next_after_approval": "Graceful restore shutdown; preserve stopped canary and exact current XML; define only proposed memory XML; start paused; private disk unlock; actual memory revalidation. Private sudo prerequisite helper may run independently within approved package/service preparation scope.",
+  "private_launcher": ".toolbox/hermes-production-restore/prerequisites-r1/run-private-prerequisites-r2.sh",
+  "private_launcher_sha256": "8dd3bc5665ed62e0556824ce9ab29a1fa112dc5edb640d3a0928524cd654f8db",
+  "proposal_path": ".toolbox/hermes-production-restore/prerequisites-r1/memory-9gib-proposal-r1.xml",
+  "proposal_xml_sha256": "596355a5a546025f5990ee88336a98cf015795f1785051a8b3a9a7eba981bfba",
+  "proposed_memory_gib": 9,
+  "status": "PROPOSAL_AND_PRIVATE_PREREQUISITE_PREPARED_NOT_APPLIED",
+  "vcpu": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53803077632
+}

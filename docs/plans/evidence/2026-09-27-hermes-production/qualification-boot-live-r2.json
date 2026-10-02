@@ -1,0 +1,41 @@
+{
+  "application_runtime": "NOT_RUN",
+  "evidence_sha256": {
+    "qualification-boot-20260929T180128332209-check-grant.json": "fecc2d7b1dfc8a56a9af0d7e3bc177e4c76bbcd87906e807f8939f80f9238eed",
+    "qualification-boot-20260929T180206343598-reboot.json": "8d0c1497642923001030dcb70d95e43ec5e6248f4642004078493671b8a1cd67",
+    "qualification-boot-20260929T180223995115-facts.json": "dc8b1edd62b3c8181f08d93f8ed3b9d605aeaffba069e0f66b3ef4a6b67b9afd",
+    "qualification-boot-20260929T180235916765-poweroff.json": "c1030b36a14da10ba9fc6c97a291cc28a1dd3b117758ce5f35353337350ead28",
+    "qualification-boot-20260929T180309469317-facts.json": "a99320b5c4d19e05e691308bcfb06514a7e6b63ba7a31f6a4d8283c75db32a27",
+    "qualification-boot-20260929T180328852986-recovery.json": "a3d04f759d89de6c6d2ea591b3ba4b0be9f0d1c6142da7c70b876bfd3ba78133",
+    "qualification-boot-20260929T180537428949-facts.json": "e7813557831dd77861ae8c4873e80d3d56934b84d67d097938eeccbe467e2a94",
+    "qualification-boot-20260929T180651916711-finish-recovery.json": "f696d9247047bbb73aea36a0c8a2f2006f02689ce2d4ae26d6d21897505d010f",
+    "qualification-boot-20260929T180704632856-facts.json": "8f850fca550a94b08bf38dba80193d2d3224bfbffbf0520e57a251573add484b"
+  },
+  "facts": {
+    "boot_id": "d0810d35-28f4-45fb-b144-ae352e69b6e4",
+    "checked_at_utc": "2026-09-29T18:07:42.669904+00:00",
+    "crypttab_sha256": "f1458594a23fe04484815095a915329d2224db2b31552f448dcec2129d019be3",
+    "initramfs_sha256": "2df447c5315532576332f46fa62922051ac4cdc12970d7279cc19e20055ef4ce",
+    "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+    "pcr7_sha256": "9488fb8f963f81eec491074b49485b126cb2a420618ac08fd3949e3772a1a5ea",
+    "recovery_parameters_present": false,
+    "recovery_slot_preserved": true,
+    "running_kernel": "6.19.10-300.fc44.x86_64",
+    "selected_kernel": "6.19.10-300.fc44.x86_64",
+    "ssh_exit": 0,
+    "status": "OBSERVED",
+    "system_state": "running",
+    "tpm_policy": "PCR7_SHA256_NO_PIN",
+    "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+  },
+  "final_boot_id": "d0810d35-28f4-45fb-b144-ae352e69b6e4",
+  "full_qualification": "INCOMPLETE",
+  "independent_exact_recovery_parameters": "PASS",
+  "operator_observation": "User reports vm unlocked during requested private recovery test",
+  "operator_passphrase_success": "USER_REPORTED",
+  "re_enrollment": "NOT_RUN",
+  "scope": "Qualification VM automatic warm/cold and passphrase recovery boot sequence only",
+  "status": "PASS",
+  "subsequent_automatic_boot": "PASS",
+  "temporary_entry_cleanup": "PASS"
+}

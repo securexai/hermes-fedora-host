@@ -1,0 +1,61 @@
+{
+  "G03": "OPEN",
+  "G04_G05_G06": "OPEN",
+  "checked_at_utc": "2026-09-30T14:15:30.655609+00:00",
+  "full_hygiene_observation": {
+    "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+    "checked_at_utc": "2026-09-30T14:15:39.245710+00:00",
+    "scope": "Pinned public receipt observation only; no private logs/input read",
+    "status": "INSTALLER_HYGIENE_REPORT_ABSENT"
+  },
+  "next_action": "Complete the separate private review of all retained restore installer logs using the already staged full-review launcher; do not repeat the completed targeted viewer. Then independently validate its public receipt. Qualification hygiene and other live gates remain separate.",
+  "prior_classification_blocker": "RESOLVED_ALL_25_REVIEWED_CLEAR",
+  "private_full_review_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/installer-hygiene-r1/run-private-installer-hygiene.sh",
+  "production_acceptance": "OPEN",
+  "public_observation": {
+    "G03": "OPEN",
+    "receipt": {
+      "G03": "OPEN",
+      "application_tpm_reboot_backup_provider_telegram": "NOT_RUN",
+      "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+      "checked_at_utc": "2026-09-30T14:10:39.645393+00:00",
+      "clear_group_count": 25,
+      "finding_location_count": 25,
+      "group_count": 25,
+      "helper_sha256": "02b0c7bdd89c66fab98dee8bcb5c2ed662e7cf99aac59fcd92574ca7f8f8f504",
+      "log_set_sha256": "d5c3ed0b4dca53744e181b88e3ec5b02eb4724fc21457d05955b120780dac2ac",
+      "logs_copied_modified_deleted": "NONE",
+      "luks_uuid": "3f6f7774-6672-40d9-afc7-d1bd03f9baa1",
+      "manual_full_review": "NOT_RUN",
+      "prior_screening_canonical_sha256": "11666a8764bba401bbd28b2474529af1030fae587b85dc0c2287bbc060565cbd",
+      "recovery_comparison": "REUSED_SAME_SCREENED_LOG_SET",
+      "reviewed_group_count": 25,
+      "reviewed_location_count": 25,
+      "scope": "Private classification of all reproduced automated findings; not a full manual log review",
+      "screening_helper_sha256": "351dbc00aedd685a345aa149225d725065660d0aa93895ff3d26713a17a2c0a1",
+      "secret_group_count": 0,
+      "status": "TARGETED_FINDINGS_CLASSIFIED_CLEAR",
+      "uncertain_group_count": 0,
+      "unreviewed_location_count": 0,
+      "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec"
+    },
+    "status": "VALIDATED_PUBLIC_TARGETED_REVIEW"
+  },
+  "receipt_canonical_sha256": "3ae3b271a029cf9f8c521057f7af8b3fb1987cfd3886c07309096850a052059c",
+  "scope": "Restore VM: independently validated public receipt for all reproduced automated findings; full manual hygiene review remains unperformed",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/check-public-review.py": "d4e2171fd3ee17b6188f76c089612b1500e13876897541805e4a5a87c3a29af5",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/full-hygiene-observation-r1.json": "1985bf3b070998509fde9e67512291e6758a4ae11221f09427957c07e89a8a62",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/full-hygiene-observation-r1.log": "1985bf3b070998509fde9e67512291e6758a4ae11221f09427957c07e89a8a62",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/private-findings-review.py": "02b0c7bdd89c66fab98dee8bcb5c2ed662e7cf99aac59fcd92574ca7f8f8f504",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/public-review-observation-r5.json": "40d97ed417a8e785bb67d50b23cec324f56f7b72a1286b3b3cb738326ff7e2d7",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/public-review-observation-r5.log": "40d97ed417a8e785bb67d50b23cec324f56f7b72a1286b3b3cb738326ff7e2d7",
+    ".toolbox/hermes-production-restore/installer-findings-review-r2/run-private-findings-review.sh": "892e7bad02eb94ee90700d91a22f5cb3e2e5bfe37a1b9307e94ac49120ffb083",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r5.py": "b2705c35a49994a70579d5a8aa80b5b4dea55c9cefd5873d9e960c1c49fa7679",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-hygiene.py": "46df3a07be7e613de77adc1cef7559a8f50a0977a6d306d3983121f109aec31a",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/run-private-installer-hygiene.sh": "317011f19345a41430cf225e069f4ef448801f22282b0582b13e27c6992193b6",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-installer-findings-review-prompt-r2.json": "7f296959d3998d9d19029f076859c2276c5d64d3ab0f2d773fe30628334f20e5",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-installer-screening-live-r1.json": "c67e7c8736fee197e0e32cdbca5c507cec1d850902df11af5fb0f727d950c930"
+  },
+  "status": "PASS_LIVE_TARGETED_FINDINGS_CLASSIFICATION_ONLY"
+}

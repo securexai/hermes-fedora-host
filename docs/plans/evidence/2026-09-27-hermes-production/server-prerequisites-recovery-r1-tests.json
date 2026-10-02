@@ -1,0 +1,60 @@
+{
+  "results": [
+    {
+      "command": [
+        "ruff",
+        "check",
+        ".toolbox/hermes-production-access/prepare-server.py",
+        ".toolbox/hermes-production-access/test_prepare_server.py"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "stderr": "",
+      "stdout": "All checks passed!\n"
+    },
+    {
+      "command": [
+        "ruff",
+        "format",
+        "--check",
+        ".toolbox/hermes-production-access/prepare-server.py",
+        ".toolbox/hermes-production-access/test_prepare_server.py"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "stderr": "",
+      "stdout": "2 files already formatted\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        ".toolbox/hermes-production-access/test_prepare_server.py",
+        "docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-script.txt",
+        "RecoveryTests.test_recovers_reported_failed_setup_and_initialized_device",
+        "-v"
+      ],
+      "exit": 1,
+      "expected_exit": 1,
+      "stderr": "test_recovers_reported_failed_setup_and_initialized_device (__main__.RecoveryTests.test_recovers_reported_failed_setup_and_initialized_device) ... ERROR\n\n======================================================================\nERROR: test_recovers_reported_failed_setup_and_initialized_device (__main__.RecoveryTests.test_recovers_reported_failed_setup_and_initialized_device)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-access/test_prepare_server.py\", line 136, in test_recovers_reported_failed_setup_and_initialized_device\n    report = m.disable_zram()\n  File \"<string>\", line 21, in disable_zram\n  File \"docs/plans/evidence/2026-09-27-hermes-production/server-prerequisites-script.txt\", line 25, in require\n    raise RuntimeError(reason)\nRuntimeError: zram-setup-state-needs-review\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (errors=1)\n",
+      "stdout": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        ".toolbox/hermes-production-access/test_prepare_server.py",
+        ".toolbox/hermes-production-access/prepare-server.py",
+        "-v"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "stderr": "test_active_swap_is_off_before_service_stop (__main__.RecoveryTests.test_active_swap_is_off_before_service_stop) ... ok\ntest_active_unit_after_stop_does_not_reset (__main__.RecoveryTests.test_active_unit_after_stop_does_not_reset) ... ok\ntest_backing_device_refused_before_mutation (__main__.RecoveryTests.test_backing_device_refused_before_mutation) ... ok\ntest_busy_reset_failure_is_not_suppressed (__main__.RecoveryTests.test_busy_reset_failure_is_not_suppressed) ... ok\ntest_failed_swapoff_does_not_reset (__main__.RecoveryTests.test_failed_swapoff_does_not_reset) ... ok\ntest_holders_refused_before_mutation (__main__.RecoveryTests.test_holders_refused_before_mutation) ... ok\ntest_ineffective_reset_does_not_clear_failure (__main__.RecoveryTests.test_ineffective_reset_does_not_clear_failure) ... ok\ntest_kernel_swap_units_and_empty_input (__main__.RecoveryTests.test_kernel_swap_units_and_empty_input) ... ok\ntest_mount_refused_before_mutation (__main__.RecoveryTests.test_mount_refused_before_mutation) ... ok\ntest_partitions_refused_before_mutation (__main__.RecoveryTests.test_partitions_refused_before_mutation) ... ok\ntest_recovers_reported_failed_setup_and_initialized_device (__main__.RecoveryTests.test_recovers_reported_failed_setup_and_initialized_device) ... ok\ntest_regenerated_unit_fails_verification (__main__.RecoveryTests.test_regenerated_unit_fails_verification) ... ok\ntest_regular_device_refused (__main__.RecoveryTests.test_regular_device_refused) ... ok\ntest_rerun_does_not_repeat_swapoff_or_device_reset (__main__.RecoveryTests.test_rerun_does_not_repeat_swapoff_or_device_reset) ... ok\ntest_stop_error_is_not_suppressed (__main__.RecoveryTests.test_stop_error_is_not_suppressed) ... ok\ntest_wrong_device_identity_refused (__main__.RecoveryTests.test_wrong_device_identity_refused) ... ok\ntest_wrong_target_refused_before_device_operations (__main__.RecoveryTests.test_wrong_target_refused_before_device_operations) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 0.013s\n\nOK\n",
+      "stdout": ""
+    }
+  ],
+  "scope": "isolated recovery regressions; privileged services and device commands mocked",
+  "script_sha256": "8ae885cbe870e5795e8e4049cefb47ead1fbf74a4bffcbc5a66d283cc998a59f",
+  "status": "PASS",
+  "tests_sha256": "c237c92f44129bef0d2c335d27ed2c48fd375ed233192425f11d261bf5b694f3"
+}

@@ -1,0 +1,52 @@
+Check-only lint: 105 shell files, 54 Markdown files
+
+=== shellcheck (certifier reviewed set, default severity) ===
+PASS: shellcheck (certifier reviewed set, default severity)
+
+=== shellcheck (whole working tree, repository error-only gate) ===
+PASS: shellcheck (whole working tree, repository error-only gate)
+
+=== shfmt check-only ===
+PASS: shfmt check-only
+
+=== markdownlint (check-only) ===
+markdownlint-cli2........................................................Passed
+PASS: markdownlint (check-only)
+
+=== pre-commit check-merge-conflict ===
+check for merge conflicts................................................Passed
+PASS: pre-commit check-merge-conflict
+
+=== pre-commit check-case-conflict ===
+check for case conflicts.................................................Passed
+PASS: pre-commit check-case-conflict
+
+=== pre-commit check-executables-have-shebangs ===
+check that executables have shebangs.....................................Passed
+PASS: pre-commit check-executables-have-shebangs
+
+=== pre-commit check-shebang-scripts-are-executable ===
+check that scripts with shebangs are executable..........................Passed
+PASS: pre-commit check-shebang-scripts-are-executable
+
+=== pre-commit check-added-large-files ===
+check for added large files..............................................Passed
+PASS: pre-commit check-added-large-files
+
+=== pre-commit check-yaml ===
+check yaml...............................................................Passed
+PASS: pre-commit check-yaml
+
+=== pre-commit check-json ===
+check json...............................................................Passed
+PASS: pre-commit check-json
+
+=== pre-commit check-toml ===
+check toml...............................................................Passed
+PASS: pre-commit check-toml
+
+=== pre-commit detect-private-key ===
+detect private key.......................................................Passed
+PASS: pre-commit detect-private-key
+
+PASS: check-only lint gate passed

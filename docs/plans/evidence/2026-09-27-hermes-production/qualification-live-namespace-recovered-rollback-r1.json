@@ -1,0 +1,13 @@
+{
+  "apply": true,
+  "checked_at_utc": "2026-09-29T20:56:50.914846+00:00",
+  "exit": 0,
+  "operation": "rollback",
+  "report": {
+    "release": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+    "status": "UNCHANGED"
+  },
+  "scope": "Named productionctl operation on pinned synthetic qualification VM using dedicated deployment key",
+  "ssh_policy": "BatchMode, IdentitiesOnly, IdentityAgent=none, strict pinned known-hosts, ForwardAgent=no, no password or keyboard-interactive fallback",
+  "started_at_utc": "2026-09-29T20:56:47.243866+00:00"
+}

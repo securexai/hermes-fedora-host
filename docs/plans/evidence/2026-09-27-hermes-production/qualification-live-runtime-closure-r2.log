@@ -1,0 +1,8 @@
+PASS: final canonical handoff, 199 local targets and 8 Markdown fragments exist
+markdownlint-cli2........................................................Passed
+Secret scan: 767 tracked/untracked files (validation disabled)
+PASS: scanner positive control reported a redacted github-pat finding for the synthetic file
+PASS: no findings in the full reviewed working tree
+wrote docs/migration-manifest.txt: 766 rows, 13 excluded candidates, payload fingerprint 495cf2fb06f843a54d132f563438799f2fab411d10cdeecc82e47d88550c4c72
+VERIFY MODE: source-aware (source, toolbox and companion checkouts present)
+PASS: docs/migration-manifest.txt matches the working tree (766 rows)

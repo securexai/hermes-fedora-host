@@ -1,0 +1,23 @@
+{
+  "status": "CORRECTIONS_REQUIRED",
+  "checked_at_utc": "2026-09-28T22:04:02.153266+00:00",
+  "scope": "Fresh prompt and read-only DVD package gap; no private input supplied",
+  "fresh_passphrase_prompt": "PASS_OBSERVED",
+  "private_input_sent": false,
+  "installer_version": "44.30-2.fc44",
+  "package_diagnostics": [
+    "No match for argument: restic",
+    "No match for argument: tpm2-tools"
+  ],
+  "configuration_review": "PASS: only the expected read-only DVD source was added to persistent XML; all other configuration unchanged",
+  "shutdown_action": "Guest-shell systemctl poweroff; console observed Power down",
+  "current_state": "shut off (unknown)",
+  "earlier_inspection": "Expected shutdown reason assertion failed; actual shut off (unknown) was inspected before proceeding",
+  "system_disk": "STILL_UNALLOCATED_ZERO",
+  "canary": "UNCHANGED",
+  "planned_corrections": [
+    "Mandatory restic and tpm2-tools installation from only the Fedora44 release repository with RPM signature validation and bounded timeout",
+    "Require inst.nosave=all_ks before private input; post-script removal is too early for generated Kickstarts"
+  ],
+  "installation": "NOT_RUN"
+}

@@ -1,0 +1,14 @@
+{
+  "anaconda_redraw": "OBSERVED",
+  "checked_at_utc": "2026-09-29T01:22:01.816268+00:00",
+  "ctrl_q_detach_exit_code": 0,
+  "guest_lifecycle_changed": false,
+  "helper_sha256": "95d2ddcb08c35a06707ae2b98980065487c75db32b34a9d9130cefd9a95c6ada",
+  "installed_system_recovery": "PENDING_PRIVATE_UNLOCK",
+  "private_input_captured": false,
+  "safe_attachment": true,
+  "scope": "Existing qualification VM private console attachment and Ctrl+Q detachment only",
+  "status": "PASS",
+  "virsh_greeting": "Escape character is ^q (Ctrl + q)",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

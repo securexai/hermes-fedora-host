@@ -1,0 +1,12 @@
+{
+  "certificate_sha256": "2e801bc6061a4587b2630a102943c2b36caf7bb0545fce278d46d1d0292aca5f",
+  "ciphertext_sha256": "df86ddc62312059f511572252b41eb84d08d835a79ec0756e9228b21453e73d9",
+  "disk_restore": "NOT_RUN",
+  "header_bytes": 16777216,
+  "header_sha256": "7e1dd8c12f5301aa441c04d6d728a4073b59a494fb841fc4e046a0fbb7c3b56c",
+  "luks_uuid": "bf1c622c-17c0-4d2b-9b51-82c345ad1de7",
+  "passphrase_test": "NOT_RUN",
+  "scope": "encrypted off-host LUKS header copy and in-memory verification",
+  "status": "PASS",
+  "tpm_enrollment": "NOT_RUN"
+}

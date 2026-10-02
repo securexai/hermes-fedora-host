@@ -1,0 +1,27 @@
+{
+  "boot_recovery": "NOT_RUN",
+  "bundle_artifact_sha256": "8f0fa9ad305f1ad01e0534ec657f2da3bfaedc1e43b03649f3b6bd11e19ad5ed",
+  "evidence_sha256": {
+    "bundle-before-final-ssh-check.json": "059f09a4051d949954eed5ed44b24f4425c5919458ba0997fabbc653f7725754",
+    "bundle-final.json": "f5b3556a126362aad7322f130926f3dd49320ee73343760af59ccd2ee9051c20",
+    "bundle-initial.json": "9ac951725803a4084903b257158c9dd81289d11e66573d8e05de126971f420f2",
+    "fixture-preview.json": "5add5a4a42f43fe93499538aec6562b97170e569450e9fd07c4998f07f46a023",
+    "lint-before-final-ssh-check.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "lint-final.log": "27e20c2b28f8b13e484519f3c9d44ec36ca9ea99c6d9f44d407bce66bf5afe32",
+    "lint-initial.log": "419648e89fbb8316fa718ad418d9471e9af618c4c3af7135a242f431be0008be",
+    "media.json": "37a01cd664b3fc74dc6190bfa36baeebec02e7a4b072cbf5f6eb3f9b37ef91e9",
+    "offline-before-final-ssh-check.log": "45c4d673b869995eefe97a8ca4f2c94eae87aa1be7727dc7029e069bc88fe803",
+    "offline-final.log": "b2ab846ca6f1640821c0833148fc2d4df4e39a2be969a85e34693b015fda14e5",
+    "offline-initial.log": "f762a6addcb3adc4e7eb4a4ca98e7069ced6312a635b4a915dd67925086d692f"
+  },
+  "focused_production_tests": 25,
+  "kickstart_parser": "F44 / pykickstart 3.78",
+  "live_installation": "BLOCKED",
+  "live_provider_telegram": "BLOCKED",
+  "physical_target": "BLOCKED",
+  "python_tests": 574,
+  "repository": "PASS",
+  "runtime": "NOT_RUN",
+  "schema": 1,
+  "shellspec_examples": 140
+}

@@ -1,0 +1,66 @@
+{
+  "application_deployment": "NOT_RUN_BY_AGENT",
+  "blocker": "APPLICATION_BOOTSTRAP_REPORT_ABSENT",
+  "checked_at_utc": "2026-09-30T16:25:35.755987+00:00",
+  "deployment_key_connections": "NOT_RUN",
+  "impasse": "Prepared dispatcher requires operator-private sudo. Keep qualification stopped during restore private setup. Remaining live gate prerequisites require private setup/recovery inputs or separately authorized credentials; offline checks cannot substitute.",
+  "named_application_preflight": "NOT_RUN",
+  "native_goal_status": "blocked",
+  "native_goal_updated_at": 1790785504,
+  "next_agent_command": "python3 -I -B .toolbox/hermes-production-restore/application-r1/run-named-inspection.py preflight r6",
+  "next_operator_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/application-r1/run-private-bootstrap.sh",
+  "private_job_state": "NOT_INFERRED_FROM_RECEIPT_ABSENCE; no live owned automated operation handle remains",
+  "production_acceptance": "NOT_CLAIMED",
+  "public_observations": [
+    {
+      "application_dispatcher": "NOT_VALIDATED",
+      "observed_at_utc": "2026-09-30T16:20:40.330031+00:00",
+      "status": "APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+    },
+    {
+      "application_dispatcher": "NOT_VALIDATED",
+      "observed_at_utc": "2026-09-30T16:22:34.241901+00:00",
+      "status": "APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+    },
+    {
+      "application_dispatcher": "NOT_VALIDATED",
+      "observed_at_utc": "2026-09-30T16:24:14.362527+00:00",
+      "status": "APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+    },
+    {
+      "application_dispatcher": "NOT_VALIDATED",
+      "observed_at_utc": "2026-09-30T16:25:10.395031+00:00",
+      "status": "APPLICATION_BOOTSTRAP_REPORT_ABSENT"
+    }
+  ],
+  "remaining_gates": [
+    "G03 qualification private installer-log hygiene",
+    "G04 current-candidate interruption/missing mount and isolated encrypted application backup/restore/startup",
+    "G05 TPM re-enrollment",
+    "G06 separately authorized private exact-candidate provider/Telegram/approval tests"
+  ],
+  "resumed_goal_turn_count": 3,
+  "scope": "Third consecutive resumed goal-turn audit of missing restore application bootstrap completion; objective remains incomplete",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/application-r1/named-preflight-r3.json": "a5ada44aa065542ff1e5c8bdac4b8cec06660cd196999e596675f5094c001501",
+    ".toolbox/hermes-production-restore/application-r1/named-preflight-r4.json": "fb2bbe6d46d2855d7644f7f6594c80d83d1a520744c94ec5ea0828449d172189",
+    ".toolbox/hermes-production-restore/application-r1/named-preflight-r5.json": "74ff9203a09691968f0d1c1289b0425bb4dfaa778df1d98cc1d0719f08d76b7e",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r2.json": "e5698313e97ad45990a1d8612e4bf196da871cf1a710485f33ef307712cbd175",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r2.log": "e5698313e97ad45990a1d8612e4bf196da871cf1a710485f33ef307712cbd175",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r3.json": "1eb59546380fa28d55bb0ab906962f4a452226f301e0ea67c77f6653eb8e36df",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r3.log": "1eb59546380fa28d55bb0ab906962f4a452226f301e0ea67c77f6653eb8e36df",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r4.json": "669f3a988c6f73aca5605621892560bb1fef0cb21e2e24dc5735abb48705e886",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r4.log": "669f3a988c6f73aca5605621892560bb1fef0cb21e2e24dc5735abb48705e886",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r5.json": "d04de2e13a0391c16072365fcb782ba12121fc6fe3bc589c5e5240a04894bdb9",
+    ".toolbox/hermes-production-restore/application-r1/public-receipt-r5.log": "d04de2e13a0391c16072365fcb782ba12121fc6fe3bc589c5e5240a04894bdb9",
+    ".toolbox/hermes-production-restore/application-r1/run-named-inspection.py": "78b25b2004eeebd5d06b4f380130e712aa20bb1bbb62841d0a6435d51b8a1377",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-application-prepared-r1.json": "c273fa79589ffbc3ce44584817bb9c2cbd906445163d819e7e3a97e6f3ae7ffc",
+    "docs/plans/evidence/2026-09-27-hermes-production/restore-application-receipt-status-r1.json": "8bf6284f308e22a581f090dfd3ae467bfc4fc84f0342bcd41f4ca9aa3c13cc9c"
+  },
+  "status": "BLOCKED",
+  "turn_classification": [
+    "PROGRESS_CLIENT_PREPARATION_WITH_PRIVATE_BLOCKER_REVALIDATED",
+    "NO_PROGRESS_SAME_PRIVATE_BLOCKER_REVALIDATED",
+    "NO_PROGRESS_SAME_PRIVATE_BLOCKER_REVALIDATED"
+  ]
+}

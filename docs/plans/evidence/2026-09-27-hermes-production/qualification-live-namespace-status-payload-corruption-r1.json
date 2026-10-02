@@ -1,0 +1,76 @@
+{
+  "apply": false,
+  "checked_at_utc": "2026-09-29T20:58:32.135158+00:00",
+  "exit": 0,
+  "operation": "status",
+  "report": {
+    "current": {
+      "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+      "release": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295"
+    },
+    "preflight": {
+      "checks": {
+        "commissioning": "PASS",
+        "conflicts": "PASS",
+        "packages": "PASS",
+        "platform": "PASS",
+        "runtime_account": "PASS",
+        "ssh_policy": "PASS",
+        "storage_boot": "PASS"
+      },
+      "commissioning_identity": {
+        "boot_sha256": "23be275faa10978e7f66085a803cd0eaadef8bb20aea01ae81765ffaaddcfad4",
+        "host_sha256": "39c0a8d4d5ae6f2b87d319ae654efe30b576f334fe07d89a8c538d897e1260bb",
+        "packages_sha256": "fdb1635a8f2216059831a8c77de105e5e3c0ca30b2d8dc223f070e6139f8c610"
+      },
+      "facts": {
+        "commissioning": "operator-attested-evidence-current",
+        "conflicts": "no-conflicts",
+        "packages": [
+          "container-selinux-2.247.0-1.fc44.noarch",
+          "cryptsetup-2.8.4-1.fc44.x86_64",
+          "dracut-108-6.fc44.x86_64",
+          "lvm2-2.03.38-2.fc44.x86_64",
+          "mokutil-0.7.2-3.fc44.x86_64",
+          "openssh-clients-10.2p1-7.fc44.x86_64",
+          "openssh-server-10.2p1-7.fc44.x86_64",
+          "passt-0^20260120.g386b5f5-1.fc44.x86_64",
+          "podman-5.8.7-1.fc44.x86_64",
+          "policycoreutils-3.10-1.fc44.x86_64",
+          "restic-0.18.1-3.fc44.x86_64",
+          "shadow-utils-4.19.0-6.fc44.x86_64",
+          "sudo-1.9.17-7.p2.fc44.x86_64",
+          "systemd-259.5-1.fc44.x86_64",
+          "tar-1.35-8.fc44.x86_64",
+          "tpm2-tools-5.7-5.fc44.x86_64",
+          "tpm2-tss-4.1.3-9.fc44.x86_64",
+          "util-linux-2.41.3-12.fc44.x86_64"
+        ],
+        "platform": "fedora44-x86_64-enforcing",
+        "runtime_account": "compatible",
+        "ssh_policy": "PAM-and-public-key-enabled",
+        "storage_boot": {
+          "boot_sha256": "23be275faa10978e7f66085a803cd0eaadef8bb20aea01ae81765ffaaddcfad4",
+          "device": "/dev/vda3"
+        }
+      },
+      "host_sha256": "39c0a8d4d5ae6f2b87d319ae654efe30b576f334fe07d89a8c538d897e1260bb",
+      "status": "PASS"
+    },
+    "status": "PASS",
+    "transaction": {
+      "candidate": "a7a12989e363152f6e92174659a06164a7396ac3333b6ab69c572a92b4042a4a",
+      "id": "72a322befaef4c36a574af98a7aed3c8",
+      "previous": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+      "protocol": 1,
+      "snapshot": "72a322befaef4c36a574af98a7aed3c8",
+      "stage": "recovered",
+      "timings": {
+        "stopped_backup": 3.5361328429989953
+      }
+    }
+  },
+  "scope": "Named productionctl operation on pinned synthetic qualification VM using dedicated deployment key",
+  "ssh_policy": "BatchMode, IdentitiesOnly, IdentityAgent=none, strict pinned known-hosts, ForwardAgent=no, no password or keyboard-interactive fallback",
+  "started_at_utc": "2026-09-29T20:58:30.615820+00:00"
+}

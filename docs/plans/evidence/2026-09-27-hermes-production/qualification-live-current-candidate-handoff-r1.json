@@ -1,0 +1,48 @@
+{
+  "actual_passes": [
+    "corrected_bootstrap_and_seven_preflight_checks",
+    "initial_deployment_actual_runtime",
+    "same_archive_unchanged_rerun",
+    "seven_dispatcher_rejections",
+    "signature_and_payload_corruption_rejection",
+    "failed_update_auto_recovery",
+    "successful_marker_only_update_and_explicit_rollback",
+    "application_automatic_warm_and_cold_boot",
+    "qualification_vm_disk_canary_preserved"
+  ],
+  "archive_sha256": "d2f206c87e4adc6373969f2720dc68b3e9d2e67ecf3525d0e9eebb9026a1d074",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-29T21:08:36.942249+00:00",
+  "current_vm_states": {
+    "hermes-production-qualification": "shut off; approved 9 GiB/two CPUs and all artifacts retained",
+    "hermes-production-restore": "running; newly created approved 8 GiB/two CPUs; private installation required"
+  },
+  "evidence_sha256": {
+    "qualification-final-vm-preservation-r1.json": "778d51d340d7275bc643eb0719f904884f45e19ee5e443b055960391c881c851",
+    "qualification-live-application-boot-r1.json": "4002b1313b835c702c6b956035890d084c09a0d20a4d16b9be898bbf2459e953",
+    "qualification-live-explicit-rollback-r1.json": "259d8aca04e9e2ee85e8b9a17680a5068cc07793106c9017b5316291f06583e4",
+    "qualification-live-failed-update-recovery-r2.json": "4d1df8ab82fd1870e195347bc000bab85054948f6cf6e4241031b3ecef1e97b4",
+    "qualification-live-index-reader-correction-r1.json": "ec7056e1359e3df579c6eed456b39f617c4952e480fe1617f8e89a9ae806d209",
+    "qualification-live-namespace-runtime-r1.json": "e72ccda3768fd0a422e08231468e5f2d3c985f4e7321bc12dbe0fd796fdf6d72",
+    "qualification-live-runtime-publication-r1.log": "9dfc829b61ae2f7c8b89708c082a6fa4b3a4fc521e8d4e75a0a9b12b90cee92c",
+    "qualification-restore-created-r1.json": "2a0727eb5b2e849c8193527cdf935f458f82a0f573e9acca045a50f2aed9bff3"
+  },
+  "exact_next_action": "python3 -B /var/home/aicloudopspecial/code/repos/hermes-fedora-host/vm/hermes-production-fixture.py --role restore --console",
+  "external_backup_endpoint": "UNCONFIGURED_NOT_CONTACTED",
+  "git_delivery_delegation": "NOT_RUN",
+  "nested_evidence_hashes_verified": 47,
+  "objective_status": "INCOMPLETE_PRIVATE_PREREQUISITES",
+  "physical_server": "NOT_CONTACTED",
+  "production_acceptance": "OPEN",
+  "provider_telegram": "NOT_RUN",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "remaining_mandatory_gates": {
+    "G03": "Private installer-log secret-hygiene verification",
+    "G04": "Final-candidate controlled interruption/missing-mount setup and isolated encrypted application backup/restore; restore private installation pending",
+    "G05": "Private TPM re-enrollment proof",
+    "G06": "Separately authorized private exact-candidate provider/Telegram/approval tests"
+  },
+  "retained_helper_source_index": ".toolbox/hermes-production-validation/synthetic-stage/qualification-namespace/live-r1/script-sha256-r2.json",
+  "retained_helper_source_index_sha256": "cfc648ef79abf981613e420a15dba035da85f1aafd809214184829e9e0567f83",
+  "scope": "Fresh exact-candidate synthetic preproduction evidence; no production acceptance"
+}

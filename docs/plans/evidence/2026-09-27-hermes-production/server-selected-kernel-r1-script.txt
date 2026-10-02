@@ -1,0 +1,353 @@
+"""Preserve, rebuild and validate the selected kernel image, then reboot once."""
+
+import argparse
+import datetime
+import fcntl
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import shlex
+import shutil
+import stat
+import sys
+import tempfile
+from pathlib import Path
+
+PREVIOUS = Path("/home/aicowork/hermes-boot-commission-9a4c0ff7d97b202c.py")
+PREVIOUS_SHA = "9a4c0ff7d97b202c49d2bfce39b2834fdf1becc45b4e8bb322c3665035891e0d"
+KERNEL = None
+BOOT_ID = "87e1d398-7465-4586-a77d-4eaf03245b73"
+IMAGE = None
+BASE = Path("/var/lib/hermes-production-boot")
+BACKUP = None
+REPORT = BASE / "selected-kernel-report.json"
+ORIGINAL_REPORT_SHA = "65bd5ac30d23de6eb80d31b3b5a812e4cf8dbe1175f0da6682bb6b00da2a73ee"
+
+
+def require(value, reason):
+    if not value:
+        raise RuntimeError(reason)
+
+
+def load_api():
+    info = PREVIOUS.lstat()
+    require(
+        stat.S_ISREG(info.st_mode)
+        and info.st_uid == 1000
+        and not info.st_mode & 0o022
+        and info.st_nlink == 1,
+        "unsafe-reviewed-helper",
+    )
+    require(
+        hashlib.sha256(PREVIOUS.read_bytes()).hexdigest() == PREVIOUS_SHA, "reviewed-helper-changed"
+    )
+    spec = importlib.util.spec_from_file_location("reviewed_boot", PREVIOUS)
+    api = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(api)
+    return api
+
+
+def detect_target(api):
+    global KERNEL, IMAGE, BACKUP
+    selected = api.command(["grubby", "--default-kernel"]).decode().strip()
+    prefix = "/boot/vmlinuz-"
+    require(selected.startswith(prefix), "invalid-default-kernel-path")
+    version = selected[len(prefix) :]
+    require(
+        re.fullmatch(r"[0-9]+\.[0-9][A-Za-z0-9.+_-]*\.fc44\.x86_64", version),
+        "unsupported-default-kernel-version",
+    )
+    api.secure(Path(selected))
+    api.secure(Path("/usr/lib/modules", version), directory=True)
+    installed = (
+        api.command(
+            ["rpm", "-q", "--qf", "%{VERSION}-%{RELEASE}.%{ARCH}", "kernel-core-" + version]
+        )
+        .decode()
+        .strip()
+    )
+    require(installed == version, "default-kernel-package-mismatch")
+    target = {"kernel": version, "before_boot_id": BOOT_ID}
+    pinned = BASE / "selected-target.json"
+    if pinned.exists() or pinned.is_symlink():
+        require(api.read_json(pinned) == target, "selected-target-changed-since-preparation")
+    else:
+        api.save_json(pinned, target)
+    KERNEL = version
+    IMAGE = Path("/boot/initramfs-" + version + ".img")
+    BACKUP = BASE / ("selected-kernel-" + version)
+
+
+def select_for_apply(api):
+    require(
+        Path("/proc/sys/kernel/random/boot_id").read_text().strip() == BOOT_ID,
+        "boot-already-changed",
+    )
+    api.public_checks()
+    detect_target(api)
+
+
+def selected_entry(api):
+    require(
+        api.command(["grubby", "--default-kernel"]).decode().strip() == "/boot/vmlinuz-" + KERNEL,
+        "selected-kernel-changed",
+    )
+    raw = api.command(["grubby", "--info=DEFAULT"]).decode()
+    values = {}
+    for line in raw.splitlines():
+        key, _, value = line.partition("=")
+        if key not in {"kernel", "initrd"}:
+            continue
+        require(key not in values, "duplicate-default-field")
+        words = shlex.split(value)
+        require(len(words) == 1, "ambiguous-default-field")
+        values[key] = words[0]
+    require(values.get("kernel") == "/boot/vmlinuz-" + KERNEL, "default-entry-kernel-mismatch")
+    require(values.get("initrd") == str(IMAGE), "default-entry-initramfs-mismatch")
+    env = api.command(["grub2-editenv", "/boot/grub2/grubenv", "list"]).decode().splitlines()
+    require(
+        not any(line.startswith("next_entry=") and line.partition("=")[2] for line in env),
+        "one-shot-boot-selection-present",
+    )
+
+
+def prepare_backup(api):
+    info = api.secure(IMAGE)
+    require(stat.S_IMODE(info.st_mode) == 0o600, "unexpected-selected-image-mode")
+    for directory in [IMAGE.parent, BASE]:
+        api.secure(directory, directory=True)
+        require(
+            shutil.disk_usage(directory).free >= info.st_size * 2 + 256 * 1024**2,
+            "insufficient-image-backup-space",
+        )
+    if not BACKUP.exists() and not BACKUP.is_symlink():
+        stage = Path(tempfile.mkdtemp(prefix=".selected-baseline-", dir=BASE))
+        try:
+            shutil.copy2(IMAGE, stage / "initramfs.before")
+            with (stage / "initramfs.before").open("rb") as stream:
+                os.fsync(stream.fileno())
+            before = {"kernel": KERNEL, "before_sha256": api.sha(IMAGE), "mode": 0o600}
+            require(
+                api.sha(stage / "initramfs.before") == before["before_sha256"],
+                "baseline-copy-mismatch",
+            )
+            api.save_json(stage / "baseline.json", before)
+            os.rename(stage, BACKUP)
+        finally:
+            if stage.exists():
+                shutil.rmtree(stage)
+    require(
+        stat.S_IMODE(api.secure(BACKUP, directory=True).st_mode) == 0o700,
+        "unsafe-selected-baseline-mode",
+    )
+    before = api.read_json(BACKUP / "baseline.json")
+    require(before["kernel"] == KERNEL and before["mode"] == 0o600, "selected-baseline-mismatch")
+    api.secure(BACKUP / "initramfs.before")
+    require(
+        api.sha(BACKUP / "initramfs.before") == before["before_sha256"],
+        "selected-recovery-copy-changed",
+    )
+    return before
+
+
+def restore(api, before):
+    if api.sha(IMAGE) == before["before_sha256"]:
+        return
+    fd, name = tempfile.mkstemp(prefix=".hermes-selected-restore-", suffix=".img", dir=IMAGE.parent)
+    os.close(fd)
+    try:
+        shutil.copyfile(BACKUP / "initramfs.before", name)
+        os.chmod(name, before["mode"])
+        with open(name, "rb") as stream:
+            os.fsync(stream.fileno())
+        os.replace(name, IMAGE)
+        api.command(["restorecon", str(IMAGE)])
+    finally:
+        Path(name).unlink(missing_ok=True)
+
+
+def build(api):
+    before = prepare_backup(api)
+    state_path = BACKUP / "build-state.json"
+    state = api.read_json(state_path) if state_path.exists() else {}
+    current = api.sha(IMAGE)
+    require(
+        current in (before["before_sha256"], state.get("image_sha256")),
+        "selected-image-changed-outside-operation",
+    )
+    if current == state.get("image_sha256"):
+        api.check_image(IMAGE)
+        return "UNCHANGED"
+    fd, name = tempfile.mkstemp(prefix=".hermes-selected-tpm-", suffix=".img", dir=IMAGE.parent)
+    os.close(fd)
+    candidate = Path(name)
+    try:
+        print(
+            "Building a candidate image for selected kernel " + KERNEL + "; originals retained.",
+            flush=True,
+        )
+        api.command(
+            [
+                "dracut",
+                "--force",
+                "--kver",
+                KERNEL,
+                "--add",
+                "systemd-cryptsetup tpm2-tss",
+                str(candidate),
+            ],
+            timeout=900,
+        )
+        api.secure(candidate)
+        api.check_image(candidate)
+        candidate.chmod(before["mode"])
+        with candidate.open("rb") as stream:
+            os.fsync(stream.fileno())
+        api.save_json(state_path, {"image_sha256": api.sha(candidate)})
+        os.replace(candidate, IMAGE)
+        api.command(["restorecon", str(IMAGE)])
+        api.check_image(IMAGE)
+        require(
+            api.sha(IMAGE) == api.read_json(state_path)["image_sha256"], "published-image-mismatch"
+        )
+        return "UPDATED"
+    except (Exception, KeyboardInterrupt) as error:
+        try:
+            restore(api, before)
+        except Exception as recovery:
+            raise RuntimeError("selected-image-rollback-failed") from recovery
+        raise error
+    finally:
+        candidate.unlink(missing_ok=True)
+
+
+def preconditions(api):
+    require(
+        Path("/proc/sys/kernel/random/boot_id").read_text().strip() == BOOT_ID,
+        "boot-already-changed",
+    )
+    api.public_checks()
+    require(api.sha(BASE / "report.json") == ORIGINAL_REPORT_SHA, "completed-setup-report-changed")
+    original = api.read_json(api.BACKUPS / "baseline.json")
+    state = api.baseline_checks(original)
+    require(api.sha(api.IMAGE) == state.get("image_sha"), "previous-validated-image-changed")
+    require(
+        api.sha(api.CT) == original["desired_crypttab_sha"] and api.DC.read_bytes() == api.DC_BYTES,
+        "completed-config-changed",
+    )
+    api.check_tokens(api.metadata(), original["recovery_slots"])
+    selected_entry(api)
+    require(Path("/usr/lib/modules", KERNEL).is_dir(), "selected-kernel-modules-missing")
+    require(
+        api.command(["systemctl", "is-system-running"]).decode().strip() == "running",
+        "system-not-running",
+    )
+    require(api.command(["getenforce"]).decode().strip() == "Enforcing", "selinux-not-enforcing")
+    require(len(Path("/proc/swaps").read_text().splitlines()) == 1, "swap-active")
+    return original
+
+
+def apply_and_reboot(api):
+    require(
+        os.geteuid() == 0 and sys.stdin.isatty() and sys.stdout.isatty(),
+        "private-root-terminal-required",
+    )
+    api.secure(BASE, directory=True)
+    fd = os.open(BASE / ".lock", os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC)
+    with os.fdopen(fd, "r+") as lock:
+        api.secure(BASE / ".lock")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        result = {
+            "status": "FAIL",
+            "scope": "selected-kernel initramfs and attended reboot",
+            "kernel": KERNEL,
+            "before_boot_id": BOOT_ID,
+            "tpm_enrollment": "NOT_CHANGED",
+            "recovery_slot": "NOT_CHANGED",
+            "automatic_boot_proof": "NOT_RUN",
+        }
+        try:
+            select_for_apply(api)
+            result["kernel"] = KERNEL
+            original = preconditions(api)
+            if KERNEL == api.KERNEL:
+                api.check_image(IMAGE)
+                result["configuration"] = "UNCHANGED_CURRENT_VALIDATED_IMAGE"
+            else:
+                result["configuration"] = build(api)
+            preconditions(api)
+            api.check_image(IMAGE)
+            api.check_tokens(api.metadata(), original["recovery_slots"])
+            result.update(
+                status="READY_TO_REBOOT",
+                initramfs_sha256=api.sha(IMAGE),
+                baseline_directory=str(api.BACKUPS if KERNEL == api.KERNEL else BACKUP),
+                recovery_slot_preserved=True,
+            )
+        except (Exception, KeyboardInterrupt) as error:
+            result["error"] = (
+                str(error) if isinstance(error, RuntimeError) else type(error).__name__
+            )
+        result["script_sha256"] = api.sha(Path(__file__))
+        result["timestamp_utc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        api.save_json(
+            BASE
+            / (
+                "selected-attempt-"
+                + datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%S%f")
+                + ".json"
+            ),
+            result,
+            0o644,
+        )
+        api.save_json(REPORT, result, 0o644)
+        print(json.dumps(result, indent=2, sort_keys=True), flush=True)
+        if result["status"] != "READY_TO_REBOOT":
+            return 1
+        api.command(["systemctl", "reboot"])
+        return 0
+
+
+def main():
+    os.umask(0o077)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--apply-and-reboot", action="store_true")
+    args = parser.parse_args()
+    api = load_api()
+    if args.apply_and_reboot:
+        return apply_and_reboot(api)
+    api.public_checks()
+    print(
+        json.dumps(
+            {
+                "status": "PREVIEW",
+                "running_kernel": api.KERNEL,
+                "selected_kernel": "DETECT_FROM_GRUB_DEFAULT_UNDER_SUDO",
+                "root_checks": "DEFERRED_TO_PRIVATE_APPLY",
+                "changes": "preserve/rebuild selected initramfs; request reboot after validation",
+                "reboot": "NOT_RUN",
+            }
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except (Exception, KeyboardInterrupt) as error:
+        print(
+            json.dumps(
+                {
+                    "status": "REFUSED",
+                    "error": str(error)
+                    if isinstance(error, RuntimeError)
+                    else type(error).__name__,
+                    "automatic_boot_proof": "NOT_RUN",
+                }
+            ),
+            file=sys.stderr,
+        )
+        sys.exit(1)

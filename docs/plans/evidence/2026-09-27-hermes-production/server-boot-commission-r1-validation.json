@@ -1,0 +1,12 @@
+{
+  "command": "python3 -B .toolbox/hermes-production-boot/test_commission_boot.py .toolbox/hermes-production-boot/commission-boot.py -v",
+  "environment": "dev-infra-hermes",
+  "format": "PASS",
+  "live_private_setup": "NOT_RUN",
+  "ruff_check": "PASS",
+  "scope": "17 isolated cases; real file/permission/transaction behavior, mocked root ownership, TPM, cryptsetup, dracut, SELinux and hardware",
+  "script_sha256": "7bb3791ac872f42a8e94a7ee9d0e1c193bdd70b8dc711c0042a8694fa060bfe9",
+  "status": "PASS",
+  "tests_passed": 17,
+  "tests_sha256": "7d77260395c2032656459912a5454775a09e08ce47360bd1c8424f9f3e4602e1"
+}

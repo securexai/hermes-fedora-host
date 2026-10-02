@@ -1,0 +1,151 @@
+"""Check the completed setup and request one attended reboot; no config edits."""
+
+import argparse
+import hashlib
+import json
+import os
+import shlex
+import stat
+import subprocess
+import sys
+from pathlib import Path
+
+KERNEL = "6.19.10-300.fc44.x86_64"
+BOOT_ID = "87e1d398-7465-4586-a77d-4eaf03245b73"
+IMAGE = "/boot/initramfs-" + KERNEL + ".img"
+HASHES = {
+    "/var/lib/hermes-production-boot/report.json": "65bd5ac30d23de6eb80d31b3b5a812e4cf8dbe1175f0da6682bb6b00da2a73ee",
+    "/etc/crypttab": "c1d4d852af5786dc38601e75cddf3ba0657268e74ac595f3b4b61f1146202fe6",
+    "/etc/dracut.conf.d/99-hermes-production-tpm.conf": "1fcc50d72b1315c427f28f9ae44b0e46bdc5e081d545b63e56d4819dd8553834",
+    IMAGE: "26462706a0cb7cf18bda8563cafab2280381177715f32f0133eac6907b280378",
+}
+
+
+def require(value, message):
+    if not value:
+        raise RuntimeError(message)
+
+
+def command(args):
+    result = subprocess.run(
+        args,
+        stdin=subprocess.DEVNULL,
+        capture_output=True,
+        text=True,
+        timeout=60,
+        env={"PATH": "/usr/sbin:/usr/bin:/sbin:/bin", "LANG": "C.UTF-8"},
+    )
+    require(result.returncode == 0 and not result.stderr.strip(), "command-refused:" + args[0])
+    return result.stdout.strip()
+
+
+def boot_entry(raw):
+    result = {}
+    for line in raw.splitlines():
+        key, sep, value = line.partition("=")
+        require(sep and key not in result, "ambiguous-default-entry")
+        words = shlex.split(value)
+        require(len(words) == 1, "invalid-default-entry-field")
+        result[key] = words[0]
+    return result
+
+
+def verify():
+    require(os.uname().release == KERNEL, "current-kernel-changed")
+    require(
+        Path("/proc/sys/kernel/random/boot_id").read_text().strip() == BOOT_ID,
+        "boot-already-changed",
+    )
+    require(
+        command(["findmnt", "-n", "-o", "UUID", "--target", "/"])
+        == "b69e7182-5b5c-4212-a024-968fec581441",
+        "wrong-server-root",
+    )
+    for filename, expected in HASHES.items():
+        path = Path(filename)
+        info = path.lstat()
+        require(
+            stat.S_ISREG(info.st_mode)
+            and info.st_uid == 0
+            and not info.st_mode & 0o022
+            and info.st_nlink == 1,
+            "unsafe-verified-file",
+        )
+        with path.open("rb") as stream:
+            require(
+                hashlib.file_digest(stream, "sha256").hexdigest() == expected,
+                "verified-file-changed:" + path.name,
+            )
+    require(
+        command(["grubby", "--default-kernel"]) == "/boot/vmlinuz-" + KERNEL,
+        "default-kernel-mismatch",
+    )
+    entry = boot_entry(command(["grubby", "--info=DEFAULT"]))
+    require(entry.get("kernel") == "/boot/vmlinuz-" + KERNEL, "default-entry-kernel-mismatch")
+    require(entry.get("initrd") == IMAGE, "default-entry-initramfs-mismatch")
+    env_lines = command(["grub2-editenv", "/boot/grub2/grubenv", "list"]).splitlines()
+    require(
+        not any(line.startswith("next_entry=") and line.partition("=")[2] for line in env_lines),
+        "one-shot-boot-selection-present",
+    )
+    require(command(["systemctl", "is-system-running"]) == "running", "system-not-running")
+    require("SecureBoot enabled" in command(["mokutil", "--sb-state"]), "secure-boot-not-enabled")
+    require(command(["getenforce"]) == "Enforcing", "selinux-not-enforcing")
+    require(len(Path("/proc/swaps").read_text().splitlines()) == 1, "swap-active")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--reboot", action="store_true")
+    args = parser.parse_args(argv)
+    if not args.reboot:
+        print(
+            json.dumps(
+                {
+                    "status": "PREVIEW",
+                    "kernel": KERNEL,
+                    "before_boot_id": BOOT_ID,
+                    "reboot": "NOT_RUN",
+                    "requires": "private sudo and ready physical console",
+                }
+            )
+        )
+        return 0
+    require(
+        os.geteuid() == 0 and sys.stdin.isatty() and sys.stdout.isatty(),
+        "private-root-terminal-required",
+    )
+    verify()
+    print(
+        json.dumps(
+            {
+                "status": "PRE_REBOOT_CHECKS_PASS",
+                "before_boot_id": BOOT_ID,
+                "kernel": KERNEL,
+                "action": "request-attended-reboot",
+                "boot_proof": "NOT_RUN",
+            }
+        ),
+        flush=True,
+    )
+    command(["systemctl", "reboot"])
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except (Exception, KeyboardInterrupt) as error:
+        print(
+            json.dumps(
+                {
+                    "status": "REFUSED",
+                    "error": str(error)
+                    if isinstance(error, RuntimeError)
+                    else type(error).__name__,
+                    "automatic_boot_proof": "NOT_RUN",
+                }
+            ),
+            file=sys.stderr,
+        )
+        sys.exit(1)

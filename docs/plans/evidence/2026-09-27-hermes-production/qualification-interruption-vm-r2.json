@@ -1,0 +1,19 @@
+{
+  "baseline_modified": false,
+  "baseline_path": ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/memory-9gib-applied-r1.xml",
+  "baseline_sha256": "442d12df7ae3d01136d092042d501472fc1aef2e18a796fa2ba395d1121d0031",
+  "canonical_xml_comparison": "PASS",
+  "checked_at_utc": "2026-09-29T20:13:34.320443+00:00",
+  "current_dumpxml_stdout_sha256": "93423a83c16d643b14ef37bb6f8a9c6dd1f03a34f36a115733dcd606a47a422a",
+  "current_memory_kib": 9437184,
+  "disks": "RETAINED",
+  "initial_raw_comparison": "FAILED_EXTRA_TERMINAL_NEWLINE_ONLY",
+  "lifecycle_changes": "NONE",
+  "memory_kib": 9437184,
+  "restore_vm": "ABSENT",
+  "state": "running",
+  "status": "PASS_WITHIN_READ_ONLY_VM_CONFIGURATION_SCOPE",
+  "trimmed_terminal_newline_comparison": "PASS",
+  "vcpus": 2,
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

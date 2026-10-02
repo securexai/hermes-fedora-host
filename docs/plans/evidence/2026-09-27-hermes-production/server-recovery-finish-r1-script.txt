@@ -1,0 +1,225 @@
+"""Remove the exact temporary recovery entry and reboot to the preserved default."""
+
+import argparse
+import datetime
+import fcntl
+import hashlib
+import importlib.util
+import json
+import os
+import stat
+import sys
+from pathlib import Path
+
+PREVIOUS = Path("/home/aicowork/hermes-recovery-once-8d6ccdaef18f5f0a.py")
+PREVIOUS_SHA = "8d6ccdaef18f5f0a5b59d55646a8fb69e2575a34ba49cf9129802fd1e3098740"
+
+
+def require(value, reason):
+    if not value:
+        raise RuntimeError(reason)
+
+
+def load_previous():
+    info = PREVIOUS.lstat()
+    require(
+        stat.S_ISREG(info.st_mode)
+        and info.st_uid == 1000
+        and not info.st_mode & 0o077
+        and info.st_nlink == 1,
+        "unsafe-recovery-helper",
+    )
+    require(
+        hashlib.sha256(PREVIOUS.read_bytes()).hexdigest() == PREVIOUS_SHA, "recovery-helper-changed"
+    )
+    spec = importlib.util.spec_from_file_location("reviewed_recovery", PREVIOUS)
+    recovery = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(recovery)
+    return recovery
+
+
+def check_recovered_boot(recovery, cmdline, boot_id):
+    require(boot_id != recovery.BOOT_ID, "recovery-reboot-not-observed")
+    selected = [
+        word
+        for word in cmdline.split()
+        if word.startswith(("rd.luks.options=", "luks.options=", "hermes.recovery="))
+        or "SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE" in word
+    ]
+    require(
+        sorted(selected) == sorted([recovery.RECOVERY, recovery.DISABLE_PLUGINS, recovery.MARKER]),
+        "corrected-recovery-parameters-missing-or-conflicting",
+    )
+
+
+def remove_owned_entry(api, entry, expected_sha, retained):
+    if retained.exists() or retained.is_symlink():
+        api.secure(retained)
+        require(api.sha(retained) == expected_sha, "retained-recovery-entry-changed")
+    if entry.exists() or entry.is_symlink():
+        api.secure(entry)
+        require(api.sha(entry) == expected_sha, "temporary-entry-changed-no-delete")
+        if not retained.exists():
+            api.atomic(retained, entry.read_bytes())
+        require(api.sha(retained) == expected_sha, "cleanup-copy-mismatch")
+        entry.unlink()
+        return "REMOVED"
+    require(retained.exists(), "missing-entry-without-cleanup-evidence")
+    return "ALREADY_REMOVED"
+
+
+def execute(recovery):
+    require(
+        os.geteuid() == 0 and sys.stdin.isatty() and sys.stdout.isatty(),
+        "private-root-terminal-required",
+    )
+    api = recovery.load_api()
+    api.secure(recovery.BASE, directory=True)
+    api.secure(recovery.STATE, directory=True)
+    fd = os.open(recovery.BASE / ".lock", os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC)
+    with os.fdopen(fd, "r+") as lock:
+        api.secure(recovery.BASE / ".lock")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        boot_id = Path("/proc/sys/kernel/random/boot_id").read_text().strip()
+        check_recovered_boot(recovery, Path("/proc/cmdline").read_text(), boot_id)
+        baseline = api.read_json(recovery.STATE / "baseline.json")
+        setup = api.read_json(recovery.REPORT)
+        require(
+            setup.get("status") == "READY_TO_REBOOT"
+            and setup.get("script_sha256") == PREVIOUS_SHA
+            and setup.get("before_boot_id") == recovery.BOOT_ID,
+            "recovery-setup-report-mismatch",
+        )
+        for key, value in baseline.items():
+            require(setup.get(key) == value, "recovery-baseline-report-mismatch")
+        normal_id = baseline["normal_entry"]
+        test_id = baseline["recovery_entry"]
+        require(
+            test_id == normal_id + "-hermes-recovery-r2"
+            and "/" not in normal_id
+            and normal_id not in ("", ".", ".."),
+            "unsafe-entry-identity",
+        )
+        api.secure(recovery.ENTRIES, directory=True)
+        normal = recovery.ENTRIES / (normal_id + ".conf")
+        entry = recovery.ENTRIES / (test_id + ".conf")
+        retained = recovery.STATE / "recovery-entry.removed"
+        kernel = baseline["kernel"]
+        image = Path("/boot/initramfs-" + kernel + ".img")
+        for path in [normal, image, Path("/boot/grub2/grub.cfg"), api.CT]:
+            api.secure(path)
+
+        def verify():
+            env = recovery.read_env(api)
+            require(
+                env.get("saved_entry") == normal_id
+                and not env.get("next_entry")
+                and not env.get("prev_saved_entry"),
+                "normal-boot-selection-not-restored",
+            )
+            require(
+                api.sha(normal) == baseline["normal_entry_sha256"]
+                and api.sha(Path("/boot/grub2/grub.cfg")) == baseline["grub_cfg_sha256"],
+                "normal-boot-entry-changed",
+            )
+            require(
+                api.sha(image) == recovery.IMAGE_SHA and api.sha(api.CT) == recovery.CT_SHA,
+                "validated-image-or-crypttab-changed",
+            )
+            require(
+                api.keyslot_identity(api.metadata()) == baseline["luks_metadata_sha256"],
+                "luks-metadata-changed",
+            )
+            require(
+                api.command(["grubby", "--default-kernel"]).decode().strip()
+                == "/boot/vmlinuz-" + kernel,
+                "normal-default-kernel-changed",
+            )
+
+        verify()
+        require(api.command(["uname", "-r"]).decode().strip() == kernel, "recovery-kernel-mismatch")
+        require(
+            api.command(["systemctl", "is-system-running"]).decode().strip() == "running",
+            "system-not-running",
+        )
+        require(
+            not api.command(
+                ["systemctl", "--failed", "--no-legend", "--plain", "--no-pager"]
+            ).strip(),
+            "failed-units-present",
+        )
+        require(
+            api.command(["getenforce"]).decode().strip() == "Enforcing", "selinux-not-enforcing"
+        )
+        require(
+            api.command(["mokutil", "--sb-state"]).decode().strip() == "SecureBoot enabled",
+            "secure-boot-not-enabled",
+        )
+        require(len(Path("/proc/swaps").read_text().splitlines()) == 1, "swap-active")
+        binding = recovery.STATE / "finish-boot-id.json"
+        if binding.exists() or binding.is_symlink():
+            require(
+                api.read_json(binding) == {"boot_id": boot_id}, "finish-boot-changed-do-not-replay"
+            )
+        else:
+            api.save_json(binding, {"boot_id": boot_id})
+        cleanup = remove_owned_entry(api, entry, baseline["recovery_entry_sha256"], retained)
+        verify()
+        result = {
+            "status": "READY_FOR_NORMAL_REBOOT",
+            "before_boot_id": boot_id,
+            "kernel": kernel,
+            "temporary_entry": cleanup,
+            "retained_entry_sha256": api.sha(retained),
+            "normal_default": "PRESERVED",
+            "luks_metadata": "UNCHANGED",
+            "operator_passphrase_observation": "REQUIRED_SEPARATE_EVIDENCE",
+            "subsequent_automatic_boot": "NOT_RUN",
+            "script_sha256": api.sha(Path(__file__)),
+            "timestamp_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        }
+        report = recovery.BASE / "recovery-finish-report.json"
+        api.save_json(report, result, mode=0o644)
+        print(json.dumps(result, indent=2, sort_keys=True), flush=True)
+        api.command(["sync"])
+        try:
+            api.command(["systemctl", "reboot"])
+        except Exception:
+            result.update(status="REBOOT_REQUEST_FAILED", error="command-failed:systemctl")
+            api.save_json(report, result, mode=0o644)
+            raise
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--cleanup-and-reboot", action="store_true")
+    args = parser.parse_args()
+    if not args.cleanup_and_reboot:
+        print(
+            json.dumps(
+                {
+                    "status": "PREVIEW",
+                    "scope": "Remove only the unchanged recovery test entry after preserving a copy, then reboot to the normal saved default",
+                    "prerequisite": "Operator recovery-passphrase success plus independent corrected-boot verification",
+                }
+            )
+        )
+        return
+    try:
+        execute(load_previous())
+    except Exception as error:
+        print(
+            json.dumps(
+                {
+                    "status": "REFUSED_OR_FAILED",
+                    "error": str(error),
+                    "subsequent_automatic_boot": "NOT_RUN",
+                }
+            ),
+            flush=True,
+        )
+        raise SystemExit(1) from None
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,22 @@
+test_backup_uses_relative_tree_and_detects_duplicate_snapshots (test_hermes_backup_fixture.LocalBackupFixtureTests.test_backup_uses_relative_tree_and_detects_duplicate_snapshots) ... ok
+test_cleanup_failure_overrides_success (test_hermes_backup_fixture.LocalBackupFixtureTests.test_cleanup_failure_overrides_success) ... ok
+test_client_uses_pinned_trust_and_file_password_without_environment_fallback (test_hermes_backup_fixture.LocalBackupFixtureTests.test_client_uses_pinned_trust_and_file_password_without_environment_fallback) ... ok
+test_command_failure_does_not_expose_output (test_hermes_backup_fixture.LocalBackupFixtureTests.test_command_failure_does_not_expose_output) ... ok
+test_container_drift_refused_before_stop (test_hermes_backup_fixture.LocalBackupFixtureTests.test_container_drift_refused_before_stop) ... ok
+test_inventory_error_is_not_absence (test_hermes_backup_fixture.LocalBackupFixtureTests.test_inventory_error_is_not_absence) ... ok
+test_name_conflict_refused_before_state_creation (test_hermes_backup_fixture.LocalBackupFixtureTests.test_name_conflict_refused_before_state_creation) ... ok
+test_podman_digest_normalization_and_keep_id_maps (test_hermes_backup_fixture.LocalBackupFixtureTests.test_podman_digest_normalization_and_keep_id_maps) ... ok
+test_port_and_space_fail_before_writes (test_hermes_backup_fixture.LocalBackupFixtureTests.test_port_and_space_fail_before_writes) ... ok
+test_preview_does_not_create_files_or_run_commands (test_hermes_backup_fixture.LocalBackupFixtureTests.test_preview_does_not_create_files_or_run_commands) ... ok
+test_private_identity_and_source_drift_refused (test_hermes_backup_fixture.LocalBackupFixtureTests.test_private_identity_and_source_drift_refused) ... ok
+test_running_rerun_preserves_keys_container_and_avoids_mutations (test_hermes_backup_fixture.LocalBackupFixtureTests.test_running_rerun_preserves_keys_container_and_avoids_mutations) ... ok
+test_stop_rerun_and_failed_stop_are_honest (test_hermes_backup_fixture.LocalBackupFixtureTests.test_stop_rerun_and_failed_stop_are_honest) ... ok
+test_symlink_unknown_state_and_lock_contention_refused (test_hermes_backup_fixture.LocalBackupFixtureTests.test_symlink_unknown_state_and_lock_contention_refused) ... ok
+test_test_failure_stops_service_and_preserves_sanitized_report (test_hermes_backup_fixture.LocalBackupFixtureTests.test_test_failure_stops_service_and_preserves_sanitized_report) ... ok
+test_unexpected_volume_and_missing_owned_container_refused (test_hermes_backup_fixture.LocalBackupFixtureTests.test_unexpected_volume_and_missing_owned_container_refused) ... ok
+test_wrong_password_failure_requires_specific_authentication_exit (test_hermes_backup_fixture.LocalBackupFixtureTests.test_wrong_password_failure_requires_specific_authentication_exit) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.036s
+
+OK

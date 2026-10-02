@@ -1,0 +1,15 @@
+{
+  "checked_at_utc": "2026-09-28T22:42:58.819980+00:00",
+  "domain_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "state": "running",
+  "guest_agent_exit": 1,
+  "guest_agent": "error: Guest agent is not responding: QEMU guest agent is not connected",
+  "ssh": "UNAVAILABLE",
+  "console_attached": false,
+  "authentication_attempted": false,
+  "scope": "Read-only readiness poll for the existing installed VM; no console access",
+  "turn_classification": "VERIFIED_WAIT",
+  "unlock_acceptance": "NOT_VERIFIED",
+  "audit_execution": "NOT_RUN",
+  "blocker": "Private disk unlock and usable guest access pending"
+}

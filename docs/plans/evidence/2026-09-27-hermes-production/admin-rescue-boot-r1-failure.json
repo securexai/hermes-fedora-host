@@ -1,0 +1,9 @@
+{
+  "status": "FAIL",
+  "scope": "Rescue boot persistent XML guard",
+  "error": "unexpected-persistent-configuration-change",
+  "state": "running",
+  "active_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a",
+  "active_cmdline": "inst.rescue inst.text inst.nosave=all console=ttyS0,115200n8 TERM=xterm-256color quiet systemd.show_status=no",
+  "private_input": "NOT_RUN"
+}

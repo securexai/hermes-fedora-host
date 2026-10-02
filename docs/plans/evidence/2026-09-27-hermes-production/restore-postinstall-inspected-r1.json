@@ -1,0 +1,53 @@
+{
+  "backup_restore_provider_telegram": "NOT_RUN",
+  "boot": {
+    "devices": [
+      "hd"
+    ],
+    "initrd": null,
+    "kernel": null
+  },
+  "checked_at_utc": "2026-09-29T21:35:36.725185+00:00",
+  "creation_xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e",
+  "disks": [
+    {
+      "device": "disk",
+      "serial": "HERMES_PROD_TEST",
+      "source": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/system.qcow2",
+      "target": "vda"
+    },
+    {
+      "device": "disk",
+      "serial": "HERMES_UNRELATED",
+      "source": "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/unrelated.raw",
+      "target": "vdb"
+    },
+    {
+      "device": "cdrom",
+      "serial": null,
+      "source": null,
+      "target": "sda"
+    }
+  ],
+  "installed_os_layout_account_packages_log_hygiene": "NOT_YET_VERIFIED",
+  "memory_gib": 8,
+  "private_input": "NOT_COLLECTED",
+  "qcow2": {
+    "actual_size": 3783200768,
+    "dirty_flag": false,
+    "format": "qcow2",
+    "virtual_size": 189817421824
+  },
+  "qualification_state": "shut off",
+  "restore_state": "shut off",
+  "running_domains": [],
+  "status": "PASS_WITHIN_STOPPED_VM_DISK_AND_CANARY_PRESERVATION_SCOPE",
+  "unrelated_disk_preserved": true,
+  "unrelated_sha256": "5419b4c0655822bb292a539bed080d6b0c97dc8710a9a7bb26c58d3e33fbb0e7",
+  "user_report": "Installer shutdown/power-down output supplied; full installation success not inferred",
+  "vcpus": 2,
+  "vm_uuid": "dbe191ac-8b57-45da-bece-f1ccea027cec",
+  "workstation_free_bytes": 53858373632,
+  "xml_matches_creation": true,
+  "xml_sha256": "16f664cdb5364ff15e6daab225ff9528fe11f17a6a964845ed3522faecc7166e"
+}

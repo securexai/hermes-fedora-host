@@ -1,0 +1,64 @@
+{
+  "abrupt_running_power_loss": "NOT_RUN",
+  "active_swap": false,
+  "before_boot_id": "cf087d12-cf0e-43a3-85df-bb4225213e33",
+  "boot_id": "01760717-a7ef-49a4-a424-c799e37921fb",
+  "checked_at_utc": "2026-09-28T17:03:34.972001+00:00",
+  "checks": {
+    "boot_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "1947d07c-1b67-4341-b196-65dbdce0fddc"
+    },
+    "cryptsetup_unit": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "LoadState=loaded\nActiveState=active\nSubState=exited"
+    },
+    "failed_units": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "hermes_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "eb129d35-1f52-4577-99e5-25daa322febc"
+    },
+    "root_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "b69e7182-5b5c-4212-a024-968fec581441"
+    },
+    "secure_boot": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "SecureBoot enabled"
+    },
+    "selinux": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "Enforcing"
+    },
+    "system_state": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "running"
+    },
+    "var_uuid": {
+      "exit": 0,
+      "stderr": "",
+      "stdout": "15a5d3d9-8e39-4fb9-9631-323e7b038a65"
+    }
+  },
+  "cold_start": "PASS",
+  "firmware_power_restoration": "PASS",
+  "kernel": "7.2.7-200.fc44.x86_64",
+  "luks_options_present": false,
+  "operator_procedure": "Clean shutdown; wait fully off; disconnect AC for ten seconds; reconnect without pressing power button",
+  "operator_reply": "it worked, started automatically and no luks was requested",
+  "recovery_boot": "NOT_RUN",
+  "scope": "Attended clean shutdown and physical AC-restoration cycle; operator observations plus independent post-cold-boot health",
+  "server_checked_at_utc": "2026-09-28T17:04:02.458093+00:00",
+  "status": "PASS"
+}

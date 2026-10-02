@@ -1,0 +1,66 @@
+..............................EF........FSTOP: KeyError
+F.............
+======================================================================
+ERROR: test_runtime_account_accepts_explicit_denial_with_supported_exit_statuses (test_hermes_production.ProductionPolicyTests.test_runtime_account_accepts_explicit_denial_with_supported_exit_statuses) (status=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 75, in test_runtime_account_accepts_explicit_denial_with_supported_exit_statuses
+    self.check_runtime_sudo(status, b"User hermes is not allowed to run sudo on hermes-qualification.\n")
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 89, in check_runtime_sudo
+    self.assertIs(preflight.account(required=True), user)
+                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/scripts/hermes/production/preflight.py", line 198, in account
+    require(
+    ~~~~~~~^
+        result.returncode == 1 and b"not allowed" in result.stderr + result.stdout,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "runtime-sudo-access-or-inspection-failed",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/scripts/hermes/production/primitives.py", line 61, in require
+    raise Refused(reason)
+production.primitives.Refused: runtime-sudo-access-or-inspection-failed
+
+======================================================================
+FAIL: test_runtime_account_rejects_grants_ambiguous_output_and_errors (test_hermes_production.ProductionPolicyTests.test_runtime_account_rejects_grants_ambiguous_output_and_errors) (status=1, output=b'sudo: policy inspection failed; not allowed\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 83, in test_runtime_account_rejects_grants_ambiguous_output_and_errors
+    with self.subTest(status=status, output=output), self.assertRaisesRegex(Refused, "runtime-sudo"):
+                                                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Refused not raised
+
+======================================================================
+FAIL: test_partial_bootstrap_selects_corrected_receiver_without_application (test_hermes_production.ProductionReceiverTests.test_partial_bootstrap_selects_corrected_receiver_without_application)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 868, in test_partial_bootstrap_selects_corrected_receiver_without_application
+    self.check_bootstrap_rerun(previous=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 993, in check_bootstrap_rerun
+    self.assertEqual(json.loads((self.install / "controller.json").read_text()),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     {"receiver": old_receiver if active else expected_receiver})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'receiver': '01770100903218a972d0b5262ff272849d1fba756c54d97aa1d65cddd755ac5c'} != {'receiver': '5e3e911957a3c963a10cc69859b5724d531e2acf5483091c39da2e54fc9f0b1c'}
+- {'receiver': '01770100903218a972d0b5262ff272849d1fba756c54d97aa1d65cddd755ac5c'}
++ {'receiver': '5e3e911957a3c963a10cc69859b5724d531e2acf5483091c39da2e54fc9f0b1c'}
+
+======================================================================
+FAIL: test_private_bootstrap_preserves_active_application_receiver (test_hermes_production.ProductionReceiverTests.test_private_bootstrap_preserves_active_application_receiver)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 871, in test_private_bootstrap_preserves_active_application_receiver
+    self.check_bootstrap_rerun(previous=True, active=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/home/aicloudopspecial/code/repos/hermes-fedora-host/tests/test_hermes_production.py", line 967, in check_bootstrap_rerun
+    self.assertEqual(exit_value.exception.code, 0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 55 tests in 3.257s
+
+FAILED (failures=3, errors=1)

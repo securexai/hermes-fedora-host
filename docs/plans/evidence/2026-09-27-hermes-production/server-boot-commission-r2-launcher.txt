@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if [[ ! -t 0 || ! -t 1 ]]; then
+  printf 'Run this command in your interactive terminal for private sudo entry.\n' >&2
+  exit 1
+fi
+
+boot_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+access_dir="$(cd -- "$boot_dir/../hermes-production-access" && pwd)"
+exec ssh -t -F /dev/null \
+  -i "$access_dir/aicowork-10.0.30.10" \
+  -o "UserKnownHostsFile=$access_dir/known_hosts" \
+  -o GlobalKnownHostsFile=/dev/null \
+  -o StrictHostKeyChecking=yes \
+  -o UpdateHostKeys=no \
+  -o BatchMode=yes \
+  -o IdentitiesOnly=yes \
+  -o IdentityAgent=none \
+  -o ForwardAgent=no \
+  -o ClearAllForwardings=yes \
+  -o ConnectTimeout=8 \
+  aicowork@10.0.30.10 \
+  'sudo python3 -I /home/aicowork/hermes-boot-commission-9a4c0ff7d97b202c.py --apply'

@@ -1,0 +1,28 @@
+{
+  "application_tpm_reboot_backup_provider_telegram_physical_git_delegation": "NOT_RUN",
+  "checked_at_utc": "2026-09-30T00:11:14.614208+00:00",
+  "current_actual_memory_boot_index_sha256": "81ca4dc5f50459e7701f138ba83c98c043fd3b5e1f0f24f3b52cc0098835d004",
+  "exact_next_action": "Operator runs the already staged private review in their own terminal, then shares only the non-secret result; do not request the password/passphrase/log text",
+  "latest_public_result": {
+    "boot_id": "f5fad6ba-4a4a-4556-b933-2dbac98469d0",
+    "checked_at_utc": "2026-09-30T00:10:20.240060+00:00",
+    "scope": "Pinned public receipt observation only; no private logs/input read",
+    "status": "INSTALLER_HYGIENE_REPORT_ABSENT"
+  },
+  "native_goal_observed": "ACTIVE_NOT_COMPLETE",
+  "prior_prepared_record_sha256": "dc3f56ca4c3172148f00a6844a11f60a1f42a59d76419de801fd64e2763b3af5",
+  "private_command": "bash /var/home/aicloudopspecial/code/repos/hermes-fedora-host/.toolbox/hermes-production-restore/installer-hygiene-r1/run-private-installer-hygiene.sh",
+  "production_acceptance": "OPEN",
+  "qualification_vm": "SHUT_OFF_NO_GUEST_CONTACT_IN_THIS_RESUMPTION",
+  "restore_vm": "RUNNING_APPROVED_9_GIB_CURRENT_XML_PIN_AND_BOOT_MATCH",
+  "scope": "Two actual pinned public-receipt checks only; private installer logs and input are not read",
+  "source_and_result_sha256": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r1.py": "18f357f60d3bb1104be8e6c626633751109bc4f6557763540af7f664120fe478",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r2.py": "aa3c837f8958edc897a8587a819938e3fbad2a0c15a2ca7340d1e47e2d9ed5cc",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r1.json": "16ea9438a2fc62f7c0c66fe5406bb502a804ed00daca6e9035f1359d502bbffc",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r1.log": "16ea9438a2fc62f7c0c66fe5406bb502a804ed00daca6e9035f1359d502bbffc",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r2.json": "853c804a795061e955573adce2dd085766d4fa306947a752a244af4a6d03c895",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r2.log": "853c804a795061e955573adce2dd085766d4fa306947a752a244af4a6d03c895"
+  },
+  "status": "BLOCKED_PRIVATE_REVIEW_RECEIPT_ABSENT"
+}

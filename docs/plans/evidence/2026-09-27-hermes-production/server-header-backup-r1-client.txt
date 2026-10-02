@@ -1,0 +1,168 @@
+"""Fetch only ciphertext; verify the header in memory with the local recovery key."""
+
+import datetime
+import hashlib
+import json
+import os
+import shlex
+import stat
+import subprocess
+import sys
+from pathlib import Path
+
+BASE = Path(__file__).resolve().parent
+ACCESS = BASE.parent / "hermes-production-access"
+CERT = BASE / "recovery-public.pem"
+KEY = BASE / "recovery-private.pem"
+LUKS_UUID = "8f5a57cb-f1d7-4eb7-8d1f-266d65f8cff6"
+
+
+def require(value, reason):
+    if not value:
+        raise RuntimeError(reason)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def private(path, *, directory=False):
+    info = path.lstat()
+    require(
+        (stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode))
+        and info.st_uid == os.getuid()
+        and not info.st_mode & 0o077,
+        "unsafe-local-recovery-path",
+    )
+    if not directory:
+        require(info.st_nlink == 1, "unsafe-local-recovery-file-links")
+
+
+def fetch(remote):
+    args = ["ssh", "-F", "/dev/null", "-i", str(ACCESS / "aicowork-10.0.30.10")]
+    for option in [
+        "UserKnownHostsFile=" + str(ACCESS / "known_hosts"),
+        "GlobalKnownHostsFile=/dev/null",
+        "StrictHostKeyChecking=yes",
+        "UpdateHostKeys=no",
+        "BatchMode=yes",
+        "IdentitiesOnly=yes",
+        "IdentityAgent=none",
+        "ConnectTimeout=8",
+        "ForwardAgent=no",
+        "ClearAllForwardings=yes",
+    ]:
+        args += ["-o", option]
+    args += ["aicowork@10.0.30.10", shlex.join(["cat", "--", remote])]
+    result = subprocess.run(args, capture_output=True, timeout=120)
+    require(result.returncode == 0, "encrypted-backup-fetch-failed")
+    return result.stdout
+
+
+def keep(path, data):
+    if path.exists() or path.is_symlink():
+        private(path)
+        require(path.read_bytes() == data, "existing-local-recovery-file-mismatch")
+    else:
+        with path.open("xb") as stream:
+            os.fchmod(stream.fileno(), 0o600)
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
+
+
+def main():
+    os.umask(0o077)
+    private(BASE, directory=True)
+    private(KEY)
+    private(CERT)
+    certificate_sha = digest(CERT.read_bytes())
+    remote_dir = "/var/lib/hermes-production-recovery/header-before-tpm-" + certificate_sha[:16]
+    raw_report = fetch(remote_dir + "/report.json")
+    report = json.loads(raw_report)
+    require(
+        report["status"] == "ENCRYPTED_ON_SERVER"
+        and report["luks_uuid"] == LUKS_UUID
+        and report["certificate_sha256"] == certificate_sha
+        and report["script_sha256"] == digest((BASE / "create-header-backup.py").read_bytes())
+        and report["artifact_directory"] == remote_dir,
+        "server-backup-identity-mismatch",
+    )
+    encrypted = fetch(remote_dir + "/header.cms")
+    require(
+        len(encrypted) <= 128 * 1024**2 and digest(encrypted) == report["ciphertext_sha256"],
+        "encrypted-transfer-hash-mismatch",
+    )
+    destination = BASE / "backup"
+    if not destination.exists() and not destination.is_symlink():
+        destination.mkdir(mode=0o700)
+    private(destination, directory=True)
+    keep(destination / "header.cms", encrypted)
+    keep(destination / "server-report.json", raw_report)
+    result = subprocess.run(
+        [
+            "openssl",
+            "cms",
+            "-decrypt",
+            "-binary",
+            "-inform",
+            "DER",
+            "-in",
+            str(destination / "header.cms"),
+            "-recip",
+            str(CERT),
+            "-inkey",
+            str(KEY),
+        ],
+        capture_output=True,
+        timeout=120,
+    )
+    require(result.returncode == 0, "authenticated-decryption-failed")
+    require(
+        len(result.stdout) == report["header_bytes"]
+        and result.stdout[:8] == b"LUKS\xba\xbe\x00\x02"
+        and digest(result.stdout) == report["header_sha256"],
+        "decrypted-header-mismatch",
+    )
+    del result
+    receipt = {
+        "status": "PASS",
+        "scope": "encrypted off-host LUKS header copy and in-memory verification",
+        "luks_uuid": LUKS_UUID,
+        "certificate_sha256": certificate_sha,
+        "ciphertext_sha256": report["ciphertext_sha256"],
+        "header_sha256": report["header_sha256"],
+        "header_bytes": report["header_bytes"],
+        "disk_restore": "NOT_RUN",
+        "passphrase_test": "NOT_RUN",
+        "tpm_enrollment": "NOT_RUN",
+    }
+    keep(
+        destination / "verification.json",
+        (json.dumps(receipt, sort_keys=True, indent=2) + "\n").encode(),
+    )
+    print(
+        json.dumps(
+            {**receipt, "checked_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat()},
+            sort_keys=True,
+            indent=2,
+        )
+    )
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as error:
+        print(
+            json.dumps(
+                {
+                    "status": "FAIL",
+                    "error": str(error)
+                    if isinstance(error, RuntimeError)
+                    else type(error).__name__,
+                }
+            ),
+            file=sys.stderr,
+        )
+        sys.exit(1)

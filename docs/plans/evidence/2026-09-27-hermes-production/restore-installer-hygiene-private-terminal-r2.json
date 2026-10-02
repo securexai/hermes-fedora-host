@@ -1,0 +1,69 @@
+{
+  "application_deployment_tpm_reboot_external_backup_provider_telegram_physical_git_delegation": "NOT_RUN",
+  "candidate": "579403970f8225aea05866752e82e8800b3bac3f5abcf2cd892ffc9f52944295",
+  "checked_at_utc": "2026-09-30T01:47:30.197929+00:00",
+  "exact_next_action": "Operator completes sudo/recovery input and all-log review in the already open private window; poll this same known live handle, then independently validate the fixed root-owned public receipt before advancing G03",
+  "frozen_private_launcher_sha256": "317011f19345a41430cf225e069f4ef448801f22282b0582b13e27c6992193b6",
+  "frozen_remote_helper_sha256": "46df3a07be7e613de77adc1cef7559a8f50a0977a6d306d3983121f109aec31a",
+  "last_live_handle_observation": {
+    "checked_at_utc": "2026-09-30T01:43:20.801891+00:00",
+    "completion_present": false,
+    "private_terminal_capture": "NONE",
+    "service": {
+      "ActiveState": "active",
+      "ExecMainCode": "0",
+      "ExecMainStatus": "0",
+      "LoadState": "loaded",
+      "MainPID": "187668",
+      "StandardError": "null",
+      "StandardInput": "null",
+      "StandardOutput": "null",
+      "SubState": "running"
+    },
+    "unit": "hermes-restore-installer-review-r2.service",
+    "wrapper_handle_present": true,
+    "wrapper_pid": 187748,
+    "wrapper_same_process_live": true
+  },
+  "native_goal_observed": "ACTIVE_AFTER_USER_UNBLOCK_REQUEST",
+  "original_direct_window_result": "Both specific frontend and wrapper process handles later missing; no numeric completion result; fixed root python3/less metadata observation found no running matching executable; cause unknown; R1 records retained",
+  "prior_blocked_audit_sha256": "97f8ee018d5aab0f09c87667bd6dcdd0290562692b56ac8e0efe7433899e77a6",
+  "prior_prepared_index_sha256": "dc3f56ca4c3172148f00a6844a11f60a1f42a59d76419de801fd64e2763b3af5",
+  "private_input_terminal_output_log_capture": "NONE",
+  "private_window_instructions": "Enter secrets only there; :n for each log, q to exit, reviewed only after every file is clean; share only final non-secret result",
+  "production_acceptance": "OPEN",
+  "published_local_metadata": "UID/PID/start/boot/source identity and numeric command exit only; no private values, terminal data or installer-log content",
+  "receiver": "a1edcaad3a47e22ce4246b13243eb39c8d66038388def6c21feb5dd31bb5671c",
+  "retry_change": "R2 uses a persistent user-session service with stdin/stdout/stderr null and a built-in separate Konsole profile; no repeat launch while the same handle is live",
+  "scope": "Open the already approved restore private installer-log review in the user own separate terminal; monitor only specific service/process handles and sanitized completion/public receipt",
+  "service_unit": "hermes-restore-installer-review-r2.service",
+  "source_and_public_metadata_sha256": {
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/check-public-receipt-r4.py": "2d2f8676687baa05a6a4b394142f381340ca2fbc7372c557f231967576c39011",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/observe-private-terminal-r2.py": "2379e2adc10a26d87569736985e211f859a251be82031527f47cb9f1a00c2a69",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/open-private-terminal-r1.py": "3a425aa76f1b2d1ddef4477980f2ef2f5267c9bee9e9f0154d910e7081b7dd0e",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/open-private-terminal-r2.py": "eb1269c00442449b0ada10c2aa545d3f6c6dacb2292e046249f7d2a1ec980137",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r1-handle.json": "84f385458047d9e13c9ffd02024932fec31f90c3d36799649d6db68f6c56bbc5",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r1-launch.json": "79cecc691d1c6ca112b88dfb6bcb6d311d5cbaabb914e9c22280649f31304493",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r1.py": "1ddb8a329057baa7fb1fd6b7d0d27e36ad66f83199f19c24c2cea8c3a6ac4ea7",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-handle.json": "4e08e2fb88a6592ad7125921f1a3cf95d5605427f6c4b05ecb0798138951ef01",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-launch.json": "3e1b745fdd2cf2377bb27c70acbe174cb46d0ba91faa75997e87872dcd410336",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-observation-r1.json": "df7608ebecb21547c37762ff2c4032349d7c7a2eed1ae6c83e69d0b4ba1318c7",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2-observation-r2.json": "556dd0a6d13f782e6ca322faca848b77fccd11311de1415310aa83a35673b718",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/private-terminal-r2.py": "34c1bc6197590e27d9066b2df3dbc148af8cd52dbb0b3e545554eaf1bc18075a",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r4.json": "448ad9f355cd3c175416c0f9b4c1caa90d798d342ab4593ad70bdc1d0ad25d78",
+    ".toolbox/hermes-production-restore/installer-hygiene-r1/public-receipt-check-r4.log": "448ad9f355cd3c175416c0f9b4c1caa90d798d342ab4593ad70bdc1d0ad25d78"
+  },
+  "status": "ACTUAL_PRIVATE_TERMINAL_JOB_LIVE_RECEIPT_NOT_YET_VALIDATED",
+  "sudo_grants_or_stored_passwords": "NONE",
+  "validation": {
+    "persistent_private_window_and_same_wrapper_handle": "ACTUAL_LIVE_OBSERVED_TWICE",
+    "private_wrapper_syntax": "PASS",
+    "real_non_tty_refusal": "PASS_BOTH_WRAPPERS_BEFORE_ANY_GUEST_OPERATION",
+    "root_private_hygiene_outcome": "NOT_YET_VALIDATED_NO_PASS_FROM_PROCESS_AVAILABILITY",
+    "service_standard_streams": "ACTUAL_NULL_OBSERVED"
+  },
+  "vm_states": {
+    "qualification": "SHUT_OFF",
+    "restore": "RUNNING_CURRENT_APPROVED_9_GIB"
+  }
+}

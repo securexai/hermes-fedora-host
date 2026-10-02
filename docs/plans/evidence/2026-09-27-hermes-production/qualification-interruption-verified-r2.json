@@ -1,0 +1,11 @@
+{
+  "checked_at_utc": "2026-09-29T20:11:56.929418+00:00",
+  "guard_log_sha256": "8584b35e664b607adeae4713252b74170379a5309d6e0cb6aec88e1623325156",
+  "guard_tests": 13,
+  "no_private_terminal": "REFUSED_BEFORE_ACCESS_INPUTS_AND_GUEST_CONTACT",
+  "packaged_source": "UNCHANGED",
+  "root_execution": "NOT_RUN",
+  "status": "PASS_WITHIN_GUARD_AND_STAGING_SCOPE",
+  "syntax": "PASS",
+  "toolbox": "dev-infra-hermes"
+}

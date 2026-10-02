@@ -1,0 +1,17 @@
+{
+  "bash_syntax": "PASS",
+  "command": "python3 -B .toolbox/hermes-production-boot/test_commission_boot.py .toolbox/hermes-production-boot/commission-boot.py -v",
+  "environment": "dev-infra-hermes",
+  "format": "PASS",
+  "launcher_sha256": "ecf2cf80b8925d9296efa5d96a8fa4541067614cfa4181e9d681aca67253f215",
+  "live_corrected_apply": "NOT_RUN",
+  "reboot": "NOT_RUN",
+  "ruff_check": "PASS",
+  "scope": "20 isolated cases with real file/transaction behavior; root ownership, TPM, cryptsetup, dracut, SELinux and hardware mocked; separate server synthetic CPIO checks use actual lsinitrd",
+  "script_sha256": "9a4c0ff7d97b202c49d2bfce39b2834fdf1becc45b4e8bb322c3665035891e0d",
+  "shellcheck": "PASS",
+  "shfmt": "PASS",
+  "status": "PASS",
+  "tests_passed": 20,
+  "tests_sha256": "4e79000cc93c831e28f89140b65d38abfdc1f90c21f01c8a7ee36326cb946436"
+}

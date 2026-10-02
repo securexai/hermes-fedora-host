@@ -1,0 +1,18 @@
+{
+  "automatic_boot_proof": "NOT_RUN",
+  "error": "default-kernel-mismatch",
+  "independently_observed_boot_id": "87e1d398-7465-4586-a77d-4eaf03245b73",
+  "independently_observed_kernel_packages": [
+    "kernel-core-6.19.10-300.fc44.x86_64",
+    "kernel-core-7.2.7-200.fc44.x86_64"
+  ],
+  "operator_default_kernel": "/boot/vmlinuz-7.2.7-200.fc44.x86_64",
+  "running_kernel": "6.19.10-300.fc44.x86_64",
+  "script_sha256": "3f403c355734681ce363e74d0d233fe9db70f51ddc5960f902d64a9a37d0ffa4",
+  "selected_kernel_dracut_module_availability": [
+    "systemd-cryptsetup",
+    "tpm2-tss"
+  ],
+  "source": "operator terminal output from reviewed attended-reboot r1",
+  "status": "REFUSED"
+}

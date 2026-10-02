@@ -1,0 +1,14 @@
+{
+  "boot_id": "4cea93af-9409-42b1-a5c2-ad4c8d8cfd60",
+  "checked_at_utc": "2026-09-28T20:38:33.262790+00:00",
+  "correction": "Use a separate one-time BLS entry with the recovery-slot override plus systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0; remove quiet/rhgb from that copy only.",
+  "diagnosis": "The systemd v259 source tries external LUKS token plugins before the passphrase path; the first options did not disable that path. This is source-based explanation, not an instrumented observation of the token chosen at boot. The synthetic generator tests verified arguments only.",
+  "kernel_argument_was_exact": true,
+  "luks_prompt_observed": false,
+  "operator_reply": "I dind not see the pathphrase request possible my mistake to add the correct values, do it for me and i will test the luks path\u1e55hrase",
+  "passphrase_recovery": "NOT_PROVEN",
+  "remote_evidence_sha256": "3c01bf6f73b350ec3c692c75118f1303124cd62af2aa7c911db6cad2139f5c92",
+  "remote_health_checks": "PASS",
+  "scope": "BC-D3 physical passphrase recovery acceptance for the first attempt",
+  "status": "FAIL"
+}

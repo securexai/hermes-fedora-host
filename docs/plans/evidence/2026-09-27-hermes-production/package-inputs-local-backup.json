@@ -1,0 +1,13 @@
+{
+  "artifact_sha256": "834adb288d5ebdec3a700426fdd054801be3dfa10010534731b8e32939851df8",
+  "checked_package_entries": 38,
+  "preserved_indices": {
+    "verification-fixture-setup.json": "b8d9756e0cee24e41d106a5aa2838861f5d26feb245e5b8ec9551a2d514de365",
+    "verification-goal-resumption.json": "a5168e325cfc41a1a117ca6a4cf1807072ae7a0f535a7e79313c27345705b90b",
+    "verification-review-r1.json": "33cc3a6035df22ef599ff963b0b7a68970cd7c662928260164dfe406d200b10e",
+    "verification-review-r2-accepted.json": "124d673d1ca41e31fbe700f28cf5d94490d54e4b9bb8e439c731c7463fd444cb",
+    "verification-review-r2.json": "86b8ba70fc8f7226b7cf84310ac7799fb15ee3991613c0754f3f967fdcbff58b"
+  },
+  "scope": "All packaged source/image bytes, modes and current profile reconstruct the prior artifact identity; prior signed roundtrip evidence retained, no redundant rebuild.",
+  "status": "PASS"
+}

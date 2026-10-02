@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "stage": "unprivileged preview",
+  "reason": "Installed swapon rejected JSON output option",
+  "remote_script": "/home/aicowork/hermes-prerequisites-bdae547b3a6271e0.py",
+  "sha256": "bdae547b3a6271e02b5d4c5474a2402fd7a0ac451cfd357c79b5fbe88e98fe5d",
+  "configuration_changes": false
+}

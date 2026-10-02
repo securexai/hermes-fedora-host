@@ -1,0 +1,19 @@
+{
+  "baseline_path": ".toolbox/hermes-production-validation/synthetic-stage/qualification-application/memory-9gib-applied-r1.xml",
+  "baseline_sha256": "442d12df7ae3d01136d092042d501472fc1aef2e18a796fa2ba395d1121d0031",
+  "checked_at_utc": "2026-09-29T22:24:07.446465+00:00",
+  "corrected_method": "Compare complete parsed XML tags/attributes/text/child order plus explicit exact 9GiB/two-CPU/UUID and shutoff; exact byte difference is one trailing LF only",
+  "current_dump_sha256": "93423a83c16d643b14ef37bb6f8a9c6dd1f03a34f36a115733dcd606a47a422a",
+  "current_retained_path": ".toolbox/hermes-production-restore/qualification-current-9gib-observed-r1.xml",
+  "disk_nvram_tpm_boot_config": "COMPLETE_STRUCTURAL_MATCH",
+  "historical_8gib_baseline": "NOT_USED",
+  "initial_byte_observer": "FAIL_EXACT_BYTES_ONE_ADDITIONAL_TRAILING_NEWLINE",
+  "initial_check_mutations": "NONE",
+  "memory_gib": 9,
+  "qualification_runtime_evidence": "UNCHANGED_IN_SCOPE",
+  "scope": "Read-only preserved qualification lifecycle baseline comparison",
+  "state": "shut off",
+  "status": "PASS_COMPLETE_CURRENT_9GIB_QUALIFICATION_CONFIG_PRESERVED",
+  "vcpus": 2,
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

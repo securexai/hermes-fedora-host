@@ -1,0 +1,96 @@
+"""Test cleanup ownership and exact corrected-boot prerequisites."""
+
+import hashlib
+import importlib.util
+import tempfile
+import types
+import unittest
+from pathlib import Path
+from unittest.mock import Mock
+
+spec = importlib.util.spec_from_file_location(
+    "finish", Path(__file__).with_name("finish-recovery.py")
+)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+
+
+class FinishTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.entry = Path(self.temp.name) / "test.conf"
+        self.retained = Path(self.temp.name) / "test.removed"
+        self.original = b"exact-owned-test-entry"
+        self.digest = hashlib.sha256(self.original).hexdigest()
+        self.api = Mock()
+        self.api.sha.side_effect = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+        self.api.atomic.side_effect = lambda path, data: path.write_bytes(data)
+        self.recovery = types.SimpleNamespace(
+            BOOT_ID="old",
+            RECOVERY="rd.luks.options=id=key-slot=0",
+            DISABLE_PLUGINS="systemd.setenv=SYSTEMD_CRYPTSETUP_USE_TOKEN_MODULE=0",
+            MARKER="hermes.recovery=r2",
+        )
+        self.cmdline = " ".join(
+            [self.recovery.RECOVERY, self.recovery.DISABLE_PLUGINS, self.recovery.MARKER]
+        )
+
+    def test_exact_recovered_boot_accepted(self):
+        mod.check_recovered_boot(self.recovery, self.cmdline, "new")
+
+    def test_original_boot_refused(self):
+        with self.assertRaisesRegex(RuntimeError, "recovery-reboot-not-observed"):
+            mod.check_recovered_boot(self.recovery, self.cmdline, "old")
+
+    def test_missing_duplicate_or_conflicting_parameters_refused(self):
+        for value in [
+            "",
+            self.recovery.RECOVERY,
+            self.cmdline + " " + self.recovery.RECOVERY,
+            self.cmdline.replace("USE_TOKEN_MODULE=0", "USE_TOKEN_MODULE=1"),
+        ]:
+            with self.subTest(value=value), self.assertRaises(RuntimeError):
+                mod.check_recovered_boot(self.recovery, value, "new")
+
+    def test_owned_entry_preserved_then_removed_and_rerun_converges(self):
+        self.entry.write_bytes(self.original)
+        self.assertEqual(
+            mod.remove_owned_entry(self.api, self.entry, self.digest, self.retained), "REMOVED"
+        )
+        self.assertFalse(self.entry.exists())
+        self.assertEqual(self.retained.read_bytes(), self.original)
+        self.assertEqual(
+            mod.remove_owned_entry(self.api, self.entry, self.digest, self.retained),
+            "ALREADY_REMOVED",
+        )
+        self.assertEqual(self.api.atomic.call_count, 1)
+
+    def test_changed_entry_not_removed(self):
+        self.entry.write_bytes(b"unrelated")
+        with self.assertRaisesRegex(RuntimeError, "temporary-entry-changed-no-delete"):
+            mod.remove_owned_entry(self.api, self.entry, self.digest, self.retained)
+        self.assertEqual(self.entry.read_bytes(), b"unrelated")
+        self.api.atomic.assert_not_called()
+
+    def test_changed_retained_copy_does_not_remove_entry(self):
+        self.entry.write_bytes(self.original)
+        self.retained.write_bytes(b"changed")
+        with self.assertRaisesRegex(RuntimeError, "retained-recovery-entry-changed"):
+            mod.remove_owned_entry(self.api, self.entry, self.digest, self.retained)
+        self.assertTrue(self.entry.exists())
+
+    def test_failed_copy_never_removes_entry(self):
+        self.entry.write_bytes(self.original)
+        self.api.atomic.side_effect = OSError("simulated disk failure")
+        with self.assertRaises(OSError):
+            mod.remove_owned_entry(self.api, self.entry, self.digest, self.retained)
+        self.assertEqual(self.entry.read_bytes(), self.original)
+
+    def test_missing_entry_without_copy_is_not_success(self):
+        with self.assertRaisesRegex(RuntimeError, "missing-entry-without-cleanup-evidence"):
+            mod.remove_owned_entry(self.api, self.entry, self.digest, self.retained)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

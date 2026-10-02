@@ -1,0 +1,21 @@
+{
+  "application_dispatcher_installation": "NOT_RUN",
+  "applied": false,
+  "assigned_gib": 8,
+  "baseline_sha256": "54695f2158e9464f9a7a3ce41b2ea3fb99809578d7982029a8b33313c7cc3e9e",
+  "bootstrap_failure": "bootstrap-preflight-failed:platform",
+  "changed_fields": [
+    "memory",
+    "currentMemory"
+  ],
+  "checked_at_utc": "2026-09-29T18:27:43.235752+00:00",
+  "exposed_bytes": 8244031488,
+  "operator_approval": "PENDING",
+  "preview_sha256": "003adbe6b28f2840976917ce5fffee2424d6da9c44af8ae8e28f847a758c183f",
+  "proposed_gib": 9,
+  "reason": "Guest exposes less memory than the unchanged platform threshold",
+  "required_bytes": 8321499136,
+  "status": "AWAITING_RESOURCE_APPROVAL",
+  "target": "hermes-production-qualification",
+  "vm_uuid": "27b76faa-7e0b-4162-9fad-e9f85684309a"
+}

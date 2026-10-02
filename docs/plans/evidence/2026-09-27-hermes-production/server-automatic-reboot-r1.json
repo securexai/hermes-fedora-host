@@ -1,0 +1,26 @@
+{
+  "after_boot_id": "cf087d12-cf0e-43a3-85df-bb4225213e33",
+  "before_boot_id": "87e1d398-7465-4586-a77d-4eaf03245b73",
+  "cold_start": "NOT_RUN",
+  "firmware_power_restoration": "NOT_RUN",
+  "kernel": "7.2.7-200.fc44.x86_64",
+  "operator_observation": "No LUKS prompt; server online and working",
+  "operator_reply": "didn\u00b4t reach LUKS, the server is online and working",
+  "operator_reply_context": "Asked whether the physical console reached login without entering a LUKS passphrase",
+  "post_reboot_evidence": "server-selected-kernel-r1-post-reboot.json",
+  "post_reboot_evidence_sha256": "8fd6396fa595f4b18249af75073013264afc1c16788db2e3fa4d8d730af9ded6",
+  "pre_cold_cycle_check": {
+    "active_swap": false,
+    "boot_id": "cf087d12-cf0e-43a3-85df-bb4225213e33",
+    "failed_units": [],
+    "kernel": "7.2.7-200.fc44.x86_64",
+    "secure_boot": "enabled",
+    "selinux": "Enforcing",
+    "server_checked_at_utc": "2026-09-28T16:57:08.334820+00:00",
+    "system_state": "running"
+  },
+  "recorded_at_utc": "2026-09-28T16:58:15.925605+00:00",
+  "recovery_boot": "NOT_RUN",
+  "scope": "attended automatic reboot with operator no-LUKS-prompt observation and independent post-boot health",
+  "status": "PASS"
+}

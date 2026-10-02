@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "scope": "Read-only eight-byte partition magic; no keyslot or secret data read",
+  "luks_version": 2,
+  "partition": 3,
+  "private_unlock": "NOT_RUN"
+}
