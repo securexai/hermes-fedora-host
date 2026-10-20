@@ -155,6 +155,12 @@ def build(artifacts, output, key, *, evidence=None):
         require(not path.is_symlink(), "source-symlink")
         files["source/" + str(path.relative_to(base))] = path
     files["source/PRODUCTION_RUNBOOK.md"] = ROOT / "docs/HERMES_PRODUCTION_DEPLOYMENT.md"
+    # The installer template is qualified with the release: changing it afterwards makes
+    # the qualification evidence stale. Not required by validate(), so older releases
+    # (without it) stay valid for rollback.
+    files["source/kickstart/fedora-server-production.ks.in"] = (
+        ROOT / "vm/kickstart/fedora-server-production.ks.in"
+    )
     for component in ("gateway", "worker"):
         path = regular(artifacts / (component + ".oci"))
         require(sha(path) == cached["files"][path.name], "retained-image-corrupt")

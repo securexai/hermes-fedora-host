@@ -545,35 +545,31 @@ class Run:
         manager = f"systemctl show user@{uid}.service --property=InvocationID --value"
         before = self.root(manager).stdout.strip()
         require(before, "runtime-user-manager-not-running")
-        payload = io.BytesIO()
-        with (
-            tarfile.open(self.dir / "upgrade.tar", "r:") as release,
-            tarfile.open(fileobj=payload, mode="w", format=tarfile.USTAR_FORMAT) as output,
-        ):
+        pointer = "cat /usr/local/libexec/hermes-production/controller.json"
+        selected = self.root(pointer).stdout
+        with tarfile.open(self.dir / "upgrade.tar", "r:") as release:
             manifest = json.loads(release.extractfile("manifest.json").read())
             wanted = receivers.expected(manifest)["files"]
-            for item in release.getmembers():
-                name = item.name.removeprefix("source/")
-                if item.name.startswith("source/") and name in wanted:
-                    member = tarfile.TarInfo(name)
-                    member.mode, member.size = 0o644, item.size
-                    output.addfile(member, release.extractfile(item))
+            contents = {
+                item.name.removeprefix("source/"): release.extractfile(item).read()
+                for item in release.getmembers()
+                if item.name.startswith("source/") and item.name.removeprefix("source/") in wanted
+            }
+        files = {name: hashlib.sha256(data).hexdigest() for name, data in contents.items()}
+        require(files == wanted, "controller-update-source-mismatch")
         copy_ = client.ssh(
             "127.0.0.1",
             PORT,
             ADMIN,
             self.dir / "admin_ed25519",
             self.dir / "known_hosts",
-            "rm -rf ~/hermes-controller && mkdir -m 700 ~/hermes-controller"
-            " && tar -C ~/hermes-controller -xf -",
+            f"rm -rf ~/{client.CONTROLLER_STAGING} && mkdir -m 700 ~/{client.CONTROLLER_STAGING}"
+            f" && tar -C ~/{client.CONTROLLER_STAGING} -xf -",
         )
-        command(copy_, data=payload.getvalue(), timeout=120)
-        result = self.root(
-            f"python3 -I -B ~{ADMIN}/hermes-controller/productionctl.py bootstrap"
-            " --config /etc/hermes-production/host.json"
-            " --signers /etc/hermes-production/allowed_signers --apply",
-            timeout=900,
-        )
+        command(copy_, data=client.controller_payload(contents), timeout=120)
+        # The operator's procedure: hash-verified root-owned staging, then bootstrap.
+        expected = digest(receivers.descriptor(files))
+        result = self.root(client.controller_script(ADMIN, files, expected), timeout=900)
         report = decode(result.stdout)
         receiver = digest(receivers.expected(manifest))
         require(
@@ -581,6 +577,7 @@ class Run:
             "controller-update-receiver",
         )
         require(self.root(manager).stdout.strip() == before, "controller-update-restarted-runtime")
+        require(self.root(pointer).stdout == selected, "controller-update-changed-selection")
         require(
             self.current() == self.facts["candidates"]["candidate"], "controller-update-release"
         )
@@ -724,7 +721,10 @@ class Run:
         swapped = re.sub(r"(?m)^TELEGRAM_ALLOWED_USERS=.*$", "TELEGRAM_ALLOWED_USERS=1", text)
         try:
             atomic(rejecting, swapped.encode(), 0o600)
+            since = float(self.root("date +%s").stdout.decode())
             ctl("credentials", *self.target(), "--env-file", str(rejecting), "--apply")
+            # The restarted gateway must be polling again before "silent" means anything.
+            self.telegram_ready(since=since)
             results["unlisted_user_rejected"] = ask(
                 "The allowlist now excludes your account. Send the bot any message.\n"
                 "Did it stay silent for at least 60 seconds?"
@@ -745,9 +745,7 @@ class Run:
         out = (
             self.root(
                 "journalctl -b -o short-unix --no-pager _SYSTEMD_USER_UNIT=hermes-gateway.service"
-                ' | awk \'/Connected to Telegram [(]polling mode[)]/ {print $1, "connect"}'
-                " /polling conflict|telegram_polling_conflict|terminated by other getUpdates/"
-                ' {print $1, "conflict"}\'; date +%s'
+                f" | awk '{TELEGRAM_EVENTS_AWK}'; date +%s"
             )
             .stdout.decode()
             .split("\n")
@@ -756,24 +754,40 @@ class Run:
         now = float(rows.pop()[0])
         return [(float(when), kind) for when, kind in rows], now
 
-    def telegram_ready(self, timeout=900):
+    def telegram_ready(self, timeout=900, since=None):
         """The VM gateway must hold the bot's only Telegram poll before any question.
 
         Two gateways polling one token keep ending each other's getUpdates, so neither
         answers reliably. A conflict here means another gateway (such as production)
-        uses this token: say so at once and keep waiting while the operator stops it.
+        uses this token: say so at once and keep waiting while the operator stops it. After
+        repeated conflicts the adapter stops polling for good; once the operator has stopped
+        the other poller, the VM gateway is restarted and only later events count.
         """
         deadline, warned = time.monotonic() + timeout, False
         while True:
             events, now = self.telegram_events()
+            if since is not None:
+                events = [event for event in events if event[0] >= since]
             state = telegram_poll_state(events, now)
             if state == "ready":
                 return
+            if state == "stopped":
+                answer = ask(
+                    "The VM gateway stopped polling Telegram after repeated conflicts: another"
+                    " instance (for example production) polls this token.\nStop it now; yes"
+                    " restarts the VM gateway, no ends the run.\nIs the other instance stopped?"
+                )
+                require(answer == "YES", "telegram-token-in-use-elsewhere")
+                since = float(self.root("date +%s").stdout.decode())
+                self.root("systemctl --user -M hermes@ restart hermes-gateway.service", timeout=120)
+                deadline, warned = time.monotonic() + timeout, True
+                continue
             if state == "conflict" and not warned:
                 warned = True
                 print(
                     "\nTelegram reports ANOTHER bot instance polling this token (for example"
-                    " production).\nStop it, or rerun with a separate qualification bot token."
+                    " production), or a previous session still expiring.\nStop any other"
+                    " instance, or rerun with a separate qualification bot token."
                     " Waiting for the conflict to clear...",
                     flush=True,
                 )
@@ -907,6 +921,15 @@ LIVE_ONLY = {"credentials", "application"}
 
 # Longer than the Telegram adapter's longest conflict back-off (60 s between retries).
 TELEGRAM_QUIET = 75
+# Fixed adapter event kinds from `journalctl -o short-unix` (field 1 is the time). r19
+# journal: conflict back-offs end in "Fatal telegram adapter error
+# (telegram_polling_conflict)", after which the adapter polls no more until a restart.
+TELEGRAM_EVENTS_AWK = (
+    '/Connected to Telegram [(]polling mode[)]/ {print $1, "connect"; next}'
+    ' tolower($0) ~ /fatal telegram adapter error/ {print $1, "stopped"; next}'
+    " /polling conflict|telegram_polling_conflict|terminated by other getUpdates/"
+    ' {print $1, "conflict"}'
+)
 LIVE_QUESTIONS = (
     (
         "tool_round_trip",
@@ -933,16 +956,38 @@ LIVE_QUESTIONS = (
 def telegram_poll_state(events, now, quiet=TELEGRAM_QUIET):
     """'ready' once connected with no adapter event for `quiet` seconds.
 
-    Otherwise 'conflict' when a polling conflict followed the last connect (another
-    poller holds the token, or a previous session is still expiring), else 'waiting'.
+    'stopped' when a fatal adapter error followed the last connect: the journal stays
+    quiet, but nothing polls until a restart (G5, 2026-10-19: reported ready, no bot
+    answered). Otherwise 'conflict' when a polling conflict followed the last connect
+    (another poller holds the token, or a previous session is still expiring), else
+    'waiting'.
     """
     connects = [when for when, kind in events if kind == "connect"]
     conflicts = [when for when, kind in events if kind == "conflict"]
+    stops = [when for when, kind in events if kind == "stopped"]
+    if stops and (not connects or max(stops) >= max(connects)):
+        return "stopped"
     if connects and now - max(connects + conflicts) >= quiet:
         return "ready"
     if conflicts and (not connects or max(conflicts) >= max(connects)):
         return "conflict"
     return "waiting"
+
+
+def release_live_token(run):
+    """A kept VM must not keep polling with the operator's real bot token."""
+    if NAME not in virsh("list", "--name").stdout.decode().split():
+        return
+    stopped = run.root(
+        "systemctl --user -M hermes@ stop hermes-gateway.service", check=False, timeout=120
+    )
+    print(
+        "\nThe kept VM holds the real credentials from --live-env. Its gateway is "
+        + ("stopped" if stopped.returncode == 0 else "NOT confirmed stopped: stop or remove the VM")
+        + "; the next run's --replace-previous removes the VM.",
+        file=sys.stderr,
+        flush=True,
+    )
 
 
 def ask(question):
@@ -1159,6 +1204,8 @@ def main(argv=None):
             and NAME in virsh("list", "--all", "--name").stdout.decode().split()
         ):
             replace_previous()
+        if args.live_env and "credentials" in {row["stage"] for row in run.stages}:
+            release_live_token(run)
     print(
         canonical(
             {"status": "PASS" if status == 0 else "FAIL", "run": str(run.dir), "gates": run.gates()}

@@ -14,6 +14,7 @@ anything from it, or make any check depend on it.
 | --- | --- |
 | Installation guide (canonical, human-facing) | [`docs/hermes-fedora-server-install-guide.html`](docs/hermes-fedora-server-install-guide.html) |
 | One-command controller | `scripts/hermes/deploy.sh`, `scripts/hermes/deploy-lib.sh` (root launcher: `hermes-deploy.sh`) |
+| Production bundle (installer, controller, qualification) | `docs/HERMES_PRODUCTION_DEPLOYMENT.md`, `scripts/hermes/productionctl.py`, `scripts/hermes/production/`, `vm/hermes-production-qualify.py` |
 | Manual profile (M01–M05) | `scripts/hermes/manual/README.md`, `docs/HERMES_MANUAL_DEPLOYMENT_GUIDE.md` |
 | Manual-profile contract | `docs/HERMES_MANUAL_PROFILE_CONTRACT.md` |
 | Unattended controller | `docs/HERMES_UNATTENDED_DEPLOYMENT.md`, `scripts/hermes/unattended/` |

@@ -43,6 +43,11 @@ def remote(args, *, operation=None, apply=None, body=None):
         "ClearAllForwardings=yes",
         "-o",
         "UserKnownHostsFile=" + str(Path(args.known_hosts).absolute()),
+        "-o",
+        # Only the pinned key: never a same-named entry in the workstation's global file.
+        "GlobalKnownHostsFile=/dev/null",
+        "-o",
+        "IdentityAgent=none",
         "-i",
         str(Path(args.identity).absolute()),
         "hermes-deploy@" + args.host,
@@ -185,6 +190,15 @@ def main(argv=None):
     enroll.add_argument("--escrow-key", required=True)
     enroll.add_argument("--escrow-out", required=True)
     enroll.add_argument("--apply", action="store_true")
+    update = sub.add_parser(
+        "controller-update", help="Stage this tree's receiver on the host, hash-verified as root"
+    )
+    update.add_argument("--host", required=True)
+    update.add_argument("--port", type=int, default=22)
+    update.add_argument("--known-hosts", required=True)
+    update.add_argument("--admin", default="hermesadmin")
+    update.add_argument("--admin-identity", required=True)
+    update.add_argument("--apply", action="store_true")
     attest = sub.add_parser("attest", help="Submit a console or power-restoration code")
     target(attest)
     attest.add_argument("--proof", required=True, choices=("console", "power"))
@@ -222,13 +236,15 @@ def main(argv=None):
         if args.operation == "release-action":
             require(os.geteuid() == 0, "root-receiver-action-required")
             from production import receivers
+            from production.primitives import contained
             from production.runtime import Backend
 
             config = preflight.configuration(read_json(preflight.CONFIG, owner=0))
             backend = Backend(config)
             _, manifest = backend.release(args.release)
             require(receivers.running_matches(manifest), "mixed-receiver-execution-refused")
-            getattr(backend, args.action)(args.release)
+            with contained():
+                getattr(backend, args.action)(args.release)
             result = {"status": "PASS"}
         elif args.operation == "dispatch":
             result = host.dispatch(sys.stdin.buffer)
@@ -308,6 +324,18 @@ def main(argv=None):
                 args.escrow_key,
                 args.escrow_out,
                 proof,
+                apply=args.apply,
+            )
+        elif args.operation == "controller-update":
+            from production import client
+
+            result = client.controller_update(
+                args.host,
+                args.port,
+                args.known_hosts,
+                args.admin,
+                args.admin_identity,
+                Path(__file__).resolve().parent,
                 apply=args.apply,
             )
         elif args.operation == "attest":

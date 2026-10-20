@@ -21,7 +21,8 @@ def child_signals():
 def main():
     # Arguments are private plumbing followed by the original argv, never secrets.
     timeout = float(sys.argv[1])
-    for fd in sys.argv[2].split(","):
+    # "-": a contained receiver action whose caller's guard already holds the lock.
+    for fd in [] if sys.argv[2] == "-" else sys.argv[2].split(","):
         os.fstat(int(fd))
     libc = ctypes.CDLL(None, use_errno=True)
     if libc.prctl(36, ctypes.c_ulong(1), 0, 0, 0) != 0:  # PR_SET_CHILD_SUBREAPER

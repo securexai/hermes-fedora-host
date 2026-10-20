@@ -467,7 +467,7 @@ def configure(gateway: str):
 
 
 WORKER_OFFLINE = "Network=none\n"
-WORKER_ONLINE = "Network=pasta:--no-map-gw\n"
+WORKER_ONLINE = "Network=pasta:--no-map-gw,--ipv4-only\n"
 
 
 def worker_network(mode: str) -> str:
@@ -492,9 +492,10 @@ def install_quadlets(uid: int, mode: str) -> bool:
         if name == "hermes-gateway.container" and mode == "synthetic":
             content = content.replace("[Container]\n", "[Container]\nNetwork=none\n", 1)
         if name == "hermes-worker.container" and mode == "production":
-            # Production workers get outbound internet through rootless pasta without the
-            # gateway-to-host-loopback mapping; the host egress guard keeps them off local
-            # networks. Synthetic and lab workers stay offline.
+            # Production workers get outbound IPv4 internet through rootless pasta without
+            # the gateway-to-host-loopback mapping; the host egress guard keeps them off
+            # local networks (it cannot know a LAN's global IPv6 prefix, so no IPv6).
+            # Synthetic and lab workers stay offline.
             if content.count(WORKER_OFFLINE) != 1:
                 raise DeployError("worker unit network line not found")
             content = content.replace(WORKER_OFFLINE, WORKER_ONLINE, 1)

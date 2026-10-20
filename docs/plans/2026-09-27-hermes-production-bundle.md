@@ -4111,3 +4111,244 @@ An external read-only reviewer, using the agent-written prompt, reported 15 find
 - consider a passphrase on the admin key.
 
 **Exact next action:** the operator chooses the fix-release scope and whether to commit the deployed tree first.
+
+## Approved scope — review fix release (2026-10-02)
+
+**Approval evidence:** after the independent branch review, the operator chose "High + Medium (Recommended)" as the fix-release scope, and "Yes, commit" for the deployed tree first. Commits made: `cb19447`, `ce73f96`, `1437be4`; no push.
+
+**Baseline (frozen):**
+
+- **Outcome:** one release that closes review findings 1–11 with tests (12), plus the Low findings 13–15 where safe. It is qualified live and rolled out to 10.0.30.10 by the operator.
+- **Compatibility constraint:** every receiver back to the deployed `6ced79eb…` must keep working for recovery and rollback. So this release does not change the bytes of host-wide files that `6ced79eb…` compares exactly:
+  - the guard's `egress.nft`, `hermes-egress.service` and user drop-in;
+  - the sshd `Match` policy, sudoers, the launcher and the mount guard.
+
+  New guard prefixes (NAT64, IPv4-mapped) and an sshd `ClientAliveInterval` are therefore deferred until every rollback target has the tolerant checks from R01.
+- **Unchanged:** worker internet with LAN blocked; no off-host backup (waiver); `preflight.PACKAGES` frozen; one Telegram poller per token; the `mikrotik` repository out of scope.
+- **Authority:** repository changes, local unattended disposable VMs with dummy credentials, and local commits on request. Live qualification, the controller update and the upgrade on 10.0.30.10 remain operator steps.
+
+| Task | Finding | Outcome | Progress |
+| --- | --- | --- | --- |
+| R01 | 2, 13 | Guard check is tolerant across receivers: the loaded table must contain the receiver's required drop rules, with exact operators and expressions; files are checked against hashes recorded by bootstrap, not against this receiver's own constants | ✅ DONE |
+| R02 | 1 | Worker is IPv4-only (`Network=pasta:--no-map-gw,--ipv4-only` in the release's Quadlet); verify refuses a worker with any non-link-local IPv6 address | ✅ DONE |
+| R03 | 5 | Probes: drop the own-address probe; only a connect timeout counts as BLOCKED; add the default gateway when one exists; no default route does not fail verify | ✅ DONE |
+| R04 | 3 | `release-action` contains its descendants: a subreaper with per-command no-lock guards, so a transient or expected exec failure fails only its own command, as in-process | ✅ DONE |
+| R05 | 4 | Restore and rollback keep the current validated gateway `.env` | ✅ DONE |
+| R06 | 6 | A failed first deploy ends `aborted`: services stopped, the candidate's units removed, deploy can be retried | ✅ DONE |
+| R07 | 11 | The last committed transition stays available for `rollback` after a later failed attempt | ✅ DONE |
+| R08 | 9 | The production Kickstart template is part of the release identity | ✅ DONE |
+| R09 | 10 | Runbook gate table matches what runs; the rejection question waits for a fresh Telegram connect; `controller_update` checks the controller pointer; `AGENTS.md` maps the production bundle | ✅ DONE |
+| R10 | 7 | A failed live run stops the VM gateway and says the VM holds real credentials | ✅ DONE |
+| R11 | 8 | `productionctl controller-update`: the file hashes come from the workstation and are checked in root-owned staging before anything runs as root; used by the runbook and the pipeline; admin-key root equivalence documented | ✅ DONE |
+| R12 | 14, 15 | `remote()` uses `GlobalKnownHostsFile=/dev/null`; the dispatcher has an upload read deadline (no sshd change) | ✅ DONE |
+| R13 | 12 | Tests for each task, including a real `nft -j` fixture and a production-mode verify with faked exec results | ✅ DONE |
+| R14 | — | Runbook, contract and record updated | ✅ DONE |
+| R15 | 4, 6, 11 | Independent check of R01–R14; corrections to R05, R06 and R07 (below) | ✅ DONE |
+| R16 | G5 attempt 1 | Added 2026-10-19 as a fix for the failed G5 gate (qualification tool only): a fatal Telegram adapter stop is never ready; the operator stops the other poller, then the VM gateway restarts | ✅ DONE |
+
+| Gate | Method | Expected | State |
+| --- | --- | --- | --- |
+| G1 | `toolbox/run-offline-checks.sh` in the Toolbox | PASS | ✅ PASS (669 tests, after the R15 corrections) |
+| G2 | `ruff check` and `ruff format --check` on changed Python | PASS | ✅ PASS |
+| G3 | Unattended production-mode VM check with dummy credentials: deploy; controller update; cross-receiver upgrade, rollback and interruption; worker has no global IPv6; probes BLOCKED by timeout | All PASS | ✅ PASS (`runs/20261020T002708Z`, 2026-10-19, after R15; earlier `runs/20261002T220112Z` is superseded) |
+| G4 | Unattended transition check from the deployed receiver: previous release built from `1437be4` (receiver `6ced79eb…`), controller update to the candidate, upgrade, then rollback to the previous release across receivers | All PASS | ✅ PASS (`runs/20261020T002708Z`, 2026-10-19, after R15; earlier `runs/20261002T220112Z` is superseded) |
+| G5 | Attended live qualification (operator) | All seven gates PASS | ✅ PASS (attempt 3, `runs/20261020T032610Z`, 2026-10-19; attempts 1 and 2 FAIL, see below) |
+| G6 | Production rollout (operator): `controller-update`, `upgrade`, `verify`, Telegram check. **Method changed 2026-10-19 (operator decision "Reinstall"):** fresh USB reinstall of 10.0.30.10 with a new escrow key, then `deploy` of the qualified bundle, Telegram check | PASS | ⬜ NOT_RUN (needs G5 PASS; earlier BLOCKED on lost `sudo`, see below) |
+
+**Exact next action:** rerun the unattended G3/G4 VM check on this tree (R15 changed the receiver), then operator G5.
+
+- **Progress (R01–R08 implemented, unit-tested; 95 production tests PASS):**
+  - **R01:** bootstrap writes `/etc/hermes-production/egress.json` (sha256 of rules, unit and drop-in). `check()` compares the files with that record and requires the drop-in's `Requires=`/`After=` lines. The loaded table must cover every required network (`subnet_of`, since nft merges prefixes) with exact `skuid ==`/`daddr ==` matches and only counter/drop otherwise (finding 13).
+    - Fixture `tests/fixtures/egress-nft-1001.json` holds real `nft` 1.1.6 `-j` output captured in an unprivileged user and network namespace, for the current rules and a future superset with `::ffff:0:0/96` and `64:ff9b::/96`. Both pass; negations, an extra `saddr`, `limit` or `accept`, a missing prefix and another uid are refused.
+    - The rule bytes are unchanged, so receiver `6ced79eb…` keeps passing.
+  - **R02:** the worker uses `Network=pasta:--no-map-gw,--ipv4-only` (pasta `-4`, same passt build as production). Verify refuses `worker-has-ipv6` for any `/proc/net/if_inet6` scope other than host or link.
+  - **R03:** probes go to `169.254.1.2:22`, `169.254.169.254:80` and the IPv4 default gateway on port 53 when there is one. Only exit 124 is `BLOCKED`; `REACHED` refuses `worker-reached-local-network`; anything else refuses `worker-local-network-probe-not-blocked`. A missing default route only skips the gateway probe.
+  - **R04:** `primitives.contained()` makes `release-action` a subreaper, guards each runtime command without a new lock (`writer_guard` accepts `-`), and reaps adopted orphans without counting their status. A real-guard test shows the supervised command sees its own detached failure while the action passes; the uncontained case (older receivers) still reports `receiver-verify-descendant-failed`.
+  - **R05:** `restore()` carries the current validated `gateway-state/.env` (bytes and owner) across the tree swap. The two-receiver rollback test now rotates the credentials after the upgrade and asserts they survive while state returns to A.
+  - **R06:** recovery of a failed first deploy calls `Backend.discard` (removes both units, user `daemon-reload`) and ends `aborted`. Deploy can be retried, and rollback refuses with no current release.
+  - **R07:** a new attempt saves a committed journal row to `rollback.json`. Rollback after a failed attempt uses it when it led to the current release; an explicit rollback marks `rolled_back` and consumes it, so a second rollback is `UNCHANGED`.
+  - **R08:** the bundle carries `source/kickstart/fedora-server-production.ks.in`. It is not required by `validate()`, so older releases stay valid.
+- **Progress (R09–R14 implemented; 99 production tests PASS):**
+  - **R09:** the rejection question first waits for a Telegram connect after the allowlist swap (`telegram_ready(since=VM time)`); the conflict notice also covers a previous session expiring. `controller_update` requires `controller.json` unchanged. The runbook gate table now states what runs. `AGENTS.md` maps the production bundle.
+  - **R10:** `release_live_token`. When `--live-env` reached credentials and the VM still runs (a failed run or `--keep`), it stops the VM gateway (`systemctl --user -M hermes@ stop`) and warns that the VM holds real credentials.
+  - **R11:** `client.controller_source/payload/script` and `productionctl controller-update`. The workstation computes the file hashes and receiver identity; the root script copies into `mktemp -d /root/hermes-controller.*`, refuses non-regular files and any name-set difference, checks `sha256sum --strict -c`, bootstraps from the copy and requires the expected receiver. `BatchMode=no` lets a passphrase-protected admin key prompt.
+    - The pipeline's `controller_update` stage uses the same script. A real `sh` test covers the valid set, a tampered or extra file, a symlink and a receiver mismatch, and that staging is always removed.
+    - The runbook documents the command and that the admin key is root-equivalent once sudo is used.
+  - **R12:** `remote()` adds `GlobalKnownHostsFile=/dev/null` and `IdentityAgent=none`. The dispatcher wraps the bundle stream in `IdleLimited` (300 s per blocked read, SIGALRM armed only during the read) and refuses `upload-stalled`; tested with a silent pipe. No sshd change.
+  - **R13:** tests added per task; real `nft` fixture; production-mode `verify_worker_network`.
+  - **R14:** runbook covers worker IPv4-only, guard record and coverage, probe semantics, credentials kept on rollback, rollback point, failed first deploy, controller update, admin-key note, the compatibility bullet for host-wide files, and the gate table. The profile contract says "IPv4 internet".
+- **G1:** offline gate PASS (665 tests). **G2:** ruff format and check PASS on the 12 changed Python files.
+- **G3/G4 (combined, started):** an unattended production-mode VM with dummy credentials.
+  - The previous release is built from `1437be4`, whose receiver is verified to equal the deployed `6ced79eb…`; the candidate receiver is `23cb081a…`.
+  - Stages: previous deploy, controller update to the candidate, cross-receiver upgrade, rollback to the old receiver, upgrade again, then rerun, failed update, marker `controller_update`, concurrent upgrade and interrupted upgrade.
+- **G3/G4 PASS: combined VM check** (agent-run, unattended, production mode, dummy credentials only; `runs/20261002T220112Z`, report `d4189458cac557c9460aaf145b2a68af9c9f9d347050e034b85f22f1a15f1fd3`; candidate `1d9cf851…`, marker `eb76ecb9…`).
+  - **Previous release:** `46aedfe0…`, built from `1437be4`, with receiver `6ced79eb…`, the one deployed in production. It was staged with the new hash-verified script and deployed (78.8 s).
+  - **Controller update and upgrade:** to candidate receiver `23cb081a…`; the cross-receiver upgrade passed, with verification 19.3 s including the IPv6 check and timeout-only probes inside the contained action.
+  - **Rollback to the old receiver:** ROLLED_BACK, verify PASS. Upgrade again: CHANGED.
+  - **Standard stages:** rerun UNCHANGED; corrupt update refused; marker `controller_update` (receiver `e71ca365…`) with the runtime user manager not restarted and the selection unchanged; concurrent upgrade (`operation-busy`, CHANGED, ROLLED_BACK); interrupted upgrade at configuration, recovered.
+  - **Live token:** `release_live_token` stopped the kept VM's gateway.
+  - **IPv4-only:** the worker's pasta runs with `--ipv4-only`, and its `/proc/net/if_inet6` holds only `lo` and `fe80::`. **Limitation:** this VM network had no global IPv6 (only link-local, plus an RA route via `fe80::1`), so suppressing a real global address was not exercised. The production VLAN also showed no global IPv6 earlier today.
+- **Remaining gates (operator):** G5, an attended live qualification of this tree (stop the production gateway or use a separate bot); G6, `bundle --evidence`, `productionctl controller-update … --apply`, `upgrade --apply`, `verify` and a Telegram check. No commit has been requested for the fix release.
+- **Independent verification and corrections (R15, 2026-10-02):** a second session checked R01–R14 against the 15 review findings.
+  - **Confirmed:** real `nft` 1.1.6 `-j` output, loaded in an unprivileged user and network namespace, is refused for a negated uid or destination, an extra `saddr`, a `limit` and an extra rule, and accepted for a superset with extra IPv4 and NAT64 prefixes; a missing `10.0.0.0/8` is not covered. With the real `writer_guard.py`, a contained action that retries one detached exit-255 failure passes. Probe verdicts: hang until timeout `BLOCKED`, refused `OTHER:1`, missing `timeout` `OTHER:127`, open port `REACHED`.
+  - **Correction 1 (R07 hazard):** `rollback --apply` is the documented recovery command. After an interrupted B→C upgrade it recovered B and then, from `rollback.json`, also rolled B back to A, leaving the wrong release and discarding state since A→B. A call that completes an unfinished transaction now only recovers and reports `RECOVERED`; a second call rolls back. Test added.
+  - **Correction 2 (R06):** an interruption between the pointer write and the commit of a first deploy left `current.json` naming the discarded candidate. `Backend.discard` now removes a pointer that names it. Tests added (transaction and real `Backend.discard`).
+  - **Correction 3 (R05):** restore copied the whole current `.env`, so a later release that adds an environment switch would fail an older release's verify on rollback. Now only the three operator settings move into a valid restored environment; the whole file is copied only when the snapshot has none. Test added.
+  - **Docs:** the runbook documents `RECOVERED` and the operator-settings carry, and the restore gate row no longer claims a state comparison.
+  - **Gates:** G1 PASS (669 tests); G2 PASS (ruff check and format on the changed Python). G3/G4 are STALE because `operations.py` and `runtime.py` changed after `runs/20261002T220112Z`.
+- **Blocked rerun (2026-10-03, found in the session history on resume):** the R15 session tried to start the G3/G4 rerun after the operator said "yes". Claude Code's auto-mode permission check refused the command as "Production Deploy", so nothing ran. Its driver and dummy environment were in a session scratchpad that no longer exists.
+- **Resumed 2026-10-19 (operator: "resume"):**
+  - **State:** the working tree is unchanged since the R15 entry (newest edit 2026-10-02 21:46 −05:00). The 16 modified files and the untracked fixture are uncommitted on `codex/hermes-production-bundle` at `1437be4`. No run follows `runs/20261002T220112Z`; the kept VM `hermes-production-qualify` is shut off and holds dummy credentials only. G1/G2 evidence still covers these files.
+  - **Driver rebuilt:** `fix_release_check.py` was reconstructed from the two sessions' transcripts: the original write plus both R15 edits, which applied cleanly. It is in this session's scratchpad. It targets only `127.0.0.1:22227` (the local VM) and builds the previous release from `1437be4`, requiring receiver `6ced79eb…`. Its stages: previous deploy, controller update and upgrade to this tree, rollback, upgrade again, rerun, failed update, marker controller update, then `interrupted_after_commit`, concurrent upgrade and interrupted upgrade.
+    - `interrupted_after_commit` checks R15 corrections 1 and 3 on a real host: `RECOVERED` first, then rotated credentials kept across the rollback to the deployed receiver.
+    - Fresh dummy credentials were generated (mode 0600) and pass `runtime.credentials`.
+  - **Disk:** `/var/home` has 11 GB free (96%). Removing the kept VM frees 15.2 GB. The last run used 8.0 GB of run files and a 15.2 GB VM disk, which leaves about 3 GB of headroom. The older run directories hold about 50 GB, mostly regenerable ISO copies and bundles; none was deleted.
+
+  - **G3/G4 start refused again (2026-10-19):** the auto-mode permission check refused the driver command as "Production Deploy". Nothing ran: the kept VM, the run directories and the tree are untouched. G3 and G4 remain 🚧 BLOCKED (STALE evidence; the prerequisite is operator permission for the local VM check).
+
+  - **G3/G4 attempt 1 (2026-10-19, operator-run with `!`): FAIL at `prepare`** (`runs/20261019T232914Z`). The reason was `qualification-needs-30gib-free`: 26.03 GiB was free after the driver removed the kept VM (dummy credentials only, as planned). This is a workstation disk shortfall, not a product result.
+    - Nothing else ran.
+    - Seven older run directories each hold about 7 GiB of regenerable files (`hermes-qualify.iso`, `candidate.tar`, `corrupt.tar`, `upgrade.tar`; `previous.tar` in the last one), next to their reports.
+
+  - **Space freed (operator choice "Two oldest runs"):** the agent deleted `hermes-qualify.iso`, `candidate.tar`, `corrupt.tar` and `upgrade.tar` from `runs/20261002T013438Z` and `runs/20261002T024125Z`. Their reports, `qualification.json`, keys, logs and escrow stay. Free space is now 39.77 GiB, above the 30 GiB guard.
+
+  - **G3/G4 attempt 2 (2026-10-19, agent-run after the operator said "Keep going with hermes project changes"):** the permission check allowed the same driver command this time. It runs in the background with 39.76 GiB free and no VM present.
+
+- **G3/G4 PASS: combined VM check after R15** (agent-run, unattended, production mode, dummy credentials only; `runs/20261020T002708Z`, report `369cdccf2a79f8e27963ebeb393a3c7a95f5ee48b7e4e95aacc8ba810bc542cb`; candidate `4fcc8c43…`, marker `63b248d1…`). All 18 stages PASS, exit 0.
+  - **Previous release:** `46aedfe0…`, built from `1437be4` with the deployed receiver `6ced79eb…`, staged with the hash-verified controller script and deployed (76.1 s).
+  - **Cross-receiver transitions:** upgrade to candidate receiver `8a9ae731…` CHANGED (verification 19.3 s, including the IPv6 check and timeout-only probes in the contained action). Rollback to the old receiver ROLLED_BACK; upgrade again CHANGED.
+  - **Standard stages:** rerun UNCHANGED and corrupt update REFUSED_AND_UNCHANGED. The marker controller update (receiver `9c272452…`) left the runtime user manager NOT_RESTARTED. Concurrent upgrade: `operation-busy`, then CHANGED and ROLLED_BACK. The interrupted upgrade (at configuration) reported RECOVERED.
+  - **R15 on a real host (`interrupted_after_commit`, 176.1 s):** an upgrade interrupted at configuration was recovered by `rollback --apply`, which reported **RECOVERED** and left the candidate current (correction 1). Credentials were rotated (`TELEGRAM_ALLOWED_USERS` 42→43). The next rollback used the kept rollback point across receivers to `46aedfe0…` (R07). Afterwards the gateway `.env` held the rotated value and the previous release's `API_SERVER_ENABLED=false`, and verify passed (corrections 1 and 3, R05). Upgrade again CHANGED.
+  - **IPv4-only, read on the kept VM afterwards:** the worker's `pasta` runs with `--no-map-gw --ipv4-only --dns-forward 169.254.1.1`. Its network mode is `pasta`, and its `/proc/net/if_inet6` holds only `lo` (host scope) and `fe80::` (link scope). **Limitation (unchanged):** the VM network has only link-local IPv6 and an RA route via `fe80::1`, so suppressing a real global address was not exercised.
+  - `background.log` holds only the concurrent stage's expected refusal. The pipeline's seven-gate summary reads NOT_RUN because this driver replaces the standard stage list; plan gates G3/G4 are judged on the stages above. The VM is kept, running with its gateway stopped and dummy credentials only; the next `--replace-previous` removes it.
+  - G1/G2 still cover the current files: no code changed after R15.
+- **Disk before G5:** 15.61 GiB free with the kept VM (16 GiB) and `runs/20261020T002708Z` (8.0 GiB) present. G5's `--replace-previous` removes the VM first, which would leave about 31 GiB against the 30 GiB guard.
+  - **Space freed (operator choice "Three superseded runs"):** the agent deleted `hermes-qualify.iso`, `candidate.tar`, `corrupt.tar` and `upgrade.tar` from `runs/20261002T043729Z`, `runs/20261002T115333Z` and `runs/20261002T121801Z`. Their reports, `qualification.json`, keys and logs stay. 36.21 GiB is free now, about 52 GiB once G5 removes the kept VM.
+
+- **G5 attempt 1 (2026-10-19, operator-run): FAIL at `application`** (`runs/20261020T005428Z`, report `56819296a6cc218e8624a9f93b9db943879465e00ec845f5e51780eb91548340`; candidate `4fcc8c43…`, the same as G3/G4).
+  - Stages `prepare` through `deploy` PASS (deploy 82.2 s).
+  - The tool then printed the polling-conflict notice, later judged the VM gateway ready and asked the first question. The operator got no reply to `uname -sr` and answered "no" (`live-application-failed:tool_round_trip`; stage 2386.1 s).
+  - `release_live_token` stopped the kept VM's gateway. The VM holds the real credentials; the next `--replace-previous` removes it.
+  - **Production bot:** after the run the operator restarted the production server. The bot then answered `uname -sr` with `Linux 7.2.8-200.fc44.x86_64`, which is production (the VM gateway was stopped). So production's gateway polled the same token during the run, and its bot did not answer until the restart.
+  - **Cause (agent inference, not journal-verified):** neither bot answered while the tool reported ready. This matches r19's journal sequence: conflict back-offs, then `Fatal telegram adapter error (telegram_polling_conflict)`, which stops polling until a restart. `telegram_poll_state` counted 75 s without adapter events as ready even when the last event was that fatal stop.
+    - The agent's read-only, redacted read of the kept VM's gateway journal was refused by Claude Code's auto-mode permission check ("Production Reads"; the VM holds real credentials). It was not retried.
+  - **Planned fix (R16, qualification tool only):** a fatal adapter stop after the last connect is never ready. The tool asks the operator to stop the other poller, then restarts the VM gateway and waits for a fresh connect.
+    - `vm/hermes-production-qualify.py` is not in the release identity (`bundle.build` ships only the kickstart from `vm/`), so the candidate and the G3/G4 evidence are unaffected. G1/G2 must rerun.
+- **R16 done (2026-10-19):**
+  - **Qualification tool:** the journal events come from `TELEGRAM_EVENTS_AWK`, which adds a `stopped` kind for `Fatal telegram adapter error`, matched case-insensitively and before the conflict patterns. `telegram_poll_state` returns `stopped` when a stop follows the last connect.
+  - **On `stopped`:** `telegram_ready` asks whether the other instance is stopped. "No" refuses `telegram-token-in-use-elsewhere` without touching the VM. "Yes" takes the VM time, runs `systemctl --user -M hermes@ restart hermes-gateway.service` and waits again on later events only, with a fresh deadline.
+  - **Tests (+2):**
+    - the state classifier with a stop, and a later connect;
+    - the real `awk` on r19-style journal lines;
+    - no restart on "no", and the restart followed by a fresh connect on "yes".
+    - The built command was also run through `sh -c` with a fake `journalctl` (agent scratchpad); the result was `stopped`.
+  - **Runbook: unchanged, deliberately.** The agent first edited it ("stop before the run", `restart` afterwards, the new prompt), then found that `bundle.build` ships it as `source/PRODUCTION_RUNBOOK.md`, so the edit would change the candidate and make G3/G4 stale. The edit was reverted. Its sha256 `20915d51…7395` equals the G3/G4 candidate's manifest entry, and all 42 bundled source files match that manifest. The tool's own prompt explains the new step. **Deferred:** the runbook wording, for the next release that is qualified anyway.
+  - **Gates:**
+    - G1 PASS on the final files (671 tests, offline gate in the Toolbox, 2026-10-19).
+    - G2 PASS (`ruff check` and `ruff format --check` on the 12 changed Python files; no Python changed afterwards).
+    - G3/G4 evidence stands: the release inputs are byte-identical, so the rerun should again build candidate `4fcc8c43…`.
+  - **Disk:** 34 GiB free; about 50 GiB once the next `--replace-previous` removes the kept VM.
+
+- **Break-glass access to 10.0.30.10 lost (operator report, 2026-10-19):**
+  - The operator's `ssh … sudo systemctl … stop` from the agent prompt (`!`) failed with `a terminal is required to read the password`. The operator then reported a forgotten `hermesadmin` password.
+  - `productionctl escrow-open --item admin-password` on `~/hermes-production/10.0.30.10-escrow.cms` failed with `command-failed:openssl` after the passphrase prompt, and the operator reported the escrow key passphrase forgotten. OpenSSL CMS decryption worked on this host earlier the same night (`release_live_token` unsealed the G5 run's test escrow), so the passphrase is the cause.
+  - **Consequences:**
+    - The escrow cannot be opened, by design. Lost with it: the admin password, the LUKS recovery key, the header backup and the Restic password copy.
+    - Production keeps running and unlocks through the TPM on normal boots.
+    - Without a recovery key, a PCR7 change (Secure Boot setting, firmware or dbx update, TPM clear) would leave the disk unopenable. There is no off-host backup (waiver).
+    - The dispatcher cannot export state: its `backup` targets the waived off-host repository.
+  - **G6 is blocked:** `controller-update` runs its root script under `sudo`.
+  - **G5 is not blocked:** a short press of the server's power button shuts it down cleanly (Fedora's logind default; the kickstart does not change it), or a separate bot can be used. The TPM unlock after power-on was proven on 2026-10-02.
+  - **Options for root (operator decision):**
+    1. Reinstall from the USB path with a new escrow key and the qualified fix release. This is the documented automated path. A fresh bootstrap installs the new receiver, so no `controller-update` is needed. The bot's server-side state is lost.
+    2. Console `rd.break` password reset, then new tooling to rotate the recovery key and re-escrow it to a new key. This keeps the state, but the reset is unproven on this image, and the tooling needs its own plan, VM qualification and approval.
+
+  - **Operator check:** `openssl pkey -noout` on the escrow key returned `bad decrypt … maybe wrong password`, so the passphrase is confirmed lost.
+- **Decision (operator, 2026-10-19): "Reinstall (Recommended)"** for regaining root. Approval evidence: the operator's answer to the agent's question listing reinstall versus console reset, with the loss of the bot's server-side state stated.
+  - **Scope change:** G6 becomes a fresh USB reinstall of 10.0.30.10 with a new escrow key, then `deploy` of the qualified bundle. The bootstrap from the media installs the fix-release receiver, so no `controller-update` or `upgrade` runs. The baseline's "rolled out to 10.0.30.10" outcome is unchanged. All production steps remain operator steps.
+  - **Accepted loss:** the gateway's server-side state (sessions, memory). The dispatcher cannot export it, and there is no off-host backup. Credentials come from the workstation's `gateway.env`.
+  - **Procedure:** the runbook fast path, with these deltas, because the tools refuse to overwrite:
+    - new escrow directory `~/hermes-production/escrow-2026-10-19`; the operator stores and verifies its passphrase at once;
+    - settings copy `install-2026-10-19.json` carrying the new certificate;
+    - ISO `hermes-production-2026-10-19.iso`, bundle `hermes-fix1.tar`, escrow `10.0.30.10-escrow-2026-10-19.cms`;
+    - the old `known_hosts` moved to `known_hosts.2026-10-02` before `pin-host`;
+    - the installer booted once with `hermes.reinstall=yes` (`%pre` reinstall guard, runbook line 135).
+  - **Prerequisite check:** the release-signing key passphrase is still needed for `bundle --evidence`. If it is lost too, a new signing key and `allowed_signers` go into the new media.
+  - The old escrow, escrow key and ISO are kept (operator files; deleting them was not requested).
+
+- **Signing-key passphrase also lost (operator report, 2026-10-19).** The reinstall carries a new `allowed_signers` on the media, so a new signing key suffices.
+  - **Procedure revised (supersedes the file-name deltas above):** `productionctl operator-setup --output ~/hermes-production-2 --server ~/hermes-production/install.json --apply` creates a complete fresh set:
+    - admin, deployment and signing keys, `allowed_signers`, the escrow key, and `install.json`;
+    - the old file supplies only the server facts, because `operator_setup` replaces its admin, deployment, certificate, kind and mode fields.
+  - The runbook fast path then runs unchanged with `P=~/hermes-production-2`. `--live-env` and `--env-file` stay `~/hermes-production/gateway.env`. The new directory has no `known_hosts`, so nothing has to be moved. The installer still needs `hermes.reinstall=yes` once.
+  - **Agent pre-checks (read-only):** `kickstart.validate` accepts the existing `install.json` with the current code, so `operator-setup` cannot fail validation after creating keys. Its preview lists the six files, and `~/hermes-production-2` does not exist.
+  - **Secret handling:** the operator creates both passphrases (signing, escrow) in a password manager and verifies them right after creation: `ssh-keygen -y -f …/signing_ed25519` and `openssl pkey -in …/escrow/escrow-key.pem -noout`.
+
+- **`operator-setup` CREATED (operator-run, 2026-10-19 21:36–21:39 −05:00):** `~/hermes-production-2`, escrow certificate sha256 `f777ce5e21c1c5974c51196a561680e8cbcf23a7eaba82fcfbae29ad83ebb8b0`.
+  - **Agent check (public material only):**
+    - `install.json` carries the new certificate, the new admin and deployment public keys (both differ from the old ones) and the unchanged server facts, with the same field set.
+    - `allowed_signers` names the new signing key.
+    - The certificate is `CN=hermes-production-escrow`, valid 2026-10-20T02:39:02Z to 2036-10-17.
+    - The escrow key is `ENCRYPTED PRIVATE KEY`, and the signing key refuses an empty passphrase.
+    - Whether the operator saved both passphrases is checked only by the operator's own verification commands.
+  - **Cosmetic follow-up (next release):** the command's output echoes the input `server` object, here the old `install.json` with the old keys and certificate, which reads as if those were used. `client.py` is part of the release identity, so it is not changed in this release.
+
+- **Passphrases verified (operator-run, 2026-10-19):** `SIGNING-OK` and `ESCROW-OK` both printed for the `~/hermes-production-2` keys.
+
+- **G5 attempt 2 (2026-10-19, operator-run, production powered off): FAIL at `application`** (`runs/20261020T024332Z`).
+  - Stages `prepare` through `deploy` PASS (deploy 82.4 s). No conflict notice this time, so the token was free.
+  - The tool asked the `uname -sr` question, and the operator answered "no" (`live-application-failed:tool_round_trip`; stage 159.9 s, so about 85 s after the at-least-75-s readiness wait).
+  - `release_live_token` stopped the kept VM's gateway; the VM holds the real credentials.
+  - **Cause unknown.** The tool does not record what the bot did.
+    - The agent prepared a read-only, redacted diagnostic (`vm_g5_diag.py` in the session scratchpad): unit and container states, the gateway journal tail, and warnings from the hermes account.
+    - Claude Code's permission check refused agent reads around this VM, including plain repository greps in this context. The diagnostic is therefore offered for the operator to run.
+  - **Known facts:**
+    - The same prepared images (`03c660d2…`) passed `application` in r21. Production's bot answered `uname -sr` around 20:50 −05:00 tonight, so the DeepSeek and Telegram credentials worked then.
+    - G3/G4 used dummy credentials, so this candidate's live tool round trip has never been exercised.
+
+  - **Diagnostic (operator-run with `!`, redacted output):**
+    - The gateway connected to Telegram (polling) at 02:55:59Z, with no conflict, error or adapter warning afterwards. The worker was active.
+    - Worker sshd accepted the gateway's key. At 02:58:08–09 it served a burst of about eight command sessions (the terminal backend's setup), then single commands at 02:58:27 and 02:58:53.
+    - At 02:59:02 the gateway was stopped by `release_live_token` after the "no", roughly 55 s after the agent's first tool call.
+  - **Reading:** the Telegram → model → worker round trip worked. The agent was still running tool calls when the stage ended: three tool commands for one `uname` suggest retries.
+    - Gateway logs show WARNING and above only, so message content is not visible there. A second diagnostic, `vm_g5_session.py`, reads the tool calls and replies from a temporary copy of the gateway's `state.db`, never `.env`.
+
+  - **Session history** (`vm_g5_session.py`; run by the agent at the operator's request, redacted). The operator reports that Telegram showed nothing.
+    - The operator sent "Run uname -sr" three times (Telegram message ids 117, 120, 123).
+    - Each time the agent called `terminal` with `uname -sr`, got `{"output": "Linux 7.2.11-200.fc44.x86_64", "exit_code": 0}` from the worker, and wrote a final reply with that version (`finish_reason=stop`).
+    - **Conclusion:** the tool round trip works; the replies were not delivered to Telegram. `state.db` has `delivery_obligations` with 3 rows (`state`, `attempts`, `last_error`).
+    - **Correction:** the VM kernel is 7.2.11, not an older DVD kernel. The earlier attribution of the 7.2.8 reply to production still holds, because the VM's gateway was stopped.
+  - **Release diff check:** this release changes only the worker's network line in `profile-deploy.py` (`--ipv4-only`). The gateway container is configured as in r21 (PASS) and in production.
+  - **Next diagnostic:** `vm_g5_delivery.py` reads `delivery_obligations`, `gateway_state.json` and the gateway's log files, never `.env`. The permission check refused the agent's run, so the operator runs it.
+
+  - **Delivery check** (`vm_g5_delivery.py`, operator-run with `!`, redacted). All three `delivery_obligations` rows read `state=delivered`, `attempts=0`, `last_error=None`.
+    - `gateway.log`: each inbound message (02:58:06, 02:58:26, 02:58:52Z) was followed by "response ready" and `Sending response … to <chat>` after 4.4, 2.7 and 2.9 s (248, 30 and 106 chars).
+    - Telegram ran through the DoH-discovered IPv4 path 149.154.166.110. Polling was confirmed healthy, and `set_my_commands` succeeded.
+    - `errors.log` has no Telegram or send error. A `/start` from the operator arrived at 02:58:41.
+    - `gateway_state.json` shows Telegram disconnected cleanly at the stop, with no error code.
+  - **Reading:** from the gateway's side the application round trip passed: message received, worker tool run, reply sent and accepted, in about 3–5 s. The operator saw nothing in the client. The open question is on the Telegram client's side: are the replies in the bot chat now? No release defect is indicated.
+
+  - **Resolved (operator screenshot of the bot chat, 2026-10-19 22:24 −05:00):** all three replies are in the chat at 21:58, each quoting "Run uname -sr" with `Linux 7.2.11-200.fc44.x86_64`: the first with the introduction, the last with "Same answer each time…".
+    - **Attempt 2's FAIL was an observation miss:** the replies were delivered within 5 s but not noticed before answering. It is not a product defect.
+    - The operator's later messages at 22:23 and 22:24 went unanswered, as expected: production is off and the VM gateway is stopped. The next gateway's cold boot drops them (`drop_pending_on_cold_boot: true`).
+  - **Follow-up idea (not done):** the application stage could corroborate each "yes" or "no" from the gateway's own record ("response ready" and a delivered obligation) instead of relying only on what the operator saw.
+
+- **G5 PASS — attempt 3 (2026-10-19, operator-run, production off): all seven gates** (`runs/20261020T032610Z`).
+  - **Evidence:** `qualification.json` sha256 `ac0164db758a1902316d23997dfb714ece012f4acc171a2de926d033f48f6ceb`. Every gate is bound to report `9cbf0776107a992326f12b80a3aa2d90d74530c6f8db90c2a7daa9f80112c266`.
+  - **Artifact:** `4fcc8c4345b1f6e4081e4f033f163eaa266255a7885390d57483ca3958e6e8ec`, the candidate G3/G4 tested; marker `63b248d1…`.
+  - **Application:** all four operator answers YES (tool round trip, worker reaches GitHub, dangerous command stopped for approval and denied, unlisted user ignored); stage 456.6 s.
+  - **Repeatability:**
+    - rerun and failed update PASS;
+    - controller update to receiver `9c272452…` with the runtime user manager NOT_RESTARTED;
+    - concurrent upgrade `operation-busy`, then CHANGED and ROLLED_BACK;
+    - interruption at configuration RECOVERED, and missing mount PASS.
+  - **Boot:** warm reboot, cold start, recovery boot (escrowed test key) and the automatic boot afterwards PASS. The canary is UNCHANGED.
+  - **Restore:** PASS on the recorded waiver.
+  - The VM was removed on PASS (agent check: no `hermes-production-qualify` domain).
+- **Commit and push (operator: "yes, commit it and push", 2026-10-19):**
+  - One commit `fix(production): close the branch review findings` holds R01–R16, the tests and fixture, the docs and this record.
+  - The push to `origin/codex/hermes-production-bundle` also carries the three earlier local commits `cb19447`, `ce73f96` and `1437be4`.
+  - The agent checked the push range and working diff: no secret-shaped lines. The pre-push hook runs the offline gate.
+  - **Media preview (agent, no `--apply`):** `disk_to_erase` `/dev/disk/by-id/nvme-512GB_SSD_MQ26W40711034`, DVD `85837793…` (the qualification's media), kickstart `64ec65a8…`, manifest `a6cc7e82…`.
+
+**Exact next action (operator), G6 by reinstall:** `bundle --evidence` with `~/hermes-production-2/signing_ed25519`, then `media` with `~/hermes-production-2/install.json`, write the USB, reinstall 10.0.30.10 (`hermes.reinstall=yes` once), then pin-host, enroll, attest console and power, credentials, deploy, Telegram check, and escrow the new admin password into the password manager.

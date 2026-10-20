@@ -1,0 +1,587 @@
+{
+ "_source": "nft 1.1.6 -j list table inet hermes_egress, loaded with egress.rules(1001) in an unprivileged user+net namespace (2026-10-02); 'future' adds ::ffff:0:0/96 and 64:ff9b::/96",
+ "current": {
+  "nftables": [
+   {
+    "chain": {
+     "family": "inet",
+     "hook": "output",
+     "name": "output",
+     "policy": "accept",
+     "prio": 0,
+     "table": "hermes_egress",
+     "type": "filter"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip"
+         }
+        },
+        "op": "==",
+        "right": {
+         "set": [
+          {
+           "prefix": {
+            "addr": "0.0.0.0",
+            "len": 8
+           }
+          },
+          {
+           "prefix": {
+            "addr": "10.0.0.0",
+            "len": 8
+           }
+          },
+          {
+           "prefix": {
+            "addr": "100.64.0.0",
+            "len": 10
+           }
+          },
+          {
+           "prefix": {
+            "addr": "169.254.0.0",
+            "len": 16
+           }
+          },
+          {
+           "prefix": {
+            "addr": "172.16.0.0",
+            "len": 12
+           }
+          },
+          {
+           "prefix": {
+            "addr": "192.0.0.0",
+            "len": 24
+           }
+          },
+          {
+           "prefix": {
+            "addr": "192.168.0.0",
+            "len": 16
+           }
+          },
+          {
+           "prefix": {
+            "addr": "198.18.0.0",
+            "len": 15
+           }
+          },
+          {
+           "prefix": {
+            "addr": "224.0.0.0",
+            "len": 3
+           }
+          }
+         ]
+        }
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip6"
+         }
+        },
+        "op": "==",
+        "right": {
+         "set": [
+          {
+           "prefix": {
+            "addr": "fc00::",
+            "len": 7
+           }
+          },
+          {
+           "prefix": {
+            "addr": "fe80::",
+            "len": 10
+           }
+          },
+          {
+           "prefix": {
+            "addr": "ff00::",
+            "len": 8
+           }
+          }
+         ]
+        }
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip"
+         }
+        },
+        "op": "==",
+        "right": {
+         "prefix": {
+          "addr": "127.0.0.0",
+          "len": 8
+         }
+        }
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "dport",
+          "protocol": "th"
+         }
+        },
+        "op": "!=",
+        "right": 53
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip6"
+         }
+        },
+        "op": "==",
+        "right": "::1"
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "dport",
+          "protocol": "th"
+         }
+        },
+        "op": "!=",
+        "right": 53
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   }
+  ]
+ },
+ "future": {
+  "nftables": [
+   {
+    "chain": {
+     "family": "inet",
+     "hook": "output",
+     "name": "output",
+     "policy": "accept",
+     "prio": 0,
+     "table": "hermes_egress",
+     "type": "filter"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip"
+         }
+        },
+        "op": "==",
+        "right": {
+         "set": [
+          {
+           "prefix": {
+            "addr": "0.0.0.0",
+            "len": 8
+           }
+          },
+          {
+           "prefix": {
+            "addr": "10.0.0.0",
+            "len": 8
+           }
+          },
+          {
+           "prefix": {
+            "addr": "100.64.0.0",
+            "len": 10
+           }
+          },
+          {
+           "prefix": {
+            "addr": "169.254.0.0",
+            "len": 16
+           }
+          },
+          {
+           "prefix": {
+            "addr": "172.16.0.0",
+            "len": 12
+           }
+          },
+          {
+           "prefix": {
+            "addr": "192.0.0.0",
+            "len": 24
+           }
+          },
+          {
+           "prefix": {
+            "addr": "192.168.0.0",
+            "len": 16
+           }
+          },
+          {
+           "prefix": {
+            "addr": "198.18.0.0",
+            "len": 15
+           }
+          },
+          {
+           "prefix": {
+            "addr": "224.0.0.0",
+            "len": 3
+           }
+          }
+         ]
+        }
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip6"
+         }
+        },
+        "op": "==",
+        "right": {
+         "set": [
+          {
+           "prefix": {
+            "addr": "::ffff:0.0.0.0",
+            "len": 96
+           }
+          },
+          {
+           "prefix": {
+            "addr": "64:ff9b::",
+            "len": 96
+           }
+          },
+          {
+           "prefix": {
+            "addr": "fc00::",
+            "len": 7
+           }
+          },
+          {
+           "prefix": {
+            "addr": "fe80::",
+            "len": 10
+           }
+          },
+          {
+           "prefix": {
+            "addr": "ff00::",
+            "len": 8
+           }
+          }
+         ]
+        }
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip"
+         }
+        },
+        "op": "==",
+        "right": {
+         "prefix": {
+          "addr": "127.0.0.0",
+          "len": 8
+         }
+        }
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "dport",
+          "protocol": "th"
+         }
+        },
+        "op": "!=",
+        "right": 53
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   },
+   {
+    "rule": {
+     "chain": "output",
+     "expr": [
+      {
+       "match": {
+        "left": {
+         "meta": {
+          "key": "skuid"
+         }
+        },
+        "op": "==",
+        "right": 1001
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "daddr",
+          "protocol": "ip6"
+         }
+        },
+        "op": "==",
+        "right": "::1"
+       }
+      },
+      {
+       "match": {
+        "left": {
+         "payload": {
+          "field": "dport",
+          "protocol": "th"
+         }
+        },
+        "op": "!=",
+        "right": 53
+       }
+      },
+      {
+       "counter": {
+        "bytes": 0,
+        "packets": 0
+       }
+      },
+      {
+       "drop": null
+      }
+     ],
+     "family": "inet",
+     "table": "hermes_egress"
+    }
+   }
+  ]
+ }
+}

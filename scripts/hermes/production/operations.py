@@ -6,11 +6,15 @@ from uuid import uuid4
 
 from .primitives import Refused, atomic, canonical, read_json, require
 
+TERMINAL = ("committed", "recovered", "aborted")
+
 
 class Transaction:
     def __init__(self, root, backend):
         self.root, self.backend = Path(root), backend
         self.journal = self.root / "journal.json"
+        # The last committed transition, kept when a later attempt replaces the journal.
+        self.rollback_point = self.root / "rollback.json"
 
     def save(self, row, stage):
         row["stage"] = stage
@@ -23,7 +27,7 @@ class Transaction:
             return
         row = read_json(self.journal)
         require(row.get("protocol", 1) == 1, "incompatible-transaction-protocol")
-        if row["stage"] in ("committed", "recovered", "aborted"):
+        if row["stage"] in TERMINAL:
             return
         pending = dict(row)
         phase = "stop"
@@ -37,11 +41,14 @@ class Transaction:
                 if row["previous"]:
                     self.backend.verify(row["previous"])
                 terminal = "aborted"
+            elif row["previous"] is None:
+                # A failed first deployment has nothing to restore: remove its units and
+                # end the attempt, so the host is stable and deploy can be retried.
+                phase = "discard"
+                self.backend.discard(row["candidate"])
+                terminal = "aborted"
             else:
-                require(
-                    row["previous"] is not None and row["snapshot"] is not None,
-                    "initial-install-incomplete-private-recovery-required",
-                )
+                require(row["snapshot"] is not None, "recovery-snapshot-missing")
                 phase = "restore"
                 # Never restart old images on the attempted version's state.
                 self.backend.restore(row["snapshot"], row["previous"])
@@ -96,6 +103,10 @@ class Transaction:
             self.backend.verify(candidate)
             return {"status": "UNCHANGED", "release": candidate}
         require(previous is None or upgrade, "use-explicit-upgrade")
+        if self.journal.exists():
+            last = read_json(self.journal)
+            if last["stage"] == "committed":
+                atomic(self.rollback_point, canonical(last))
         row = {
             "protocol": 1,
             "id": uuid4().hex,
@@ -134,16 +145,38 @@ class Transaction:
             raise
 
     def rollback(self):
+        """Undo the last committed transition that led to the current release.
+
+        A transaction left unfinished (interrupted, or its recovery failed) is only
+        recovered here, so the release it was replacing stays current: the documented
+        recovery command must never also roll that release back. Run rollback again to
+        undo the current release's own committed transition.
+        """
+        unfinished = self.journal.exists() and read_json(self.journal)["stage"] not in TERMINAL
         self.recover()
+        require(self.journal.exists(), "no-matching-rollback-snapshot")
+        if unfinished:
+            return {"status": "RECOVERED", "release": self.backend.current()}
         row = read_json(self.journal)
-        if row["stage"] == "recovered":
-            self.backend.verify(row["previous"])
-            return {"status": "UNCHANGED", "release": row["previous"]}
+        if row["stage"] in ("recovered", "aborted") and not row.get("rolled_back"):
+            # The newest attempt failed and was recovered: undo the last committed
+            # transition instead, if it led to the current release.
+            if self.rollback_point.exists():
+                point = read_json(self.rollback_point)
+                if point["stage"] == "committed" and point["candidate"] == self.backend.current():
+                    row = point
+        if row["stage"] in ("recovered", "aborted"):
+            current = self.backend.current()
+            require(current is not None, "no-matching-rollback-snapshot")
+            self.backend.verify(current)
+            return {"status": "UNCHANGED", "release": current}
         require(
             row["stage"] == "committed" and row["previous"] and row["snapshot"],
             "no-matching-rollback-snapshot",
         )
         # A rollback itself is recoverable, and retains the failed version's state.
+        row["rolled_back"] = True
         self.save(row, "rollback")
         self.recover()
+        self.rollback_point.unlink(missing_ok=True)
         return {"status": "ROLLED_BACK", "release": row["previous"]}

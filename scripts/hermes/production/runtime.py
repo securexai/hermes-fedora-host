@@ -34,10 +34,17 @@ TREES = ("gateway-state", "gateway-ssh", "worker-state")
 # Reason codes a receiver may print after "STOP: " (never free text or values).
 REASON = re.compile(r"[A-Za-z0-9][A-Za-z0-9:._-]{0,159}")
 # Worker local-network probe (bash -c PROBE TARGET PORT): prints its verdict, exits 0.
+# Only a connect that hangs until the timeout is BLOCKED (the guard drops silently);
+# a refusal or unreachable answer means something replied, and must not pass.
 PROBE = (
-    'if timeout 5 bash -c "exec 3<>/dev/tcp/$0/$1" 2>/dev/null; '
-    "then echo REACHED; else echo BLOCKED; fi"
+    'timeout 5 bash -c "exec 3<>/dev/tcp/$0/$1" 2>/dev/null; rc=$?; '
+    'if [ "$rc" = 124 ]; then echo BLOCKED; elif [ "$rc" = 0 ]; then echo REACHED; '
+    'else echo "OTHER:$rc"; fi'
 )
+# Worker IPv6 addresses (scope column of /proc/net/if_inet6): only host and link scope
+# may exist. The worker is IPv4-only; the guard cannot know a LAN's global IPv6 prefix.
+IPV6_ADDRESSES = "cat /proc/net/if_inet6 2>/dev/null; exit 0"
+LOCAL_IPV6_SCOPES = {"10", "20"}
 
 
 # The gateway image writes its own key for its built-in API server into the stored
@@ -91,6 +98,52 @@ def credential_text(text, *, container_managed=False):
         "explicit-telegram-numeric-allowlist-required",
     )
     require(all(values.get(k, v) == v for k, v in optional.items()), "unsafe-profile-environment")
+
+
+OPERATOR_SETTINGS = ("DEEPSEEK_API_KEY", "TELEGRAM_BOT_TOKEN", "TELEGRAM_ALLOWED_USERS")
+
+
+def carry_operator_settings(keep, restored_path):
+    """Put the current operator settings into a restored gateway environment.
+
+    `keep` is the current validated environment as (text, uid, gid). Only the three
+    operator values move into a restored live environment: it keeps its own contract
+    switches and container-managed key, which its (possibly older) receiver validates,
+    so a later release's environment changes cannot fail an older release's verify. A
+    snapshot without an environment gets the current file; any other file is left.
+    """
+    current, uid, gid = keep
+    path = Path(restored_path)
+    if not path.exists() and not path.is_symlink():
+        atomic(path, current.encode(), 0o600)
+        os.chown(path, uid, gid)
+        return True
+    if not path.is_file() or path.is_symlink():
+        return False
+    try:
+        credentials(path)
+        restored = path.read_text()
+    except (Refused, UnicodeDecodeError):
+        return False  # Not a live gateway environment: leave the snapshot's file alone.
+    values = {}
+    for line in current.splitlines():
+        key, _, value = line.partition("=")
+        if key in OPERATOR_SETTINGS:
+            values[key] = value
+    lines = []
+    for line in restored.splitlines(keepends=True):
+        key, separator, _ = line.partition("=")
+        if separator and key in values:
+            line = key + "=" + values[key] + ("\n" if line.endswith("\n") else "")
+        lines.append(line)
+    merged = "".join(lines)
+    credential_text(merged, container_managed=True)
+    if merged == restored:
+        return False
+    owner = path.lstat()
+    atomic(path, merged.encode(), 0o600)
+    os.chown(path, owner.st_uid, owner.st_gid)
+    return True
 
 
 def validate_snapshot(path):
@@ -416,6 +469,17 @@ class Backend:
             info["receiver"] == receivers.for_release(manifest).name, "snapshot-receiver-mismatch"
         )
         validate_snapshot(target / "state.tar")
+        # Credentials are operator configuration, not application state: recovery and
+        # rollback keep the current operator settings (a rotated token or a removed
+        # allowed user must not come back with an older snapshot).
+        live, keep = HOME / "gateway-state/.env", None
+        if live.is_file() and not live.is_symlink():
+            try:
+                credentials(live)
+                held = live.lstat()
+                keep = (live.read_text(), held.st_uid, held.st_gid)
+            except (Refused, UnicodeDecodeError):
+                keep = None
         # A private directory on the same mounted filesystem enables safe rename.
         import tempfile
 
@@ -440,6 +504,8 @@ class Backend:
                 if (HOME / tree).exists():
                     os.rename(HOME / tree, failed / tree)
                 os.rename(Path(directory) / tree, HOME / tree)
+                if tree == "gateway-state" and keep is not None:
+                    carry_operator_settings(keep, live)
                 durable_tree(HOME / tree)
             durable_directory(HOME)
         for name, expected in info["units"].items():
@@ -451,6 +517,20 @@ class Backend:
             atomic(self.units / name, (target / "units" / name).read_bytes(), 0o644)
         run(["restorecon", "-R", str(self.units)])
         self.user("systemctl", "--user", "daemon-reload")
+
+    def discard(self, release):
+        """A failed first deployment: remove its units so the runtime cannot start it.
+
+        An interruption after the pointer write but before the commit leaves
+        current.json naming the candidate; with nothing to return to, clear it too.
+        """
+        self.release(release)
+        for name in ("hermes-worker.container", "hermes-gateway.container"):
+            (self.units / name).unlink(missing_ok=True)
+        self.user("systemctl", "--user", "daemon-reload")
+        if self.current() == release:
+            (self.state / "current.json").unlink()
+            durable_directory(self.state)
 
     def import_images(self, release):
         root, manifest = self.release(release)
@@ -591,25 +671,38 @@ class Backend:
         require(worker_uid == b"1000", "worker-process-identity")
         egress.check(self.uid)
         if self.mode == "production":
-            # The worker has internet; the server itself, pasta's host map and link-local
-            # metadata must stay unreachable. The probe reports its verdict and exits 0:
-            # an exec that exits non-zero leaves a failed detached session process, which
-            # a cross-receiver action's transaction guard would count as a failure, and a
-            # probe that could not run must never pass as "blocked".
-            for target, port in (
-                (egress.host_address(), 22),
-                ("169.254.1.2", 22),
-                ("169.254.169.254", 80),
-            ):
-                probe = self.user(
-                    "podman",
-                    "exec",
-                    "hermes-worker",
-                    "bash",
-                    "-c",
-                    PROBE,
-                    target,
-                    str(port),
-                    timeout=60,
-                )
-                require(probe.stdout.strip() == b"BLOCKED", "worker-reached-local-network")
+            self.verify_worker_network()
+
+    def verify_worker_network(self):
+        """Production worker: IPv4 only, and the guard silently drops local destinations.
+
+        Probes go through pasta to the host (its host map), link-local metadata and the
+        LAN default gateway when one exists. Each probe exits 0 and prints its verdict:
+        an exec that exits non-zero leaves a failed detached session process that a
+        cross-receiver action's guard would count, and a probe that could not run must
+        never pass.
+        """
+        addresses = self.user(
+            "podman", "exec", "hermes-worker", "bash", "-c", IPV6_ADDRESSES, timeout=60
+        ).stdout.decode()
+        scopes = {line.split()[3] for line in addresses.splitlines() if len(line.split()) >= 6}
+        require(scopes <= LOCAL_IPV6_SCOPES, "worker-has-ipv6")
+        targets = [("169.254.1.2", 22), ("169.254.169.254", 80)]
+        gateway = egress.default_gateway()
+        if gateway:
+            targets.append((gateway, 53))
+        for target, port in targets:
+            probe = self.user(
+                "podman",
+                "exec",
+                "hermes-worker",
+                "bash",
+                "-c",
+                PROBE,
+                target,
+                str(port),
+                timeout=60,
+            )
+            verdict = probe.stdout.strip()
+            require(verdict != b"REACHED", "worker-reached-local-network")
+            require(verdict == b"BLOCKED", "worker-local-network-probe-not-blocked")

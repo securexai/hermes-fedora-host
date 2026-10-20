@@ -27,7 +27,7 @@ done on particular dates. They are not current runbooks.
 | Application host | Fedora Linux 44 (Server Edition), x86-64, cgroup v2, SELinux Enforcing, rootless Podman 5.8.x, systemd 259.x | Other Fedora releases, ARM, cgroup v1, SELinux disabled or permissive |
 | Storage | Dedicated XFS `/home/hermes` filesystem on LUKS-encrypted storage | NFS/SMB homes, `virtiofs`, shared or unsupported filesystems |
 | Accounts | A locked, non-login unprivileged runtime account (`hermes`) with ≥65,536 subordinate IDs; an administrator account whose name is **configurable** (`HERMES_ADMIN`) | System-UID runtime accounts; a fixed administrator name |
-| Capability scope | CLI and Telegram **text** conversations; terminal and file work executed in the worker (offline in this manual profile; outbound internet behind a host egress guard in the [production profile](HERMES_PRODUCTION_DEPLOYMENT.md#worker-internet-access)); approval-gated memory | Browser, computer-use, code execution, scheduling, delegation, external messaging/integrations, media tools |
+| Capability scope | CLI and Telegram **text** conversations; terminal and file work executed in the worker (offline in this manual profile; outbound IPv4 internet behind a host egress guard in the [production profile](HERMES_PRODUCTION_DEPLOYMENT.md#worker-internet-access)); approval-gated memory | Browser, computer-use, code execution, scheduling, delegation, external messaging/integrations, media tools |
 | Lab hypervisor (for validation) | The virtualization repository's Fedora 44 Kinoite NAT profile, x86-64 | Any claim that Kinoite is the application target |
 | Optional no-input boot | UEFI Secure Boot on, working TPM2/SHA-256 PCR7, console recovery, verified firmware AC-restoration behaviour | VM-only certification of hardware boot; protection against theft of an intact powered-off server |
 
@@ -91,7 +91,7 @@ recorded as unverified until it runs.
 ## 4. Trust and transport
 
 - In this manual profile the worker has no route at all (`Network=none`); the production profile adds
-  outbound internet behind a host egress guard. The only gateway-to-worker transport is a Unix socket in a minimal
+  outbound IPv4 internet behind a host egress guard. The only gateway-to-worker transport is a Unix socket in a minimal
   shared directory; the worker runs `socat` feeding `sshd -i` (inetd mode), never a TCP listener.
 - The worker SSH host key lives in a persistent worker-only directory, so rebuilding the image cannot
   silently change the identity the gateway pins.

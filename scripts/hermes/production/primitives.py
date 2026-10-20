@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ctypes
 import fcntl
 import hashlib
 import json
@@ -21,19 +22,21 @@ class Refused(RuntimeError):
 
 
 _LOCKS = ContextVar("production_locks", default=())
+# Inside a contained receiver action: guard each command although no lock is held here.
+_CONTAINED = ContextVar("production_contained", default=False)
 
 
 def supervised_run(argv, *, timeout=None, **kwargs):
     """Run commands under a lock-owning subreaper when inside a transaction."""
     locks = _LOCKS.get()
-    if not locks:
+    if not locks and not _CONTAINED.get():
         return subprocess.run(argv, timeout=timeout, **kwargs)
     command = [
         sys.executable,
         "-I",
         str(Path(__file__).with_name("writer_guard.py")),
         str(timeout or 0),
-        ",".join(map(str, locks)),
+        ",".join(map(str, locks)) or "-",
         *argv,
     ]
     data = kwargs.pop("input", None)
@@ -221,6 +224,31 @@ def durable_tree(root):
         durable_directory(path)
     durable_directory(root)
     durable_directory(root.parent)
+
+
+@contextmanager
+def contained():
+    """Give a cross-receiver action the same outcome semantics as in-process code.
+
+    The calling receiver runs this action under one transaction guard, which would
+    adopt every orphan of this process and fail the action if any exits non-zero
+    (such as a container exec session after an expected or retried failure). As a
+    subreaper this process adopts them instead; each command gets its own guard (no
+    new lock: the caller's guard holds it), and adopted descendants are waited for,
+    without their status counting, before the action returns.
+    """
+    libc = ctypes.CDLL(None, use_errno=True)
+    require(libc.prctl(36, ctypes.c_ulong(1), 0, 0, 0) == 0, "subreaper-unavailable")
+    token = _CONTAINED.set(True)
+    try:
+        yield
+    finally:
+        _CONTAINED.reset(token)
+        while True:
+            try:
+                os.waitpid(-1, 0)
+            except ChildProcessError:
+                break
 
 
 @contextmanager

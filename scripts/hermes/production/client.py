@@ -2,13 +2,18 @@
 
 from __future__ import annotations
 
+import hashlib
+import io
 import json
 import os
 import re
+import shlex
+import subprocess
+import tarfile
 from pathlib import Path
 
-from . import escrow
-from .primitives import atomic, decode, regular, require, run, sha
+from . import escrow, receivers
+from .primitives import atomic, decode, digest, regular, require, run, sha
 
 HOST = re.compile(r"[A-Za-z0-9][A-Za-z0-9.-]*")
 
@@ -32,6 +37,99 @@ def ssh(host, port, user, identity, known_hosts, command=None):
         argv += ["-o", option]
     argv += ["-i", str(Path(identity).absolute()), f"{user}@{host}"]
     return argv + ([command] if command else [])
+
+
+CONTROLLER_STAGING = "hermes-controller"
+
+
+def controller_source(source):
+    """Receiver files of a source tree: ({name: bytes}, {name: sha256}, identity)."""
+    files = receivers.file_map(source)
+    contents = {name: regular(Path(source) / name).read_bytes() for name in files}
+    require(
+        all(hashlib.sha256(contents[n]).hexdigest() == files[n] for n in files),
+        "controller-source-changed",
+    )
+    return contents, files, digest(receivers.descriptor(files))
+
+
+def controller_payload(contents):
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w", format=tarfile.USTAR_FORMAT) as archive:
+        for name in sorted(contents):
+            member = tarfile.TarInfo(name)
+            member.mode, member.size = 0o644, len(contents[name])
+            archive.addfile(member, io.BytesIO(contents[name]))
+    return buffer.getvalue()
+
+
+def controller_script(admin, files, receiver):
+    """Root side of a controller update; every value comes from the workstation.
+
+    The administrator account staged the files, so it could have changed them: copy
+    them into fresh root-owned staging, require exactly the expected names (regular
+    files only) and SHA-256 values, bootstrap from that copy, and require that the
+    staged receiver is the expected one.
+    """
+    require(re.fullmatch(r"[a-z_][a-z0-9_-]{0,31}", admin or "") is not None, "invalid-admin")
+    require(re.fullmatch(r"[0-9a-f]{64}", receiver or "") is not None, "invalid-receiver")
+    names = sorted(files)
+    for name in names:
+        require(
+            re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_./-]*", name) is not None
+            and ".." not in name.split("/")
+            and re.fullmatch(r"[0-9a-f]{64}", files[name]) is not None,
+            "invalid-controller-file",
+        )
+    sums = "\n".join(f"{files[name]}  {name}" for name in names)
+    listing = "\n".join(names)
+    return (
+        "set -eu\n"
+        "umask 077\n"
+        "stage=$(mktemp -d /root/hermes-controller.XXXXXX)\n"
+        "trap 'rm -rf \"$stage\"' EXIT\n"
+        f'cp -R -P ~{admin}/{CONTROLLER_STAGING}/. "$stage"/\n'
+        'cd "$stage"\n'
+        'test -z "$(find . ! -type f ! -type d)"\n'
+        f"test \"$(find . -type f | sed 's|^[.]/||' | LC_ALL=C sort)\" = '{listing}'\n"
+        f"printf '%s\\n' '{sums}' | sha256sum --strict --quiet -c -\n"
+        'out=$(python3 -I -B "$stage/productionctl.py" bootstrap'
+        " --config /etc/hermes-production/host.json"
+        " --signers /etc/hermes-production/allowed_signers --apply)\n"
+        "printf '%s\\n' \"$out\"\n"
+        f'case "$out" in *\'"receiver":"{receiver}"\'*) ;; '
+        "*) echo 'STOP: controller-receiver-mismatch' >&2; exit 1;; esac\n"
+    )
+
+
+def controller_update(host, port, known_hosts, admin, identity, source, *, apply=False):
+    """Stage this tree's receiver on the host; the operator types sudo's password."""
+    contents, files, receiver = controller_source(source)
+    result = {"status": "PREVIEW", "receiver": receiver, "files": len(files)}
+    if not apply:
+        return result
+    staging = f"~/{CONTROLLER_STAGING}"
+    copy = ssh(
+        host,
+        port,
+        admin,
+        identity,
+        known_hosts,
+        f"rm -rf {staging} && mkdir -m 700 {staging} && tar -C {staging} -xf -",
+    )
+    script = controller_script(admin, files, receiver)
+    root = ssh(host, port, admin, identity, known_hosts, "sudo /bin/sh -c " + shlex.quote(script))
+    for argv in (copy, root):
+        # Interactive: allow the key's passphrase prompt; the second call needs a terminal.
+        argv[argv.index("BatchMode=yes")] = "BatchMode=no"
+    root[root.index("-T")] = "-t"
+    require(
+        subprocess.run(copy, input=controller_payload(contents), timeout=300).returncode == 0,
+        "controller-copy-failed",
+    )
+    require(subprocess.run(root, timeout=1800).returncode == 0, "controller-bootstrap-failed")
+    result["status"] = "BOOTSTRAPPED"
+    return result
 
 
 def pin_host(host, port, fingerprint, known_hosts, *, apply=False):

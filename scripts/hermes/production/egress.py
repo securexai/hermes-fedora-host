@@ -6,17 +6,25 @@ gateway: private, carrier-grade NAT, link-local (including cloud metadata), mult
 reserved destinations are dropped, and so is host loopback except DNS (pasta forwards
 container DNS to the host's stub resolver). The table is owned here and never touches
 firewalld's own table. A oneshot unit loads it at boot before the user manager starts.
+
+The rules, unit and drop-in are host-wide, while every receiver that may still run
+(for recovery or rollback) checks them. So bootstrap records their hashes, and a
+receiver checks the files against that record and the loaded table only for the
+coverage it requires: a later release may block more without breaking older ones.
 """
 
 from __future__ import annotations
 
+import ipaddress
 import shutil
 from pathlib import Path
 
-from .primitives import atomic, decode, public_directory, require, run
+from .primitives import atomic, canonical, decode, public_directory, read_json, require, run, sha
 
 TABLE = "hermes_egress"
 RULES = Path("/etc/hermes-production/egress.nft")
+# Hashes of the installed guard files, written by bootstrap and read by every receiver.
+RECORD = Path("/etc/hermes-production/egress.json")
 UNIT = Path("/etc/systemd/system/hermes-egress.service")
 SYSTEMD = Path("/etc/systemd/system")
 DROPIN = "40-hermes-egress.conf"
@@ -72,14 +80,16 @@ def rules(uid):
 
 
 def install(uid):
-    """Write the rules, unit and user-manager dependency (bootstrap, root)."""
+    """Write the rules, unit, user-manager dependency and their hash record (bootstrap)."""
     require(shutil.which("nft") is not None, "nftables-required")
     atomic(RULES, rules(uid), 0o644)
     atomic(UNIT, UNIT_BYTES, 0o644)
     dropin = SYSTEMD / f"user@{uid}.service.d"
     public_directory(dropin)
     atomic(dropin / DROPIN, DROPIN_BYTES, 0o644)
-    return [RULES, UNIT, dropin / DROPIN]
+    record = {"dropin": sha(dropin / DROPIN), "rules": sha(RULES), "unit": sha(UNIT)}
+    atomic(RECORD, canonical(record), 0o644)
+    return [RULES, UNIT, dropin / DROPIN, RECORD]
 
 
 def activate():
@@ -93,19 +103,24 @@ def activate():
     run(["nft", "-f", str(RULES)])
 
 
-def _prefixes(right):
+def _networks(right):
     items = right.get("set") if isinstance(right, dict) and "set" in right else [right]
     found = set()
     for item in items:
         if isinstance(item, dict) and "prefix" in item:
-            found.add(f"{item['prefix']['addr']}/{item['prefix']['len']}")
+            found.add(ipaddress.ip_network(f"{item['prefix']['addr']}/{item['prefix']['len']}"))
         else:
-            found.add(str(item))
-    return found
+            require(isinstance(item, str), "egress-rule-destination")
+            found.add(ipaddress.ip_network(item))
+    return frozenset(found)
 
 
 def loaded(uid):
-    """Normalize the live table into comparable rules; refuse anything unexpected."""
+    """Normalize the live table; refuse anything but exact uid drop rules.
+
+    Each rule may hold only `meta skuid == uid`, `ip/ip6 daddr == {...}`, optionally
+    `th dport != 53`, a counter and a final drop: nothing that narrows or negates it.
+    """
     data = decode(run(["nft", "-j", "list", "table", "inet", TABLE]).stdout)["nftables"]
     chains = [row["chain"] for row in data if "chain" in row]
     require(
@@ -119,59 +134,86 @@ def loaded(uid):
     observed = []
     for row in (r["rule"] for r in data if "rule" in r):
         expr = row["expr"]
-        require(expr and "drop" in expr[-1], "egress-rule-not-drop")
-        meta = [e["match"] for e in expr if "match" in e and "meta" in e["match"]["left"]]
+        require(expr and expr[-1] == {"drop": None}, "egress-rule-not-drop")
+        meta, dest, port = [], [], []
+        for item in expr[:-1]:
+            if "counter" in item:
+                continue
+            match = item.get("match")
+            require(isinstance(match, dict), "egress-rule-unexpected-expression")
+            left = match.get("left", {})
+            if "meta" in left:
+                meta.append(match)
+            elif left.get("payload", {}).get("field") == "daddr":
+                dest.append(match)
+            elif left.get("payload", {}).get("field") == "dport":
+                port.append(match)
+            else:
+                require(False, "egress-rule-unexpected-expression")
         require(
             len(meta) == 1
+            and meta[0]["op"] == "=="
             and meta[0]["left"]["meta"]["key"] == "skuid"
             and meta[0]["right"] == uid,
             "egress-rule-uid-mismatch",
         )
-        dest = [
-            e["match"]
-            for e in expr
-            if "match" in e and e["match"]["left"].get("payload", {}).get("field") == "daddr"
-        ]
-        require(len(dest) == 1, "egress-rule-destination")
+        require(len(dest) == 1 and dest[0]["op"] == "==", "egress-rule-destination")
         family = dest[0]["left"]["payload"]["protocol"]
-        port = [
-            e["match"]
-            for e in expr
-            if "match" in e and e["match"]["left"].get("payload", {}).get("field") == "dport"
-        ]
+        require(family in ("ip", "ip6"), "egress-rule-destination")
         except_dns = len(port) == 1 and port[0]["op"] == "!=" and port[0]["right"] == 53
         require(not port or except_dns, "egress-rule-port")
-        observed.append((family, frozenset(_prefixes(dest[0]["right"])), except_dns))
-    return sorted(observed, key=repr)
+        observed.append((family, _networks(dest[0]["right"]), except_dns))
+    return observed
 
 
-def expected():
-    return sorted(
-        [
-            ("ip", frozenset(BLOCKED_V4), False),
-            ("ip6", frozenset(BLOCKED_V6), False),
-            ("ip", frozenset({"127.0.0.0/8"}), True),
-            ("ip6", frozenset({"::1"}), True),
-        ],
-        key=repr,
+def required():
+    """(family, network, except_dns) this receiver needs blocked for the runtime uid."""
+    return (
+        [("ip", ipaddress.ip_network(n), False) for n in BLOCKED_V4]
+        + [("ip6", ipaddress.ip_network(n), False) for n in BLOCKED_V6]
+        + [("ip", ipaddress.ip_network("127.0.0.0/8"), True)]
+        + [("ip6", ipaddress.ip_network("::1"), True)]
+    )
+
+
+def covered(observed):
+    """Every required network lies inside a loaded drop rule of the same kind."""
+    return all(
+        any(
+            family == fam and except_dns == dns and any(net.subnet_of(n) for n in nets)
+            for fam, nets, dns in observed
+        )
+        for family, net, except_dns in required()
     )
 
 
 def check(uid):
-    """Loaded table, rules file and unit all match; the unit is enabled and active."""
-    require(RULES.read_bytes() == rules(uid), "egress-rules-file-drift")
-    require(UNIT.read_bytes() == UNIT_BYTES, "egress-unit-drift")
+    """Files match bootstrap's record, the unit is enabled and active, coverage holds."""
+    record = read_json(RECORD, owner=0)
     dropin = SYSTEMD / f"user@{uid}.service.d" / DROPIN
-    require(dropin.read_bytes() == DROPIN_BYTES, "egress-dropin-drift")
+    require(
+        set(record) == {"dropin", "rules", "unit"}
+        and sha(RULES) == record["rules"]
+        and sha(UNIT) == record["unit"]
+        and sha(dropin) == record["dropin"],
+        "egress-files-drift",
+    )
+    lines = set(dropin.read_text().splitlines())
+    require(
+        {"Requires=hermes-egress.service", "After=hermes-egress.service"} <= lines,
+        "egress-dropin-drift",
+    )
     for state, expected_state in (("is-enabled", "enabled"), ("is-active", "active")):
         out = run(["systemctl", state, UNIT.name], check=False).stdout.decode().strip()
         require(out == expected_state, f"egress-unit-not-{expected_state}")
-    require(loaded(uid) == expected(), "egress-table-mismatch")
+    require(covered(loaded(uid)), "egress-table-mismatch")
     return "egress-guard-active"
 
 
-def host_address():
-    """The host's own source address toward the internet (a LAN address on a VLAN)."""
-    routes = decode(run(["ip", "-j", "route", "get", "1.1.1.1"]).stdout)
-    require(routes and routes[0].get("prefsrc"), "egress-host-address-unavailable")
-    return routes[0]["prefsrc"]
+def default_gateway():
+    """The host's IPv4 default gateway (a LAN router), or None without a default route."""
+    routes = decode(run(["ip", "-j", "-4", "route", "show", "default"]).stdout or b"[]")
+    for route in routes:
+        if route.get("gateway"):
+            return str(ipaddress.ip_address(route["gateway"]))
+    return None

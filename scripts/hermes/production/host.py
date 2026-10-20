@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import pwd
+import signal
 import stat
 import tempfile
 import time
@@ -354,6 +355,29 @@ def provision_credentials(config, stream, *, apply):
         return {"status": "STORED", "restarted": True, "release": current}
 
 
+# A stalled upload must not hold the operation lock (and block recovery) for long.
+UPLOAD_IDLE_SECONDS = 300
+
+
+class IdleLimited:
+    """Bound how long each read of an upload may wait; only the blocked read is timed."""
+
+    def __init__(self, stream, seconds=UPLOAD_IDLE_SECONDS):
+        self.stream, self.seconds = stream, seconds
+
+    def read(self, size=-1):
+        def stalled(signum, frame):
+            raise Refused("upload-stalled")
+
+        previous = signal.signal(signal.SIGALRM, stalled)
+        signal.alarm(self.seconds)
+        try:
+            return self.stream.read(size)
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, previous)
+
+
 def dispatch(stream):
     require(os.geteuid() == 0, "installed-root-dispatcher-required")
     config = preflight.configuration(read_json(preflight.CONFIG, owner=0))
@@ -427,7 +451,7 @@ def dispatch(stream):
             started = time.monotonic()
             payload = Path(directory) / "release"
             manifest = bundle.unpack(
-                stream,
+                IdleLimited(stream),
                 payload,
                 ETC / "allowed_signers",
                 production=config["kind"] == "production",
