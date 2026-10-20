@@ -4153,9 +4153,9 @@ An external read-only reviewer, using the agent-written prompt, reported 15 find
 | G3 | Unattended production-mode VM check with dummy credentials: deploy; controller update; cross-receiver upgrade, rollback and interruption; worker has no global IPv6; probes BLOCKED by timeout | All PASS | ✅ PASS (`runs/20261020T002708Z`, 2026-10-19, after R15; earlier `runs/20261002T220112Z` is superseded) |
 | G4 | Unattended transition check from the deployed receiver: previous release built from `1437be4` (receiver `6ced79eb…`), controller update to the candidate, upgrade, then rollback to the previous release across receivers | All PASS | ✅ PASS (`runs/20261020T002708Z`, 2026-10-19, after R15; earlier `runs/20261002T220112Z` is superseded) |
 | G5 | Attended live qualification (operator) | All seven gates PASS | ✅ PASS (attempt 3, `runs/20261020T032610Z`, 2026-10-19; attempts 1 and 2 FAIL, see below) |
-| G6 | Production rollout (operator): `controller-update`, `upgrade`, `verify`, Telegram check. **Method changed 2026-10-19 (operator decision "Reinstall"):** fresh USB reinstall of 10.0.30.10 with a new escrow key, then `deploy` of the qualified bundle, Telegram check | PASS | ⬜ NOT_RUN (needs G5 PASS; earlier BLOCKED on lost `sudo`, see below) |
+| G6 | Production rollout (operator): `controller-update`, `upgrade`, `verify`, Telegram check. **Method changed 2026-10-19 (operator decision "Reinstall"):** fresh USB reinstall of 10.0.30.10 with a new escrow key, then `deploy` of the qualified bundle, Telegram check | PASS | 🔄 IN_PROGRESS (bundle and corrected media `hermes-production-r2.iso` BUILT 2026-10-20; the reinstall and rollout are operator steps; see the end of this section) |
 
-**Exact next action:** rerun the unattended G3/G4 VM check on this tree (R15 changed the receiver), then operator G5.
+**Exact next action:** kept current at the end of this section.
 
 - **Progress (R01–R08 implemented, unit-tested; 95 production tests PASS):**
   - **R01:** bootstrap writes `/etc/hermes-production/egress.json` (sha256 of rules, unit and drop-in). `check()` compares the files with that record and requires the drop-in's `Requires=`/`After=` lines. The loaded table must cover every required network (`subnet_of`, since nft merges prefixes) with exact `skuid ==`/`daddr ==` matches and only counter/drop otherwise (finding 13).
@@ -4349,6 +4349,34 @@ An external read-only reviewer, using the agent-written prompt, reported 15 find
   - One commit `fix(production): close the branch review findings` holds R01–R16, the tests and fixture, the docs and this record.
   - The push to `origin/codex/hermes-production-bundle` also carries the three earlier local commits `cb19447`, `ce73f96` and `1437be4`.
   - The agent checked the push range and working diff: no secret-shaped lines. The pre-push hook runs the offline gate.
+  - **Result:**
+    - Committed as `41e949f`, inside the Toolbox, where the `pre-commit` hooks run. The first host attempt was refused because `pre_commit` is not installed on the host, and one markdownlint MD033 error in this record was fixed.
+    - The message has no attribution lines, and the tree was clean afterwards. All 42 bundled source files in `HEAD` equal the qualified candidate's manifest.
+    - **Push NOT done:** Claude Code's permission check refused the agent's `git push` ("Out-of-Place Publication"). The operator pushes.
   - **Media preview (agent, no `--apply`):** `disk_to_erase` `/dev/disk/by-id/nvme-512GB_SSD_MQ26W40711034`, DVD `85837793…` (the qualification's media), kickstart `64ec65a8…`, manifest `a6cc7e82…`.
 
-**Exact next action (operator), G6 by reinstall:** `bundle --evidence` with `~/hermes-production-2/signing_ed25519`, then `media` with `~/hermes-production-2/install.json`, write the USB, reinstall 10.0.30.10 (`hermes.reinstall=yes` once), then pin-host, enroll, attest console and power, credentials, deploy, Telegram check, and escrow the new admin password into the password manager.
+- **Bundle and media BUILT (operator-run, 2026-10-20 09:39–09:40 −05:00):**
+  - `bundle --evidence runs/20261020T032610Z/qualification.json --apply`: `~/hermes-production-2/hermes-qualified.tar`, sha256 `49adad3e0bf52da1fe5627b4facc9db46e3cae3c18c98c8d3ae5b592d0be3a8c`, stage `qualified`, artifact `4fcc8c43…`.
+  - `media --apply`: `~/hermes-production-2/hermes-production.iso`, sha256 `b3bf51fa846e1e9bd0f7e489393ebc164b6c2025565c0f6356ea6e40a6f04c70`. The source DVD (`85837793…`), kickstart (`64ec65a8…`), manifest (`a6cc7e82…`) and disk to erase equal the agent's preview. Boot options: `inst.nosave=all_ks inst.text`.
+  - **Agent check (read-only, public material):**
+    - `sha256sum` reproduces both hashes, and the evidence file is still `ac0164db…`.
+    - `inspect-bundle` with `~/hermes-production-2/allowed_signers` verifies the signature. It reports stage `qualified`, `report_sha256` `ac0164db…`, all seven gates PASS, and the runbook entry `20915d51…` as qualified.
+  - **Push still pending:** the branch is 4 commits ahead of `origin`.
+- **Blocker found before the USB write: `deploy_from` no longer matches the workstation (agent check, 2026-10-20).**
+  - `install.json`, and so the new ISO, carries `deploy_from` `192.168.99.184/32`: the address the server saw on 2026-10-01 (P04, no NAT).
+  - The workstation now has the DHCP lease `192.168.99.10` (`enp10s0`, dynamic, from `192.168.99.254`). Its route to 10.0.30.10 uses that source address.
+  - Bootstrap writes `deploy_from` into the deployment key's `from=` restriction (`host.py`), so sshd would refuse the deployment key from `.10`. `enroll` proves its nonce through the dispatcher, so commissioning, `credentials` and `deploy` would all fail. Changing it after installation is a host-configuration change (private re-bootstrap under `sudo`).
+  - **Not verified:** the source address the server sees today. The agent did not contact it.
+  - Nothing was changed: `install.json` and the ISO are as built.
+- **Decision (operator, 2026-10-20): "Use .10/32, rebuild (Recommended)".** Approval evidence: the operator's answer to the agent's question listing `.10/32`, the `/24` and a router reservation for `.184`.
+  - The agent sets `deploy_from` to `192.168.99.10/32` in `~/hermes-production-2/install.json` and rebuilds the media to `~/hermes-production-2/hermes-production-r2.iso`. The first ISO is kept.
+  - The bundle is unchanged: `deploy_from` is host configuration, not part of the release identity.
+  - The operator adds a DHCP reservation for the workstation's `192.168.99.10` on the router.
+- **Media rebuilt (agent-run, 2026-10-20):**
+  - **Settings:** `install.json` has `deploy_from` `192.168.99.10/32` (one line changed, still mode 0600 and valid JSON).
+  - **Preview, then `--apply`:** `~/hermes-production-2/hermes-production-r2.iso`, sha256 `42b5f8eb66c07f7cc12792555bd5f45ba1cf72b3380d8c424384783d96c225c0`. Kickstart `624b4ac8…` and manifest `72a8ddda…`; the DVD `85837793…`, the disk to erase and the boot options are unchanged.
+  - **Agent check:** `xorriso` extracted `/hermes-production.ks`, `/hermes-installer/install.json` and `manifest.json` from the new ISO. The embedded settings carry `"deploy_from":"192.168.99.10/32"`, and the recomputed kickstart and manifest digests equal the reported values. `media` itself also checked the embedded files and both UEFI `grub.cfg` copies.
+  - **Superseded:** `hermes-production.iso` (`b3bf51fa…`) still allows only `192.168.99.184`. Do not write it. It is kept, because deleting it was not requested.
+  - **Not verified:** that the server sees the workstation as `192.168.99.10`. P04 found no NAT on this path on 2026-10-01.
+
+**Exact next action (operator), G6 by reinstall:** add the DHCP reservation for `192.168.99.10`, then write `hermes-production-r2.iso` to the USB, reinstall 10.0.30.10 (`hermes.reinstall=yes` once), pin-host, enroll, store and verify the new admin password and recovery key in the password manager, attest console and power, credentials, deploy, Telegram check, and push the branch.
