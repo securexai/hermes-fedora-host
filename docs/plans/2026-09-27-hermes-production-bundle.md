@@ -2,7 +2,7 @@
 
 <!-- markdownlint-disable MD013 -->
 
-Record state: IN_PROGRESS — the unattended production path is implemented and proven in disposable Secure Boot + TPM2 VMs (runs r7/r8: install → commissioned → deployed in about 9.5 minutes, every local stage PASS, no secret typed). Off-host restore, real-credential application tests, fault automation, physical attestation and the production canary remain open; see [Approved scope change — unattended production path](#approved-scope-change--unattended-production-path-2026-10-01). Prior pet-VM qualification work (G03–G05) is STALE/superseded history; no production acceptance is claimed.
+Record state: IN_PROGRESS — the review fix release (artifact `4fcc8c43…`) passed all seven qualification gates with real credentials (G5, 2026-10-19). It runs on 10.0.30.10 after a fresh USB reinstall, commissioned with all five proofs and answering in Telegram (G6, 2026-10-20); see [Approved scope — review fix release](#approved-scope--review-fix-release-2026-10-02). Open: committing this record's G6 entries; off-host backup and isolated off-host restore (the restore gate passed on the recorded no-off-host-backup waiver); and the deferred follow-ups listed with G6's result. Prior pet-VM qualification work (G03–G05) is STALE/superseded history; no production acceptance beyond these gates is claimed.
 
 ## Approved baseline — preserve after approval
 
@@ -4153,7 +4153,7 @@ An external read-only reviewer, using the agent-written prompt, reported 15 find
 | G3 | Unattended production-mode VM check with dummy credentials: deploy; controller update; cross-receiver upgrade, rollback and interruption; worker has no global IPv6; probes BLOCKED by timeout | All PASS | ✅ PASS (`runs/20261020T002708Z`, 2026-10-19, after R15; earlier `runs/20261002T220112Z` is superseded) |
 | G4 | Unattended transition check from the deployed receiver: previous release built from `1437be4` (receiver `6ced79eb…`), controller update to the candidate, upgrade, then rollback to the previous release across receivers | All PASS | ✅ PASS (`runs/20261020T002708Z`, 2026-10-19, after R15; earlier `runs/20261002T220112Z` is superseded) |
 | G5 | Attended live qualification (operator) | All seven gates PASS | ✅ PASS (attempt 3, `runs/20261020T032610Z`, 2026-10-19; attempts 1 and 2 FAIL, see below) |
-| G6 | Production rollout (operator): `controller-update`, `upgrade`, `verify`, Telegram check. **Method changed 2026-10-19 (operator decision "Reinstall"):** fresh USB reinstall of 10.0.30.10 with a new escrow key, then `deploy` of the qualified bundle, Telegram check | PASS | 🔄 IN_PROGRESS (bundle and corrected media `hermes-production-r2.iso` BUILT 2026-10-20; the reinstall and rollout are operator steps; see the end of this section) |
+| G6 | Production rollout (operator): `controller-update`, `upgrade`, `verify`, Telegram check. **Method changed 2026-10-19 (operator decision "Reinstall"):** fresh USB reinstall of 10.0.30.10 with a new escrow key, then `deploy` of the qualified bundle, Telegram check | PASS | ✅ PASS (2026-10-20: reinstall from `hermes-production-r2.iso`, COMMISSIONED, `deploy` of `4fcc8c43…` CHANGED, Telegram answered `uname -sr`; see the end of this section) |
 
 **Exact next action:** kept current at the end of this section.
 
@@ -4379,4 +4379,53 @@ An external read-only reviewer, using the agent-written prompt, reported 15 find
   - **Superseded:** `hermes-production.iso` (`b3bf51fa…`) still allows only `192.168.99.184`. Do not write it. It is kept, because deleting it was not requested.
   - **Not verified:** that the server sees the workstation as `192.168.99.10`. P04 found no NAT on this path on 2026-10-01.
 
-**Exact next action (operator), G6 by reinstall:** add the DHCP reservation for `192.168.99.10`, then write `hermes-production-r2.iso` to the USB, reinstall 10.0.30.10 (`hermes.reinstall=yes` once), pin-host, enroll, store and verify the new admin password and recovery key in the password manager, attest console and power, credentials, deploy, Telegram check, and push the branch.
+- **USB written (operator-run, 2026-10-20):** `dd` of `hermes-production-r2.iso` to `/dev/sda` (Kingston DataTraveler Max, 476.9G, USB; the agent confirmed it was unmounted and held only an older Fedora install image). 3912564736 bytes in 9.0 s; `cmp -n 3912564736` against the ISO printed `USB-OK`.
+
+- **DHCP reservation (operator report, 2026-10-20):** "192.168.99.10 lease configured". The agent saw only the client side: the route to 10.0.30.10 still uses source `192.168.99.10`. The reservation itself was not inspected, because the router is out of scope.
+
+- **Reinstall boot attempt 1 (operator photo, 2026-10-20): not the installer.** The GRUB editor showed the installed system's entry (`vmlinuz-7.2.8-200.fc44`, `root=/dev/mapper/hermes_system-root`), so the server booted its NVMe, not the USB. `hermes.reinstall=yes` was typed on a new line of its own, not appended to the `linux` line. The agent advised Esc (nothing is booted or saved), the firmware's one-time boot menu with the stick's UEFI entry, and appending the option to the `linux /images/pxeboot/vmlinuz …` line of "Install Fedora 44".
+
+- **Reinstall boot attempt 2 (operator photos, 2026-10-20):** the stick's "Install Fedora 44" entry, with `hermes.reinstall=yes` appended to the `linux` line after `inst.ks=…:/hermes-production.ks` (a first edit put it on a line of its own and was corrected before booting).
+- **Reinstall completed (operator photo of the login banner, 2026-10-20):** Fedora Linux 44 Server, kernel `7.2.11-200.fc44`, hostname `hermes-production`. The "Hermes production commissioning" banner shows an ED25519 SSH host-key fingerprint and a console code. Pending proofs: `console_access`, `encrypted_offhost_recovery` and `firmware_power_restoration`, so `recovery_unlock` and `automatic_reboot` are already recorded, which means the TPM unlocked the installed system without a prompt. The fingerprint is recorded once `pin-host` confirms it, and the console code is not recorded.
+
+- **`pin-host` PINNED (operator-run, 2026-10-20):** `SHA256:EK1Iy1IMDSoe+MQfs1tQjIIW4qJOlHiQQFavxgHsJuM` (ED25519) for 10.0.30.10:22.
+  - The agent's reading of the console photo was refused (`host-key-fingerprint-mismatch`). Compared with the scanned fingerprint it differed in one character only: position 7 after `SHA256:`, `l` read where the key has `I`, a look-alike pair; the other 42 matched.
+  - The operator was asked to confirm that character at the console; no explicit confirmation was given before `--apply`.
+  - `~/hermes-production-2/known_hosts`: one line, mode 0600, `ssh-keygen -lf` shows the same fingerprint (agent check).
+
+- **`enroll` ENROLLED (operator-run, 2026-10-20):** escrow `~/hermes-production-2/10.0.30.10-escrow.cms`, sha256 `9793dd61605f3343e32b96992cb9eb26ce81f360ecaed78caa8a2f1e69e5aa7e` (agent check: same hash, mode 0600, 16.8 MB). LUKS UUID `1ebbc57a-fa9c-4a97-b1ab-886f98e51e6c`.
+  - The members are `admin-password`, `luks-header.img`, `receipt.json`, `recovery-key` and `restic-password`.
+  - Commissioning is PENDING: `encrypted_offhost_recovery` is attested, and `console_access` and `firmware_power_restoration` are missing.
+  - The attestation went through the deployment dispatcher, so the deployment key's `from=` accepts the workstation at `192.168.99.10`.
+
+- **Escrowed secrets stored and verified (operator-run, 2026-10-20):** after `escrow-open`, the operator reported `ADMIN-PASSWORD-OK` (`sudo -k; sudo -v` over the admin key) and `RECOVERY-KEY-OK` (`cryptsetup open --test-passphrase --type luks2 --tries 1 --disable-external-tokens` on LUKS `1ebbc57a…`, the installer's own test, which cannot pass through the TPM token). Read-only on the server; no reboot, so the console code stays valid.
+
+- **`attest --proof console` (operator-run, 2026-10-20):** `console_access` attested. Commissioning is still PENDING; only `firmware_power_restoration` is missing.
+
+- **COMMISSIONED (operator-run, 2026-10-20):** after a wall-power pull with automatic firmware power-on, `attest --proof power` recorded `firmware_power_restoration`. Nothing is missing.
+  - All five proofs are recorded: `recovery_unlock` and `automatic_reboot` at first boot, `encrypted_offhost_recovery` by `enroll`, `console_access` and `firmware_power_restoration` by `attest`.
+  - **Agent pre-checks for the deployment:** `~/hermes-production/gateway.env` is mode 0600 and unchanged since 2026-10-01; it is the file G5 used. No `hermes` libvirt domain exists, so no other gateway polls the bot token.
+
+- **`credentials` STORED (operator-run, 2026-10-20):** `~/hermes-production/gateway.env` sent through the dispatcher; `restarted: false`, because no release runs yet.
+- **`deploy` PREVIEW (operator-run, 2026-10-20):** no refusal; `host_sha256` `2fe627a4940608409fcc2e104bd26e70afd496207e422468154313c55c74eae4`.
+
+- **`deploy --apply` CHANGED (operator-run, 2026-10-20):** release `4fcc8c4345b1f6e4081e4f033f163eaa266255a7885390d57483ca3958e6e8ec`, the G5-qualified artifact. The in-transaction verification passed.
+  - Timings: transfer and verification 100.6 s, stopped backup 0.3 s, import 59.3 s, configuration 3.5 s, restart 1.1 s, verification 22.1 s.
+
+- **Telegram check (operator, 2026-10-20):** the production bot answered `Run uname -sr` with `Linux 7.2.11-200.fc44.x86_64`, the kernel shown on the new installation's banner. No other gateway was running.
+- **G6 PASS.** Every task R01–R16 is DONE and gates G1–G6 PASS, so the frozen baseline's outcome is met: the release is qualified live and rolled out to 10.0.30.10.
+  - **Accepted loss (decision of 2026-10-19):** the gateway's server-side state from the previous installation.
+  - **Deferred follow-ups (not started; each needs its own approval):**
+    - the runbook wording for stopping the other poller before a live run (R16);
+    - `operator-setup` output echoing the input `server` object;
+    - corroborating the application stage's answers from the gateway's own record;
+    - guard prefixes (NAT64, IPv4-mapped) and an sshd `ClientAliveInterval` once no rollback target needs byte-identical guard files;
+    - exercising suppression of a real global IPv6 address;
+    - **new:** a runbook or `media` check that `deploy_from` matches the workstation's current source address (`ip -4 route get HOST`), from this session's DHCP drift.
+    - The runbook ships in the bundle, so runbook changes wait for the next qualified release.
+
+- **Push done (operator, 2026-10-20):** the operator committed this record through the media rebuild as `ae1a9ac` (10:28 −05:00) and pushed `codex/hermes-production-bundle`. `origin` is at `ae1a9ac` (reflog: update by push, 10:30:53 −05:00), so `cb19447`, `ce73f96`, `1437be4` and `41e949f` are published too. The entries from "USB written" onward are uncommitted.
+
+- **Commit and push approved (operator, 2026-10-20: "Commit and push (Recommended)"):** one commit `docs(plans): record the production reinstall and rollout` with the entries from "USB written" through this one. The agent commits inside the Toolbox, where the hooks run, and pushes; the pre-push hook runs the offline gate. The commit and push themselves are in the Git history, not in this record.
+
+**Exact next action:** none for the review fix release. The deferred follow-ups above and off-host backup each need a new approved scope.
