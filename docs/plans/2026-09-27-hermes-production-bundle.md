@@ -4428,4 +4428,6 @@ An external read-only reviewer, using the agent-written prompt, reported 15 find
 
 - **Commit and push approved (operator, 2026-10-20: "Commit and push (Recommended)"):** one commit `docs(plans): record the production reinstall and rollout` with the entries from "USB written" through this one. The agent commits inside the Toolbox, where the hooks run, and pushes; the pre-push hook runs the offline gate. The commit and push themselves are in the Git history, not in this record.
 
+- **Superseded ISO deleted (operator request, 2026-10-20):** the agent confirmed `~/hermes-production-2/hermes-production.iso` hashed to `b3bf51fa…` (the `.184` media), then deleted it. `hermes-production-r2.iso`, the bundle, the escrow and all keys remain.
+
 **Exact next action:** none for the review fix release. The deferred follow-ups above and off-host backup each need a new approved scope.
