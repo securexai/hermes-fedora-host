@@ -2,7 +2,7 @@
 
 <!-- markdownlint-disable MD013 -->
 
-Record state: IN_PROGRESS — the review fix release (artifact `4fcc8c43…`) passed all seven qualification gates with real credentials (G5, 2026-10-19). It runs on 10.0.30.10 after a fresh USB reinstall, commissioned with all five proofs and answering in Telegram (G6, 2026-10-20); see [Approved scope — review fix release](#approved-scope--review-fix-release-2026-10-02). Open: committing this record's G6 entries; off-host backup and isolated off-host restore (the restore gate passed on the recorded no-off-host-backup waiver); and the deferred follow-ups listed with G6's result. Prior pet-VM qualification work (G03–G05) is STALE/superseded history; no production acceptance beyond these gates is claimed.
+Record state: COMPLETE for the review fix release (artifact `4fcc8c43…`; G1–G6 PASS). Re-verified 2026-10-20: clean tree in sync with `origin`, offline gate PASS (226 + 140 + 671 tests, secret scan clean). It passed all seven qualification gates with real credentials (G5, 2026-10-19). It runs on 10.0.30.10 after a fresh USB reinstall, commissioned with all five proofs and answering in Telegram (G6, 2026-10-20); see [Approved scope — review fix release](#approved-scope--review-fix-release-2026-10-02). Open, each needing new approval: off-host backup and isolated off-host restore (the restore gate passed on the recorded no-off-host-backup waiver); and the deferred follow-ups listed with G6's result. Prior pet-VM qualification work (G03–G05) is STALE/superseded history; no production acceptance beyond these gates is claimed.
 
 ## Approved baseline — preserve after approval
 
@@ -20,6 +20,8 @@ Record state: IN_PROGRESS — the review fix release (artifact `4fcc8c43…`) pa
 - **Record owner:** This file is the single execution record for this approved change. Older records remain historical.
 
 ## Tasks and gates
+
+Current status is the [review fix release](#approved-scope--review-fix-release-2026-10-02) section, not the tables in this section. The R2, T01–T05 and G01–G08 tables below are historical for the earlier passes.
 
 Review correction R2 baseline (user request, 2026-09-27): preserve serialization
 while receiver children or mutating descendants survive dispatcher death, stop

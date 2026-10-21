@@ -4,6 +4,15 @@ This is the dated evidence record for the Fedora Server 44 Hermes appliance.
 The executable contract is documented in
 [`HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md`](HERMES_ONE_COMMAND_DEPLOYMENT_HANDOFF.md).
 
+## Current production status (2026-10-20)
+
+The portable production bundle's review-fix release (artifact `4fcc8c43…`) is deployed to
+the physical production host `10.0.30.10` after a fresh USB reinstall. Its qualification
+gates G1–G6 are recorded PASS in the [execution record](plans/2026-09-27-hermes-production-bundle.md#approved-scope--review-fix-release-2026-10-02).
+The 2026-10-20 offline gate re-run passed (226 + 140 + 671 tests, secret scan clean).
+Off-host backup and isolated off-host restore remain open and need separate approval.
+The 2026-09 and earlier entries below are historical and do not describe this release.
+
 ## Fresh DeepSeek VM evidence boundary (2026-09-23)
 
 The [new execution record](plans/2026-09-23-hermes-deepseek-e2e-r1.md) owns the
